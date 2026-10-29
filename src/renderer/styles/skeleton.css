@@ -1,0 +1,66 @@
+.reacd-skeleton {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+.reacd-skeleton-label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.reacd-skeleton-visual {
+  display: grid;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+}
+.reacd-skeleton-shape {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  block-size: var(--reacd-skeleton-line);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-border);
+}
+.reacd-skeleton[data-size='small'] {
+  --reacd-skeleton-line: var(--reacd-skeleton-line-small);
+  --reacd-skeleton-rectangle: var(--reacd-skeleton-rectangle-small);
+  --reacd-skeleton-avatar: var(--reacd-avatar-small);
+}
+.reacd-skeleton[data-size='medium'] {
+  --reacd-skeleton-line: var(--reacd-skeleton-line-medium);
+  --reacd-skeleton-rectangle: var(--reacd-skeleton-rectangle-medium);
+  --reacd-skeleton-avatar: var(--reacd-avatar-medium);
+}
+.reacd-skeleton[data-size='large'] {
+  --reacd-skeleton-line: var(--reacd-skeleton-line-large);
+  --reacd-skeleton-rectangle: var(--reacd-skeleton-rectangle-large);
+  --reacd-skeleton-avatar: var(--reacd-avatar-large);
+}
+.reacd-skeleton-shape[data-short='true'] {
+  inline-size: var(--reacd-skeleton-last-line);
+}
+.reacd-skeleton[data-shape='avatar'] .reacd-skeleton-shape {
+  inline-size: min(100%, var(--reacd-skeleton-avatar));
+  block-size: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+.reacd-skeleton[data-shape='rectangle'] .reacd-skeleton-shape {
+  block-size: var(--reacd-skeleton-rectangle);
+}
+.reacd-skeleton[data-animated='true'] .reacd-skeleton-visual {
+  animation: reacd-skeleton-pulse var(--reacd-skeleton-duration) ease-in-out;
+  animation-iteration-count: var(--reacd-skeleton-iterations);
+}
+@keyframes reacd-skeleton-pulse {
+  50% {
+    opacity: var(--reacd-skeleton-pulse-opacity);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reacd-skeleton[data-animated='true'] .reacd-skeleton-visual {
+    animation: none;
+  }
+}

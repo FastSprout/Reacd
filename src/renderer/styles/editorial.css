@@ -1,0 +1,101 @@
+.reacd-editorial-collection {
+  display: grid;
+  gap: var(--reacd-large);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.reacd-editorial-collection[data-orientation='horizontal'] {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--reacd-page-intro-track)), 1fr)
+  );
+}
+
+.reacd-editorial,
+.reacd-editorial-copy,
+.reacd-editorial-media {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-medium);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+.reacd-editorial {
+  padding: min(var(--reacd-large), var(--reacd-padding-limit));
+  border-radius: var(--reacd-radius);
+  border: var(--reacd-border-width) solid transparent;
+}
+
+.reacd-editorial[data-variant='outline'],
+.reacd-editorial[data-variant='subtle'] {
+  border-color: var(--reacd-border);
+}
+
+.reacd-editorial[data-variant='outline'] {
+  background: var(--reacd-surface);
+}
+
+.reacd-editorial[data-variant='soft'],
+.reacd-editorial[data-variant='subtle'] {
+  background: var(--reacd-canvas);
+}
+
+.reacd-editorial[data-variant='naked'] {
+  padding: 0;
+  border: 0;
+}
+
+.reacd-editorial[data-orientation='horizontal'] {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.reacd-editorial-copy,
+.reacd-editorial-media {
+  flex: 1 1 var(--reacd-page-intro-track);
+  min-inline-size: min(100%, var(--reacd-page-intro-track));
+}
+
+.reacd-editorial[data-orientation='vertical'] > * {
+  flex-basis: auto;
+}
+
+.reacd-editorial .reacd-page-title,
+.reacd-editorial-copy > p {
+  margin: 0;
+}
+
+.reacd-editorial .reacd-page-title {
+  font-size: calc(var(--reacd-font-size) * var(--reacd-page-title-section));
+}
+
+.reacd-editorial-image {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: var(--reacd-editorial-image-ratio);
+  object-fit: contain;
+  overflow-wrap: anywhere;
+}
+
+.reacd-editorial-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-small);
+}
+
+.reacd-editorial[data-indicator='true'] .reacd-editorial-meta::before {
+  content: '';
+  display: block;
+  inline-size: var(--reacd-editorial-indicator);
+  block-size: var(--reacd-editorial-indicator);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-border);
+  flex-shrink: 0;
+}

@@ -1,0 +1,14 @@
+import { render, screen } from '@testing-library/react';
+import { expect, it } from 'vitest';
+import { ReacdProvider } from 'reacd';
+import { ErrorExample } from './error.js';
+
+it('renders the documented Error declaration', () => {
+  render(
+    <ReacdProvider>
+      <ErrorExample />
+    </ReacdProvider>,
+  );
+  expect(screen.getByText('Page unavailable')).toBeVisible();
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+});

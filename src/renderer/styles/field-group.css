@@ -1,0 +1,16 @@
+.reacd-field-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--reacd-small);
+  padding: min(var(--reacd-small), var(--reacd-padding-limit));
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+}
+.reacd-field-group[data-orientation='horizontal'] > * {
+  flex: 1 1 var(--reacd-stack-track);
+}
+.reacd-field-group[data-orientation='vertical'] {
+  flex-direction: column;
+}

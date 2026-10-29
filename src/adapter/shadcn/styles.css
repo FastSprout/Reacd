@@ -1,0 +1,35 @@
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '../../renderer/styles.css';
+@source './vendor';
+@source inline('sr-only');
+
+@theme inline {
+  --color-background: var(--reacd-surface);
+  --color-foreground: var(--reacd-text);
+  --color-card: var(--reacd-surface);
+  --color-card-foreground: var(--reacd-text);
+  --color-primary: var(--reacd-primary);
+  --color-primary-foreground: var(--reacd-onPrimary);
+  --color-secondary: var(--reacd-canvas);
+  --color-secondary-foreground: var(--reacd-text);
+  --color-muted: var(--reacd-canvas);
+  --color-muted-foreground: var(--reacd-muted);
+  --color-accent: var(--reacd-canvas);
+  --color-accent-foreground: var(--reacd-text);
+  --color-destructive: var(--reacd-danger);
+  --color-destructive-foreground: var(--reacd-onDanger);
+  --color-popover: var(--reacd-surface);
+  --color-popover-foreground: var(--reacd-text);
+  --color-input: var(--reacd-border);
+  --color-border: var(--reacd-border);
+  --color-ring: var(--reacd-focus);
+  --radius-md: var(--reacd-radius);
+  --radius-lg: var(--reacd-radius);
+}
+@import '../../renderer/styles/carousel.css';
+@import '../../renderer/styles/marquee.css';
+@import '../../renderer/styles/chart.css';
+@import '../../renderer/styles/color-mode.css';
+@import '../../renderer/styles/locale-select.css';

@@ -1,0 +1,85 @@
+.reacd-toast-viewport {
+  position: fixed;
+  inline-size: auto;
+  inset-inline: var(--reacd-small);
+  inset-block-end: var(--reacd-small);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--reacd-small);
+  padding: 0;
+  min-inline-size: 0;
+  max-block-size: calc(100dvh - 2 * var(--reacd-small));
+  overflow: auto;
+  overscroll-behavior: contain;
+  pointer-events: none;
+  background: transparent;
+  z-index: var(--reacd-toast-layer);
+}
+.reacd-toast {
+  flex-shrink: 0;
+  inline-size: var(--reacd-toast-width);
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  padding: var(--reacd-medium);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  box-shadow: var(--reacd-shadow);
+  pointer-events: auto;
+  transform: translate(
+    var(--toast-swipe-movement-x, 0px),
+    var(--toast-swipe-movement-y, 0px)
+  );
+}
+.reacd-toast[dir='rtl'] {
+  align-self: flex-start;
+}
+.reacd-toast[data-ending-style],
+.reacd-toast[data-limited] {
+  display: none;
+}
+.reacd-toast[data-intent='success'] {
+  border-color: var(--reacd-primary);
+}
+.reacd-toast[data-intent='danger'] {
+  border-color: var(--reacd-danger);
+}
+.reacd-toast-content {
+  min-inline-size: 0;
+  max-block-size: var(--reacd-toast-block);
+  overflow: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.reacd-toast-content p,
+.reacd-toast-title {
+  margin: 0;
+}
+.reacd-toast-title {
+  font-size: inherit;
+  font-weight: bold;
+}
+.reacd-toast-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+  margin-block-start: var(--reacd-small);
+}
+
+.reacd-toast-grip {
+  min-block-size: var(--reacd-control-target);
+  display: grid;
+  place-items: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.reacd-toast-grip > span {
+  inline-size: var(--reacd-toast-grip-width);
+  block-size: var(--reacd-toast-grip-block);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-muted);
+}

@@ -1,0 +1,49 @@
+.reacd-chat-shimmer {
+  position: relative;
+  display: inline-block;
+  max-inline-size: 100%;
+  color: var(--reacd-text);
+  overflow-wrap: anywhere;
+}
+.reacd-chat-shimmer::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: var(--reacd-chat-feedback-decoration);
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+}
+.reacd-chat-shimmer[data-active='true']::after {
+  opacity: var(--reacd-chat-feedback-rest);
+  animation: reacd-chat-shimmer var(--reacd-chat-feedback-duration) ease-in-out;
+  animation-iteration-count: var(--reacd-chat-feedback-iterations);
+}
+@keyframes reacd-chat-shimmer {
+  50% {
+    opacity: var(--reacd-chat-feedback-peak);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reacd-chat-shimmer[data-active='true']::after {
+    animation: none;
+  }
+}
+.reacd-chat-feedback-details {
+  max-block-size: var(--reacd-chat-feedback-details);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--reacd-small);
+}
+.reacd-chat-feedback-text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.reacd-chat-tool {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+  overflow-wrap: anywhere;
+}

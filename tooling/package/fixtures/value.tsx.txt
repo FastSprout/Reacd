@@ -1,0 +1,3 @@
+import { Input } from 'reacd';
+export const invalid = <Input label="Name" value={42}
+  onValueChange={() => undefined} />;

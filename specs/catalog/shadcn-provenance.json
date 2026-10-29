@@ -1,0 +1,209 @@
+{
+  "retrieved": "2026-10-28",
+  "style": "new-york",
+  "ownedRecipes": [{
+    "component": "Pagination",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/pagination/pagination.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/pagination.json",
+    "sha256": "d2c45af4aaf4a676f420c673f337e8ba89dc7db75bf9fa11143f8a947f3a7f42",
+    "adaptation": "Bounded page windows, value callbacks and validated native URLs."
+  }, {
+    "component": "Breadcrumb",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/breadcrumb/breadcrumb.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/breadcrumb.json",
+    "sha256": "5e7a33d921824d659494dc90411393cdf795c0ad5c94631da5c2883924623350",
+    "adaptation": "Named paths, safe native links and typed local ancestor actions."
+  }, {
+    "component": "Skeleton",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/skeleton/skeleton.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/skeleton.json",
+    "sha256": "85692a09912f518ffd64c540dfcf098fe748a807baf288c107cf8126496cf886",
+    "adaptation": "Semantic shapes, finite pulse, reduced motion and optional status."
+  }, {
+    "component": "Empty",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/empty/empty.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/empty.json",
+    "sha256": "e89ffe0fc2969956f6e1d601bd3f00b068600ac08e31590f65344e79ff242230",
+    "adaptation": "Named region, safe slots, logical surfaces and host-owned actions."
+  }, {
+    "component": "Popover",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/popover/popover.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/popover.json",
+    "sha256": "ba5fe84f353f6c0fd2133a2ab893f5e8861fc60dc4dea548a7ec875acaa37b2c",
+    "adaptation": "Owned trigger, retained content, portal hosts and dismissal scopes."
+  }, {
+    "component": "Kbd",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/kbd/kbd-key.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/kbd.json",
+    "sha256": "4cfe2ba8e19f4d19d090eb039e3f1c041c9cfb379ce948237a9b5018203f7a6c",
+    "adaptation": "Passive notation, named glyphs, explicit platforms and wrapping."
+  }, {
+    "component": "Tooltip",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/tooltip/tooltip.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/tooltip.json",
+    "sha256": "2f55867faecee2d3616cfd8c6a80b538909a21e62fdfa2788b1ead56093e5395",
+    "adaptation": "Safe group anchor, portal host, logical timing and state binding."
+  }, {
+    "component": "Chip",
+    "style": "new-york",
+    "path": "src/adapter/shadcn/chip/chip.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/new-york/badge.json",
+    "sha256": "dab689d836ad3292b41e7f4986b4e68e5d45c6903e4aeaae8972a82d4aebec29",
+    "adaptation": "Badge text/dot indicators with safe edge tracks and full labels."
+  }, {
+    "component": "Avatar",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/avatar/avatar.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/avatar.json",
+    "sha256": "bbcabf0121fb2ff93a8522f8f80b74631e732a31399b1b7991c0b8c3167e2172",
+    "adaptation": "Named identity, grapheme fallback, stable image geometry and tokens."
+  }, {
+    "component": "AvatarGroup",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/avatar-group/avatar-group.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/avatar.json",
+    "sha256": "bbcabf0121fb2ff93a8522f8f80b74631e732a31399b1b7991c0b8c3167e2172",
+    "adaptation": "Closed identities, wrapping, count and accessible overflow disclosure."
+  }, {
+    "component": "RadioGroup",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/radio-group/radio-group.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/radio-group.json",
+    "sha256": "874b30662ba338d06362491b663cae9198281a4bc385b6be6425f2de442384d7",
+    "adaptation": "Closed choices, accessible descriptions, and engine geometry."
+  }, {
+    "component": "CheckboxGroup",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/checkbox-group/checkbox-group.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/checkbox.json",
+    "sha256": "e6df7b595f25a7ee97c3fb94e0ddc35998f74c98b990d3030e485905ec677178",
+    "adaptation": "Base UI group, shadcn check recipe, closed values and limits."
+  }, {
+    "component": "Collapsible",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/collapsible/collapsible.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/collapsible.json",
+    "sha256": "74f78cd88a30185243847968977cf1de9ffbf576547f2ec1f14b5ef55505b90d",
+    "adaptation": "Closed props, engine tokens, and inactive descendant portals."
+  }, {
+    "component": "Modal",
+    "style": "base-nova",
+    "path": "src/adapter/shadcn/modal/modal.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/base-nova/dialog.json",
+    "sha256": "5be79d2cf2d2152a29d9f14c8e209ad57b696e9dfbf0b9cdf4523a7c710c8d02",
+    "adaptation": "Owned Base UI recipe with closed props and engine tokens."
+  }, {
+    "component": "SelectContent",
+    "style": "new-york",
+    "path": "src/adapter/shadcn/select/select-content.adapter.tsx",
+    "source": "https://ui.shadcn.com/r/styles/new-york/select.json",
+    "sha256": "3d93ae07a8f3fe121ba60f4439e26bd7859f247eb8bfcafcf4b4a8a069888eec",
+    "adaptation": "Owned content recipe routes portals to the nearest overlay host."
+  }],
+  "patches": ["Replace @/lib/utils with ../lib/utils.js."],
+  "files": [
+    {
+      "name": "accordion",
+      "path": "src/adapter/shadcn/vendor/ui/accordion.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/accordion.json",
+      "sha256": "00dd6eef660f08ce85154106fa0fa4d943ed699c5ca7b06bb08732978bcebb49"
+    },
+    {
+      "name": "button",
+      "path": "src/adapter/shadcn/vendor/ui/button.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/button.json",
+      "sha256": "c2b999a96781e6c932632bd089095368e973bf5602e1b1a62156b7d2b43f1e84"
+    },
+    {
+      "name": "input",
+      "path": "src/adapter/shadcn/vendor/ui/input.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/input.json",
+      "sha256": "6299a6a387dc55e528aec4342deaea0b83f1ea3a365c135a31a18ee55334f441"
+    },
+    {
+      "name": "card",
+      "path": "src/adapter/shadcn/vendor/ui/card.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/card.json",
+      "sha256": "525c4bb2c051987be64df0e92e1d90174912b219bf541e24ffbc4a3406de49e8"
+    },
+    {
+      "name": "badge",
+      "path": "src/adapter/shadcn/vendor/ui/badge.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/badge.json",
+      "sha256": "dab689d836ad3292b41e7f4986b4e68e5d45c6903e4aeaae8972a82d4aebec29"
+    },
+    {
+      "name": "textarea",
+      "path": "src/adapter/shadcn/vendor/ui/textarea.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/textarea.json",
+      "sha256": "ec7c92aaed80f6923a7caa4bfe4eead395b50a7001504fd7fbb0b9381804dae9"
+    },
+    {
+      "name": "label",
+      "path": "src/adapter/shadcn/vendor/ui/label.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/label.json",
+      "sha256": "2eac8fbb04002c42b0fbc4062d20d131e421796eaf65c37d2049e29e42ecbc5a"
+    },
+    {
+      "name": "separator",
+      "path": "src/adapter/shadcn/vendor/ui/separator.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/separator.json",
+      "sha256": "995c54f1c5c688f712a675fe35d55bcada2b31dba561dcc71553a1ad601e59ec"
+    },
+    {
+      "name": "utils",
+      "path": "src/adapter/shadcn/vendor/lib/utils.ts",
+      "source": "https://ui.shadcn.com/r/styles/new-york/utils.json",
+      "sha256": "7c8c3dfc0cdd370d44932828eb067ef771c8fe7996693221d5d4b90af6d54f2d"
+    },
+    {
+      "name": "select",
+      "path": "src/adapter/shadcn/vendor/ui/select.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/select.json",
+      "sha256": "3d93ae07a8f3fe121ba60f4439e26bd7859f247eb8bfcafcf4b4a8a069888eec"
+    },
+    {
+      "name": "checkbox",
+      "path": "src/adapter/shadcn/vendor/ui/checkbox.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/checkbox.json",
+      "sha256": "c9e19d480a43172f9504ac9b22f4a9c149de1d916162f24c62395533b7be19f6"
+    },
+    {
+      "name": "switch",
+      "path": "src/adapter/shadcn/vendor/ui/switch.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/switch.json",
+      "sha256": "ab2d009e0fa7366f47ae1a6e0ca35d0aac55c6264c5f61718e12366c196163b4"
+    },
+    {
+      "name": "slider",
+      "path": "src/adapter/shadcn/vendor/ui/slider.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/slider.json",
+      "sha256": "16dad0a2c58fba2a38740ab9b15936f1f9a07d0e3aafccdce875b6bac31d79be"
+    },
+    {
+      "name": "tabs",
+      "path": "src/adapter/shadcn/vendor/ui/tabs.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/tabs.json",
+      "sha256": "d41aded0394298102614635e15d709369c6bdae8fe79b918b8341ef39407ee03"
+    },
+    {
+      "name": "alert",
+      "path": "src/adapter/shadcn/vendor/ui/alert.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/alert.json",
+      "sha256": "5950ac01377e7eedc94b00eb3fee678745e4cc1a72b5343867f0733d07db6660"
+    },
+    {
+      "name": "progress",
+      "path": "src/adapter/shadcn/vendor/ui/progress.tsx",
+      "source": "https://ui.shadcn.com/r/styles/new-york/progress.json",
+      "sha256": "6b3b4b69a1cb361076174892e9a96e1a09020307616965ef89f2f7e2495b57a9"
+    }
+  ]
+}

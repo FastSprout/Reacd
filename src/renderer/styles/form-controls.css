@@ -1,0 +1,39 @@
+.reacd-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.reacd-form-field legend {
+  max-inline-size: 100%;
+  padding: 0;
+  margin-block-end: var(--reacd-small);
+  overflow-wrap: anywhere;
+}
+.reacd-form-field p,
+.reacd-switch p,
+.reacd-textarea p {
+  margin: 0;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-field-error {
+  color: var(--reacd-danger);
+}
+.reacd-field-hint {
+  color: var(--reacd-muted);
+}
+.reacd-textarea[data-auto-resize] textarea {
+  resize: none;
+  overflow-y: auto;
+}
+.reacd-textarea textarea[aria-invalid='true'] {
+  border-color: var(--reacd-danger);
+}
+.reacd-switch [role='switch'][aria-invalid='true'] {
+  outline: var(--reacd-border-width) solid var(--reacd-danger);
+  outline-offset: var(--reacd-border-width);
+}

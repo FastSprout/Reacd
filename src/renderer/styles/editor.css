@@ -1,0 +1,127 @@
+.reacd-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+  color: var(--reacd-text);
+  overflow-wrap: anywhere;
+}
+.reacd-editor-recovery button {
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  padding: min(var(--reacd-small), var(--reacd-padding-limit));
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+}
+.reacd-editor-recovery button:hover {
+  text-decoration: underline;
+}
+.reacd-editor-recovery button:active {
+  border-style: inset;
+}
+.reacd-editor-label {
+  font-weight: bold;
+}
+.reacd-editor-content,
+.reacd-editor-content > div {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.reacd-editor .ProseMirror,
+.reacd-editor-preview {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-block-size: var(--reacd-editor-min-block);
+  padding: min(var(--reacd-medium), var(--reacd-padding-limit));
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.reacd-editor .ProseMirror:focus-visible {
+  outline: var(--reacd-focus-width) solid var(--reacd-focus);
+  outline-offset: var(--reacd-focus-width);
+}
+.reacd-editor .ProseMirror[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+.reacd-editor .ProseMirror :where(p, h1, h2, h3, blockquote, pre, ul, ol, li) {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-editor .ProseMirror :where(blockquote, ul, ol) {
+  padding-inline: var(--reacd-editor-indent) 0;
+}
+.reacd-editor .ProseMirror :where(ul, ol) {
+  list-style-position: inside;
+}
+.reacd-editor .ProseMirror li > p:first-child {
+  display: inline;
+}
+.reacd-editor .ProseMirror pre {
+  white-space: pre-wrap;
+}
+.reacd-editor .ProseMirror a {
+  color: var(--reacd-text);
+  text-decoration: underline;
+}
+.reacd-editor .ProseMirror:has(> p:only-child > br:only-child)::before {
+  content: attr(data-placeholder);
+  display: block;
+  color: var(--reacd-muted);
+  pointer-events: none;
+}
+.reacd-editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+}
+.reacd-editor-toolbar > button {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.reacd-editor-menu {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+}
+.reacd-editor-menu > p {
+  margin: min(var(--reacd-small), var(--reacd-padding-limit));
+}
+.reacd-editor-menu [role='listbox'] {
+  display: flex;
+  flex-direction: column;
+  max-block-size: min(var(--reacd-editor-menu-block), 100dvh);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.reacd-editor-menu [role='option'] {
+  min-block-size: var(--reacd-control-target);
+  padding: min(var(--reacd-small), var(--reacd-padding-limit));
+  border: 0;
+  font: inherit;
+  text-align: start;
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.reacd-editor-menu [role='option']:is([aria-selected='true'], :hover, :active) {
+  background: var(--reacd-primary);
+  color: var(--reacd-onPrimary);
+}
+.reacd-editor-menu [role='option']:disabled {
+  cursor: not-allowed;
+  color: var(--reacd-muted);
+  background: var(--reacd-surface);
+}

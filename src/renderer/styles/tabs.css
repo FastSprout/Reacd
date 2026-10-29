@@ -1,0 +1,50 @@
+.reacd-tabs {
+  display: grid;
+  gap: var(--reacd-small);
+}
+
+.reacd-tabs [role='tabpanel'][hidden] {
+  display: none;
+}
+
+.reacd-tabs [role='tablist'][data-orientation='vertical'] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.reacd-tabs [role='tab'] {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  color: var(--reacd-text);
+}
+
+.reacd-tabs [role='tab']:disabled {
+  color: var(--reacd-muted);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.reacd-tabs [role='tab']:hover:enabled {
+  text-decoration: underline;
+}
+
+.reacd-tabs [role='tab']:active:enabled {
+  border-style: inset;
+}
+
+.reacd-tabs [role='tab'][aria-selected='true'] {
+  background: var(--reacd-surface);
+  text-decoration: underline;
+  text-underline-offset: var(--reacd-small);
+}
+
+.reacd-link[aria-current='page'] {
+  font-weight: bold;
+}
+
+.reacd-root .reacd-link[aria-disabled='true'] {
+  cursor: not-allowed;
+  color: var(--reacd-muted);
+  text-decoration-style: dotted;
+}

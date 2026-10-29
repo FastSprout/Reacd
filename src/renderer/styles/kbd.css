@@ -1,0 +1,47 @@
+.reacd-kbd {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  inline-size: fit-content;
+  padding: calc(var(--reacd-small) / 2) var(--reacd-small);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  font: inherit;
+  font-weight: 500;
+  font-size: calc(1em * var(--reacd-kbd-medium));
+  overflow-wrap: anywhere;
+  --reacd-key-fill: var(--reacd-text);
+  --reacd-key-on-fill: var(--reacd-surface);
+}
+.reacd-kbd[data-size='small'] {
+  font-size: calc(1em * var(--reacd-kbd-small));
+}
+.reacd-kbd[data-size='large'] {
+  font-size: calc(1em * var(--reacd-kbd-large));
+}
+.reacd-kbd[data-intent='primary'] {
+  --reacd-key-fill: var(--reacd-primary);
+  --reacd-key-on-fill: var(--reacd-onPrimary);
+}
+.reacd-kbd[data-intent='danger'] {
+  --reacd-key-fill: var(--reacd-danger);
+  --reacd-key-on-fill: var(--reacd-onDanger);
+}
+.reacd-kbd[data-variant='soft'] {
+  background: var(--reacd-canvas);
+  border-color: transparent;
+}
+.reacd-kbd[data-variant='subtle'] {
+  border-block-end-width: calc(2 * var(--reacd-border-width));
+}
+.reacd-kbd[data-variant='solid'] {
+  background: var(--reacd-key-fill);
+  color: var(--reacd-key-on-fill);
+  border-color: var(--reacd-key-fill);
+}
+.reacd-tooltip-shortcuts .reacd-kbd {
+  color: inherit;
+  background: transparent;
+}

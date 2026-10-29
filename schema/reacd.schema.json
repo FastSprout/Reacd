@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://reacd.dev/schema/0.1.json"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "templateId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+    },
+    "root": {
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "templateId",
+    "root"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "VStack"
+            },
+            "spacing": {
+              "type": "string",
+              "enum": [
+                "small",
+                "medium",
+                "large"
+              ]
+            },
+            "children": {
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/__schema0"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "children"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "HStack"
+            },
+            "spacing": {
+              "type": "string",
+              "enum": [
+                "small",
+                "medium",
+                "large"
+              ]
+            },
+            "children": {
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/__schema0"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "children"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "Card"
+            },
+            "spacing": {
+              "type": "string",
+              "enum": [
+                "small",
+                "medium",
+                "large"
+              ]
+            },
+            "children": {
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/__schema0"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "children"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "Grid"
+            },
+            "columns": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "spacing": {
+              "type": "string",
+              "enum": [
+                "small",
+                "medium",
+                "large"
+              ]
+            },
+            "children": {
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/__schema0"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "columns",
+            "children"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "Text"
+            },
+            "content": {
+              "type": "string",
+              "maxLength": 10000
+            },
+            "role": {
+              "type": "string",
+              "enum": [
+                "headline",
+                "subheadline",
+                "body",
+                "caption",
+                "display"
+              ]
+            },
+            "weight": {
+              "type": "string",
+              "enum": [
+                "normal",
+                "medium",
+                "bold"
+              ]
+            },
+            "lineLimit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            }
+          },
+          "required": [
+            "type",
+            "content"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "Button"
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+            },
+            "intent": {
+              "type": "string",
+              "enum": [
+                "primary",
+                "secondary",
+                "danger"
+              ]
+            },
+            "disabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type",
+            "label",
+            "action"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "Input"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "inputType": {
+              "type": "string",
+              "enum": [
+                "text",
+                "email",
+                "password",
+                "search"
+              ]
+            },
+            "placeholder": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "value": {
+              "type": "string",
+              "maxLength": 10000
+            },
+            "disabled": {
+              "type": "boolean"
+            },
+            "required": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type",
+            "id",
+            "label"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "Table"
+            },
+            "caption": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "columns": {
+              "minItems": 1,
+              "maxItems": 12,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              }
+            },
+            "rows": {
+              "maxItems": 200,
+              "type": "array",
+              "items": {
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 10000
+                }
+              }
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "ready",
+                "loading",
+                "error"
+              ]
+            },
+            "emptyMessage": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "errorMessage": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            }
+          },
+          "required": [
+            "type",
+            "caption",
+            "columns",
+            "rows"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "$id": "https://reacd.dev/schema/0.1.json"
+}

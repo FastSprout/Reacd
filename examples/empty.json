@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "0.1",
+  "templateId": "saas-modern-light",
+  "root": {
+    "type": "VStack",
+    "spacing": "large",
+    "children": [
+      {
+        "type": "Text",
+        "role": "caption",
+        "content": "Sample data · no server connection"
+      },
+      {
+        "type": "Text",
+        "role": "headline",
+        "lineLimit": 2,
+        "content": "Order overview"
+      },
+      {
+        "type": "Text",
+        "content": "The same structure uses both templates. Resize the preview to inspect the layout."
+      },
+      {
+        "type": "Grid",
+        "columns": 3,
+        "spacing": "medium",
+        "children": [
+          {
+            "type": "Card",
+            "spacing": "small",
+            "children": [
+              {
+                "type": "Text",
+                "content": "Sample orders",
+                "role": "caption"
+              },
+              {
+                "type": "Text",
+                "content": "3",
+                "role": "display"
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "spacing": "small",
+            "children": [
+              {
+                "type": "Text",
+                "content": "In progress",
+                "role": "caption"
+              },
+              {
+                "type": "Text",
+                "content": "1",
+                "role": "display"
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "spacing": "small",
+            "children": [
+              {
+                "type": "Text",
+                "content": "Ready for collection",
+                "role": "caption"
+              },
+              {
+                "type": "Text",
+                "content": "1",
+                "role": "display"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "children": [
+          {
+            "type": "Text",
+            "role": "subheadline",
+            "content": "Order note"
+          },
+          {
+            "type": "Text",
+            "role": "caption",
+            "content": "Saving only affects this preview in memory."
+          },
+          {
+            "type": "HStack",
+            "children": [
+              {
+                "type": "Input",
+                "id": "note",
+                "label": "Note content",
+                "placeholder": "For example, deliver after noon",
+                "required": true
+              },
+              {
+                "type": "Button",
+                "label": "Save note",
+                "action": "save-note",
+                "intent": "primary"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Table",
+        "caption": "Sample orders",
+        "columns": [
+          "Number",
+          "Description",
+          "Status"
+        ],
+        "rows": [],
+        "state": "ready",
+        "emptyMessage": "The list is empty. Select Standard data to show the table.",
+        "errorMessage": "Sample read failure. Choose another state to restore the table."
+      }
+    ]
+  }
+}

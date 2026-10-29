@@ -1,0 +1,39 @@
+.reacd-user {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+  color: var(--reacd-text);
+  text-align: start;
+  text-decoration: none;
+  white-space: normal;
+  block-size: auto;
+  border-radius: var(--reacd-radius);
+}
+.reacd-user[data-orientation='vertical'] {
+  flex-direction: column;
+  align-items: start;
+}
+.reacd-user-identity {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-user-name {
+  font-weight: 500;
+}
+.reacd-user-description {
+  color: var(--reacd-muted);
+}
+:is(a, button).reacd-user {
+  padding: var(--reacd-small);
+  background: var(--reacd-surface);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+}
+:is(a, button).reacd-user:hover {
+  text-decoration: underline;
+}
+.reacd-user:disabled {
+  text-decoration: none;
+}

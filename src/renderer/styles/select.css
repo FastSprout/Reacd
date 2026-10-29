@@ -1,0 +1,93 @@
+.reacd-select-entry > input[aria-hidden='true'][tabindex='-1'] {
+  min-block-size: 0;
+}
+.reacd-select-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-small);
+}
+.reacd-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 1 auto;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+  padding: var(--reacd-small);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+  white-space: normal;
+}
+.reacd-select-value {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  text-align: start;
+}
+.reacd-select-icon,
+.reacd-select-indicator svg {
+  inline-size: var(--reacd-medium);
+  block-size: var(--reacd-medium);
+  flex-shrink: 0;
+}
+.reacd-select-positioner {
+  z-index: var(--reacd-popup-layer);
+}
+.reacd-base-select-popup {
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  box-shadow: var(--reacd-shadow);
+  padding: var(--reacd-small);
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  inline-size: min(var(--anchor-width), calc(100vw - var(--reacd-medium) * 2));
+  max-inline-size: calc(100vw - var(--reacd-medium) * 2);
+  max-block-size: var(--available-height);
+  overflow: hidden;
+}
+.reacd-select-list {
+  min-block-size: 0;
+  overflow: auto;
+}
+.reacd-select-option {
+  display: grid;
+  grid-template-columns: var(--reacd-control-target) minmax(0, 1fr);
+  align-items: center;
+  min-block-size: var(--reacd-control-target);
+  gap: var(--reacd-small);
+  padding: var(--reacd-small);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.reacd-select-option-content {
+  grid-column: 2;
+}
+.reacd-select-option[data-highlighted] {
+  color: var(--reacd-onPrimary);
+  background: var(--reacd-primary);
+}
+.reacd-select-option[data-disabled] {
+  color: var(--reacd-muted);
+  cursor: not-allowed;
+}
+.reacd-select p,
+.reacd-base-select-popup p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-select-trigger[aria-invalid='true'] {
+  border-color: var(--reacd-danger);
+}
+
+.reacd-select-entry > .reacd-button {
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+  border-color: var(--reacd-border);
+}

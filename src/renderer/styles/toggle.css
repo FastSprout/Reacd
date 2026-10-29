@@ -1,0 +1,29 @@
+.reacd-toggle [role='switch'] {
+  --reacd-toggle-size: max(var(--reacd-control-target), var(--reacd-toggle-min-track));
+  position: relative;
+  inline-size: calc(var(--reacd-toggle-size) * var(--reacd-toggle-ratio));
+  block-size: var(--reacd-toggle-size);
+  padding: 0;
+  border: 0;
+  background: var(--reacd-border);
+}
+.reacd-toggle [role='switch'][data-state='checked'] {
+  background: var(--reacd-primary);
+}
+.reacd-toggle [role='switch'] span {
+  position: absolute;
+  inset-block-start: var(--reacd-toggle-inset);
+  inset-inline-start: var(--reacd-toggle-inset);
+  block-size: calc(
+    var(--reacd-toggle-size) - var(--reacd-toggle-inset) - var(--reacd-toggle-inset)
+  );
+  inline-size: calc(
+    var(--reacd-toggle-size) - var(--reacd-toggle-inset) - var(--reacd-toggle-inset)
+  );
+  /* Pairing this reset with transform:none removes it during CSS optimization. */
+  translate: 0;
+  background: var(--reacd-surface);
+}
+.reacd-toggle [role='switch'][data-state='checked'] span {
+  inset-inline-start: calc(100% - var(--reacd-toggle-size) + var(--reacd-toggle-inset));
+}

@@ -1,0 +1,165 @@
+.reacd-root :is(button, input, select, textarea, summary, a),
+.reacd-portal-root :is(button, [role='option']) {
+  font: inherit;
+  min-block-size: var(--reacd-control-target);
+}
+.reacd-root :is(button, a, summary, select, label[for]),
+.reacd-portal-root [role='option'] {
+  cursor: pointer;
+}
+.reacd-root :is(button, input, select, textarea):disabled,
+.reacd-root :is([role='slider'], [role='switch'], [role='checkbox'])[data-disabled] {
+  cursor: not-allowed;
+  border-style: dashed;
+}
+.reacd-button {
+  block-size: auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.reacd-button:hover:enabled {
+  text-decoration: underline;
+}
+.reacd-button:active:enabled {
+  border-style: inset;
+}
+.reacd-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+}
+.reacd-field label {
+  font-weight: 500;
+}
+.reacd-field :is(input, textarea, [role='combobox']) {
+  inline-size: 100%;
+  border-color: var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+}
+.reacd-field [role='combobox'] {
+  block-size: auto;
+  white-space: normal;
+}
+.reacd-field textarea {
+  resize: vertical;
+}
+.reacd-select-popup {
+  display: flex;
+  flex-direction: column;
+  z-index: var(--reacd-popup-layer);
+  min-inline-size: var(--radix-select-trigger-width);
+  max-inline-size: calc(100vw - var(--reacd-small) - var(--reacd-small));
+  max-block-size: var(--radix-select-content-available-height);
+  overflow: auto;
+  padding: var(--reacd-small);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+  box-shadow: var(--reacd-shadow);
+}
+.reacd-select-viewport {
+  min-block-size: 0;
+}
+.reacd-code-editor textarea {
+  font-family: monospace;
+}
+.reacd-field :is(input, textarea)::placeholder {
+  color: var(--reacd-muted);
+  opacity: 1;
+}
+.reacd-check {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--reacd-small);
+}
+.reacd-check > input[type='checkbox'] {
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  /* Radix's inline form bridge translation otherwise escapes in RTL. */
+  transform: none !important;
+}
+.reacd-check button {
+  flex-shrink: 0;
+  inline-size: var(--reacd-control-target);
+  block-size: var(--reacd-control-target);
+}
+.reacd-tabs [role='tablist'] {
+  display: flex;
+  flex-wrap: wrap;
+  block-size: auto;
+  justify-content: start;
+  gap: var(--reacd-small);
+}
+.reacd-tabs [role='tab'] {
+  white-space: normal;
+}
+.reacd-root :focus-visible,
+.reacd-portal-root :focus-visible {
+  outline: var(--reacd-focus-width) solid var(--reacd-focus);
+  outline-offset: var(--reacd-focus-width);
+}
+.reacd-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-block-size: var(--reacd-control-target);
+  touch-action: none;
+  user-select: none;
+}
+.reacd-accordion-trigger {
+  gap: var(--reacd-small);
+  inline-size: 100%;
+  white-space: normal;
+  text-align: start;
+  padding-block: var(--reacd-medium);
+  padding-inline: var(--reacd-small);
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+.reacd-accordion h3 {
+  margin: 0;
+  font: inherit;
+}
+.reacd-accordion-trigger:disabled {
+  color: var(--reacd-muted);
+  text-decoration: none;
+}
+.reacd-accordion-item {
+  border-color: var(--reacd-border);
+}
+.reacd-accordion-content {
+  overflow-wrap: anywhere;
+  padding: var(--reacd-medium);
+}
+.reacd-slider-track {
+  position: relative;
+  flex-grow: 1;
+  block-size: var(--reacd-small);
+  background: var(--reacd-border);
+}
+.reacd-slider-range {
+  position: absolute;
+  block-size: 100%;
+  background: var(--reacd-primary);
+}
+.reacd-slider-thumb {
+  display: block;
+  inline-size: var(--reacd-control-target);
+  block-size: var(--reacd-control-target);
+  background: var(--reacd-surface);
+  border: var(--reacd-border-width) solid var(--reacd-primary);
+  border-radius: var(--reacd-radius);
+  cursor: grab;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reacd-root *,
+  .reacd-portal-root * {
+    animation: none;
+    transition: none;
+    scroll-behavior: auto;
+  }
+}

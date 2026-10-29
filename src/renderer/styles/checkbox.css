@@ -1,0 +1,28 @@
+.reacd-checkbox p {
+  margin: 0;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-checkbox
+  [role='checkbox']:is([data-state='checked'], [data-state='indeterminate']) {
+  background: var(--reacd-primary);
+  color: var(--reacd-onPrimary);
+  border-color: var(--reacd-primary);
+}
+.reacd-checkbox [role='checkbox'][data-state='indeterminate'] svg {
+  display: none;
+}
+.reacd-checkbox [role='checkbox'][data-state='indeterminate'] > span::after {
+  content: '';
+  display: block;
+  inline-size: var(--reacd-medium);
+  block-size: var(--reacd-border-width);
+  background: currentColor;
+}
+.reacd-checkbox [role='checkbox'][aria-invalid='true'] {
+  outline: var(--reacd-border-width) solid var(--reacd-danger);
+  outline-offset: var(--reacd-border-width);
+}
+.reacd-checkbox [role='checkbox'][aria-readonly='true'] {
+  cursor: default;
+}

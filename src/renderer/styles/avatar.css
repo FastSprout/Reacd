@@ -1,0 +1,92 @@
+.reacd-avatar,
+.reacd-avatar-group {
+  --reacd-avatar-size: var(--reacd-avatar-medium);
+}
+:is(.reacd-avatar, .reacd-avatar-group)[data-size='small'] {
+  --reacd-avatar-size: var(--reacd-avatar-small);
+}
+:is(.reacd-avatar, .reacd-avatar-group)[data-size='large'] {
+  --reacd-avatar-size: var(--reacd-avatar-large);
+}
+.reacd-avatar,
+.reacd-avatar-count {
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+  flex: 0 0 auto;
+  inline-size: var(--reacd-avatar-size);
+  block-size: var(--reacd-avatar-size);
+  aspect-ratio: 1;
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: 50%;
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  vertical-align: middle;
+  font-weight: 500;
+}
+.reacd-avatar {
+  overflow: hidden;
+}
+.reacd-avatar-image,
+.reacd-avatar-fallback {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border-radius: inherit;
+}
+.reacd-avatar-fallback {
+  display: grid;
+  place-items: center;
+}
+.reacd-avatar-fallback,
+.reacd-avatar-count {
+  font-size: calc(var(--reacd-avatar-size) / var(--reacd-avatar-font-divisor));
+  line-height: 1;
+}
+.reacd-avatar-image {
+  object-fit: cover;
+}
+.reacd-avatar-image[aria-hidden='true'] {
+  visibility: hidden;
+}
+.reacd-avatar-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+}
+.reacd-avatar-group p {
+  margin: 0;
+}
+.reacd-avatar-group-label {
+  font-weight: 500;
+}
+.reacd-avatar-visible-list,
+.reacd-avatar-hidden-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  gap: var(--reacd-small);
+}
+.reacd-avatar-visible-list {
+  flex-wrap: wrap;
+}
+.reacd-avatar-hidden-list {
+  flex-direction: column;
+  margin-block-start: var(--reacd-small);
+}
+.reacd-avatar-person,
+.reacd-avatar-overflow summary {
+  display: flex;
+  align-items: center;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-avatar-person > span:last-child {
+  min-inline-size: 0;
+}
+.reacd-avatar-overflow summary:hover {
+  text-decoration: underline;
+}

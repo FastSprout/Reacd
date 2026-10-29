@@ -1,0 +1,57 @@
+.reacd-pagination {
+  min-inline-size: 0;
+}
+.reacd-pagination-status {
+  margin-block: 0 var(--reacd-small);
+}
+.reacd-pagination-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-small);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.reacd-pagination-list > li {
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+.reacd-pagination-control {
+  min-block-size: var(--reacd-control-target);
+  min-inline-size: min(100%, var(--reacd-control-target));
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.reacd-pagination-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--reacd-small);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+}
+.reacd-pagination-link[data-current='true'] {
+  color: var(--reacd-onPrimary);
+  background: var(--reacd-primary);
+}
+.reacd-pagination-link[aria-disabled='true'] {
+  cursor: default;
+  text-decoration: none;
+}
+.reacd-pagination[data-size='small'] .reacd-pagination-control {
+  padding: var(--reacd-small);
+}
+.reacd-pagination[data-size='medium'] .reacd-pagination-control,
+.reacd-pagination[data-size='large'] .reacd-pagination-control {
+  padding-inline: var(--reacd-medium);
+}
+.reacd-pagination[data-size='large'] .reacd-pagination-control {
+  padding-block: var(--reacd-medium);
+}
+.reacd-pagination-ellipsis {
+  padding-inline: var(--reacd-small);
+}

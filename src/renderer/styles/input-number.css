@@ -1,0 +1,45 @@
+.reacd-number-group {
+  display: flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+}
+.reacd-number-input {
+  min-inline-size: 0;
+  inline-size: 100%;
+  min-block-size: var(--reacd-control-target);
+  padding-inline: var(--reacd-small);
+  border: 0;
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+  font: inherit;
+  text-align: center;
+}
+.reacd-number-step {
+  flex: 0 0 var(--reacd-control-target);
+  display: grid;
+  place-items: center;
+  min-block-size: var(--reacd-control-target);
+  border: 0;
+  color: var(--reacd-text);
+  background: var(--reacd-canvas);
+  cursor: pointer;
+}
+.reacd-number-step:disabled {
+  color: var(--reacd-muted);
+  cursor: default;
+}
+.reacd-number-step svg {
+  inline-size: 1em;
+  block-size: 1em;
+}
+.reacd-number-input:focus-visible,
+.reacd-number-step:focus-visible {
+  outline: var(--reacd-focus-width) solid var(--reacd-focus);
+  outline-offset: calc(var(--reacd-focus-width) * -1);
+}
+.reacd-field-description {
+  color: var(--reacd-muted);
+  overflow-wrap: anywhere;
+}

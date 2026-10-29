@@ -1,0 +1,36 @@
+.reacd-content-surround {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-medium);
+}
+
+.reacd-surround-link {
+  flex: 1 1 var(--reacd-stack-track);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: var(--reacd-small);
+  padding: min(var(--reacd-medium), var(--reacd-padding-limit));
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.reacd-surround-direction {
+  color: var(--reacd-muted);
+}
+
+.reacd-surround-title {
+  font-weight: bold;
+}
+
+.reacd-surround-link:hover .reacd-surround-title {
+  text-decoration: underline;
+}
+
+.reacd-surround-link:active {
+  border-color: var(--reacd-primary);
+}

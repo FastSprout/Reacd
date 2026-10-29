@@ -1,0 +1,182 @@
+import { renderToString } from 'react-dom/server';
+import { SelectMenu, Listbox, Toast, type ToastProps } from 'reacd';
+import { AuthForm, PageLogos, ContentNavigation, ContentToc } from 'reacd';
+import { Accordion, Avatar, AvatarGroup, Button, CheckboxGroup, Collapsible,
+  Grid, Input, Modal, Chip, Tooltip, Kbd, Popover, Skeleton, Empty,
+  RadioGroup, ReacdProvider, Text,
+  VStack, createReacdStore, shadcnAdapter } from 'reacd';
+import type { GridProps } from 'reacd';
+import { ContentSurround, ContentSearch, ContentSearchButton } from 'reacd';
+import { Link, Tabs } from 'reacd';
+import type { TabsProps, LinkProps } from 'reacd';
+import { PageAside, PageBody, PageColumns, PageGrid, PageList } from 'reacd';
+import { PageHeader, PageFeature, PageCard, PageHero, PageSection,
+  FooterColumns, NavigationMenu, Stepper, InputTags, Tree,
+  Sidebar, Splitter, PageAnchors, PageLinks, PageCTA, CommandPalette } from 'reacd';
+import { Container, Main, Header, Footer, Separator, User, ProgressGroup,
+  Banner, InputNumber, PinInput, Pagination, Breadcrumb,
+  App, Error as ErrorView, Theme, Timeline, ScrollArea, InputRating } from 'reacd';
+import { GenerativeUI, createDocumentState, defineGenerativeDeclaration,
+  createDataTableController } from 'reacd/generative';
+
+const properties: GridProps = { columns: 2 };
+const packedToast: ToastProps = { title: 'Packed toast notification', open: true,
+  duration: 'persistent', onOpenChange: () => undefined };
+const packedLink: LinkProps = { label: 'Packed current', href: '/', active: true };
+const packedTabs: TabsProps = {
+  label: 'Packed views', value: 'one', onValueChange: () => undefined,
+  items: [{ value: 'one', label: 'One', content: <Link {...packedLink} /> }],
+  orientation: 'vertical', activationMode: 'manual',
+};
+const store = createReacdStore();
+export const markup = renderToString(
+  <ReacdProvider store={store} adapter={shadcnAdapter}>
+    <VStack>
+      <Toast {...packedToast} />
+      <AuthForm label="Packed auth example" submitLabel="Submit packed auth"
+        onSubmit={() => undefined} />
+      <PageLogos label="Packed logos" items={[]} />
+      <ContentNavigation label="Packed document tree" items={[]} expandedKeys={[]}
+        onExpandedKeysChange={() => undefined} />
+      <ContentToc label="Packed outline" items={[]} />
+      <ContentSurround label="Packed adjacent documents" />
+      <ContentSearchButton label="Packed search request" open={false}
+        onOpenChange={() => undefined} />
+      <ContentSearch title="Packed documentation" label="Packed query"
+        query="" groups={[]} open={false} triggerLabel="Open packed search"
+        onOpenChange={() => undefined} onQueryChange={() => undefined} />
+      <PageHeader title="Packed page header" anchor="packed-header" />
+      <PageFeature title="Packed feature" />
+      <PageCard title="Packed page card" />
+      <PageHero title="Packed hero" />
+      <PageSection title="Packed section" anchor="packed-section" />
+      <FooterColumns label="Packed columns" columns={[]} />
+      <NavigationMenu label="Packed menu" items={[]} />
+      <Stepper label="Packed steps" value="one" items={[{ key: 'one', title: 'One' }]}
+        onValueChange={() => undefined} />
+      <SelectMenu label="Packed choice menu" items={[]} value=""
+        onValueChange={() => undefined} />
+      <Listbox label="Packed inline choices" items={[]} value=""
+        onValueChange={() => undefined} />
+      <InputTags label="Packed tags" value={[]} onValueChange={() => undefined} />
+      <Tree label="Packed tree" items={[]} value={[]} expanded={[]}
+        onValueChange={() => undefined} onExpandedChange={() => undefined} />
+      <Sidebar title="Packed sidebar" open={false} mobileOpen={false}
+        onOpenChange={() => undefined} onMobileOpenChange={() => undefined} />
+      <Splitter label="Packed splitter" panels={[
+        { id: 'one', label: 'One', content: <Text>One</Text> },
+        { id: 'two', label: 'Two', content: <Text>Two</Text> },
+      ]} value={[{ id: 'one', share: 50 }, { id: 'two', share: 50 }]}
+        onValueChange={() => undefined} />
+      <PageAnchors label="Packed anchors" />
+      <PageLinks label="Packed page links" />
+      <PageCTA title="Packed call to action" />
+      <CommandPalette label="Packed commands" query="" groups={[]}
+        onQueryChange={() => undefined} />
+      <Tabs {...packedTabs} />
+      <PageAside label="Packed page navigation"><Text>Aside</Text></PageAside>
+      <PageBody><Text>Page body</Text></PageBody>
+      <PageColumns><Text>Column flow</Text></PageColumns>
+      <PageGrid><Text>Grid content</Text></PageGrid>
+      <PageList divide><Text>List content</Text></PageList>
+      <App language="en"><Theme defaults={{ Text: { role: 'caption' } }}>
+        <Text>Packed scoped content</Text></Theme></App>
+      <ErrorView statusCode={404} title="Packed unavailable" redirect="/" />
+      <Timeline label="Packed events"
+        items={[{ id: 'created', title: 'Packed created' }]} />
+      <ScrollArea label="Packed scroll"><Text>Packed record</Text></ScrollArea>
+      <InputRating label="Packed rating" value={2} onValueChange={() => undefined} />
+      <Container><Main><Text>Packed main</Text></Main></Container>
+      <Header title="Packed application"><Text>Packed header</Text></Header>
+      <Footer><Text>Packed footer</Text></Footer>
+      <Separator label="Packed separator" />
+      <User name="Packed user" />
+      <ProgressGroup label="Packed segments"
+        items={[{ id: 'done', label: 'Complete', value: 20 }]} />
+      <Banner title="Packed notice" open onOpenChange={() => undefined} />
+      <InputNumber label="Packed quantity" value={null}
+        onValueChange={() => undefined} />
+      <PinInput label="Packed code" value="" onValueChange={() => undefined} />
+      <Pagination label="Packed pages" totalItems={23}
+        value={{ pageIndex: 0, pageSize: 10 }} navigation={{ href: '/orders' }} />
+      <Breadcrumb label="Packed path"
+        items={[{ key: 'home', label: 'Packed home', href: '/' }]} />
+      <Skeleton label="Packed loading" lines={2} animated={false} />
+      <Empty title="Packed empty" loading leading={<Kbd value="enter" />}
+        actions={<Button label="Packed recovery" onPress={() => undefined} />}>
+        <Text>Packed empty body</Text>
+      </Empty>
+      <Kbd value="meta" platform="apple" />
+      <Popover title="Packed popover" triggerLabel="Open packed popover" open
+        onOpenChange={() => undefined}><Text>Packed floating body</Text></Popover>
+      <Tooltip text="Packed hint"><Chip label="Packed count" text={8}>
+        <Text>Packaged anchor</Text></Chip></Tooltip>
+      <Avatar name="Packed Avatar" fallback="PA" />
+      <AvatarGroup label="Packed identities" max={1} items={[
+        { id: 'first', name: 'Packed First' },
+        { id: 'second', name: 'Packed Second' },
+      ]} />
+      <Grid columns={properties.columns}><Text>Packaged UI</Text></Grid>
+      <Input label="Name" value="Example" onValueChange={() => undefined} />
+      <Button label="Save" onPress={() => undefined} />
+      <RadioGroup label="Packed choice" items={[{ value: 'a', label: 'Alpha' }]}
+        value="a" onValueChange={() => undefined} />
+      <CheckboxGroup label="Packed choices" items={[{ value: 'a', label: 'Alpha' }]}
+        value={['a']} onValueChange={() => undefined} max={1} />
+      <Collapsible label="Packed disclosure" open onOpenChange={() => undefined}>
+        <Text>Packed disclosure body</Text>
+      </Collapsible>
+      <Collapsible label="Packed retained" open={false} retainContent
+        onOpenChange={() => undefined}>
+        <Text>Packed retained body</Text>
+      </Collapsible>
+      <Modal title="Packed modal" description="SSR example" open
+        onOpenChange={() => undefined} triggerLabel="Open packed modal">
+        <Text>Client popup body</Text>
+      </Modal>
+      <Accordion label="Packed sections" value={['details']}
+        onValueChange={() => undefined} items={[{ value: 'details', label: 'Details',
+          content: <Text>Packed panel</Text> }]} />
+    </VStack>
+  </ReacdProvider>,
+);
+const declaration = defineGenerativeDeclaration({
+  schemaVersion: '0.2',
+  state: [{ key: 'name', kind: 'text', initial: 'Initial', access: 'readWrite' }],
+  root: { type: 'Text', content: { state: 'name', mode: 'read' } },
+});
+export const first = createDocumentState(declaration);
+export const second = createDocumentState(declaration);
+export const update = first.update('name', 'Edited');
+export const generated = renderToString(
+  <GenerativeUI document={declaration} registry={first} />,
+);
+const columns = [{ key: 'title', label: 'Title', kind: 'text' }] as const;
+const bindings = {
+  rows: { state: 'rows', mode: 'read' },
+  selection: { state: 'selected', mode: 'readWrite' },
+  sorting: { state: 'sorting', mode: 'readWrite' },
+  filters: { state: 'filters', mode: 'readWrite' },
+  pagination: { state: 'page', mode: 'readWrite' },
+} as const;
+const tableDocument = defineGenerativeDeclaration({
+  schemaVersion: '0.2', state: [
+    { key: 'rows', kind: 'tableRows', access: 'read', initial: [
+      { id: 'z', cells: { title: 'Zulu' } },
+      { id: 'a', cells: { title: 'Alpha' } },
+    ] },
+    { key: 'selected', kind: 'selection', access: 'readWrite', initial: [] },
+    { key: 'sorting', kind: 'sorting', access: 'readWrite', initial: [] },
+    { key: 'filters', kind: 'filters', access: 'readWrite', initial: [] },
+    { key: 'page', kind: 'pagination', access: 'readWrite',
+      initial: { pageIndex: 0, pageSize: 1 } },
+  ], root: { type: 'DataTable', caption: 'Packed table', columns, bindings },
+});
+const tableState = createDocumentState(tableDocument);
+const table = createDataTableController(tableState, { columns, bindings });
+if (!table.success) throw new Error(JSON.stringify(table.issues));
+export const sorted = table.data.sort([{ column: 'title', direction: 'ascending' }]);
+export const tableSnapshot = table.data.read();
+export const tableMarkup = renderToString(
+  <GenerativeUI document={tableDocument} registry={tableState} />,
+);

@@ -1,0 +1,99 @@
+.reacd-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  inline-size: var(--reacd-icon-medium);
+  block-size: var(--reacd-icon-medium);
+  vertical-align: middle;
+  max-inline-size: 100%;
+}
+.reacd-icon[data-size='small'] {
+  inline-size: var(--reacd-icon-small);
+  block-size: var(--reacd-icon-small);
+}
+.reacd-icon[data-size='large'] {
+  inline-size: var(--reacd-icon-large);
+  block-size: var(--reacd-icon-large);
+}
+.reacd-button-label {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-button {
+  flex-wrap: wrap;
+  padding-block: var(--reacd-small);
+  padding-inline: var(--reacd-medium);
+  border-radius: var(--reacd-radius);
+  font-size: inherit;
+}
+.reacd-button[aria-busy='true'] {
+  border-style: dashed;
+}
+.reacd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--reacd-small);
+  max-inline-size: 100%;
+  flex-wrap: wrap;
+  padding: var(--reacd-small);
+  border-radius: var(--reacd-radius);
+}
+.reacd-badge[data-size='small'] {
+  font-size: var(--reacd-badge-small);
+}
+.reacd-badge[data-size='medium'] {
+  font-size: var(--reacd-badge-medium);
+}
+.reacd-badge[data-size='large'] {
+  font-size: var(--reacd-badge-large);
+}
+.reacd-card .reacd-card-slot {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--reacd-gap);
+}
+.reacd-alert-layout {
+  display: flex;
+  align-items: start;
+  gap: var(--reacd-small);
+}
+.reacd-alert-content {
+  flex: 1;
+}
+.reacd-alert-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: var(--reacd-small);
+}
+.reacd-alert-content strong {
+  display: block;
+}
+.reacd-alert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+  margin-block-start: var(--reacd-small);
+}
+.reacd-alert-close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: var(--reacd-control-target);
+  block-size: auto;
+  padding: 0;
+  color: inherit;
+}
+.reacd-alert {
+  color: var(--reacd-text);
+  padding: min(var(--reacd-medium), var(--reacd-padding-limit));
+  border-radius: var(--reacd-radius);
+  font-size: inherit;
+}
+.reacd-alert-content > div {
+  font-size: inherit;
+}
+.reacd-progress-track {
+  display: flex;
+}

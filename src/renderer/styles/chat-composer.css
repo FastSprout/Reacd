@@ -1,0 +1,75 @@
+.reacd-chat-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+  padding: var(--reacd-medium);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  overflow-wrap: anywhere;
+}
+.reacd-chat-prompt-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+}
+.reacd-chat-prompt-content > label {
+  font-weight: bold;
+}
+.reacd-chat-prompt-content > p,
+.reacd-chat-prompt > p {
+  margin: 0;
+}
+.reacd-chat-prompt-content > textarea {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  resize: vertical;
+  padding: var(--reacd-small);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  font: inherit;
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+}
+.reacd-chat-prompt-content > textarea::placeholder {
+  color: var(--reacd-muted);
+  opacity: 1;
+}
+.reacd-chat-prompt-content > textarea:focus-visible {
+  outline: var(--reacd-focus-width) solid var(--reacd-focus);
+  outline-offset: var(--reacd-focus-width);
+}
+.reacd-chat-prompt-content > textarea:disabled {
+  cursor: not-allowed;
+}
+.reacd-chat-prompt-files,
+.reacd-chat-prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+}
+.reacd-chat-prompt-files > * {
+  flex: 1 1 var(--reacd-chat-file-track);
+}
+.reacd-chat-palette {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  block-size: min(var(--reacd-chat-palette-block), 100dvh);
+  gap: var(--reacd-medium);
+}
+.reacd-chat-palette-content {
+  flex: 1;
+  min-block-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.reacd-chat-palette-prompt {
+  flex: none;
+  min-inline-size: 0;
+}

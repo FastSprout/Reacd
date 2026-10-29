@@ -1,0 +1,6 @@
+.reacd-root .reacd-search-button:disabled {
+  opacity: 1;
+  pointer-events: auto;
+  color: var(--reacd-muted);
+  background: var(--reacd-surface);
+}

@@ -1,0 +1,1 @@
+export const invalid = <div>Native markup is forbidden</div>;

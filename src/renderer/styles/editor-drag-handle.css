@@ -1,0 +1,22 @@
+.reacd-editor-drag-handle {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  gap: var(--reacd-small);
+  overflow-wrap: anywhere;
+}
+.reacd-editor-drag-handle p {
+  margin: 0;
+}
+.reacd-editor-drag-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+}
+.reacd-editor-drag-controls [draggable='true'] {
+  cursor: grab;
+}
+.reacd-editor-drag-controls [draggable='true']:active {
+  cursor: grabbing;
+}

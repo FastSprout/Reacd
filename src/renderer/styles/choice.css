@@ -1,0 +1,87 @@
+.reacd-choice-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+.reacd-choice-legend {
+  margin-block-end: var(--reacd-small);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.reacd-choice-description {
+  display: block;
+  margin: 0;
+  color: var(--reacd-muted);
+  overflow-wrap: anywhere;
+}
+.reacd-choice-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+  margin-block-start: var(--reacd-small);
+}
+.reacd-choice-items[data-orientation='horizontal'] {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.reacd-choice-item {
+  display: flex;
+  align-items: start;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  cursor: pointer;
+}
+.reacd-choice-item:has(
+  .reacd-choice-control:is([data-disabled], [aria-disabled='true'])
+) {
+  cursor: not-allowed;
+}
+.reacd-choice-items[data-orientation='horizontal'] .reacd-choice-item {
+  flex: 1 1 var(--reacd-stack-track);
+}
+.reacd-choice-text {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-choice-control {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: var(--reacd-control-target);
+  block-size: var(--reacd-control-target);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  border-radius: var(--reacd-radius);
+  cursor: pointer;
+}
+.reacd-choice-control[data-checked] {
+  background: var(--reacd-primary);
+  color: var(--reacd-onPrimary);
+}
+.reacd-choice-control:is([data-disabled], [aria-disabled='true']) {
+  cursor: not-allowed;
+  border-style: dashed;
+}
+.reacd-radio {
+  border-radius: 50%;
+}
+.reacd-choice-indicator {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.reacd-radio-dot,
+.reacd-choice-check {
+  inline-size: calc(var(--reacd-control-target) / var(--reacd-choice-marker-ratio));
+  block-size: calc(var(--reacd-control-target) / var(--reacd-choice-marker-ratio));
+}
+.reacd-radio-dot {
+  background: currentColor;
+  border-radius: 50%;
+}

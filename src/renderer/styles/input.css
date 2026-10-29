@@ -1,0 +1,11 @@
+.reacd-input input {
+  block-size: auto;
+}
+.reacd-input p {
+  margin: 0;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-input input[aria-invalid='true'] {
+  border-color: var(--reacd-danger);
+}

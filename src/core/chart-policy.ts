@@ -1,0 +1,33 @@
+export const CHART_KINDS = ['line', 'area', 'bar', 'donut'] as const;
+export const CHART_POLICY = {
+  maxCategories: 50,
+  maxSeries: 6,
+  maximumMagnitude: 1_000_000_000_000,
+  width: 640,
+  height: 320,
+  padding: 32,
+  zero: 0,
+  unitDomain: 1,
+  midpoint: 2,
+  strokeWidth: 2,
+  dashUnit: 2,
+  dashGap: 4,
+  markerRadius: 4,
+  barGroupRatio: 0.75,
+  donutOuterRadius: 120,
+  donutInnerRadius: 76,
+  startAngle: -Math.PI / 2,
+  fullAngle: Math.PI * 2,
+  patternSize: 8,
+  patternRotationStep: 30,
+} as const;
+export const CHART_DEFAULTS = {
+  kind: 'line',
+  emptyMessage: 'No chart data available.',
+  loadingMessage: 'Loading chart data…',
+  errorMessage: 'Unable to load chart data.',
+  retryLabel: 'Retry chart',
+  missingValue: 'No value',
+  categoryLabel: 'Category',
+  seriesLabel: 'Data series',
+} as const;

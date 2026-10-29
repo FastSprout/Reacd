@@ -1,0 +1,78 @@
+# Quality requirements
+
+Tests live beside their subject. Component modules use `*.test.tsx`, schema modules use
+`*.test.ts`, and adapter conformance lives under the adapter's `__tests__/` directory.
+Shared test utilities live in `test-support/`. Cross-application browser scenarios live
+in `demo/e2e/`. Test files and test-only helpers are excluded from package output and
+production coverage. Production modules may not import test files or test-support code.
+
+QUALITY-001: Use TypeScript 7 in strict mode. Keep unchecked-index and exact
+optional-property checks enabled. Do not downgrade the compiler to accommodate an
+auxiliary tool.
+
+QUALITY-002: No `any`, non-null assertions, `@ts-ignore`, `@ts-nocheck`, unsafe type
+assertions, or hidden suppression of errors in owned code. External input starts as
+`unknown` and is narrowed by validation.
+
+QUALITY-003: Every owned production module has 100% statement, branch, function, and
+line coverage, enforced per file. Do not lower thresholds, omit executable files, or
+insert coverage-ignore directives to obtain a passing report.
+
+QUALITY-004: Tests assert behavior and meaningful failures. A coverage percentage is a
+measurement of executed code, not proof of all possible correctness.
+
+## Source rules
+
+QUALITY-005: Maintained source, configuration, tests, and documentation use English, at
+most 300 lines per file, 88 characters per line, and two-space indentation. Split
+modules when they exceed the limit.
+
+Package-manager lockfiles, third-party license text, vendored material, generated
+schemas, reports, and build output retain their machine-defined formats. These are not a
+place to hide owned component implementations. Every exclusion is explicitly listed by
+the source-policy checker.
+
+The sole third-party source tree is `src/adapter/shadcn/vendor/`. Its official registry
+provenance and upstream hashes are in `catalog/shadcn-provenance.json`. Only local
+relative import paths differ. Owned adapter wrappers are outside that tree, remain fully
+instrumented, and receive per-file 100% coverage checks.
+
+QUALITY-006: Each component has its own module. Barrels re-export; they do not implement
+multiple components. A single large switch is not the component API.
+
+QUALITY-007: Named core policies replace unexplained behavior literals. Design values
+live in named template or adapter token definitions.
+
+QUALITY-008: Enforce dependency direction and the application source boundary. Native
+JSX, CSS imports, styling props, and direct private-renderer access in an application
+are build failures.
+
+## Acceptance gates
+
+The complete local check must include:
+
+1. Formatting, file limits, language-policy review, and architecture checks.
+2. Strict project and packed-consumer type checks.
+3. Typed lint without warnings or disabled safety rules.
+4. Runtime schema and generative-document validation.
+5. Per-file 100% coverage across owned executable modules.
+6. Component and state behavior, including negative cases.
+7. Adapter conformance and browser rendering checks.
+8. Production build, SSR, hydration, and package export verification.
+9. Strict MkDocs build and compiled documentation examples.
+
+QUALITY-009: Browser tests are centralized around renderer and adapter contracts. They
+are not an application author's substitute for using the component API.
+
+QUALITY-010: Do not report an enterprise milestone as complete until evidence covers its
+full requirement set. Historical prototype reports are not evidence for a rewritten
+architecture.
+
+QUALITY-011: No commits, pushes, deployments, package publication, or DNS changes are
+part of the current acceptance process.
+
+QUALITY-012: Coverage includes every executable CLI module under `scripts/`, including
+`.mjs` orchestration. Tests cover success, failure propagation, stale generated
+artifacts, input diagnostics, exit codes, and package workspace cleanup. Do not exclude
+entry points or replace behavioral checks with import-only coverage. Real commands still
+run in the persistent main check; isolated runner tests never invoke recursive checks.

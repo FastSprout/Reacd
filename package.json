@@ -1,0 +1,113 @@
+{
+  "name": "reacd",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A constrained, agent-driven UI contract and React renderer.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "files": [
+    "dist",
+    "schema/reacd.schema.json",
+    "schema/generative.schema.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=26.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./schema.json": "./schema/reacd.schema.json",
+    "./generative-schema.json": "./schema/generative.schema.json",
+    "./generative": {
+      "types": "./dist/generative.d.ts",
+      "import": "./dist/generative.js"
+    },
+    "./jsx-runtime": {
+      "types": "./dist/jsx-runtime.d.ts",
+      "import": "./dist/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "types": "./dist/jsx-dev-runtime.d.ts",
+      "import": "./dist/jsx-dev-runtime.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "node scripts/build.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "node scripts/typecheck.mjs",
+    "lint": "oxlint --type-aware --deny-warnings",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:browser": "playwright test",
+    "schema": "tsx scripts/schema.ts",
+    "schema:check": "tsx scripts/schema.ts --check",
+    "examples": "tsx scripts/examples.ts",
+    "examples:check": "tsx scripts/examples.ts --check",
+    "validate": "tsx scripts/validate.ts",
+    "policy": "tsx scripts/policy.ts",
+    "test:package": "tsx scripts/package-check.ts",
+    "docs:check": "node scripts/docs.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "dependencies": {
+    "@base-ui/react": "1.9.0",
+    "@radix-ui/react-accordion": "1.3.1",
+    "@radix-ui/react-checkbox": "1.4.1",
+    "@radix-ui/react-direction": "1.2.0",
+    "@radix-ui/react-label": "2.1.17",
+    "@radix-ui/react-progress": "1.2.1",
+    "@radix-ui/react-select": "2.4.1",
+    "@radix-ui/react-separator": "1.2.0",
+    "@radix-ui/react-slider": "1.6.1",
+    "@radix-ui/react-slot": "1.5.0",
+    "@radix-ui/react-switch": "1.4.1",
+    "@radix-ui/react-tabs": "1.2.1",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "input-otp": "1.5.0",
+    "jotai": "3.0.1",
+    "lucide-react": "1.63.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwind-merge": "3.7.0",
+    "zod": "4.6.7",
+    "@internationalized/date": "3.12.4",
+    "react-aria-components": "1.22.1",
+    "@daypicker/react": "10.0.2",
+    "@tiptap/core": "3.32.1",
+    "@tiptap/react": "3.32.1",
+    "@tiptap/pm": "3.32.1",
+    "@tiptap/starter-kit": "3.32.1",
+    "@tiptap/suggestion": "3.32.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@tailwindcss/vite": "4.3.3",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@testing-library/user-event": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "6.1.2",
+    "@vitest/coverage-v8": "5.0.5",
+    "ajv": "latest",
+    "fast-check": "4.10.2",
+    "jsdom": "latest",
+    "oxc-parser": "0.156.0",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "prettier": "3.9.10",
+    "tailwindcss": "4.3.3",
+    "tsx": "latest",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  }
+}

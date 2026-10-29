@@ -1,0 +1,51 @@
+.reacd-command-palette {
+  display: grid;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+}
+.reacd-command-palette > label {
+  font-weight: bold;
+}
+.reacd-command-palette p {
+  margin: 0;
+}
+.reacd-command-list {
+  max-block-size: var(--reacd-command-block);
+  overflow: auto;
+  overscroll-behavior: contain;
+  min-inline-size: 0;
+}
+.reacd-command-group {
+  display: grid;
+  gap: var(--reacd-small);
+  margin-block-end: var(--reacd-medium);
+}
+.reacd-command-item {
+  min-block-size: var(--reacd-control-target);
+  display: grid;
+  align-content: center;
+  gap: var(--reacd-small);
+  padding: var(--reacd-small);
+  border: var(--reacd-border-width) solid transparent;
+  border-radius: var(--reacd-radius);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.reacd-command-item[data-highlighted],
+.reacd-command-item:hover:not([data-disabled]) {
+  border-color: var(--reacd-focus);
+  background: var(--reacd-surface);
+}
+.reacd-command-item:active:not([data-disabled]) {
+  border-color: var(--reacd-primary);
+}
+.reacd-command-item[data-disabled] {
+  cursor: not-allowed;
+  color: var(--reacd-muted);
+}
+.reacd-command-description {
+  font-size: calc(1em * var(--reacd-command-description));
+}

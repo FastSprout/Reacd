@@ -1,0 +1,33 @@
+.reacd-app {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-large);
+  inline-size: 100%;
+}
+
+.reacd-theme {
+  background: var(--reacd-canvas);
+  color: var(--reacd-text);
+  font-family: var(--reacd-font);
+  font-size: var(--reacd-font-size);
+}
+
+.reacd-error {
+  display: grid;
+  gap: var(--reacd-medium);
+  inline-size: 100%;
+  max-inline-size: var(--reacd-page-width);
+  margin-inline: auto;
+  overflow-wrap: anywhere;
+}
+
+.reacd-error-status {
+  color: var(--reacd-danger);
+  font-weight: bold;
+}
+
+.reacd-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+}

@@ -1,0 +1,54 @@
+.reacd-table-scroll {
+  max-inline-size: 100%;
+  overflow-x: auto;
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+}
+.reacd-table {
+  inline-size: 100%;
+  min-inline-size: calc(var(--reacd-table-columns) * var(--reacd-table-column));
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.reacd-table caption {
+  text-align: start;
+  font-weight: 700;
+  padding: var(--reacd-medium);
+}
+.reacd-table th,
+.reacd-table td {
+  padding: var(--reacd-medium);
+  text-align: start;
+  vertical-align: top;
+  border-block-start: var(--reacd-border-width) solid var(--reacd-border);
+  overflow-wrap: anywhere;
+}
+.reacd-table th {
+  color: var(--reacd-muted);
+  font-weight: 500;
+}
+.reacd-alert,
+.reacd-badge {
+  overflow-wrap: anywhere;
+}
+.reacd-badge {
+  white-space: normal;
+}
+.reacd-spinner {
+  margin: 0;
+}
+
+.reacd-progress-track {
+  position: relative;
+  overflow: hidden;
+  block-size: var(--reacd-small);
+  inline-size: 100%;
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-border);
+}
+.reacd-progress-fill {
+  block-size: 100%;
+  inline-size: 100%;
+  background: var(--reacd-primary);
+}

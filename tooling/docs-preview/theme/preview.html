@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+{% block page %}
+{% set original = super() %}
+{% set entry = 'assets/previews/docs-preview.html' | url %}
+{% set preview_url = entry ~ '?component=' ~ page.meta.reacd_preview %}
+{% set preview %}
+<iframe title="Live {{ page.meta.reacd_preview }} example"
+  src="{{ preview_url }}"
+  height="{{ page.meta.reacd_preview_height }}" loading="lazy"
+  sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads"
+  style="display:block;width:100%;max-width:100%;min-width:0;border:0;">
+</iframe>
+<p><a href="{{ preview_url }}" target="_blank" rel="noopener noreferrer">
+  Open {{ page.meta.reacd_preview }} example
+</a></p>
+{% endset %}
+{{ original | replace('<!-- reacd-live-preview -->', preview) | safe }}
+{% endblock page %}

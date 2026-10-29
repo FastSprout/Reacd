@@ -1,0 +1,85 @@
+.reacd-calendar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+}
+.reacd-calendar-label {
+  font-weight: 500;
+}
+.reacd-calendar-viewport {
+  overflow: auto;
+  max-inline-size: 100%;
+  padding: var(--reacd-small);
+}
+.reacd-calendar .rdp-months {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-medium);
+}
+.reacd-calendar .rdp-month {
+  inline-size: calc(var(--reacd-calendar-days) * var(--reacd-control-target));
+  flex-shrink: 0;
+}
+.reacd-calendar .rdp-month_grid {
+  border-collapse: collapse;
+}
+.reacd-calendar :is(.rdp-month_caption, .rdp-nav) {
+  display: flex;
+  align-items: center;
+  gap: var(--reacd-small);
+  min-block-size: var(--reacd-control-target);
+}
+.reacd-calendar .rdp-nav button {
+  display: grid;
+  place-items: center;
+  inline-size: var(--reacd-control-target);
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+}
+.reacd-calendar .rdp-chevron {
+  inline-size: 1em;
+  block-size: 1em;
+  fill: currentColor;
+}
+.reacd-calendar[data-direction='rtl'] .rdp-chevron {
+  transform: rotate(180deg);
+}
+.reacd-calendar .rdp-weekday {
+  color: var(--reacd-muted);
+  font-weight: normal;
+  overflow-wrap: anywhere;
+}
+.reacd-calendar .rdp-day {
+  padding: 0;
+}
+.reacd-calendar .reacd-calendar-day {
+  inline-size: var(--reacd-control-target);
+  min-block-size: var(--reacd-control-target);
+  block-size: auto;
+  padding: 0;
+  color: var(--reacd-text);
+  border-radius: var(--reacd-radius);
+  white-space: normal;
+  background: var(--reacd-surface);
+}
+.reacd-calendar .reacd-calendar-day[data-selected] {
+  color: var(--reacd-onPrimary);
+  background: var(--reacd-primary);
+}
+.reacd-calendar .rdp-today button {
+  border: var(--reacd-border-width) solid var(--reacd-focus);
+}
+.reacd-calendar .reacd-calendar-validation {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  inline-size: var(--reacd-border-width);
+  block-size: var(--reacd-border-width);
+  min-block-size: 0;
+  clip-path: inset(50%);
+  opacity: 0;
+  pointer-events: none;
+}

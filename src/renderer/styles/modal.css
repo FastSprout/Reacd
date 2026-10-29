@@ -1,0 +1,57 @@
+.reacd-modal-portal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--reacd-modal-layer);
+  padding: 0;
+  pointer-events: none;
+  background: transparent;
+}
+.reacd-modal-portal[hidden] {
+  display: none;
+}
+.reacd-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: color-mix(
+    in srgb,
+    var(--reacd-text) var(--reacd-backdrop-percent),
+    transparent
+  );
+  pointer-events: auto;
+}
+.reacd-modal-viewport {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--reacd-small);
+}
+.reacd-modal-panel {
+  position: relative;
+  inline-size: min(100%, var(--reacd-modal-width));
+  max-block-size: calc(100dvh - var(--reacd-small) - var(--reacd-small));
+  overflow: auto;
+  padding: var(--reacd-medium);
+  background: var(--reacd-surface);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  box-shadow: var(--reacd-shadow);
+  pointer-events: auto;
+}
+.reacd-modal-panel[data-fullscreen='true'] {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.reacd-modal-header :is(h2, p) {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-modal-body,
+.reacd-modal-footer {
+  margin-block-start: var(--reacd-medium);
+}
+.reacd-modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+}

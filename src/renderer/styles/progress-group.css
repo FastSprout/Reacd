@@ -1,0 +1,52 @@
+.reacd-progress-group {
+  display: grid;
+  gap: var(--reacd-small);
+}
+.reacd-progress-group p {
+  margin: 0;
+}
+.reacd-progress-group-label {
+  font-weight: 500;
+}
+.reacd-progress-group-track {
+  display: flex;
+  overflow: hidden;
+  min-block-size: var(--reacd-small);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+}
+.reacd-progress-group-segment {
+  flex-shrink: 0;
+  background: var(--reacd-primary);
+  border-inline-end: var(--reacd-border-width) solid var(--reacd-surface);
+}
+.reacd-progress-group-segment[data-intent='secondary'] {
+  background: var(--reacd-muted);
+}
+.reacd-progress-group-segment[data-intent='danger'] {
+  background: var(--reacd-danger);
+}
+.reacd-progress-group-legend {
+  list-style: none;
+  display: grid;
+  gap: var(--reacd-small);
+  padding: 0;
+  margin: 0;
+}
+.reacd-progress-group-legend li {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+}
+.reacd-progress-group-item {
+  border-inline-start: var(--reacd-focus-width) solid var(--reacd-primary);
+  padding-inline-start: var(--reacd-small);
+}
+.reacd-progress-group-item[data-intent='secondary'] {
+  border-color: var(--reacd-muted);
+}
+.reacd-progress-group-item[data-intent='danger'] {
+  border-color: var(--reacd-danger);
+}

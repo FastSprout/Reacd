@@ -1,0 +1,34 @@
+.reacd-page-logos {
+  display: grid;
+  gap: var(--reacd-large);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+.reacd-page-logos :is(p, .reacd-page-title) {
+  margin: 0;
+}
+.reacd-logo-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-large);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.reacd-logo-list > li {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.reacd-safe-image {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+  object-fit: contain;
+  overflow-wrap: anywhere;
+}
+.reacd-logo-image[role='img'] {
+  inline-size: fit-content;
+}

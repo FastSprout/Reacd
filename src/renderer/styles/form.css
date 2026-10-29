@@ -1,0 +1,17 @@
+.reacd-form-fields {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.reacd-form-summary {
+  color: var(--reacd-danger);
+  overflow-wrap: anywhere;
+}
+.reacd-form-summary p {
+  margin: 0;
+}
+.reacd-form-summary ul {
+  margin-block: var(--reacd-small);
+  padding-inline-start: var(--reacd-large);
+}

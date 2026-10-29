@@ -1,0 +1,163 @@
+.reacd-page-introduction,
+.reacd-page-intro-copy,
+.reacd-page-intro-content {
+  display: grid;
+  align-content: start;
+  gap: var(--reacd-medium);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+.reacd-page-introduction {
+  --reacd-page-title-scale: var(--reacd-page-title-header);
+  --reacd-page-emphasis: var(--reacd-border);
+}
+
+.reacd-page-intro-regions {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--reacd-large);
+  min-inline-size: 0;
+}
+
+.reacd-page-introduction[data-orientation='horizontal'] > .reacd-page-intro-regions {
+  flex-direction: row;
+}
+
+.reacd-page-intro-regions > * {
+  flex: 1 1 var(--reacd-page-intro-track);
+  min-inline-size: min(100%, var(--reacd-page-intro-track));
+}
+
+.reacd-page-introduction[data-orientation='vertical'] > .reacd-page-intro-regions > * {
+  flex-basis: auto;
+}
+
+.reacd-page-introduction .reacd-page-title {
+  font-size: calc(var(--reacd-font-size) * var(--reacd-page-title-scale));
+  margin: 0;
+}
+
+.reacd-page-description,
+.reacd-page-headline {
+  margin: 0;
+  color: var(--reacd-muted);
+}
+
+.reacd-page-title-action {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--reacd-control-target);
+  max-inline-size: 100%;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  text-align: start;
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  cursor: pointer;
+}
+
+.reacd-page-title-action:hover,
+.reacd-page-title-action:active {
+  text-decoration-thickness: var(--reacd-focus-width);
+}
+
+.reacd-page-title-action:focus-visible {
+  outline: var(--reacd-focus-width) solid var(--reacd-focus);
+  outline-offset: var(--reacd-small);
+}
+
+.reacd-page-introduction[data-kind='feature'] {
+  --reacd-page-title-scale: var(--reacd-page-title-feature);
+}
+
+.reacd-page-introduction[data-kind='section'] {
+  --reacd-page-title-scale: var(--reacd-page-title-section);
+}
+
+.reacd-page-introduction[data-kind='hero'] {
+  --reacd-page-title-scale: var(--reacd-page-title-hero);
+  padding-block: var(--reacd-large);
+}
+
+.reacd-page-introduction:is([data-kind='card'], [data-kind='cta']) {
+  --reacd-page-title-scale: var(--reacd-page-title-card);
+  padding: min(var(--reacd-large), var(--reacd-padding-limit));
+  border-radius: var(--reacd-radius);
+  border: var(--reacd-border-width) solid transparent;
+}
+
+.reacd-page-introduction:is(
+    [data-kind='card'],
+    [data-kind='cta']
+  )[data-variant='solid'],
+.reacd-page-introduction:is(
+    [data-kind='card'],
+    [data-kind='cta']
+  )[data-variant='outline'] {
+  background: var(--reacd-surface);
+  border-color: var(--reacd-border);
+}
+
+.reacd-page-introduction:is(
+    [data-kind='card'],
+    [data-kind='cta']
+  )[data-variant='solid'] {
+  box-shadow: var(--reacd-shadow);
+}
+
+.reacd-page-introduction:is([data-kind='card'], [data-kind='cta'])[data-variant='soft'],
+.reacd-page-introduction:is(
+    [data-kind='card'],
+    [data-kind='cta']
+  )[data-variant='subtle'] {
+  background: var(--reacd-canvas);
+}
+
+.reacd-page-introduction:is(
+    [data-kind='card'],
+    [data-kind='cta']
+  )[data-variant='subtle'] {
+  border-color: var(--reacd-border);
+}
+
+.reacd-page-introduction:is(
+    [data-kind='card'],
+    [data-kind='cta']
+  )[data-variant='naked'] {
+  padding: 0;
+  border: 0;
+}
+
+.reacd-page-introduction:is(
+    [data-kind='card'],
+    [data-kind='cta']
+  )[data-highlight='true'] {
+  border-color: var(--reacd-page-emphasis);
+  border-style: solid;
+  border-width: calc(var(--reacd-border-width) * var(--reacd-page-emphasis-border));
+}
+
+.reacd-page-introduction[data-intent='primary'] {
+  --reacd-page-emphasis: var(--reacd-primary);
+}
+
+.reacd-page-introduction[data-intent='danger'] {
+  --reacd-page-emphasis: var(--reacd-danger);
+}
+
+.reacd-page-introduction[data-spotlight='true']:hover,
+.reacd-page-introduction[data-spotlight='true']:focus-within {
+  outline: var(--reacd-focus-width) solid var(--reacd-focus);
+  outline-offset: var(--reacd-small);
+}
+
+.reacd-page-introduction[data-kind='cta'] {
+  --reacd-page-title-scale: var(--reacd-page-title-section);
+}

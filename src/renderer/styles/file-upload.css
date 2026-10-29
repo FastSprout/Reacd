@@ -1,0 +1,27 @@
+.reacd-file-upload {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-file-upload-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.reacd-file-upload-list > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-small);
+  min-inline-size: 0;
+}
+.reacd-file-upload-list > li > span {
+  flex: 1 1 var(--reacd-stack-track);
+  min-inline-size: 0;
+}
+.reacd-file-upload:focus-visible {
+  outline: var(--reacd-focus-width) solid var(--reacd-text);
+  outline-offset: var(--reacd-focus-width);
+}

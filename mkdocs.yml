@@ -1,0 +1,185 @@
+site_name: reacd
+site_description: High-level React UI with closed components and theme adapters
+site_url: https://reacd.dev/
+docs_dir: docs
+site_dir: site
+exclude_docs: |
+  examples/*.test.tsx
+  examples/tsconfig.json
+strict: true
+dev_addr: 127.0.0.1:8000
+theme:
+  name: shadcn
+  custom_dir: tooling/docs-preview/theme
+plugins:
+  - search:
+      lang: en
+markdown_extensions:
+  - admonition
+  - fenced_code
+  - tables
+  - pymdownx.snippets:
+      base_path: docs
+      check_paths: true
+  - toc:
+      permalink: true
+nav:
+  - Overview: index.md
+  - Get started: getting-started.md
+  - Components:
+      - Catalog: components/index.md
+      - CodeBlock: components/code-block.md
+      - CodeEditor: components/code-editor.md
+      - Divider: components/divider.md
+      - HStack: components/h-stack.md
+      - Navigation: components/navigation.md
+      - Section: components/section.md
+      - Spacer: components/spacer.md
+      - Spinner: components/spinner.md
+      - SplitView: components/split-view.md
+      - SubmitButton: components/submit-button.md
+      - TextArea: components/text-area.md
+      - Toggle: components/toggle.md
+      - Toolbar: components/toolbar.md
+      - VStack: components/v-stack.md
+      - Viewport: components/viewport.md
+      - Carousel: components/carousel.md
+      - Marquee: components/marquee.md
+      - Chart: components/chart.md
+      - Table: components/table.md
+      - ColorModeButton: components/color-mode-button.md
+      - ColorModeSwitch: components/color-mode-switch.md
+      - ColorModeSelect: components/color-mode-select.md
+      - ColorModeAvatar: components/color-mode-avatar.md
+      - ColorModeImage: components/color-mode-image.md
+      - LocaleSelect: components/locale-select.md
+      - Calendar: components/calendar.md
+      - InputTime: components/input-time.md
+      - InputDate: components/input-date.md
+      - FieldGroup: components/field-group.md
+      - Icon: components/icon.md
+      - Badge: components/badge.md
+      - Card: components/card.md
+      - Alert: components/alert.md
+      - Progress: components/progress.md
+      - ChatAttachment: components/chat-attachment.md
+      - ChatMessage: components/chat-message.md
+      - ChatMessages: components/chat-messages.md
+      - ChatReasoning: components/chat-reasoning.md
+      - ChatTool: components/chat-tool.md
+      - ChatShimmer: components/chat-shimmer.md
+      - Toast: components/toast.md
+      - ContentNavigation: components/content-navigation.md
+      - ContentToc: components/content-toc.md
+      - AuthForm: components/auth-form.md
+      - PageLogos: components/page-logos.md
+      - Button: components/button.md
+      - Text: components/text.md
+      - Input: components/input.md
+      - SelectMenu: components/select-menu.md
+      - Listbox: components/listbox.md
+      - InputMenu: components/input-menu.md
+      - FileUpload: components/file-upload.md
+      - ColorPicker: components/color-picker.md
+      - Checkbox: components/checkbox.md
+      - Select: components/select.md
+      - Slider: components/slider.md
+      - Form: components/form.md
+      - FormField: components/form-field.md
+      - Switch: components/switch.md
+      - Textarea: components/textarea.md
+      - ChatPrompt: components/chat-prompt.md
+      - ChatPromptSubmit: components/chat-prompt-submit.md
+      - ChatPalette: components/chat-palette.md
+      - InputNumber: components/input-number.md
+      - InputRating: components/input-rating.md
+      - InputTags: components/input-tags.md
+      - PinInput: components/pin-input.md
+      - Container: components/container.md
+      - App: components/app.md
+      - Error: components/error.md
+      - Theme: components/theme.md
+      - Timeline: components/timeline.md
+      - Tree: components/tree.md
+      - Editor: components/editor.md
+      - EditorToolbar: components/editor-toolbar.md
+      - EditorDragHandle: components/editor-drag-handle.md
+      - EditorSuggestionMenu: components/editor-suggestion-menu.md
+      - EditorMentionMenu: components/editor-mention-menu.md
+      - EditorEmojiMenu: components/editor-emoji-menu.md
+      - Mention lookup: components/editor-mention-lookup.md
+      - ScrollArea: components/scroll-area.md
+      - PageAside: components/page-aside.md
+      - PageBody: components/page-body.md
+      - PageColumns: components/page-columns.md
+      - PageGrid: components/page-grid.md
+      - PageList: components/page-list.md
+      - PageHeader: components/page-header.md
+      - PageFeature: components/page-feature.md
+      - PageCard: components/page-card.md
+      - PageHero: components/page-hero.md
+      - PageSection: components/page-section.md
+      - Page: components/page.md
+      - PageAnchors: components/page-anchors.md
+      - PageLinks: components/page-links.md
+      - PageCTA: components/page-cta.md
+      - Sidebar: components/sidebar.md
+      - Splitter: components/splitter.md
+      - CommandPalette: components/command-palette.md
+      - ContentSurround: components/content-surround.md
+      - ContentSearch: components/content-search.md
+      - ContentSearchButton: components/content-search-button.md
+      - PricingPlan: components/pricing-plan.md
+      - PricingPlans: components/pricing-plans.md
+      - PricingTable: components/pricing-table.md
+      - DashboardGroup: components/dashboard-group.md
+      - DashboardSidebar: components/dashboard-sidebar.md
+      - DashboardPanel: components/dashboard-panel.md
+      - DashboardNavbar: components/dashboard-navbar.md
+      - DashboardToolbar: components/dashboard-toolbar.md
+      - DashboardSidebarCollapse: components/dashboard-sidebar-collapse.md
+      - DashboardSidebarToggle: components/dashboard-sidebar-toggle.md
+      - DashboardResizeHandle: components/dashboard-resize-handle.md
+      - DashboardSearch: components/dashboard-search.md
+      - DashboardSearchButton: components/dashboard-search-button.md
+      - BlogPost: components/blog-post.md
+      - BlogPosts: components/blog-posts.md
+      - ChangelogVersion: components/changelog-version.md
+      - ChangelogVersions: components/changelog-versions.md
+      - Drawer: components/drawer.md
+      - Slideover: components/slideover.md
+      - ContextMenu: components/context-menu.md
+      - DropdownMenu: components/dropdown-menu.md
+      - Main: components/main.md
+      - Header: components/header.md
+      - Footer: components/footer.md
+      - Separator: components/separator.md
+      - User: components/user.md
+      - ProgressGroup: components/progress-group.md
+      - Banner: components/banner.md
+      - Pagination: components/pagination.md
+      - Breadcrumb: components/breadcrumb.md
+      - Link: components/link.md
+      - Tabs: components/tabs.md
+      - FooterColumns: components/footer-columns.md
+      - NavigationMenu: components/navigation-menu.md
+      - Stepper: components/stepper.md
+      - RadioGroup: components/radio-group.md
+      - CheckboxGroup: components/checkbox-group.md
+      - Avatar: components/avatar.md
+      - AvatarGroup: components/avatar-group.md
+      - Chip: components/chip.md
+      - Tooltip: components/tooltip.md
+      - Kbd: components/kbd.md
+      - Popover: components/popover.md
+      - Skeleton: components/skeleton.md
+      - Empty: components/empty.md
+      - Grid: components/grid.md
+      - DataTable: components/data-table.md
+      - Accordion: components/accordion.md
+      - Collapsible: components/collapsible.md
+      - Modal: components/modal.md
+  - Guides:
+      - Theme adapters: guides/theme-adapters.md
+      - State with Jotai: guides/state.md
+      - Generative UI: guides/generative-ui.md

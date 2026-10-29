@@ -147,3 +147,13 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# reacd demo and browser verification artifacts
+demo-dist/
+test-results/
+playwright-report/
+
+# Local documentation tools and generated output
+.venv-docs/
+site/
+__pycache__/

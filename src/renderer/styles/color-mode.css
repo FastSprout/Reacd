@@ -1,0 +1,46 @@
+.reacd-root .reacd-color-mode-button,
+.reacd-root .reacd-color-mode-select {
+  min-block-size: var(--reacd-control-target);
+  block-size: auto;
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--reacd-text);
+}
+
+.reacd-root .reacd-color-mode-select > span {
+  display: block;
+  -webkit-line-clamp: unset;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.reacd-color-mode-image {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  overflow: hidden;
+  background: var(--reacd-surface);
+  color: var(--reacd-text);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+}
+
+.reacd-color-mode-image > * {
+  grid-area: 1 / 1;
+}
+
+.reacd-color-mode-image img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
+.reacd-color-mode-image[data-status='loading'] img {
+  opacity: 0;
+}
+
+.reacd-color-mode-image span {
+  padding: var(--reacd-medium);
+  overflow-wrap: anywhere;
+}

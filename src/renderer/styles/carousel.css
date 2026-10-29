@@ -1,0 +1,23 @@
+.reacd-carousel,
+.reacd-carousel-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-medium);
+}
+.reacd-carousel-panel[hidden] {
+  display: none;
+}
+.reacd-carousel-panel {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.reacd-carousel-controls,
+.reacd-carousel-chooser {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+}
+.reacd-carousel p {
+  margin: 0;
+}

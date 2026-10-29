@@ -1,0 +1,79 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import * as consumer from './dist/consumer.js';
+
+assert.match(consumer.markup, /Packaged UI/);
+assert.doesNotMatch(consumer.markup, /Packed toast notification/);
+assert.match(consumer.markup, /Packed auth example/);
+assert.match(consumer.markup, /Packed logos/);
+assert.match(consumer.markup, /Packed document tree/);
+assert.match(consumer.markup, /Packed outline/);
+assert.match(consumer.markup, /Packed adjacent documents/);
+assert.match(consumer.markup, /Packed search request/);
+assert.match(consumer.markup, /Open packed search/);
+for (const label of ['Packed main', 'Packed header', 'Packed footer',
+  'Packed separator', 'Packed user', 'Packed segments', 'Packed notice',
+  'Packed quantity', 'Packed code', 'Packed pages', 'Packed path',
+  'Packed scoped content', 'Packed unavailable', 'Packed events', 'Packed scroll',
+  'Packed rating'])
+  assert.match(consumer.markup, new RegExp(label));
+assert.match(consumer.markup, /page=2&amp;pageSize=10/);
+assert.match(consumer.markup, /Packed loading/);
+assert.match(consumer.markup, /Packed empty body/);
+assert.match(consumer.markup, /Packed recovery/);
+assert.match(consumer.markup, /data-slot="skeleton"/);
+assert.match(consumer.markup, /aria-label="Command"/);
+assert.match(consumer.markup, /Open packed popover/);
+assert.doesNotMatch(consumer.markup, /Packed floating body/);
+assert.match(consumer.markup, /Packed hint/);
+assert.match(consumer.markup, /Packed count: 8/);
+assert.match(consumer.markup, /Packaged anchor/);
+assert.match(consumer.markup, /aria-label="Packed Avatar"/);
+assert.match(consumer.markup, /Packed identities/);
+assert.match(consumer.markup.replaceAll('<!-- -->', ''), /Show 1 more person/);
+assert.match(consumer.markup, /Packed Second/);
+assert.match(consumer.markup, /Packed panel/);
+assert.match(consumer.markup, /Packed choice/);
+assert.match(consumer.markup, /Packed choices/);
+assert.match(consumer.markup, /Packed disclosure body/);
+assert.match(consumer.markup, /Packed retained body/);
+assert.match(consumer.markup, /Open packed modal/);
+assert.doesNotMatch(consumer.markup, /Client popup body/);
+assert.match(consumer.markup, /data-adapter="shadcn-ui"/);
+assert.match(consumer.generated, /Edited/);
+assert.equal(consumer.update.success, true);
+assert.equal(consumer.sorted.success, true);
+assert.equal(consumer.tableSnapshot.success, true);
+if (consumer.tableSnapshot.success) {
+  assert.equal(consumer.tableSnapshot.data.rows[0].id, 'a');
+  assert.equal(consumer.tableSnapshot.data.pageCount, 2);
+}
+assert.match(consumer.tableMarkup, /Packed table/);
+assert.match(consumer.tableMarkup, /Alpha/);
+assert.doesNotMatch(consumer.tableMarkup, /Zulu/);
+assert.deepEqual(consumer.first.read('name'), {
+  success: true, data: { key: 'name', kind: 'text', value: 'Edited' },
+});
+assert.deepEqual(consumer.second.read('name'), {
+  success: true, data: { key: 'name', kind: 'text', value: 'Initial' },
+});
+const display = consumer.first.bind({ state: 'name', mode: 'read' }, {
+  kinds: ['text'], mode: 'read',
+});
+assert.equal(display.success, true);
+if (display.success) assert.equal('write' in display.data, false);
+for (const path of ['reacd', 'reacd/generative', 'reacd/jsx-runtime',
+  'reacd/jsx-dev-runtime']) await import(path);
+const { jsx } = await import('reacd/jsx-runtime');
+assert.throws(() => jsx('div', {}), /Native HTML/);
+for (const [path, version] of [
+  ['reacd/schema.json', '0.1'], ['reacd/generative-schema.json', '0.2'],
+]) {
+  const schema = JSON.parse(readFileSync(new URL(import.meta.resolve(path)), 'utf8'));
+  assert.equal(schema.$id, `https://reacd.dev/schema/${version}.json`);
+}
+const css = readFileSync(new URL(import.meta.resolve('reacd/styles.css')), 'utf8');
+assert.match(css, /reacd-slider/);
+await assert.rejects(import('reacd/dist/schema/shared/children.js'), {
+  code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
+});

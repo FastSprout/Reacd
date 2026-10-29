@@ -1,0 +1,112 @@
+.reacd-root,
+.reacd-root *,
+.reacd-portal-root,
+.reacd-portal-root *,
+.reacd-issues,
+.reacd-issues * {
+  box-sizing: border-box;
+  min-inline-size: 0;
+}
+
+.reacd-root,
+.reacd-portal-root {
+  --reacd-gap: var(--reacd-medium);
+  color: var(--reacd-text);
+  background: var(--reacd-canvas);
+  font: var(--reacd-font-size)/1.55 var(--reacd-font);
+  overflow-wrap: anywhere;
+}
+
+.reacd-root {
+  inline-size: 100%;
+  max-inline-size: 100%;
+  padding: min(var(--reacd-large), var(--reacd-padding-limit));
+}
+
+.reacd-node {
+  max-inline-size: 100%;
+}
+.reacd-vstack,
+.reacd-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-gap);
+}
+.reacd-hstack {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-gap);
+}
+.reacd-hstack > * {
+  flex: 1 1 var(--reacd-stack-track);
+}
+.reacd-grid {
+  display: grid;
+  gap: var(--reacd-gap);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(
+      min(
+        100%,
+        max(
+          var(--reacd-grid-track),
+          calc(
+            (100% - (var(--reacd-columns) - 1) * var(--reacd-gap)) /
+              var(--reacd-columns)
+          )
+        )
+      ),
+      1fr
+    )
+  );
+}
+.reacd-card {
+  padding: min(var(--reacd-medium), var(--reacd-padding-limit));
+  background: var(--reacd-surface);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  box-shadow: var(--reacd-shadow);
+}
+.reacd-page {
+  display: grid;
+  gap: var(--reacd-large);
+  max-inline-size: var(--reacd-page-width);
+  margin-inline: auto;
+}
+.reacd-page-header {
+  display: grid;
+  gap: var(--reacd-small);
+}
+.reacd-page-header :is(h1, p),
+.reacd-section-title {
+  margin: 0;
+}
+.reacd-toolbar,
+.reacd-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--reacd-small);
+}
+.reacd-spacer {
+  flex: 1;
+}
+.reacd-divider {
+  background: var(--reacd-border);
+  margin-block: 0;
+}
+.reacd-split {
+  display: grid;
+  gap: var(--reacd-gap);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--reacd-split-track)), 1fr)
+  );
+}
+.reacd-viewport {
+  inline-size: 100%;
+  margin-inline: auto;
+}
+.reacd-viewport[data-compact='true'] {
+  max-inline-size: var(--reacd-compact);
+}

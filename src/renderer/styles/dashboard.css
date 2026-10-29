@@ -1,0 +1,50 @@
+.reacd-dashboard-group {
+  align-items: stretch;
+}
+.reacd-dashboard-group[data-narrow='true'] {
+  flex-direction: column;
+}
+.reacd-dashboard-region {
+  flex-basis: 0;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.reacd-dashboard-region[data-empty='true'] {
+  flex-basis: 0;
+  flex-grow: 0;
+  inline-size: 0;
+  block-size: 0;
+}
+.reacd-dashboard-group[data-narrow='true'] > .reacd-dashboard-region {
+  flex: 0 0 auto;
+}
+.reacd-dashboard-panel,
+.reacd-dashboard-panel-body {
+  display: grid;
+  gap: var(--reacd-medium);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-dashboard-panel {
+  padding-inline: min(var(--reacd-medium), var(--reacd-padding-limit));
+}
+.reacd-dashboard-navbar,
+.reacd-dashboard-toolbar,
+.reacd-dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-small);
+}
+.reacd-dashboard-navbar,
+.reacd-dashboard-toolbar {
+  padding-block: var(--reacd-small);
+  border-block-end: var(--reacd-border-width) solid var(--reacd-border);
+}
+.reacd-dashboard-navbar :is(h1, h2) {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.reacd-dashboard-actions {
+  min-inline-size: 0;
+}

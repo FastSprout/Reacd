@@ -1,0 +1,26 @@
+import { Children } from 'react';
+import type { ReactNode } from 'react';
+import type { BlogPostsProps }
+  from '../../../components/blog-posts/blog-posts.props.js';
+import { BlogPost } from '../../../components/blog-post/blog-post.js';
+import { EDITORIAL_DEFAULTS } from '../../../core/editorial-policy.js';
+
+export function ShadcnBlogPosts({
+  children,
+  posts = EDITORIAL_DEFAULTS.entries,
+  orientation = EDITORIAL_DEFAULTS.collectionOrientation,
+}: BlogPostsProps): ReactNode {
+  return (
+    <ul
+      className="reacd-node reacd-editorial-collection"
+      data-orientation={orientation}
+    >
+      {posts.map(({ key, ...entry }) => (
+        <li key={key}>
+          <BlogPost {...entry} />
+        </li>
+      ))}
+      {Children.map(children, (child) => (child == null ? null : <li>{child}</li>))}
+    </ul>
+  );
+}

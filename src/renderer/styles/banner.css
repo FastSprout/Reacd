@@ -1,0 +1,34 @@
+.reacd-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-medium);
+  padding: var(--reacd-medium);
+  color: var(--reacd-text);
+  background: var(--reacd-surface);
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-inline-start-width: var(--reacd-focus-width);
+  border-radius: var(--reacd-radius);
+}
+.reacd-banner[data-intent='error'] {
+  border-inline-start-color: var(--reacd-danger);
+}
+.reacd-banner-content {
+  flex: 1 1 var(--reacd-stack-track);
+  overflow-wrap: anywhere;
+}
+.reacd-banner-content h5 {
+  margin: 0;
+  line-height: inherit;
+}
+.reacd-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--reacd-small);
+}
+.reacd-banner-close {
+  flex: 0 1 auto;
+  color: var(--reacd-text);
+  border-color: var(--reacd-border);
+}

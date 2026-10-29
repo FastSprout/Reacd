@@ -1,0 +1,20 @@
+.reacd-auth-form,
+.reacd-auth-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-medium);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+.reacd-auth-form {
+  padding: min(var(--reacd-large), var(--reacd-padding-limit));
+  border: var(--reacd-border-width) solid var(--reacd-border);
+  border-radius: var(--reacd-radius);
+  background: var(--reacd-surface);
+}
+.reacd-auth-fields {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}

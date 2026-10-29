@@ -1,0 +1,46 @@
+.reacd-tree {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reacd-small);
+}
+.reacd-tree-item {
+  display: grid;
+  grid-template-columns: var(--reacd-control-target) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--reacd-small);
+  min-block-size: var(--reacd-control-target);
+  border: var(--reacd-border-width) solid transparent;
+  border-radius: var(--reacd-radius);
+  cursor: pointer;
+}
+.reacd-tree-item[aria-selected='true'] {
+  color: var(--reacd-onPrimary);
+  background: var(--reacd-primary);
+}
+.reacd-tree-item[aria-disabled='true'] {
+  cursor: not-allowed;
+  border-style: dashed;
+  border-color: currentColor;
+}
+.reacd-tree-toggle {
+  display: grid;
+  place-items: center;
+  inline-size: var(--reacd-control-target);
+  min-block-size: var(--reacd-control-target);
+  padding: 0;
+  color: inherit;
+  border: var(--reacd-border-width) solid currentColor;
+  border-radius: var(--reacd-radius);
+  background: transparent;
+}
+.reacd-tree-spacer {
+  inline-size: var(--reacd-control-target);
+}
+.reacd-tree-label {
+  overflow-wrap: anywhere;
+  padding-block: var(--reacd-small);
+  padding-inline-end: var(--reacd-small);
+}
+.reacd-tree p {
+  margin: 0;
+}

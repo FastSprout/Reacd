@@ -1,0 +1,14 @@
+import { render, screen } from '@testing-library/react';
+import { expect, it } from 'vitest';
+import { ReacdProvider } from 'reacd';
+import { DividerExample } from './divider.js';
+
+it('runs the Divider public example', () => {
+  render(
+    <ReacdProvider>
+      <DividerExample />
+    </ReacdProvider>,
+  );
+  expect(screen.getByRole('separator')).toBeVisible();
+  expect(screen.getByText('After the divider')).toBeVisible();
+});

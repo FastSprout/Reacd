@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <title>Illustrated workspace in a light palette</title>
+  <rect width="640" height="360" fill="#f3f5f3"/>
+  <rect x="32" y="32" width="576" height="296" rx="12" fill="#ffffff"/>
+  <rect x="56" y="64" width="136" height="232" rx="8" fill="#245b43"/>
+  <rect x="216" y="64" width="368" height="40" rx="8" fill="#172a24"/>
+  <rect x="216" y="128" width="168" height="168" rx="8" fill="#d8e9dd"/>
+  <rect x="408" y="128" width="176" height="168" rx="8" fill="#d8e9dd"/>
+</svg>

@@ -1,0 +1,17 @@
+export const SLIDER_POLICY = {
+  defaultStep: 1,
+  maximumFractionDigits: 12,
+  percentScale: 100,
+  largeStepFactor: 10,
+  defaultOrientation: 'horizontal',
+  locale: 'en-US',
+  minimumLabel: 'Minimum',
+  maximumLabel: 'Maximum',
+  startSuffix: '.start',
+  endSuffix: '.end',
+  verticalExtentRem: 12,
+  rangeSeparator: ' to ',
+  invalidBoundsMessage: 'Slider interval must support finite numeric editing.',
+  unsupportedPrecisionMessage: 'Slider values support at most 12 fraction digits.',
+  invalidValueMessage: 'Value must be within an ordered range.',
+} as const;
