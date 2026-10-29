@@ -19,12 +19,14 @@ const PUBLIC_ENTRIES = new Set([
   'jsx-runtime.ts',
   'jsx-dev-runtime.ts',
 ]);
+const GENERATED_RELEASE_TEXT = new Set(['docs/changelog.md']);
 
 export function inspectRepository(files: readonly SourceFile[], root: string) {
   const issues: PolicyDiagnostic[] = [];
   for (const { path, source } of files) {
     const name = relative(root, path);
     if (name.startsWith('src/adapter/shadcn/vendor/')) continue;
+    if (GENERATED_RELEASE_TEXT.has(name)) continue;
     issues.push(...checkSource(path, source));
     if (!/\.[cm]?[jt]sx?$/.test(name)) continue;
     const test = /(?:__tests__|test-support|e2e)\/|\.(?:test|spec)\./.test(name);

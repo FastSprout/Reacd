@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { z } from 'zod';
 
 interface CompilationResult {
   status: number | null;
@@ -29,7 +30,25 @@ vi.mock('node:fs/promises', async (importOriginal) => {
 const actualFs =
   await vi.importActual<typeof import('node:fs/promises')>('node:fs/promises');
 const root = process.cwd();
-const archive = [{ filename: 'reacd-local.tgz', files: [{ path: 'dist/index.js' }] }];
+const installedManifest = z.object({
+  type: z.literal('module'),
+  dependencies: z.object({
+    reacd: z.string(),
+    react: z.literal('19.3.1'),
+    'react-dom': z.literal('19.3.1'),
+    jotai: z.literal('3.0.1'),
+  }),
+});
+const archive = [
+  {
+    filename: 'reacd-local.tgz',
+    files: [
+      { path: 'dist/index.js' },
+      { path: 'LICENSE' },
+      { path: 'THIRD_PARTY_NOTICES.md' },
+    ],
+  },
+];
 const diagnostics = [
   'TS2745: Children must have type never.',
   'TS2322: Invalid style.',
@@ -71,6 +90,34 @@ afterEach(async () => {
 });
 
 describe('packed consumer runner', () => {
+  it('installs the tarball in a clean consumer with shared hosts', async () => {
+    let installed = false;
+    execute.mockImplementation((file, args, options) => {
+      if (file === 'npm' && args[0] === 'install') {
+        if (
+          typeof options !== 'object' ||
+          options === null ||
+          !('cwd' in options) ||
+          typeof options.cwd !== 'string'
+        ) {
+          throw new Error('Missing isolated installation cwd.');
+        }
+        const metadata: unknown = JSON.parse(
+          readFileSync(join(options.cwd, 'package.json'), 'utf8'),
+        );
+        const consumer = installedManifest.parse(metadata);
+        expect(consumer.dependencies.reacd).toMatch(/^file:.*\.tgz$/);
+        expect(existsSync(join(options.cwd, 'node_modules'))).toBe(false);
+        expect(args).toContain('--ignore-scripts');
+        expect(args).not.toContain('--legacy-peer-deps');
+        installed = true;
+      }
+      return JSON.stringify(archive);
+    });
+    await import('./package-check.js');
+    expect(installed).toBe(true);
+    await expectRemoved();
+  });
   it('uses an isolated real workspace and compiles all intended fixtures', async () => {
     const configurations: unknown[] = [];
     compile.mockReset().mockImplementation((_file, _args, options) => {
@@ -81,6 +128,9 @@ describe('packed consumer runner', () => {
         typeof options.cwd !== 'string'
       )
         throw new Error('Missing compiler cwd.');
+      for (const host of ['react', 'react-dom', 'jotai']) {
+        expect(existsSync(join(options.cwd, 'node_modules', host))).toBe(true);
+      }
       const configuration: unknown = JSON.parse(
         readFileSync(join(options.cwd, 'negative.json'), 'utf8'),
       );
@@ -114,6 +164,8 @@ describe('packed consumer runner', () => {
       'tar',
       process.execPath,
       process.execPath,
+      'npm',
+      process.execPath,
     ]);
     expect(console.log).toHaveBeenCalledOnce();
     await expectRemoved();
@@ -140,16 +192,35 @@ describe('packed consumer runner', () => {
     expect(execute).toHaveBeenCalledOnce();
     await expectRemoved();
   });
-  it.each([1, 2, 3, 4])('cleans up after external command %s fails', async (stage) => {
-    const failure = new Error('External command failed.');
-    execute.mockImplementation(() => {
-      if (execute.mock.calls.length === stage) throw failure;
-      return JSON.stringify(archive);
-    });
-    await expect(import('./package-check.js')).rejects.toBe(failure);
-    expect(console.log).not.toHaveBeenCalled();
-    await expectRemoved();
-  });
+  it.each(['LICENSE', 'THIRD_PARTY_NOTICES.md'])(
+    'rejects an archive missing the required notice %s',
+    async (missing) => {
+      execute.mockReturnValue(
+        JSON.stringify([
+          {
+            ...archive[0],
+            files: archive[0]?.files.filter((file) => file.path !== missing),
+          },
+        ]),
+      );
+      await expect(import('./package-check.js')).rejects.toThrow(missing);
+      expect(compile).not.toHaveBeenCalled();
+      await expectRemoved();
+    },
+  );
+  it.each([1, 2, 3, 4, 5, 6])(
+    'cleans up after external command %s fails',
+    async (stage) => {
+      const failure = new Error('External command failed.');
+      execute.mockImplementation(() => {
+        if (execute.mock.calls.length === stage) throw failure;
+        return JSON.stringify(archive);
+      });
+      await expect(import('./package-check.js')).rejects.toBe(failure);
+      expect(console.log).not.toHaveBeenCalled();
+      await expectRemoved();
+    },
+  );
   it.each([0, null])(
     'rejects a negative fixture with exit status %s',
     async (status) => {

@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { lstatSync } from 'node:fs';
+import { createElement } from 'react';
+import { renderToString } from 'react-dom/server';
+import { atom, useAtomValue } from 'jotai';
+import { ReacdProvider, Text, createReacdStore } from 'reacd';
+
+const consumer = createRequire(import.meta.url);
+const packaged = createRequire(new URL(import.meta.resolve('reacd')));
+for (const name of ['react', 'react-dom', 'jotai']) {
+  assert.equal(packaged.resolve(name), consumer.resolve(name),
+    `The installed package must reuse its ${name} host instance.`);
+}
+assert.equal(lstatSync(new URL('./node_modules/reacd', import.meta.url))
+  .isSymbolicLink(), false);
+
+const value = atom('default store');
+const first = createReacdStore();
+const second = createReacdStore();
+first.set(value, 'first isolated host');
+second.set(value, 'second isolated host');
+function ConsumerView() {
+  return createElement(Text, null, useAtomValue(value));
+}
+/** @param {ReturnType<typeof createReacdStore>} store */
+function render(store) {
+  return renderToString(createElement(ReacdProvider, { store },
+    createElement(ConsumerView)));
+}
+assert.match(render(first), /first isolated host/);
+assert.doesNotMatch(render(first), /second isolated host|default store/);
+assert.match(render(second), /second isolated host/);
+assert.doesNotMatch(render(second), /first isolated host|default store/);
+console.log('Clean tarball install shares React/Jotai hosts and isolates SSR state.');

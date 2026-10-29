@@ -1,0 +1,15 @@
+{
+  "bootstrap-sha": "926abba865790d93fde8e5e22e18f717d4ff878e",
+  "release-type": "node",
+  "include-component-in-tag": false,
+  "include-v-in-tag": true,
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": false,
+  "packages": {
+    ".": {
+      "package-name": "reacd",
+      "initial-version": "0.1.0",
+      "changelog-path": "docs/changelog.md"
+    }
+  }
+}

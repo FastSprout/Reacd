@@ -32,6 +32,8 @@ describe('repository policy CLI', () => {
         'docs/**/*.{md,tsx,json}',
         'specs/**/*.md',
         '.github/**/*.yml',
+        'release-please-config.json',
+        '.release-please-manifest.json',
       ]),
     );
     expect(read).toHaveBeenCalledWith('src/core/clean.ts', 'utf8');

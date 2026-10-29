@@ -1,21 +1,46 @@
 name: Check
-on: [push, pull_request]
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '26'
+  PYTHON_VERSION: '3.13'
+  DOCS_ARTIFACT_RETENTION_DAYS: '14'
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 26
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
+      - run: npm install --global npm@11.19.0
       - run: npm ci
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
         with:
-          python-version: '3.13'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
           cache-dependency-path: requirements-docs.txt
       - run: python -m venv .venv-docs
       - run: .venv-docs/bin/python -m pip install -r requirements-docs.txt
       - run: npx playwright install --with-deps chromium
       - run: npm run check
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: docs-${{ github.sha }}
+          path: site/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: ${{ env.DOCS_ARTIFACT_RETENTION_DAYS }}

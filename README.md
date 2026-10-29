@@ -115,6 +115,19 @@ Use Python 3.13 for the pinned documentation environment. Public guides live in 
 internal requirements, decisions, catalog inventories, and verification evidence live in
 `specs/`. Implementation follows spec-driven development.
 
+## Releases and package installation
+
+Verified main commits build the complete documentation artifact. Conventional Commits
+produce a reviewed release PR and the public [changelog](docs/changelog.md).
+The [release guide](docs/guides/releases.md) describes the initial npm ownership and
+OIDC setup. Publication is disabled until its explicit repository setting is enabled.
+Adding the workflow does not publish npm or deploy the documentation domain.
+
+React 19.3.1, ReactDOM 19.3.1 and Jotai 3.0.1 are exact host peer requirements.
+The clean packed-consumer check verifies shared host instances and isolated SSR state.
+The distributed package includes the project Apache-2.0 LICENSE and the upstream
+shadcn MIT license in THIRD_PARTY_NOTICES.md.
+
 ## Verification boundaries
 
 The owned runtime requires 100% statement, branch, function, and line coverage per file.
@@ -131,6 +144,6 @@ widths, enlarged text, and token profiles. Neither coverage nor schema validatio
 that every possible interface is correct.
 
 The closed application API is not a filesystem sandbox. Restricting an agent's ability
-to modify trusted engine source requires workspace permissions as well. All work in this
-repository currently stays local: no commits, pushes, package publication, or
-deployment.
+to modify trusted engine source requires workspace permissions as well. Publishing
+requires the verified release SHA, tag, package identity and explicit npm enablement.
+Build artifacts and canonical documentation URLs do not constitute deployment.

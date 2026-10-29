@@ -26,6 +26,8 @@ markdown_extensions:
 nav:
   - Overview: index.md
   - Get started: getting-started.md
+  - Changelog: changelog.md
+  - Releases: guides/releases.md
   - Components:
       - Catalog: components/index.md
       - CodeBlock: components/code-block.md

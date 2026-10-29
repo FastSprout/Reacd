@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { chooseOption } from '../../../../test-support/select-choice.js';
 import {
   Button,
   Modal,
@@ -83,10 +84,9 @@ describe('shadcn Modal', () => {
   it('closes transient child portals when a retained host is closed', async () => {
     const user = userEvent.setup();
     const view = render(<Example open retainContent />);
+    await chooseOption(user, 'Local role', 'Second');
     await user.click(screen.getByRole('combobox', { name: 'Local role' }));
-    await user.click(screen.getByRole('option', { name: 'Second' }));
-    await user.click(screen.getByRole('combobox', { name: 'Local role' }));
-    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(await screen.findByRole('listbox')).toBeInTheDocument();
     view.rerender(<Example open={false} retainContent />);
     await waitFor(() =>
       expect(screen.queryByRole('listbox', { hidden: true })).toBeNull(),

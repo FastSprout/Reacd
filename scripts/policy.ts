@@ -14,6 +14,8 @@ const files = globSync([
   'docs/**/*.{md,tsx,json}',
   'specs/**/*.md',
   'package.json',
+  'release-please-config.json',
+  '.release-please-manifest.json',
   'tsconfig*.json',
   'mkdocs.yml',
   '.github/**/*.yml',

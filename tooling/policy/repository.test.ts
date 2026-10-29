@@ -2,6 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { inspectRepository } from './repository.js';
 
 describe('repository enforcement', () => {
+  it('limits the generated-format exemption to the release changelog', () => {
+    const source = `${'Generated release link '.repeat(10)}\n`.repeat(301);
+    expect(
+      inspectRepository([{ path: '/repo/docs/changelog.md', source }], '/repo'),
+    ).toEqual([]);
+    for (const path of ['/repo/docs/guide.md', '/repo/tooling/changelog.ts']) {
+      expect(
+        inspectRepository([{ path, source }], '/repo').map((issue) => issue.rule),
+      ).toContain('lines');
+    }
+  });
   it('checks application boundaries, layer imports, and source rules', () => {
     const issues = inspectRepository(
       [
