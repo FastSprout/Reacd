@@ -1,8 +1,12 @@
 import { defineConfig } from '@playwright/test';
+import type { ReporterDescription } from '@playwright/test';
 
 const BROWSER_EXECUTION_POLICY = {
   maxWorkers: 2,
 } as const;
+
+const GITHUB_REPORTERS: ReporterDescription[] =
+  process.env['GITHUB_ACTIONS'] === 'true' ? [['github']] : [];
 
 export default defineConfig({
   testDir: 'demo/e2e',
@@ -10,7 +14,7 @@ export default defineConfig({
   forbidOnly: true,
   workers: BROWSER_EXECUTION_POLICY.maxWorkers,
   retries: 0,
-  reporter: [['list'], ['html', { open: 'never' }]],
+  reporter: [['list'], ['html', { open: 'never' }], ...GITHUB_REPORTERS],
   use: {
     baseURL: 'http://127.0.0.1:4174',
     browserName: 'chromium',

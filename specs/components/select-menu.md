@@ -99,3 +99,19 @@ SELECT-MENU-011: The integrated runnable example labels its status switch Loadin
 records, distinct from the adjacent Select example. Both controls remain uniquely
 identifiable by their visible names without positional test selectors. This changes
 example copy only, not component defaults or the public API.
+
+SELECT-MENU-012: The host-close focus proof must prepare a known disclosure state.
+After observing its initially open query, close it explicitly with Escape and wait
+until hidden before editing the next declaration. Reopen from that closed state,
+observe the query and focus it before applying the host's false binding through
+the existing non-focusing DOM click. Preserve the final hidden-query and focused
+trigger assertions. Editor focus/outside-dismissal timing must not decide whether
+an unconditional trigger toggle opens or closes the popup. This is test setup
+normalization; it does not change component behavior, timeouts or retries.
+
+Hosted run 40966318241 provides the original failing acceptance: 1,041 browser
+cases passed; the host-close case timed out at query.focus after its ambiguous
+trigger toggle. The authenticated job log is retained outside public docs at
+.cache/coordination/agent-a/release-ci/automation-job.log. Verify the corrected
+proof repeatedly and run the complete SelectMenu browser file before the next
+hosted complete Check.

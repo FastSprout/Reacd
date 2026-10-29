@@ -18,6 +18,9 @@ Release workflow, which calls the same complete Check once before release work.
 It runs source policy, strict types, lint, full coverage, package acceptance, built
 documentation and browser acceptance. Failed checks prevent release work.
 
+Hosted failures annotate the failed gate. Browser cases also emit GitHub check
+annotations alongside the list and HTML reports. Failure still stops release work.
+
 Successful verification uploads a docs-COMMIT_SHA Actions artifact containing the
 complete generated site, compiled component previews and local assets. Artifacts
 are retained for fourteen days. Download one, extract it and serve its directory
@@ -66,6 +69,13 @@ complete its first successful publish within npm's documented lifetime.
 
 ## What the publish job verifies
 
+The non-OIDC release job first checks the raw publication variable with a quoted,
+case-sensitive Bash comparison. Only literal true emits a trusted enabled output;
+TRUE, surrounding whitespace and every other input emit false. The capability job
+uses that canonical output because [GitHub expressions][expr] ignore case when
+comparing strings. The CLI verifier still receives the raw variable and enforces
+its strict value.
+
 The publish job starts only for a newly created release with explicit enablement
 and an action-output SHA equal to this run's verified SHA. This condition applies
 before checkout or any OIDC-capable dependency install/build from that source.
@@ -96,3 +106,5 @@ Official references: [release-please][release], [npm trusted publishing][npm], a
 [release]: https://github.com/googleapis/release-please-action
 [npm]: https://docs.npmjs.com/trusted-publishers/
 [triggers]: https://docs.github.com/actions/using-workflows/triggering-a-workflow
+
+[expr]: https://docs.github.com/en/actions/reference/workflows-and-actions/expressions

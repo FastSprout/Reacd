@@ -32,12 +32,23 @@ jobs:
       sha: ${{ steps.release.outputs.sha }}
       tag_name: ${{ steps.release.outputs.tag_name }}
       version: ${{ steps.release.outputs.version }}
+      publish_enabled: ${{ steps.publication.outputs.enabled }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 0
+      - name: Normalize publication enablement
+        id: publication
+        env:
+          PUBLISH_ENABLED: ${{ vars.NPM_PUBLISH_ENABLED }}
+        run: |
+          if [ "$PUBLISH_ENABLED" = "true" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Ignore a superseded main check
         id: current
         env:
@@ -63,7 +74,7 @@ jobs:
     if: >-
       needs.release.outputs.release_created == 'true' &&
       needs.release.outputs.sha == github.sha &&
-      vars.NPM_PUBLISH_ENABLED == 'true'
+      needs.release.outputs.publish_enabled == 'true'
     runs-on: ubuntu-latest
     environment: npm
     permissions:

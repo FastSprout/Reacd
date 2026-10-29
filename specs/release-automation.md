@@ -77,9 +77,17 @@ identity validation must reject a release SHA differing from this run. Default
 GITHUB_TOKEN bot PR checks may need approval; fully automatic checks may later
 use a narrowly scoped GitHub App installation.
 
-RELEASE-010: The publish job cannot start unless NPM_PUBLISH_ENABLED is exactly
-true, a real root release was created and the action-output SHA equals this run's
-verified github.sha. This job-level guard precedes checkout, dependency install,
+RELEASE-010: The non-OIDC release job normalizes NPM_PUBLISH_ENABLED before any
+publication-capable job can start. GitHub expression string equality ignores
+case, so never compare the raw variable to true in that job guard. [expr] Pass it only
+as the publication step's PUBLISH_ENABLED environment value. Bash compares the
+literal string case-sensitively and emits enabled=true only for exact true;
+every other value emits enabled=false through quoted GITHUB_OUTPUT. Expose this
+trusted boolean text as the release job's publish_enabled output.
+
+The publish job cannot start unless publish_enabled is true, a real root release
+was created and the action-output SHA equals this run's verified github.sha. This
+job-level guard precedes checkout, dependency install,
 build and all OIDC-capable execution. The later source verifier remains defense
 in depth. Only a GitHub-hosted publish job gets
 id-token write; other jobs cannot publish. Check out the exact release SHA with
@@ -125,18 +133,59 @@ result and provenance evidence.
 
 ## Ownership and acceptance
 
+
 Root owns package manifests, licensing/peer and packed-consumer tooling, publication
 identity helpers, generated-changelog policy, README and git operations. The release
 worker owns this spec, check/release workflows, release-please configuration and
 manifest, public changelog/release guide and MkDocs navigation only.
 
-RELEASE-015: Static acceptance validates YAML/JSON syntax, pinned actions, required
+RELEASE-015: Maintained acceptance reads the actual workflow with yaml 2.9.1,
+an exact direct dev dependency. Treat parsed YAML as unknown and validate the
+needed fields with Zod. Extract and execute the actual publication step's Bash
+in an isolated OS temporary directory. Only literal true emits enabled=true;
+uppercase/mixed case, empty, whitespace, numbers, JSON/malformed text, newline
+and shell-like inputs must emit false without interpretation or side effects.
+Verify raw input env wiring, trusted output wiring, the pre-checkout job guard,
+absence of raw-variable job equality, exact SHA gate and raw CLI verifier env.
+The initial acceptance must fail against the original unnormalized workflow.
+
+Static acceptance also validates YAML/JSON syntax, pinned actions, required
 job permissions, main/PR trigger separation, the disabled publication condition,
 release SHA wiring, artifact paths and documentation links. Root runs the required
 local checks and inspects actual GitHub Actions results after pushing. Static
 validation is not GitHub execution or an npm authentication test.
 
+RELEASE-016: Hosted browser failures must emit GitHub check annotations through
+Playwright's GitHub reporter, alongside the existing list and HTML reports.
+Enable that reporter only for the standard literal GITHUB_ACTIONS=true runner
+environment. Local reporting stays list/HTML. Test both environments against the
+actual configuration without launching a browser. Keep every browser scenario,
+the two-worker policy, assertions, timeouts and zero retries unchanged.
+
+The first automation run 40966318241 failed in complete Check after about forty
+minutes. Its public check exposed only a generic process-exit annotation; log
+download requires authentication (HTTP 403), and available browser controls timed
+out. Rich failure annotations are required to diagnose subsequent hosted failures
+through the public API. This requirement does not infer which browser test failed
+or treat missing details as a successful result.
+
+Subsequent read-only reuse of existing Git HTTPS authentication retrieved the job
+log without a new login, token or service setting. All 2,923 unit tests and their
+coverage passed. Browser acceptance passed 1,041 cases and failed the SelectMenu
+host-close focus setup. SELECT-MENU-012 specifies the deterministic setup repair.
+The historical API-only uncertainty remains distinct from that later diagnosis.
+
+RELEASE-017: On a failed gate, the check orchestrator emits a GitHub error
+annotation naming the fixed gate before rethrowing the original failure. Emit
+only for literal GITHUB_ACTIONS=true; local failures stay unchanged. Never include
+the child error contents, credentials or arbitrary input in the annotation.
+Preserve the gate order, original thrown value and immediate stop on failure.
+Tests execute the real module with isolated mocked subprocesses/environment and
+capture annotation output so acceptance failures do not create false CI reports.
+
 References: npm trusted-publishers, npm-trust and npm package-json documentation;
 GitHub trigger-a-workflow and workflow artifact documentation; release-please v5
 and its manifest-releaser guide. Detailed dated primary-source research is stored
 outside docs at .cache/coordination/agent-a/release-plan.md.
+
+[expr]: https://docs.github.com/en/actions/reference/workflows-and-actions/expressions

@@ -168,6 +168,8 @@ test('host close restores focus without a focus-changing click', async ({ page }
   const trigger = page.getByRole('combobox', { name: 'Focus records', exact: true });
   const query = page.getByRole('combobox', { name: 'Search Focus records' });
   await expect(query).toBeVisible();
+  await query.press('Escape');
+  await expect(query).toBeHidden();
   await source.fill(
     JSON.stringify({
       ...declaration,
@@ -178,6 +180,7 @@ test('host close restores focus without a focus-changing click', async ({ page }
     }),
   );
   await trigger.click();
+  await expect(query).toBeVisible();
   await query.focus();
   await expect(query).toBeFocused();
   await apply.evaluate((button: HTMLButtonElement) => button.click());
