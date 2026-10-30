@@ -2,11 +2,13 @@
 
 ## Authority and workflow
 
-- Work from `specs/` using spec-driven development.
+- Work from local, gitignored `specs/` using spec-driven development.
+- Keep specifications, agent coordination and private evidence out of Git.
 - Update affected requirements before changing behavior.
 - Implement acceptance tests, then code, then record verification evidence.
 - This is an enterprise implementation, not a JSON-first prototype.
-- All work stays local. Do not commit, push, publish, deploy, or change DNS.
+- Keep Git changes local; do not commit, push, deploy, or change DNS.
+- Publish a verified npm package only when the user explicitly requests it.
 
 ## Architecture
 
@@ -15,12 +17,14 @@ core <- schema <- components <- renderer <- adapter <- state
 ```
 
 - Dependencies point left. Do not introduce reverse imports or cycles.
+- Run `npm run lint:layers`; architecture violations must fail CI.
 - Declare application UI in TSX using reacd components.
 - No native HTML, CSS, Tailwind, styling props, or DOM mutation in applications.
 - Keep native rendering in the trusted renderer and adapter layers.
 - Every component has its own module. Barrels only re-export.
 - Colocate tests with their modules; shared helpers live in `test-support/`.
-- Keep browser conformance in `demo/e2e/`. Do not create a root `tests/` tree.
+- Keep browser conformance in `test-support/browser/e2e/`.
+- Do not create a root `tests/` tree or a public demo application.
 - shadcn/ui is the first theme adapter. MUI is later work.
 - Jotai owns application state. Use isolated stores for apps and SSR requests.
 - JSON is an optional generative transport, not the primary authoring API.

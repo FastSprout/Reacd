@@ -2,13 +2,12 @@ node_modules/
 .venv-docs/
 .cache/
 dist/
-demo-dist/
 coverage/
 test-results/
 playwright-report/
 site/
 package-lock.json
 schema/*.json
-examples/*.json
+test-support/fixtures/generative/*.json
 LICENSE
 src/adapter/shadcn/vendor/
