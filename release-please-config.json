@@ -7,7 +7,7 @@
   "bump-patch-for-minor-pre-major": false,
   "packages": {
     ".": {
-      "package-name": "reacd",
+      "package-name": "@fastsprout/reacd",
       "initial-version": "0.1.0",
       "changelog-path": "docs/changelog.md"
     }
