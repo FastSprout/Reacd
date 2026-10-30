@@ -1,8 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "jsxImportSource": "reacd"
-  },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["**/*.test.*", "e2e/**"]
-}

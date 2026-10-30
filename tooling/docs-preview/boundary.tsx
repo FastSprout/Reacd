@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import type { ReactNode } from 'react';
-import { Alert } from 'reacd';
+import { Alert } from '@fastsprout/reacd';
 
 interface PreviewBoundaryProps {
   name: string;

@@ -22,7 +22,9 @@ afterEach(() => {
 describe('validation CLI', () => {
   it('requires a filename before attempting any read', async () => {
     process.argv = ['node', 'validate.ts'];
-    await expect(import('./validate.js')).rejects.toThrow('Usage: npm run validate');
+    await expect(import('./validate.js')).rejects.toThrow(
+      'Usage: npm run validate -- test-support/fixtures/generative/standard.json',
+    );
     expect(read).not.toHaveBeenCalled();
   });
   it('reports a valid document without a failing exit code', async () => {

@@ -25,7 +25,7 @@ describe('bundle acceptance CLI', () => {
     inspect.mockReturnValue({ chunkCount: 2 });
     await import('./bundle-check.js');
     expect(files).toHaveBeenCalledExactlyOnceWith('**/*.js', {
-      cwd: fileURLToPath(new URL('../demo-dist/', import.meta.url)),
+      cwd: fileURLToPath(new URL('../.cache/conformance-dist/', import.meta.url)),
     });
     expect(inspect).toHaveBeenCalledExactlyOnceWith(
       {},
@@ -34,9 +34,10 @@ describe('bundle acceptance CLI', () => {
         ['assets/nested/chunk.js', 100],
       ]),
     );
-    expect(log).toHaveBeenCalledExactlyOnceWith('Demo JavaScript bundle acceptance:', {
-      chunkCount: 2,
-    });
+    expect(log).toHaveBeenCalledExactlyOnceWith(
+      'Conformance JavaScript bundle acceptance:',
+      { chunkCount: 2 },
+    );
   });
   it('propagates malformed manifest data without reporting success', async () => {
     read.mockReturnValue('not JSON');

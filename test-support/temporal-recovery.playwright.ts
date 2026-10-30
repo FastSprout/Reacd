@@ -2,7 +2,7 @@ import { defineConfig } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
-  testDir: '../demo/e2e',
+  testDir: './browser/e2e',
   testMatch: 'temporal-recovery.spec.ts',
   workers: 1,
   retries: 0,

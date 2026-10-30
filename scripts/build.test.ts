@@ -21,7 +21,7 @@ beforeEach(() => {
 });
 
 describe('production build runner', () => {
-  it('clears stale output before compiling and builds both CSS and demo', async () => {
+  it('builds CSS and private conformance after clearing stale output', async () => {
     await import('./build.mjs');
     expect(remove).toHaveBeenCalledExactlyOnceWith(
       new URL('../dist/', import.meta.url),
@@ -37,7 +37,11 @@ describe('production build runner', () => {
         [vite, 'build', '--config', 'vite.styles.config.ts'],
         { stdio: 'inherit' },
       ],
-      [process.execPath, [vite, 'build'], { stdio: 'inherit' }],
+      [
+        process.execPath,
+        [vite, 'build', '--config', 'vite.conformance.config.ts'],
+        { stdio: 'inherit' },
+      ],
       [
         process.execPath,
         [
@@ -47,6 +51,11 @@ describe('production build runner', () => {
         ],
         { stdio: 'inherit' },
       ],
+      ...['counter', 'form', 'dashboard'].map((mode) => [
+        process.execPath,
+        [vite, 'build', '--config', 'vite.examples.config.ts', '--mode', mode],
+        { stdio: 'inherit' },
+      ]),
     ]);
   });
   it('does not compile when stale output cannot be removed', async () => {
@@ -57,7 +66,7 @@ describe('production build runner', () => {
     await expect(import('./build.mjs')).rejects.toBe(failure);
     expect(execute).not.toHaveBeenCalled();
   });
-  it.each([1, 2, 3, 4])('stops on build stage %s failure', async (stage) => {
+  it.each([1, 2, 3, 4, 5, 6, 7])('stops on build stage %s failure', async (stage) => {
     const failure = new Error('Build failed.');
     execute.mockImplementation(() => {
       if (execute.mock.calls.length === stage) throw failure;

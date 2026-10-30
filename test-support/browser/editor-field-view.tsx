@@ -10,8 +10,8 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
-import type { EditorDocument, EditorSelection } from 'reacd';
+} from '@fastsprout/reacd';
+import type { EditorDocument, EditorSelection } from '@fastsprout/reacd';
 
 const INITIAL: EditorDocument = {
   version: 1,

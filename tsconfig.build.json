@@ -10,5 +10,5 @@
     "types": ["react"]
   },
   "include": ["src"],
-  "exclude": ["demo", "test-support", "src/**/*.test.*", "src/**/__tests__/**"]
+  "exclude": ["test-support", "src/**/*.test.*", "src/**/__tests__/**"]
 }

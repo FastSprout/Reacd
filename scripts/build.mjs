@@ -16,9 +16,21 @@ execFileSync(process.execPath, [compiler, '-p', 'tsconfig.build.json'], {
 execFileSync(process.execPath, [vite, 'build', '--config', 'vite.styles.config.ts'], {
   stdio: 'inherit',
 });
-execFileSync(process.execPath, [vite, 'build'], { stdio: 'inherit' });
+execFileSync(
+  process.execPath,
+  [vite, 'build', '--config', 'vite.conformance.config.ts'],
+  { stdio: 'inherit' },
+);
 execFileSync(
   process.execPath,
   ['--import', 'tsx', fileURLToPath(new URL('./bundle-check.ts', import.meta.url))],
   { stdio: 'inherit' },
 );
+const EXAMPLE_MODES = ['counter', 'form', 'dashboard'];
+for (const mode of EXAMPLE_MODES) {
+  execFileSync(
+    process.execPath,
+    [vite, 'build', '--config', 'vite.examples.config.ts', '--mode', mode],
+    { stdio: 'inherit' },
+  );
+}

@@ -11,16 +11,19 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      'reacd/jsx-runtime': fileURLToPath(
+      '@fastsprout/reacd/jsx-runtime': fileURLToPath(
         new URL('./src/jsx-runtime.ts', import.meta.url),
       ),
-      'reacd/jsx-dev-runtime': fileURLToPath(
+      '@fastsprout/reacd/jsx-dev-runtime': fileURLToPath(
         new URL('./src/jsx-dev-runtime.ts', import.meta.url),
       ),
-      'reacd/generative': fileURLToPath(
+      '@fastsprout/reacd/generative': fileURLToPath(
         new URL('./src/generative.ts', import.meta.url),
       ),
-      reacd: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+      '@fastsprout/reacd/bootstrap': fileURLToPath(
+        new URL('./src/bootstrap.ts', import.meta.url),
+      ),
+      '@fastsprout/reacd': fileURLToPath(new URL('./src/index.ts', import.meta.url)),
     },
   },
   test: {
@@ -35,8 +38,8 @@ export default defineConfig({
           setupFiles: ['test-support/setup.ts'],
           include: [
             'src/**/*.test.{ts,tsx}',
-            'demo/**/*.test.{ts,tsx}',
-            'tooling/**/*.test.ts',
+            'examples/**/*.test.{ts,tsx}',
+            'tooling/**/*.test.{ts,tsx}',
             'docs/examples/**/*.test.tsx',
           ],
         },
@@ -54,8 +57,10 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: [
+        'vite.site.config.ts',
+        'vite.conformance.config.ts',
         'src/**/*.{ts,tsx}',
-        'demo/**/*.{ts,tsx}',
+        'examples/**/*.{ts,tsx}',
         'tooling/**/*.{ts,tsx}',
         'scripts/**/*.{ts,mjs}',
         'docs/examples/**/*.tsx',

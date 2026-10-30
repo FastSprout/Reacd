@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "jsxImportSource": "@fastsprout/reacd" },
+  "include": ["**/*.tsx"],
+  "exclude": ["**/*.test.tsx"]
+}

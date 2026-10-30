@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createStore } from 'jotai';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { EditorFieldView } from './editor-field-view.js';
 import '../../src/adapter/shadcn/styles.css';
 

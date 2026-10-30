@@ -10,7 +10,7 @@ import {
   Toggle,
   Toolbar,
   createReacdStore,
-} from 'reacd';
+} from '@fastsprout/reacd';
 import { DOCS_PREVIEW_POLICY } from '../../src/core/docs-preview-policy.js';
 import { PreviewBoundary } from './boundary.js';
 import { previewRegistry } from './registry.js';

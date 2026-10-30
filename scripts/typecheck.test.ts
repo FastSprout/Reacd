@@ -12,13 +12,19 @@ beforeEach(() => {
 });
 
 describe('type checking runner', () => {
-  it('checks declarations, source, closed demo, and compiled docs', async () => {
+  it('checks declarations, private conformance, source and examples', async () => {
     await import('./typecheck.mjs');
     const compiler = fileURLToPath(
       new URL('../node_modules/typescript/bin/tsc', import.meta.url),
     );
     expect(execute.mock.calls).toEqual(
-      ['tsconfig.build.json', '.', 'demo', 'docs/examples'].map((project) => [
+      [
+        'tsconfig.build.json',
+        '.',
+        'tooling/conformance',
+        'docs/examples',
+        'examples',
+      ].map((project) => [
         process.execPath,
         [compiler, '-p', project],
         { stdio: 'inherit' },

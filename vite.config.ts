@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, URL as NodeURL } from 'node:url';
+
+const REACT_ARIA_MODULES =
+  /node_modules[\\/](react-aria-components|@react-(aria|stately))[\\/]/;
 
 const PROSEMIRROR_PACKAGES = [
   String.raw`prosemirror-[^\\/]+`,
@@ -14,43 +17,34 @@ const PROSEMIRROR_MODULES = new RegExp(
 );
 
 export default defineConfig({
-  root: 'demo',
-  cacheDir: fileURLToPath(new URL('./.cache/vite', import.meta.url)),
+  publicDir: fileURLToPath(
+    new NodeURL('./tooling/docs-preview/public', import.meta.url),
+  ),
+  cacheDir: fileURLToPath(new NodeURL('./.cache/vite', import.meta.url)),
   plugins: [tailwindcss(), react()],
   resolve: {
     alias: {
-      'reacd/jsx-runtime': fileURLToPath(
-        new URL('./src/jsx-runtime.ts', import.meta.url),
+      '@fastsprout/reacd/jsx-runtime': fileURLToPath(
+        new NodeURL('./src/jsx-runtime.ts', import.meta.url),
       ),
-      'reacd/jsx-dev-runtime': fileURLToPath(
-        new URL('./src/jsx-dev-runtime.ts', import.meta.url),
+      '@fastsprout/reacd/jsx-dev-runtime': fileURLToPath(
+        new NodeURL('./src/jsx-dev-runtime.ts', import.meta.url),
       ),
-      'reacd/generative': fileURLToPath(
-        new URL('./src/generative.ts', import.meta.url),
+      '@fastsprout/reacd/generative': fileURLToPath(
+        new NodeURL('./src/generative.ts', import.meta.url),
       ),
-      reacd: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+      '@fastsprout/reacd/bootstrap': fileURLToPath(
+        new NodeURL('./src/bootstrap.ts', import.meta.url),
+      ),
+      '@fastsprout/reacd': fileURLToPath(
+        new NodeURL('./src/index.ts', import.meta.url),
+      ),
     },
   },
   build: {
-    outDir: '../demo-dist',
     emptyOutDir: true,
     manifest: true,
     rolldownOptions: {
-      input: {
-        compositionSafety: fileURLToPath(
-          new URL('./demo/composition-safety.html', import.meta.url),
-        ),
-        index: fileURLToPath(new URL('./demo/index.html', import.meta.url)),
-        temporalRecovery: fileURLToPath(
-          new URL('./demo/temporal-recovery.html', import.meta.url),
-        ),
-        listboxFieldMetadata: fileURLToPath(
-          new URL('./demo/listbox-field-metadata.html', import.meta.url),
-        ),
-        editorFieldMetadata: fileURLToPath(
-          new URL('./demo/editor-field-metadata.html', import.meta.url),
-        ),
-      },
       output: {
         codeSplitting: {
           groups: [
@@ -58,8 +52,7 @@ export default defineConfig({
             { name: 'tiptap', test: /node_modules[\\/]@tiptap[\\/]/ },
             {
               name: 'react-aria',
-              test:
-                /node_modules[\\/](react-aria-components|@react-(aria|stately))[\\/]/,
+              test: REACT_ARIA_MODULES,
             },
             {
               name: 'temporal',
