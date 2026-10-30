@@ -9,7 +9,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const SAMPLE_EMAIL = 'owner@example.com';
 const emailAtom = atom(SAMPLE_EMAIL);

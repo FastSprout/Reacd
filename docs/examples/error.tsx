@@ -1,4 +1,4 @@
-import { Error, Text } from 'reacd';
+import { Error, Text } from '@fastsprout/reacd';
 
 export function ErrorExample() {
   return (

@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { App, Form, Slider, SubmitButton, Text, Toggle, VStack } from 'reacd';
+import {
+  App,
+  Form,
+  Slider,
+  SubmitButton,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const levelAtom = atom(20);
 const priceAtom = atom({ start: 20, end: 80 });

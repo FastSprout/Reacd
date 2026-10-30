@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Header, Input, Select, Text, Link, VStack } from 'reacd';
+import { Header, Input, Select, Text, Link, VStack } from '@fastsprout/reacd';
 
 const openAtom = atom(false);
 const titleAtom = atom('reacd');

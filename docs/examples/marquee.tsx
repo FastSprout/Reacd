@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { App, Input, Marquee, Toggle, VStack } from 'reacd';
+import { App, Input, Marquee, Toggle, VStack } from '@fastsprout/reacd';
 const pausedAtom = atom(true);
 const readonlyAtom = atom(false);
 const rtlAtom = atom(false);

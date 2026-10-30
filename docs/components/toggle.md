@@ -25,5 +25,5 @@ Callbacks receive boolean values. Application state remains the source of truth.
 
 Optional generative transport retains the corresponding closed logical contract.
 
-Run `npm run dev` and choose **Fields** to use this same compiled example. The adapter
-and template own HTML, CSS and responsive rendering.
+Use the live TSX preview above to run this example. The adapter and template own HTML,
+CSS and responsive rendering.

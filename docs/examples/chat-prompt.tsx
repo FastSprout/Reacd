@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
-import { Button, ChatPrompt, Section, Text, VStack } from 'reacd';
-import type { ChatPromptProps } from 'reacd';
+import { Button, ChatPrompt, Section, Text, VStack } from '@fastsprout/reacd';
+import type { ChatPromptProps } from '@fastsprout/reacd';
 
 const draftAtom = atom('');
 const statusAtom = atom<ChatPromptProps['status']>('ready');

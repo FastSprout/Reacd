@@ -1,4 +1,4 @@
-import { Link, PageHeader, Text } from 'reacd';
+import { Link, PageHeader, Text } from '@fastsprout/reacd';
 
 export function PageHeaderExample() {
   return (

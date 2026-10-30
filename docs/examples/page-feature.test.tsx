@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { PageFeatureExample } from './page-feature.js';
 
 it('renders the runnable PageFeature reference', () => {

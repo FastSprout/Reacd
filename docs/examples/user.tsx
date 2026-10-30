@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { App, Input, Section, Text, Toggle, User, VStack } from 'reacd';
+import { App, Input, Section, Text, Toggle, User, VStack } from '@fastsprout/reacd';
 
 const verticalAtom = atom(false);
 const disabledAtom = atom(false);

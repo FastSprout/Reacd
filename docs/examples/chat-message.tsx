@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
-import { Button, ChatMessage, Input, Section, Text, VStack } from 'reacd';
-import type { ChatMessageProps } from 'reacd';
+import { Button, ChatMessage, Input, Section, Text, VStack } from '@fastsprout/reacd';
+import type { ChatMessageProps } from '@fastsprout/reacd';
 
 const textAtom = atom('This is an editable example response.');
 const statusAtom = atom<ChatMessageProps['status']>('ready');

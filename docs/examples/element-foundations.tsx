@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { App, Section, Toggle, VStack } from 'reacd';
+import { App, Section, Toggle, VStack } from '@fastsprout/reacd';
 import { AlertExample } from './alert.js';
 import { BadgeExample } from './badge.js';
 import { ButtonExample } from './button.js';

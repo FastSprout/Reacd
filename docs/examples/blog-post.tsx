@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { BlogPost, Input, Text } from 'reacd';
+import { BlogPost, Input, Text } from '@fastsprout/reacd';
 
 const draftAtom = atom('');
 const inspectedAtom = atom(false);

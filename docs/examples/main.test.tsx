@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { MainExample } from './main.js';
 
 describe('documented Main example', () => {

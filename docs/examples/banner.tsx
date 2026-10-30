@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { App, Banner, Button, Input, Section, Text, Toggle, VStack } from 'reacd';
+import {
+  App,
+  Banner,
+  Button,
+  Input,
+  Section,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const visibleAtom = atom(true);
 const dismissibleAtom = atom(true);

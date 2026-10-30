@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Avatar, Input, Section, Select, Text, VStack } from 'reacd';
+import { Avatar, Input, Section, Select, Text, VStack } from '@fastsprout/reacd';
 
 const nameAtom = atom('Example Reader');
 const sourceAtom = atom('fallback');

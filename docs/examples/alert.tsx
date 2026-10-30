@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Alert, Button, Text, Toggle, VStack } from 'reacd';
+import { Alert, Button, Text, Toggle, VStack } from '@fastsprout/reacd';
 const openAtom = atom(true);
 const readOnlyAtom = atom(false);
 const reviewAtom = atom(0);

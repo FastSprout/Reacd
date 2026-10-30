@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { validateGenerativeDocument } from 'reacd/generative';
+import { validateGenerativeDocument } from '@fastsprout/reacd/generative';
 import { GenerativeStateExample, SHARED_STATE_DOCUMENT } from './generative-state.js';
 
 describe('documented shared generative state', () => {

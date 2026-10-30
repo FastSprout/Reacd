@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
-import { DataTable, Text, VStack } from 'reacd';
-import type { DataTableProps } from 'reacd';
+import { DataTable, Text, VStack } from '@fastsprout/reacd';
+import type { DataTableProps } from '@fastsprout/reacd';
 
 const selectedAtom = atom<DataTableProps['selection']>([]);
 const COLUMNS: DataTableProps['columns'] = [

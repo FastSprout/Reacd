@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { InputTimeExample } from './input-time.js';
 
 it('runs time, range, locale, protection and submit examples', async () => {

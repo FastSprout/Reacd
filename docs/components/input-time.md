@@ -17,7 +17,7 @@ actions, focus, descriptions and native validation.
 ```
 
 ```tsx
-import { InputTime } from 'reacd';
+import { InputTime } from '@fastsprout/reacd';
 
 <InputTime label="Arrival time" value="12:30:00" onValueChange={setArrival} required />;
 ```

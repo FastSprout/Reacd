@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { AuthForm, Input, Select, Text, Toggle, VStack } from 'reacd';
+import { AuthForm, Input, Select, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const emailAtom = atom('');
 const roleAtom = atom('reader');

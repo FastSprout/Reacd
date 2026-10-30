@@ -1,6 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, ChatMessages, Input, Section, Toggle, VStack } from 'reacd';
-import type { ChatMessagesProps } from 'reacd';
+import {
+  App,
+  Button,
+  ChatMessages,
+  Input,
+  Section,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
+import type { ChatMessagesProps } from '@fastsprout/reacd';
 
 const messagesAtom = atom<ChatMessagesProps['messages']>([]);
 const statusAtom = atom<ChatMessagesProps['status']>('ready');

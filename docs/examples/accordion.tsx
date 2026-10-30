@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Accordion, Input, Text, VStack } from 'reacd';
+import { Accordion, Input, Text, VStack } from '@fastsprout/reacd';
 
 const openAtom = atom<readonly string[]>([]);
 const noteAtom = atom('');

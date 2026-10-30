@@ -8,7 +8,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 const colorAtom = atom('#33aa6680');
 const readonlyAtom = atom(false);
 const disabledAtom = atom(false);

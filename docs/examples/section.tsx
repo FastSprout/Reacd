@@ -1,4 +1,4 @@
-import { Section, Text } from 'reacd';
+import { Section, Text } from '@fastsprout/reacd';
 
 export function SectionExample() {
   return (

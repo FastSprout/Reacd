@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { AlertExample } from './alert.js';
 it('runs documented alert actions, dismissal and readonly visibility', async () => {
   const user = userEvent.setup();

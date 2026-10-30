@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { CarouselExample } from './carousel.js';
 it('runs navigation, retained edits and host previews', async () => {
   const user = userEvent.setup();

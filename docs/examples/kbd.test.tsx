@@ -2,7 +2,7 @@ import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { KbdExample } from './kbd.js';
 describe('documented Kbd example', () => {
   it('changes values, labels, platform, size, intent, and variant', async () => {

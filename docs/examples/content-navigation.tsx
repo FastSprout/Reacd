@@ -1,5 +1,12 @@
 import { atom, useAtom } from 'jotai';
-import { ContentNavigation, Input, PageSection, Text, Toggle, VStack } from 'reacd';
+import {
+  ContentNavigation,
+  Input,
+  PageSection,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const expandedAtom = atom<readonly string[]>([]);
 const currentAtom = atom('');

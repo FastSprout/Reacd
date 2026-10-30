@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Input, PageHero, Text, Toggle, VStack } from 'reacd';
+import { Input, PageHero, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const reverseAtom = atom(false);
 const horizontalAtom = atom(true);

@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { installEditorGeometry } from '../../test-support/editor-geometry.js';
 import { selectEditorText } from '../../test-support/editor-selection.js';
 import { EditorExample } from './editor.js';

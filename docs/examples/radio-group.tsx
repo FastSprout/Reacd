@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Form, RadioGroup, SubmitButton, Text, Toggle, VStack } from 'reacd';
+import {
+  Button,
+  Form,
+  RadioGroup,
+  SubmitButton,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const valueAtom = atom('');
 const disabledAtom = atom(false);

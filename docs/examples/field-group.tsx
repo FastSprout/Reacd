@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, FieldGroup, Input, Text, Toggle, VStack } from 'reacd';
+import {
+  App,
+  Button,
+  FieldGroup,
+  Input,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const queryAtom = atom('');
 const verticalAtom = atom(false);

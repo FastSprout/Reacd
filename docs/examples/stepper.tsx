@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Input, Section, Stepper, Text, Toggle, VStack } from 'reacd';
+import { Input, Section, Stepper, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const stepAtom = atom('address');
 const linearAtom = atom(true);

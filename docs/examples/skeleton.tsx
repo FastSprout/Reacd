@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { Grid, HStack, Input, Section, Select, Skeleton, Toggle, VStack } from 'reacd';
+import {
+  Grid,
+  HStack,
+  Input,
+  Section,
+  Select,
+  Skeleton,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const shapeAtom = atom('text');
 const sizeAtom = atom('medium');

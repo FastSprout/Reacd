@@ -1,4 +1,4 @@
-import { HStack, Spacer, Text } from 'reacd';
+import { HStack, Spacer, Text } from '@fastsprout/reacd';
 
 export function SpacerExample() {
   return (

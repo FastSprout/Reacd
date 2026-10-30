@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { Breadcrumb, Input, Section, Select, Text, Toggle, VStack } from 'reacd';
+import {
+  Breadcrumb,
+  Input,
+  Section,
+  Select,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 const finalAtom = atom('Current record');
 const separatorAtom = atom('chevron');
 const disabledAtom = atom(false);

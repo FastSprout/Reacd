@@ -88,4 +88,4 @@ generative renderer and adapter.
 --8<-- "examples/generative-table.tsx"
 ```
 
-Choose **Content and data** in the local workbench to use this same compiled example.
+Use the live TSX preview above to run this example.

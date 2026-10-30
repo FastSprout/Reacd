@@ -10,7 +10,7 @@ Choose from a visible list of options. Focus and typeahead help inspect choices;
 explicit activation requests a change. Values stay controlled by the host.
 
 ```tsx
-import { Listbox } from 'reacd';
+import { Listbox } from '@fastsprout/reacd';
 
 <Listbox label="Region" items={regions} value={region} onValueChange={setRegion} />;
 ```

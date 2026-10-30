@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, Form, Listbox, SubmitButton, Text, Toggle, VStack } from 'reacd';
+import {
+  App,
+  Button,
+  Form,
+  Listbox,
+  SubmitButton,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const primaryAtom = atom('42');
 const additionalAtom = atom<readonly string[]>(['offline']);

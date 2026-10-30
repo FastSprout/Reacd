@@ -1,4 +1,7 @@
-import { GenerativeUI, defineGenerativeDeclaration } from 'reacd/generative';
+import {
+  GenerativeUI,
+  defineGenerativeDeclaration,
+} from '@fastsprout/reacd/generative';
 
 const KEYS = { name: 'customer.name', status: 'service.status' } as const;
 const INITIAL_STATUS = 'Waiting for host refresh.';

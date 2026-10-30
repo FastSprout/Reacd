@@ -9,7 +9,7 @@ import {
   Toggle,
   Tooltip,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const openAtom = atom(false);
 const disabledAtom = atom(false);

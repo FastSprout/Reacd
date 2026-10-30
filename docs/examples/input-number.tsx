@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, InputNumber, Text, Toggle, VStack } from 'reacd';
+import { App, Button, InputNumber, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const rtlAtom = atom(false);
 const valueAtom = atom<number | null>(0.1);

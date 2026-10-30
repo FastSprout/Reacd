@@ -17,7 +17,7 @@ import {
   useSystemColorMode,
   VStack,
   templates,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const draftAtom = atom('A draft survives palette changes.');
 const readOnlyAtom = atom(false);

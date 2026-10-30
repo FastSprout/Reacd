@@ -1,4 +1,4 @@
-import { PageAside, Link, Text } from 'reacd';
+import { PageAside, Link, Text } from '@fastsprout/reacd';
 
 export function PageAsideExample() {
   return (

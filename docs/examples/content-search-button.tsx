@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { ContentSearchButton, Text, VStack } from 'reacd';
+import { ContentSearchButton, Text, VStack } from '@fastsprout/reacd';
 
 const requestedAtom = atom(false);
 

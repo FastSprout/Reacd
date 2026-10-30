@@ -7,7 +7,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const openAtom = atom(false);
 const queryAtom = atom('');

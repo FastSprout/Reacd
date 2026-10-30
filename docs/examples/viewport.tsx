@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Text, Toggle, Viewport, VStack } from 'reacd';
+import { Text, Toggle, Viewport, VStack } from '@fastsprout/reacd';
 
 const compactAtom = atom(false);
 

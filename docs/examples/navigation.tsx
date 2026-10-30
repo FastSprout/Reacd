@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Navigation, Text, VStack } from 'reacd';
+import { Navigation, Text, VStack } from '@fastsprout/reacd';
 
 const viewAtom = atom('summary');
 const ITEMS = [

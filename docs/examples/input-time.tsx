@@ -8,7 +8,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const arrivalAtom = atom<string | null>('12:30:00');
 const availabilityAtom = atom<Readonly<{ start: string | null; end: string | null }>>({

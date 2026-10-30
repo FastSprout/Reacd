@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { Grid, HStack, Input, Kbd, Section, Select, Text, VStack } from 'reacd';
+import {
+  Grid,
+  HStack,
+  Input,
+  Kbd,
+  Section,
+  Select,
+  Text,
+  VStack,
+} from '@fastsprout/reacd';
 
 const valueAtom = atom('meta');
 const platformAtom = atom('other');

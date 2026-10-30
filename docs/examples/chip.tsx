@@ -9,7 +9,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const textAtom = atom('5');
 const showAtom = atom(true);

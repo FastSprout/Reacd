@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Form, SubmitButton, Text } from 'reacd';
+import { Form, SubmitButton, Text } from '@fastsprout/reacd';
 
 const approvalsAtom = atom(0);
 

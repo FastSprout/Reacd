@@ -2,7 +2,7 @@ import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { installEditorGeometry } from '../../test-support/editor-geometry.js';
 import { selectEditorText } from '../../test-support/editor-selection.js';
 import { EditorMentionLookupExample } from './editor-mention-lookup.js';

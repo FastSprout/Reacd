@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, Input, Table, Toggle, VStack } from 'reacd';
-import type { TableProps } from 'reacd';
+import { App, Button, Input, Table, Toggle, VStack } from '@fastsprout/reacd';
+import type { TableProps } from '@fastsprout/reacd';
 type Model = Extract<TableProps, { mode: 'interactive' }>['model'];
 const INITIAL: Model = {
   columns: [

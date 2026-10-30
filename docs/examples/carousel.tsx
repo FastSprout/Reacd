@@ -11,7 +11,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 const indexAtom = atom(0);
 const draftAtom = atom('Draft profile');
 const loopAtom = atom(false);

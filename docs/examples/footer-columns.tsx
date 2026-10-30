@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { FooterColumns, Input, Section, Text, Toggle, VStack } from 'reacd';
+import { FooterColumns, Input, Section, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const disabledAtom = atom(false);
 const messageAtom = atom('No footer action selected.');

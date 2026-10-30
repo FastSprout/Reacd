@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Form, SubmitButton, Switch, Text, Toggle, VStack } from 'reacd';
+import { Form, SubmitButton, Switch, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const checkedAtom = atom(false);
 const readOnlyAtom = atom(false);

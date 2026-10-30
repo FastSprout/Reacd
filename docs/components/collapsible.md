@@ -12,7 +12,8 @@ theme; application code supplies logical values and reacd children.
 ## Example
 
 The local Layout catalog runs this same compiled source. Place the example inside
-`ReacdProvider` in an application configured with `jsxImportSource: "reacd"`.
+`ReacdProvider` in an application configured with
+`jsxImportSource: "@fastsprout/reacd"`.
 
 <!-- reacd-live-preview -->
 

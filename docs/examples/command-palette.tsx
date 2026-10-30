@@ -1,5 +1,12 @@
 import { atom, useAtom } from 'jotai';
-import { CommandPalette, Section, Select, Text, Toggle, VStack } from 'reacd';
+import {
+  CommandPalette,
+  Section,
+  Select,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const queryAtom = atom('');
 const statusAtom = atom('ready');

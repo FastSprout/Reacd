@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { AvatarGroup, Section, Select, Slider, Text, Toggle, VStack } from 'reacd';
+import {
+  AvatarGroup,
+  Section,
+  Select,
+  Slider,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const maximumAtom = atom(2);
 const emptyAtom = atom(false);

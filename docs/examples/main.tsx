@@ -1,4 +1,4 @@
-import { Main, Text } from 'reacd';
+import { Main, Text } from '@fastsprout/reacd';
 
 export function MainExample() {
   return (

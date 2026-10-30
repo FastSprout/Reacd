@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { InputTagsExample } from './input-tags.js';
 
 it('runs documented tag entry, form, read-only and scoped RTL controls', async () => {

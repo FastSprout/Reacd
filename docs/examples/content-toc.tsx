@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { ContentToc, PageSection, Text, Toggle, VStack } from 'reacd';
+import { ContentToc, PageSection, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const currentAtom = atom('');
 const vetoAtom = atom(false);

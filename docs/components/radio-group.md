@@ -12,7 +12,7 @@ the adapter owns accessible controls, visual indicators, and wrapping.
 ## Example
 
 The Fields catalog runs this same compiled source. Use it inside `ReacdProvider` with
-`jsxImportSource: "reacd"`.
+`jsxImportSource: "@fastsprout/reacd"`.
 
 <!-- reacd-live-preview -->
 

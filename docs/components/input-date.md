@@ -17,7 +17,7 @@ validation, clear actions and rendering.
 ```
 
 ```tsx
-import { InputDate } from 'reacd';
+import { InputDate } from '@fastsprout/reacd';
 
 <InputDate
   label="Event date"

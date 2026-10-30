@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Grid, Pagination, Section, Select, Text, Toggle, VStack } from 'reacd';
+import {
+  Button,
+  Grid,
+  Pagination,
+  Section,
+  Select,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 const DATASETS = { empty: 0, sample: 23, large: 1000, huge: 1_000_000_000 } as const;
 const pageAtom = atom({ dataset: 'sample', value: { pageIndex: 0, pageSize: 10 } });
 const sizeAtom = atom('medium');

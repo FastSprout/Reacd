@@ -1,6 +1,15 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Input, Section, Select, Text, Toast, Toggle, VStack } from 'reacd';
-import type { ToastProps } from 'reacd';
+import {
+  Button,
+  Input,
+  Section,
+  Select,
+  Text,
+  Toast,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
+import type { ToastProps } from '@fastsprout/reacd';
 const openAtom = atom(false);
 const backgroundAtom = atom(false);
 const titleAtom = atom('Sample record saved');

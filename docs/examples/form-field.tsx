@@ -10,7 +10,7 @@ import {
   Textarea,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const approvedAtom = atom(false);
 const notesAtom = atom('');

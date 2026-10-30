@@ -8,7 +8,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const LONG_LABEL = 'Regional approval and international logistics coordination';
 const items = [

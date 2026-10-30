@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { ContentSurround, Input, Toggle, VStack } from 'reacd';
+import { ContentSurround, Input, Toggle, VStack } from '@fastsprout/reacd';
 
 const titleAtom = atom('Earlier reference');
 const emptyAtom = atom(false);

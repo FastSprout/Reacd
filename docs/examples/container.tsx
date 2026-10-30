@@ -1,4 +1,4 @@
-import { Container, Text } from 'reacd';
+import { Container, Text } from '@fastsprout/reacd';
 
 export function ContainerExample() {
   return (

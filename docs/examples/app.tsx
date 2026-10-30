@@ -1,4 +1,4 @@
-import { App, Container, Main, Text } from 'reacd';
+import { App, Container, Main, Text } from '@fastsprout/reacd';
 
 export function AppExample() {
   return (

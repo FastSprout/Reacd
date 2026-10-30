@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Input, PageCTA, Text, Toggle, VStack } from 'reacd';
+import { Button, Input, PageCTA, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const draftAtom = atom('');
 const confirmedAtom = atom(false);

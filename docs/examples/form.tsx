@@ -1,6 +1,15 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, Form, Input, SubmitButton, Text, Toggle, VStack } from 'reacd';
-import type { FormSummaryIssue } from 'reacd';
+import {
+  App,
+  Button,
+  Form,
+  Input,
+  SubmitButton,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
+import type { FormSummaryIssue } from '@fastsprout/reacd';
 
 const PROJECT_NAME = 'Local project';
 const EXAMPLE_SUMMARY: readonly FormSummaryIssue[] = [

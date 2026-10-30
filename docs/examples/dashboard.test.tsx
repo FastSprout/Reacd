@@ -2,7 +2,7 @@ import { chooseOption } from '../../test-support/select-choice.js';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { DashboardExample } from './dashboard.js';
 import { installLayout } from '../../test-support/layout-observer.js';
 

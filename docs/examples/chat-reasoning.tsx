@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { App, ChatReasoning, Input, Section, Toggle, VStack } from 'reacd';
+import { App, ChatReasoning, Input, Section, Toggle, VStack } from '@fastsprout/reacd';
 
 const textAtom = atom('Example summary: validate the selected component contract.');
 const openAtom = atom(false);

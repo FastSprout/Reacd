@@ -10,7 +10,7 @@ Enter a controlled numeric or alphanumeric code. A string preserves leading zero
 incomplete input. The default length is six characters.
 
 ```tsx
-import { PinInput } from 'reacd';
+import { PinInput } from '@fastsprout/reacd';
 
 <PinInput
   label="Verification code"

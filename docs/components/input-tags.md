@@ -10,7 +10,7 @@ Collect a controlled list of unique text tokens. The host owns committed tags; t
 adapter keeps a separate editable draft until the host accepts an addition.
 
 ```tsx
-import { InputTags } from 'reacd';
+import { InputTags } from '@fastsprout/reacd';
 
 <InputTags
   label="Topics"

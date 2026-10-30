@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Text, Toolbar, VStack } from 'reacd';
+import { Button, Text, Toolbar, VStack } from '@fastsprout/reacd';
 
 const savesAtom = atom(0);
 

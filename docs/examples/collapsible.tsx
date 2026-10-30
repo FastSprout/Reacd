@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Collapsible, Input, Select, Text, Toggle, VStack } from 'reacd';
+import {
+  Button,
+  Collapsible,
+  Input,
+  Select,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const openAtom = atom(false);
 const nestedAtom = atom(false);

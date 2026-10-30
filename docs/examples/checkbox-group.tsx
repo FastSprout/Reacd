@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { Button, CheckboxGroup, Form, SubmitButton, Text, Toggle, VStack } from 'reacd';
+import {
+  Button,
+  CheckboxGroup,
+  Form,
+  SubmitButton,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const valueAtom = atom<readonly string[]>([]);
 const disabledAtom = atom(false);

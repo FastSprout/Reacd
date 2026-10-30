@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { ChatShimmer, Input, Section, Toggle, VStack } from 'reacd';
+import { ChatShimmer, Input, Section, Toggle, VStack } from '@fastsprout/reacd';
 
 const textAtom = atom('Processing an example request.');
 const activeAtom = atom(true);

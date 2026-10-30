@@ -3,7 +3,7 @@ import { installLayout } from '../../test-support/layout-observer.js';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { AvatarGroupExample } from './avatar-group.js';
 
 let restoreLayout: () => void;

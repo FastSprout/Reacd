@@ -1,5 +1,15 @@
 import { atom, useAtom } from 'jotai';
-import { Alert, Badge, Button, Card, Icon, Input, Progress, Text, VStack } from 'reacd';
+import {
+  Alert,
+  Badge,
+  Button,
+  Card,
+  Icon,
+  Input,
+  Progress,
+  Text,
+  VStack,
+} from '@fastsprout/reacd';
 const DEFAULT_LABEL = 'Content stays inside its component';
 const LABEL_LIMIT = 500;
 const labelAtom = atom(DEFAULT_LABEL);

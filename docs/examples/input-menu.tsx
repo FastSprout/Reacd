@@ -10,7 +10,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const valueAtom = atom('');
 const readonlyAtom = atom(false);

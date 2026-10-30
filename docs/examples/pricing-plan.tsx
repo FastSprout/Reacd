@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Input, PricingPlan, Text, Toggle, VStack } from 'reacd';
+import { Button, Input, PricingPlan, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const selectedAtom = atom(false);
 const draftAtom = atom('');

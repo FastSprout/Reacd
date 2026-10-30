@@ -11,7 +11,7 @@ suggestion requests its label; the option key is not stored or submitted. Use Se
 when the value must identify an option.
 
 ```tsx
-import { InputMenu } from 'reacd';
+import { InputMenu } from '@fastsprout/reacd';
 
 <InputMenu
   label="Destination"

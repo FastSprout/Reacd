@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { CodeEditor, Text, VStack } from 'reacd';
+import { CodeEditor, Text, VStack } from '@fastsprout/reacd';
 
 const sourceAtom = atom('Draft source');
 

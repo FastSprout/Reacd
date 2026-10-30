@@ -1,7 +1,11 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
-import { createReacdStore, ReacdProvider, darkTemplateVariants } from 'reacd';
+import {
+  createReacdStore,
+  ReacdProvider,
+  darkTemplateVariants,
+} from '@fastsprout/reacd';
 import { templateAtom } from '../../src/state/theme/template.atom.js';
 import { ColorModeExample } from './color-mode.js';
 

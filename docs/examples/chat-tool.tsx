@@ -1,6 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { Button, ChatTool, Input, Section, Text, Toggle, VStack } from 'reacd';
-import type { ChatToolProps } from 'reacd';
+import {
+  Button,
+  ChatTool,
+  Input,
+  Section,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
+import type { ChatToolProps } from '@fastsprout/reacd';
 
 const statusAtom = atom<ChatToolProps['status']>('pending');
 const openAtom = atom(false);

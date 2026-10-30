@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Badge, Toggle, VStack } from 'reacd';
+import { Badge, Toggle, VStack } from '@fastsprout/reacd';
 const warningAtom = atom(false);
 const largeAtom = atom(false);
 export function BadgeExample() {

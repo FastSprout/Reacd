@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { installEditorGeometry } from '../../test-support/editor-geometry.js';
 import { EditorDragHandleExample } from './editor-drag-handle.js';
 let restore: () => void = () => undefined;

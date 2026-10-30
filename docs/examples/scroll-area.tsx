@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, Card, ScrollArea, Section, Text, Toggle, VStack } from 'reacd';
+import {
+  App,
+  Button,
+  Card,
+  ScrollArea,
+  Section,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const horizontalAtom = atom(false);
 const rtlAtom = atom(false);

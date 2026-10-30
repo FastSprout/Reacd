@@ -1,4 +1,7 @@
-import { GenerativeUI, defineGenerativeDeclaration } from 'reacd/generative';
+import {
+  GenerativeUI,
+  defineGenerativeDeclaration,
+} from '@fastsprout/reacd/generative';
 
 const KEYS = {
   rows: 'orders.rows',

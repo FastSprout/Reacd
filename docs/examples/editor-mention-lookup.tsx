@@ -8,12 +8,12 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 import type {
   EditorDocument,
   EditorMentionLookupRequest,
   EditorMentionLookupResult,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const INITIAL: EditorDocument = {
   version: 1,

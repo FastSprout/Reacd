@@ -9,7 +9,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const singleAtom = atom('');
 const multipleAtom = atom<readonly string[]>([]);

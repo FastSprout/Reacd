@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { SwitchExample } from './switch.js';
 import { TextareaExample } from './textarea.js';
 import { FormFieldExample } from './form-field.js';

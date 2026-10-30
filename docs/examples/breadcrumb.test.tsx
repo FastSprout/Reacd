@@ -2,7 +2,7 @@ import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { BreadcrumbExample } from './breadcrumb.js';
 describe('documented Breadcrumb example', () => {
   it('changes separators, path length and disabled actions', async () => {

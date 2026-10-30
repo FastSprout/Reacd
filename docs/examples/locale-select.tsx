@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { App, LocaleSelect, Text, Toggle, VStack } from 'reacd';
+import { App, LocaleSelect, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const localeAtom = atom('en-US');
 const readOnlyAtom = atom(false);

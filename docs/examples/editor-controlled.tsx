@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Editor, EditorToolbar, Text, Toggle, VStack } from 'reacd';
-import type { EditorEdit } from 'reacd';
+import { Button, Editor, EditorToolbar, Text, Toggle, VStack } from '@fastsprout/reacd';
+import type { EditorEdit } from '@fastsprout/reacd';
 
 const INITIAL_TEXT = 'Controlled draft.';
 const BLOCK_ID = 'controlled-intro';

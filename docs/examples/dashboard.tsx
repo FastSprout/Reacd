@@ -17,8 +17,8 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
-import type { DashboardGroupProps } from 'reacd';
+} from '@fastsprout/reacd';
+import type { DashboardGroupProps } from '@fastsprout/reacd';
 
 const INITIAL = [
   { id: 'navigation', share: 25 },

@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { Slideover, Button, Input, Section, Select, Text, Toggle, VStack } from 'reacd';
+import {
+  Slideover,
+  Button,
+  Input,
+  Section,
+  Select,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 const openAtom = atom(false);
 const placementAtom = atom('end');
 const noteAtom = atom('Sample note');

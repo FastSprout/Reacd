@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Card, Text, Toggle, VStack } from 'reacd';
+import { Button, Card, Text, Toggle, VStack } from '@fastsprout/reacd';
 const headerAtom = atom(true);
 const footerAtom = atom(true);
 const reviewAtom = atom(0);

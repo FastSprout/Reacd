@@ -10,7 +10,7 @@ Edit a controlled number with keyboard entry and increment/decrement controls. T
 owns the value; `null` represents an empty field.
 
 ```tsx
-import { InputNumber } from 'reacd';
+import { InputNumber } from '@fastsprout/reacd';
 
 <InputNumber
   label="Quantity"

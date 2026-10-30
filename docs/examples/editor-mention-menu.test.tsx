@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { installEditorGeometry } from '../../test-support/editor-geometry.js';
 import { EditorMentionMenuExample } from './editor-mention-menu.js';
 

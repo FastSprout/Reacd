@@ -9,8 +9,8 @@ import {
   Toggle,
   VStack,
   readUploadBytes,
-} from 'reacd';
-import type { UploadFile } from 'reacd';
+} from '@fastsprout/reacd';
+import type { UploadFile } from '@fastsprout/reacd';
 const SAMPLE: UploadFile = {
   id: 'sample',
   name: 'Saved-document-with-a-long-readable-file-name.txt',

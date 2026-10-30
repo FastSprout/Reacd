@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Card, PageColumns, Text, VStack } from 'reacd';
+import { Button, Card, PageColumns, Text, VStack } from '@fastsprout/reacd';
 
 const selectedAtom = atom('None');
 const ITEMS = [

@@ -1,7 +1,7 @@
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { HeaderExample } from './header.js';
 import { userEvent } from '@testing-library/user-event';
 

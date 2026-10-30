@@ -1,4 +1,4 @@
-import { Separator, Text, VStack } from 'reacd';
+import { Separator, Text, VStack } from '@fastsprout/reacd';
 
 export function SeparatorExample() {
   return (

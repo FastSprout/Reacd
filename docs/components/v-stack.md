@@ -23,5 +23,5 @@ Content can grow naturally. The engine owns geometry, overflow and gap resolutio
 
 Optional generative transport retains the corresponding closed logical contract.
 
-Run `npm run dev` and choose **Layout** to use this same compiled example. The adapter
-and template own HTML, CSS and responsive rendering.
+Use the live TSX preview above to run this example. The adapter and template own HTML,
+CSS and responsive rendering.

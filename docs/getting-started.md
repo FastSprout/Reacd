@@ -15,22 +15,31 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/` to review the local application.
+Open `http://127.0.0.1:5173/` to use the counter application. The three applications
+below have isolated stores and local sample data. Reloading resets their unsaved state.
 
-Catalog families and the generative playground load when first selected. A loading
-placeholder leaves navigation and appearance controls available. Field values and
-generative edits survive switching views within the same workspace. If a view fails to
-load, other views remain available. The explicit reload link starts a fresh workspace
-and clears unsaved local changes.
+## Run a small TSX application
 
-The package is currently developed locally. The commands above do not publish a package,
-deploy a site, or change a domain.
+The repository includes standalone [counter][counter], [contact form][form] and
+[dashboard][dashboard] applications. After npm ci, choose one command:
+
+```sh
+npm run example -- --mode counter
+npm run example -- --mode form
+npm run example -- --mode dashboard
+```
+
+Each serves its selected application at http://127.0.0.1:5173/. Its App.tsx uses closed
+components and its own Jotai store. Its main.tsx imports the browser-only
+@fastsprout/reacd/bootstrap entry, which supplies the trusted renderer and styles. The
+shared HTML host belongs to the framework; application files contain no HTML or CSS.
+Sample form submissions and filtering stay in the browser.
 
 ## Declare a view
 
 ```tsx
 import { atom, useAtom } from 'jotai';
-import { Button, Card, Input, Text, VStack } from 'reacd';
+import { Button, Card, Input, Text, VStack } from '@fastsprout/reacd';
 
 const nameAtom = atom('');
 
@@ -67,9 +76,8 @@ This includes strict typing, coverage, built-package acceptance, browser conform
 and the strict documentation build. Use `npm run docs:check` to build documentation
 independently. Checks generate local artifacts and never deploy the site.
 
-The production build also validates its generated bundle manifest. JavaScript chunks
-must remain within the configured byte budget, and deferred views must stay outside the
-static entry graph. The public library's synchronous SSR API is unchanged.
+Build checks also validate bundle budgets and the installed package's synchronous
+server-rendering API. Internal conformance fixtures are separate from public examples.
 
 - [Component catalog](components/index.md)
 - [Theme adapters](guides/theme-adapters.md)
@@ -83,6 +91,10 @@ change another. Reloading an example resets its unsaved state.
 
 `npm run docs:check` compiles the preview assets, builds strict MkDocs output and checks
 all component references. Serve the generated site locally with
-`.venv-docs/bin/python -m http.server 8000 --bind 127.0.0.1 -d site`. Run the
+`npm run preview -- --config vite.site.config.ts --port 8000 --strictPort`. Run the
 documentation build before invoking `npm run test:browser` independently. The complete
 `npm run check` command keeps that order automatically.
+
+[counter]: https://github.com/FastSprout/Reacd/tree/main/examples/counter
+[form]: https://github.com/FastSprout/Reacd/tree/main/examples/form
+[dashboard]: https://github.com/FastSprout/Reacd/tree/main/examples/dashboard

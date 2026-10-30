@@ -1,5 +1,11 @@
 import { atom, useAtom } from 'jotai';
-import { ChangelogVersion, ChangelogVersions, Text, Toggle, VStack } from 'reacd';
+import {
+  ChangelogVersion,
+  ChangelogVersions,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const indicatorsAtom = atom(false);
 

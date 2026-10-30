@@ -2,7 +2,7 @@ import { installLayout } from '../../test-support/layout-observer.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { beforeEach, afterEach, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { ProgressExample } from './progress.js';
 it('runs documented progress, indeterminate and status controls', async () => {
   const user = userEvent.setup();

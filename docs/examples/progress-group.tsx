@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { App, Input, ProgressGroup, Section, Slider, Toggle, VStack } from 'reacd';
+import {
+  App,
+  Input,
+  ProgressGroup,
+  Section,
+  Slider,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const STORAGE = { capacity: 128, applications: 24, documents: 16 } as const;
 const usedAtom = atom<number>(STORAGE.applications);

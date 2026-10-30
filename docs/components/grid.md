@@ -44,4 +44,4 @@ per-screen class names.
 --8<-- "examples/grid.tsx"
 ```
 
-Choose **Layout** in the local workbench to use this same compiled example.
+Use the live TSX preview above to run this example.

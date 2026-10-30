@@ -17,8 +17,8 @@ view in TSX and keep its document in application state.
 
 ```tsx
 import { atom, useAtom } from 'jotai';
-import { Editor, EditorToolbar } from 'reacd';
-import type { EditorDocument } from 'reacd';
+import { Editor, EditorToolbar } from '@fastsprout/reacd';
+import type { EditorDocument } from '@fastsprout/reacd';
 
 const initial: EditorDocument = {
   version: 1,

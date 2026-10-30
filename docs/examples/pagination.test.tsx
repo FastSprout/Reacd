@@ -2,7 +2,7 @@ import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { PaginationExample, UrlPaginationExample } from './pagination.js';
 describe('documented Pagination examples', () => {
   it('changes datasets, windows, page sizes and logical presentation', async () => {

@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Text, Textarea, Toggle, VStack } from 'reacd';
+import { Button, Text, Textarea, Toggle, VStack } from '@fastsprout/reacd';
 
 const notesAtom = atom('');
 const autoResizeAtom = atom(true);

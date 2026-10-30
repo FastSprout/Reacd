@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { MarqueeExample } from './marquee.js';
 it('runs documented readable motion, readonly and empty controls', async () => {
   vi.stubGlobal('matchMedia', () => ({

@@ -15,7 +15,7 @@ Chart presents typed numeric series and a readable table of their original value
 ```
 
 ```tsx
-import { Chart } from 'reacd';
+import { Chart } from '@fastsprout/reacd';
 
 <Chart
   label="Activity"

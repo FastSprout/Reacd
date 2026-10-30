@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { App, Sidebar, Input, Text, VStack, Toggle, Select, Button } from 'reacd';
+import {
+  App,
+  Sidebar,
+  Input,
+  Text,
+  VStack,
+  Toggle,
+  Select,
+  Button,
+} from '@fastsprout/reacd';
 
 const desktopAtom = atom(true);
 const mobileAtom = atom(false);
@@ -56,15 +65,26 @@ export function SidebarExample() {
         }
       />
       <App direction={rtl ? 'rtl' : 'ltr'}>
-        <Sidebar title="Workspace navigation" description="Local preview navigation"
-          open={open} onOpenChange={setOpen}
-          mobileOpen={mobileOpen} onMobileOpenChange={setMobileOpen}
-          side={side} variant={variant} collapsible={collapsible}
+        <Sidebar
+          title="Workspace navigation"
+          description="Local preview navigation"
+          open={open}
+          onOpenChange={setOpen}
+          mobileOpen={mobileOpen}
+          onMobileOpenChange={setMobileOpen}
+          side={side}
+          variant={variant}
+          collapsible={collapsible}
           header={<Text>Workspace controls</Text>}
           footer={<Text>Values survive collapse and responsive reflow.</Text>}
-          actions={<Button label="Inspect workspace"
-            onPress={() => setAction('Workspace inspected.')} />}
-          collapsedContent={<Text>Workspace</Text>}>
+          actions={
+            <Button
+              label="Inspect workspace"
+              onPress={() => setAction('Workspace inspected.')}
+            />
+          }
+          collapsedContent={<Text>Workspace</Text>}
+        >
           <Input
             label="Sidebar workspace query"
             value={query}

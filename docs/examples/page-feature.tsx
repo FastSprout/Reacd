@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Button, PageFeature, Text } from 'reacd';
+import { Button, PageFeature, Text } from '@fastsprout/reacd';
 
 const inspectedAtom = atom(false);
 const expandedAtom = atom(false);

@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Input, PageList, Text, Toggle, VStack } from 'reacd';
+import { Input, PageList, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const divideAtom = atom(false);
 const queryAtom = atom('');

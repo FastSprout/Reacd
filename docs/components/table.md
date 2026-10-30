@@ -15,7 +15,7 @@ Table supports static text grids and controlled interactive business data.
 ```
 
 ```tsx
-import { Table } from 'reacd';
+import { Table } from '@fastsprout/reacd';
 
 <Table caption="Status" columns={['Name', 'Status']} rows={[['Example', 'Ready']]} />;
 ```

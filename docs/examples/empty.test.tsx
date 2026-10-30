@@ -2,10 +2,11 @@ import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { EmptyExample } from './empty.js';
+
 describe('documented Empty example', () => {
-  it('preserves recovery data across surface and busy changes', async () => {
+  it('retains the query across every size and surface variant', async () => {
     const user = userEvent.setup();
     render(
       <ReacdProvider>
@@ -20,6 +21,19 @@ describe('documented Empty example', () => {
       for (const option of options) {
         await chooseOption(user, name, option);
       }
+    expect(screen.getByLabelText('Empty recovery query')).toHaveValue(
+      'Keep this query',
+    );
+  });
+
+  it('retains the query across busy, media, footer and recovery actions', async () => {
+    const user = userEvent.setup();
+    render(
+      <ReacdProvider>
+        <EmptyExample />
+      </ReacdProvider>,
+    );
+    await user.type(screen.getByLabelText('Empty recovery query'), 'Keep this query');
     await user.click(screen.getByRole('switch', { name: 'Empty loading signal' }));
     expect(screen.getByRole('status')).toHaveTextContent('Refreshing local data');
     await user.click(screen.getByRole('button', { name: 'Create sample record' }));
@@ -34,6 +48,15 @@ describe('documented Empty example', () => {
     }
     expect(screen.getByLabelText('Empty recovery query')).toHaveValue(
       'Keep this query',
+    );
+  });
+
+  it('uses a named fallback after clearing title and description', async () => {
+    const user = userEvent.setup();
+    render(
+      <ReacdProvider>
+        <EmptyExample />
+      </ReacdProvider>,
     );
     await user.clear(screen.getByLabelText('Empty title'));
     await user.clear(screen.getByLabelText('Empty description'));

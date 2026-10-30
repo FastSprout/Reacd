@@ -8,7 +8,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const tagsAtom = atom<readonly string[]>(['React']);
 const readOnlyAtom = atom(false);

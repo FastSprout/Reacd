@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
-import { Button, Editor, EditorToolbar, Text, Toggle, VStack } from 'reacd';
-import type { EditorDocument, EditorToolbarItem } from 'reacd';
+import { Button, Editor, EditorToolbar, Text, Toggle, VStack } from '@fastsprout/reacd';
+import type { EditorDocument, EditorToolbarItem } from '@fastsprout/reacd';
 
 const INITIAL_DOCUMENT: EditorDocument = {
   version: 1,

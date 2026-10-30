@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Progress, Slider, Toggle, VStack } from 'reacd';
+import { Progress, Slider, Toggle, VStack } from '@fastsprout/reacd';
 const INITIAL_ITEMS = 125;
 const MAXIMUM_ITEMS = 500;
 const valueAtom = atom<number | null>(INITIAL_ITEMS);

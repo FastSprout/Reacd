@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { ContextMenu, Section, Text, VStack } from 'reacd';
+import { ContextMenu, Section, Text, VStack } from '@fastsprout/reacd';
 const openAtom = atom(false);
 const archivedAtom = atom(false);
 const confirmedAtom = atom(false);

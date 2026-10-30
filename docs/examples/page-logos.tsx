@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Button, PageLogos, Text, VStack } from 'reacd';
+import { Button, PageLogos, Text, VStack } from '@fastsprout/reacd';
 
 const reversedAtom = atom(false);
 const placeholders = [

@@ -11,7 +11,7 @@ the selection; query text is a separate value and never becomes a key by typing.
 editable free text, use [InputMenu](input-menu.md).
 
 ```tsx
-import { SelectMenu } from 'reacd';
+import { SelectMenu } from '@fastsprout/reacd';
 
 <SelectMenu
   label="Records"

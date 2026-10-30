@@ -44,4 +44,4 @@ arbitrary font sizes, or CSS overflow rules.
 --8<-- "examples/text.tsx"
 ```
 
-Choose **Layout** in the local workbench to use this same compiled example.
+Use the live TSX preview above to run this example.

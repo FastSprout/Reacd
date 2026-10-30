@@ -1,4 +1,4 @@
-import { PageLinks, Text } from 'reacd';
+import { PageLinks, Text } from '@fastsprout/reacd';
 
 export function PageLinksExample() {
   return (

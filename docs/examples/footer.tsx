@@ -1,4 +1,4 @@
-import { Footer, Text } from 'reacd';
+import { Footer, Text } from '@fastsprout/reacd';
 
 export function FooterExample() {
   return (

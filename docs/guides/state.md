@@ -5,7 +5,7 @@ components.
 
 ```tsx
 import { atom, useAtom } from 'jotai';
-import { Input } from 'reacd';
+import { Input } from '@fastsprout/reacd';
 
 const nameAtom = atom('');
 

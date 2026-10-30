@@ -8,7 +8,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const draftAtom = atom('');
 const sidesAtom = atom(true);

@@ -1,4 +1,4 @@
-import { Link, VStack } from 'reacd';
+import { Link, VStack } from '@fastsprout/reacd';
 
 export function LinkExample() {
   return (

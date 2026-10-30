@@ -1,4 +1,4 @@
-import { PageFeature, PageSection, Text } from 'reacd';
+import { PageFeature, PageSection, Text } from '@fastsprout/reacd';
 
 export function PageSectionExample() {
   return (

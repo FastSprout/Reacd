@@ -1,4 +1,4 @@
-import { Divider, Text, VStack } from 'reacd';
+import { Divider, Text, VStack } from '@fastsprout/reacd';
 
 export function DividerExample() {
   return (

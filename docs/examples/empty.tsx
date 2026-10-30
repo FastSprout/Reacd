@@ -10,7 +10,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const titleAtom = atom('No sample records');
 const descriptionAtom = atom('Create a local record or change the recovery query.');

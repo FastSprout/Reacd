@@ -10,8 +10,8 @@ import {
   Toggle,
   VStack,
   templates,
-} from 'reacd';
-import type { ChartProps } from 'reacd';
+} from '@fastsprout/reacd';
+import type { ChartProps } from '@fastsprout/reacd';
 const kindAtom = atom<NonNullable<ChartProps['kind']>>('line');
 const stateAtom = atom<ChartProps['state']>('ready');
 const missingAtom = atom(true);

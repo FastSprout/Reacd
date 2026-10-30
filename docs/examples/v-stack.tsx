@@ -1,4 +1,4 @@
-import { Text, VStack } from 'reacd';
+import { Text, VStack } from '@fastsprout/reacd';
 
 export function VStackExample() {
   return (

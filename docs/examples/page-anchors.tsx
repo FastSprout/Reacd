@@ -1,4 +1,4 @@
-import { PageAnchors, PageSection, Text, VStack } from 'reacd';
+import { PageAnchors, PageSection, Text, VStack } from '@fastsprout/reacd';
 
 export function PageAnchorsExample() {
   return (

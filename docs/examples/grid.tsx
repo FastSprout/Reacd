@@ -1,4 +1,4 @@
-import { Card, Grid, Text } from 'reacd';
+import { Card, Grid, Text } from '@fastsprout/reacd';
 
 export function GridExample() {
   return (

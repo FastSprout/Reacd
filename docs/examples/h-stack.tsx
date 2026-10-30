@@ -1,4 +1,4 @@
-import { Badge, HStack, Text } from 'reacd';
+import { Badge, HStack, Text } from '@fastsprout/reacd';
 
 export function HStackExample() {
   return (

@@ -1,5 +1,13 @@
 import { atom, useAtom } from 'jotai';
-import { Button, ChatAttachment, Input, Section, Text, Toggle, VStack } from 'reacd';
+import {
+  Button,
+  ChatAttachment,
+  Input,
+  Section,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const shownAtom = atom(true);
 const uploadingAtom = atom(false);

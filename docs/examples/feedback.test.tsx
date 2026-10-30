@@ -2,7 +2,7 @@ import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import { installLayout } from '../../test-support/layout-observer.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { ReacdProvider } from 'reacd';
+import { ReacdProvider } from '@fastsprout/reacd';
 import { UserExample } from './user.js';
 import { ProgressGroupExample } from './progress-group.js';
 import { BannerExample } from './banner.js';

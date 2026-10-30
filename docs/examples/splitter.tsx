@@ -1,6 +1,6 @@
 import { atom, useAtom } from 'jotai';
-import { App, Splitter, Input, Text, VStack, Toggle, Button } from 'reacd';
-import type { SplitterProps } from 'reacd';
+import { App, Splitter, Input, Text, VStack, Toggle, Button } from '@fastsprout/reacd';
+import type { SplitterProps } from '@fastsprout/reacd';
 
 const INITIAL = [
   { id: 'outline', share: 50 },

@@ -1,5 +1,12 @@
 import { atom, useAtom } from 'jotai';
-import { Button, PricingPlan, PricingPlans, Text, Toggle, VStack } from 'reacd';
+import {
+  Button,
+  PricingPlan,
+  PricingPlans,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const verticalAtom = atom(false);
 const compactAtom = atom(false);

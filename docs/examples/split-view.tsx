@@ -1,4 +1,4 @@
-import { Section, SplitView, Text } from 'reacd';
+import { Section, SplitView, Text } from '@fastsprout/reacd';
 
 export function SplitViewExample() {
   return (

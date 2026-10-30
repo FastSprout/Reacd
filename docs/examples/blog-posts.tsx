@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { BlogPost, BlogPosts, Text, Toggle, VStack } from 'reacd';
+import { BlogPost, BlogPosts, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const verticalAtom = atom(false);
 

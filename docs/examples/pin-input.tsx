@@ -1,5 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, Form, PinInput, SubmitButton, Text, Toggle, VStack } from 'reacd';
+import {
+  App,
+  Button,
+  Form,
+  PinInput,
+  SubmitButton,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
 
 const rtlAtom = atom(false);
 const valueAtom = atom('');

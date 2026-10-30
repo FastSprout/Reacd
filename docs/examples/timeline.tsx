@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { App, Section, Text, Timeline, Toggle, VStack } from 'reacd';
+import { App, Section, Text, Timeline, Toggle, VStack } from '@fastsprout/reacd';
 
 const currentAtom = atom('design');
 const reverseAtom = atom(false);

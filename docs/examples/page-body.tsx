@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Input, PageBody, Text } from 'reacd';
+import { Input, PageBody, Text } from '@fastsprout/reacd';
 
 const queryAtom = atom('');
 

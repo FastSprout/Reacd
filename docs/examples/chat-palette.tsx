@@ -1,5 +1,11 @@
 import { atom, useAtom } from 'jotai';
-import { ChatPalette, ChatPrompt, ChatMessages, Modal, Section } from 'reacd';
+import {
+  ChatPalette,
+  ChatPrompt,
+  ChatMessages,
+  Modal,
+  Section,
+} from '@fastsprout/reacd';
 
 const openAtom = atom(false);
 const draftAtom = atom('');

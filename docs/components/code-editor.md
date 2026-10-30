@@ -25,5 +25,5 @@ Editing does not execute code or imply JSON validation. The host owns the value.
 Current 0.2 generative transport does not expose this component type. Use its TSX API;
 this reference does not introduce a new JSON transport or deprecation.
 
-Run `npm run dev` and choose **Fields** to use this same compiled example. The adapter
-and template own HTML, CSS and responsive rendering.
+Use the live TSX preview above to run this example. The adapter and template own HTML,
+CSS and responsive rendering.

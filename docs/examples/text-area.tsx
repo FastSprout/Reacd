@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Text, TextArea, VStack } from 'reacd';
+import { Text, TextArea, VStack } from '@fastsprout/reacd';
 
 const notesAtom = atom('Draft notes');
 

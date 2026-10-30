@@ -8,7 +8,7 @@ import {
   Text,
   Toggle,
   VStack,
-} from 'reacd';
+} from '@fastsprout/reacd';
 
 const REFERENCE_DATE = '2024-02-28';
 const eventAtom = atom<string | null>('2024-02-28');

@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Icon, Toggle, VStack } from 'reacd';
+import { Icon, Toggle, VStack } from '@fastsprout/reacd';
 const decorativeAtom = atom(false);
 const largeAtom = atom(false);
 export function IconExample() {

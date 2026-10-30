@@ -12,7 +12,7 @@ required selection, disabled items, and shared state.
 ## Example
 
 The Fields catalog runs this same compiled source. Place it inside `ReacdProvider` in a
-project configured with `jsxImportSource: "reacd"`.
+project configured with `jsxImportSource: "@fastsprout/reacd"`.
 
 <!-- reacd-live-preview -->
 

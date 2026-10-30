@@ -1,6 +1,15 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, Input, Section, Text, Toggle, Tree, VStack } from 'reacd';
-import type { TreeProps } from 'reacd';
+import {
+  App,
+  Button,
+  Input,
+  Section,
+  Text,
+  Toggle,
+  Tree,
+  VStack,
+} from '@fastsprout/reacd';
+import type { TreeProps } from '@fastsprout/reacd';
 
 const selectedAtom = atom<readonly string[]>([]);
 const expandedAtom = atom<readonly string[]>([]);

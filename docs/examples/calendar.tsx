@@ -1,6 +1,15 @@
 import { atom, useAtom } from 'jotai';
-import { App, Button, Calendar, Form, SubmitButton, Text, Toggle, VStack } from 'reacd';
-import type { CalendarProps } from 'reacd';
+import {
+  App,
+  Button,
+  Calendar,
+  Form,
+  SubmitButton,
+  Text,
+  Toggle,
+  VStack,
+} from '@fastsprout/reacd';
+import type { CalendarProps } from '@fastsprout/reacd';
 
 type Range = Extract<CalendarProps, { mode: 'range' }>['value'];
 const valueAtom = atom<string | null>('2026-10-29');

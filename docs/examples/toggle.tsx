@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Text, Toggle, VStack } from 'reacd';
+import { Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const enabledAtom = atom(false);
 

@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Theme, Button, Text, VStack, templates } from 'reacd';
+import { Theme, Button, Text, VStack, templates } from '@fastsprout/reacd';
 
 const countAtom = atom(0);
 

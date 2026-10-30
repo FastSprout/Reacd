@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { DropdownMenu, Section, Text, VStack } from 'reacd';
+import { DropdownMenu, Section, Text, VStack } from '@fastsprout/reacd';
 const openAtom = atom(false);
 const pinnedAtom = atom(false);
 const densityAtom = atom('comfortable');

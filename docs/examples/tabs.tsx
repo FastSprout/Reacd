@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Input, Tabs, Text, Toggle, VStack } from 'reacd';
+import { Input, Tabs, Text, Toggle, VStack } from '@fastsprout/reacd';
 
 const selectedAtom = atom('account');
 const aliasAtom = atom('');

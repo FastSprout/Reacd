@@ -1,5 +1,5 @@
 import { atom, useAtom } from 'jotai';
-import { Input, PageCard, Text } from 'reacd';
+import { Input, PageCard, Text } from '@fastsprout/reacd';
 
 const draftAtom = atom('');
 

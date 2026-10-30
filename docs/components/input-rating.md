@@ -10,7 +10,7 @@ Collect a controlled star rating, including half-star values, with one accessibl
 slider. The host owns the number. Zero represents an unrated value.
 
 ```tsx
-import { InputRating } from 'reacd';
+import { InputRating } from '@fastsprout/reacd';
 
 <InputRating
   label="Service rating"

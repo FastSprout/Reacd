@@ -54,7 +54,7 @@ expressions.
 ## Render a validated declaration
 
 ```tsx
-import { GenerativeUI } from 'reacd/generative';
+import { GenerativeUI } from '@fastsprout/reacd/generative';
 
 export function GeneratedView({ declaration }: { declaration: unknown }) {
   return <GenerativeUI document={declaration} />;
@@ -65,9 +65,9 @@ Use `validateGenerativeDocument` for external objects or `parseGenerativeJson` f
 strings. `defineGenerativeDeclaration` provides checked authoring in TypeScript. The
 separately supported `0.1` transport does not have named state bindings.
 
-The portable contract ships at `reacd/generative-schema.json`. JSON Schema checks the
-structural shape. The semantic validator additionally checks unique keys, binding
-permissions, references, column types, and initial table consistency.
+The portable contract ships at `@fastsprout/reacd/generative-schema.json`. JSON Schema
+checks the structural shape. The semantic validator additionally checks unique keys,
+binding permissions, references, column types, and initial table consistency.
 
 ## State kinds
 
