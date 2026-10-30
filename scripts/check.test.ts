@@ -27,10 +27,11 @@ describe('main check runner', () => {
       expect(execute.mock.calls).toEqual(
         [
           'policy',
+          'lint:layers',
           'typecheck',
           'lint',
           'schema:check',
-          'examples:check',
+          'fixtures:check',
           'test:coverage',
           'build',
           'test:package',
@@ -45,14 +46,14 @@ describe('main check runner', () => {
     'propagates failure without annotations for GITHUB_ACTIONS=%s',
     async (hosted) => {
       vi.stubEnv('GITHUB_ACTIONS', hosted);
-      const failure = new Error('Type checking failed.');
+      const failure = new Error('Layer lint failed.');
       execute.mockReturnValueOnce('').mockImplementationOnce(() => {
         throw failure;
       });
       await expect(import('./check.mjs')).rejects.toBe(failure);
       expect(execute.mock.calls.map((call) => call[1])).toEqual([
         ['run', 'policy'],
-        ['run', 'typecheck'],
+        ['run', 'lint:layers'],
       ]);
       expect(report).not.toHaveBeenCalled();
     },
@@ -71,11 +72,31 @@ describe('main check runner', () => {
       await expect(import('./check.mjs')).rejects.toBe(failure);
       expect(execute.mock.calls.map((call) => call[1])).toEqual([
         ['run', 'policy'],
-        ['run', 'typecheck'],
+        ['run', 'lint:layers'],
       ]);
       expect(report).toHaveBeenCalledExactlyOnceWith(
-        '::error title=Check gate failed::typecheck',
+        '::error title=Check gate failed::lint:layers',
       );
     },
   );
+
+  it('preserves a later gate failure after the mandatory layer check', async () => {
+    vi.stubEnv('GITHUB_ACTIONS', 'true');
+    const failure = new Error('Type checking failed.');
+    execute
+      .mockReturnValueOnce('')
+      .mockReturnValueOnce('')
+      .mockImplementationOnce(() => {
+        throw failure;
+      });
+    await expect(import('./check.mjs')).rejects.toBe(failure);
+    expect(execute.mock.calls.map((call) => call[1])).toEqual([
+      ['run', 'policy'],
+      ['run', 'lint:layers'],
+      ['run', 'typecheck'],
+    ]);
+    expect(report).toHaveBeenCalledExactlyOnceWith(
+      '::error title=Check gate failed::typecheck',
+    );
+  });
 });

@@ -1,34 +1,15 @@
-import { dirname, isAbsolute, relative, resolve } from 'node:path';
 import { diagnostic } from './diagnostic.js';
 import type { PolicyDiagnostic } from './diagnostic.js';
 import { importVisitor } from './imports.js';
 import { inspectSource } from './parse.js';
+import { LAYERS, layerOf, isTestModule, isVendorModule } from './layers.js';
+import { internalPath } from './module-path.js';
+import { isTrustedUiDependency } from './ui-dependencies.js';
 
-export const LAYERS = [
-  'core',
-  'schema',
-  'components',
-  'renderer',
-  'adapter',
-  'state',
-] as const;
+export { LAYERS } from './layers.js';
 
-function layerOf(file: string, root: string): number {
-  const segment = relative(resolve(root, 'src'), file).split('/')[0];
-  return LAYERS.findIndex((layer) => layer === segment);
-}
-
-function internalPath(value: string, file: string, root: string): string | null {
-  if (value === 'reacd') return resolve(root, 'src/index.ts');
-  if (value.startsWith('reacd/')) {
-    return resolve(root, 'src', value.slice('reacd/'.length));
-  }
-  if (value.startsWith('@/')) return resolve(root, 'src', value.slice(2));
-  if (value.startsWith('.') || isAbsolute(value)) {
-    return resolve(dirname(file), value);
-  }
-  return null;
-}
+export const NATIVE_UI_DEPENDENCY_ERROR =
+  'Native UI and styling dependencies belong to renderer or adapter.';
 
 export function checkArchitecture(
   file: string,
@@ -44,15 +25,25 @@ export function checkArchitecture(
     add(0, 'Owned implementation must belong to a declared layer.');
     return issues;
   }
+  const name = LAYERS[layer];
+  const nativeUi = name === 'renderer' || name === 'adapter';
   const visitor = importVisitor(({ value, offset }) => {
     if (value === null) {
       add(offset, 'Computed imports cannot be verified. Use a literal path.');
       return;
     }
+    if (!nativeUi && isTrustedUiDependency(value)) {
+      add(offset, NATIVE_UI_DEPENDENCY_ERROR);
+      return;
+    }
     const target = internalPath(value, file, root);
     if (target === null) return;
-    if (/(?:__tests__|test-support)\/|\.(?:test|spec)\./.test(target)) {
+    if (isTestModule(target)) {
       add(offset, 'Production code cannot depend on tests.');
+      return;
+    }
+    if (isVendorModule(target, root) && !nativeUi) {
+      add(offset, NATIVE_UI_DEPENDENCY_ERROR);
       return;
     }
     const dependency = layerOf(target, root);
@@ -63,5 +54,44 @@ export function checkArchitecture(
     }
   });
   const syntax = inspectSource(file, source, visitor);
+  return [...issues, ...syntax];
+}
+
+export function checkFacade(file: string, source: string): PolicyDiagnostic[] {
+  const issues: PolicyDiagnostic[] = [];
+  const references = importVisitor(({ value, offset }) => {
+    if (value !== null && isTrustedUiDependency(value)) {
+      issues.push(
+        diagnostic(file, source, offset, 'architecture', NATIVE_UI_DEPENDENCY_ERROR),
+      );
+    }
+  });
+  const syntax = inspectSource(file, source, {
+    ...references,
+    Program(program) {
+      for (const statement of program.body) {
+        if (
+          statement.type === 'ExpressionStatement' &&
+          statement.expression.type === 'Literal' &&
+          statement.expression.value === 'use client'
+        )
+          continue;
+        if (
+          (statement.type === 'ExportNamedDeclaration' && statement.source) ||
+          statement.type === 'ExportAllDeclaration'
+        )
+          continue;
+        issues.push(
+          diagnostic(
+            file,
+            source,
+            statement.start,
+            'facade',
+            'Public entry files may only re-export declared modules.',
+          ),
+        );
+      }
+    },
+  });
   return [...issues, ...syntax];
 }

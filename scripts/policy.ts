@@ -5,7 +5,7 @@ import { inspectRepository } from '../tooling/policy/repository.js';
 const root = process.cwd();
 const files = globSync([
   'src/**/*.{ts,tsx,css}',
-  'demo/**/*.{ts,tsx}',
+  'examples/**/*.{ts,tsx}',
   'tooling/**/*.{ts,tsx,txt,html}',
   'test-support/**/*.ts',
   'scripts/*.{ts,mjs}',

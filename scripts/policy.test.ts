@@ -26,7 +26,8 @@ describe('repository policy CLI', () => {
     expect(discover).toHaveBeenCalledWith(
       expect.arrayContaining([
         'src/**/*.{ts,tsx,css}',
-        'demo/**/*.{ts,tsx}',
+        'tooling/**/*.{ts,tsx,txt,html}',
+        'examples/**/*.{ts,tsx}',
         'tooling/**/*.{ts,tsx,txt,html}',
         'scripts/*.{ts,mjs}',
         'docs/**/*.{md,tsx,json}',

@@ -8,7 +8,7 @@ describe('application boundary', () => {
     expect(
       inspect(`
       import { useId, type ReactNode } from 'react';
-      import { Button } from 'reacd';
+      import { Button } from '@fastsprout/reacd';
       import { calculate } from './business.js';
       export const App = () => <><Button label="Save" onPress={calculate}/></>;
     `),
@@ -25,7 +25,7 @@ describe('application boundary', () => {
     "import './app.css'",
     "import('./app.scss')",
     'import(path)',
-    "import { x } from 'reacd/renderer/private'",
+    "import { x } from '@fastsprout/reacd/renderer/private'",
     "import { jsx } from 'react/jsx-runtime'",
     "import { createRoot } from 'react-dom/client'",
     "import { createElement as h } from 'react'",
@@ -42,7 +42,7 @@ describe('application boundary', () => {
   it('rejects a directly imported SDK Label inside closed reacd composition', () => {
     const source = `
       import { Root as Label } from '@radix-ui/react-label';
-      import { ReacdProvider, Text, VStack } from 'reacd';
+      import { ReacdProvider, Text, VStack } from '@fastsprout/reacd';
       export function BoundaryProof() {
         return (
           <ReacdProvider>
@@ -95,8 +95,8 @@ describe('application boundary', () => {
     "import { useMemo, type ReactNode } from 'react'",
     "import { atom } from 'jotai'",
     "import { atomWithStorage } from 'jotai/utils'",
-    "import { Text } from 'reacd'",
-    "import { renderGenerative } from 'reacd/generative'",
+    "import { Text } from '@fastsprout/reacd'",
+    "import { renderGenerative } from '@fastsprout/reacd/generative'",
     "import { z } from 'zod'",
     "import { parseDate } from '@internationalized/date'",
     "import { calculate } from './business/react-label.js'",

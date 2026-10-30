@@ -22,12 +22,20 @@ export function importVisitor(
     },
     ImportExpression(node) {
       visit({
-        value: node.source.type === 'Literal' ? String(node.source.value) : null,
+        value:
+          node.source.type === 'Literal' && typeof node.source.value === 'string'
+            ? node.source.value
+            : null,
         offset: node.start,
       });
     },
     TSImportType(node) {
       visit({ value: node.source.value, offset: node.start });
+    },
+    TSImportEqualsDeclaration(node) {
+      if (node.moduleReference.type === 'TSExternalModuleReference') {
+        visit({ value: node.moduleReference.expression.value, offset: node.start });
+      }
     },
     CallExpression(node) {
       if (node.callee.type !== 'Identifier' || node.callee.name !== 'require') {
@@ -35,7 +43,10 @@ export function importVisitor(
       }
       const argument = node.arguments[0];
       visit({
-        value: argument?.type === 'Literal' ? String(argument.value) : null,
+        value:
+          argument?.type === 'Literal' && typeof argument.value === 'string'
+            ? argument.value
+            : null,
         offset: node.start,
       });
     },

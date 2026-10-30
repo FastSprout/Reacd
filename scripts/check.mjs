@@ -2,10 +2,11 @@ import { execFileSync } from 'node:child_process';
 
 const checks = [
   'policy',
+  'lint:layers',
   'typecheck',
   'lint',
   'schema:check',
-  'examples:check',
+  'fixtures:check',
   'test:coverage',
   'build',
   'test:package',

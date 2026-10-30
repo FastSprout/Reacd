@@ -20,13 +20,18 @@ describe('repository enforcement', () => {
           path: '/repo/src/components/a.ts',
           source: "import { x } from '../state/x.js';",
         },
-        { path: '/repo/demo/a.tsx', source: 'export const A = () => <div />;' },
-        { path: '/repo/demo/a.css', source: '\t.a {}' },
+        {
+          path: '/repo/tooling/conformance/a.tsx',
+          source: 'export const A = () => <div />;',
+        },
+        { path: '/repo/examples/a.tsx', source: 'export const A = () => <div />;' },
+        { path: '/repo/tooling/conformance/a.css', source: '\t.a {}' },
       ],
       '/repo',
     );
     expect(issues.map((issue) => issue.rule)).toEqual([
       'architecture',
+      'application',
       'application',
       'tabs',
       'indent',
@@ -43,6 +48,10 @@ describe('repository enforcement', () => {
             source: "export { UI } from './state/ui.js';",
           },
           {
+            path: '/repo/src/bootstrap.ts',
+            source: "export { mountApplication } from './state/bootstrap.js';",
+          },
+          {
             path: '/repo/src/renderer.tsx',
             source: "'use client'; export { UI } from './state/ui.js';",
           },
@@ -50,7 +59,10 @@ describe('repository enforcement', () => {
             path: '/repo/src/core/core.test.ts',
             source: "import { x } from '../state/x.js';",
           },
-          { path: '/repo/demo/e2e/a.spec.ts', source: 'const a = document.body;' },
+          {
+            path: '/repo/test-support/browser/e2e/a.spec.ts',
+            source: 'const a = document.body;',
+          },
           { path: '/repo/src/adapter/shadcn/vendor/ui.ts', source: '\ttrusted;' },
         ],
         '/repo',
