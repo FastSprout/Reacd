@@ -3,7 +3,7 @@ import { parsePublicationManifest } from './metadata.js';
 
 function manifest() {
   return {
-    name: 'reacd',
+    name: '@fastsprout/reacd',
     version: '0.1.0',
     private: false,
     repository: {
@@ -23,7 +23,7 @@ function manifest() {
 describe('publication metadata', () => {
   it('returns validated identity and exact host peers', () => {
     expect(parsePublicationManifest(manifest())).toEqual({
-      name: 'reacd',
+      name: '@fastsprout/reacd',
       version: '0.1.0',
       peerDependencies: manifest().peerDependencies,
     });
@@ -39,6 +39,7 @@ describe('publication metadata', () => {
 
   it.each([
     { name: '@other/reacd' },
+    { name: 'reacd' },
     { private: true },
     { version: '01.0.0' },
     { version: 1 },
@@ -64,7 +65,8 @@ describe('publication metadata', () => {
     const input = manifest();
     const withoutDependencies = { ...input };
     Reflect.deleteProperty(withoutDependencies, 'dependencies');
-    expect(parsePublicationManifest(withoutDependencies).name).toBe('reacd');
+    expect(parsePublicationManifest(withoutDependencies).name)
+      .toBe('@fastsprout/reacd');
     expect(() => parsePublicationManifest({ ...input, dependencies: [] }))
       .toThrow('Publication manifest');
   });

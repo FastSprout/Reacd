@@ -22,7 +22,7 @@ async function manifest(): Promise<unknown> {
 describe('publication contract', () => {
   it('declares the real public package and canonical repository', async () => {
     expect(await manifest()).toMatchObject({
-      name: 'reacd',
+      name: '@fastsprout/reacd',
       private: false,
       repository: {
         type: 'git',
@@ -33,6 +33,19 @@ describe('publication contract', () => {
       publishConfig: {
         access: 'public',
         registry: 'https://registry.npmjs.org/',
+      },
+    });
+  });
+
+  it('exposes browser bootstrap separately from the Node root export', async () => {
+    expect(await manifest()).toMatchObject({
+      exports: {
+        '.': { types: './dist/index.d.ts', import: './dist/index.js' },
+        './styles.css': './dist/adapter/shadcn/styles.css',
+        './bootstrap': {
+          types: './dist/renderer/bootstrap/bootstrap.d.ts',
+          import: './dist/bootstrap.js',
+        },
       },
     });
   });

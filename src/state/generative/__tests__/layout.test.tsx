@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { renderToString } from 'react-dom/server';
 import { ReacdRenderer, templates } from '../../../index.js';
 import type { ActionHandlers, ReacdNode, TemplateRegistry } from '../../../index.js';
-import { createExample } from '../../../../demo/example.js';
+import { createExample } from '../../../../tooling/conformance/example.js';
 import { documentWith } from '../../../../test-support/documents.js';
 
 describe('Generative rendering: layout', () => {

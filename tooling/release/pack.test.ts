@@ -117,7 +117,7 @@ describe('verified local release archive', () => {
   it('rejects archive bytes that do not match the reported SHA-512', () => {
     npmOutput = (destination) => {
       const result = fixture.pack(destination);
-      writeFileSync(join(destination, 'reacd-0.1.0.tgz'), 'tampered');
+      writeFileSync(join(destination, 'fastsprout-reacd-0.1.0.tgz'), 'tampered');
       return JSON.stringify(result);
     };
     rejectsCleanly('integrity');
@@ -126,7 +126,7 @@ describe('verified local release archive', () => {
   it('rejects an archive file replaced by a symbolic link', () => {
     npmOutput = (destination) => {
       const result = fixture.pack(destination);
-      const path = join(destination, 'reacd-0.1.0.tgz');
+      const path = join(destination, 'fastsprout-reacd-0.1.0.tgz');
       rmSync(path);
       symlinkSync(join(fixture.root, 'LICENSE'), path);
       return JSON.stringify(result);

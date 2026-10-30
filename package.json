@@ -1,5 +1,5 @@
 {
-  "name": "reacd",
+  "name": "@fastsprout/reacd",
   "version": "0.1.0",
   "private": false,
   "description": "A constrained, agent-driven UI contract and React renderer.",
@@ -21,7 +21,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./dist/styles.css",
+    "./styles.css": "./dist/adapter/shadcn/styles.css",
     "./schema.json": "./schema/reacd.schema.json",
     "./generative-schema.json": "./schema/generative.schema.json",
     "./generative": {
@@ -35,10 +35,14 @@
     "./jsx-dev-runtime": {
       "types": "./dist/jsx-dev-runtime.d.ts",
       "import": "./dist/jsx-dev-runtime.js"
+    },
+    "./bootstrap": {
+      "types": "./dist/renderer/bootstrap/bootstrap.d.ts",
+      "import": "./dist/bootstrap.js"
     }
   },
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
+    "dev": "vite --config vite.examples.config.ts --mode counter --host 127.0.0.1",
     "build": "node scripts/build.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "node scripts/typecheck.mjs",
@@ -48,15 +52,17 @@
     "test:browser": "playwright test",
     "schema": "tsx scripts/schema.ts",
     "schema:check": "tsx scripts/schema.ts --check",
-    "examples": "tsx scripts/examples.ts",
-    "examples:check": "tsx scripts/examples.ts --check",
     "validate": "tsx scripts/validate.ts",
     "policy": "tsx scripts/policy.ts",
     "test:package": "tsx scripts/package-check.ts",
     "docs:check": "node scripts/docs.mjs",
     "check": "node scripts/check.mjs",
     "release:verify": "tsx scripts/release-verify.ts",
-    "release:pack": "tsx scripts/release-pack.ts"
+    "release:pack": "tsx scripts/release-pack.ts",
+    "lint:layers": "tsx scripts/lint-layers.ts",
+    "example": "vite --config vite.examples.config.ts --host 127.0.0.1",
+    "fixtures": "tsx scripts/fixtures.ts",
+    "fixtures:check": "tsx scripts/fixtures.ts --check"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",

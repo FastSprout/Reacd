@@ -9,13 +9,17 @@ interface CompilationResult {
   stdout: string;
   stderr: string;
 }
-const { execute, compile } = vi.hoisted(() => ({
+const { execute, compile, browser } = vi.hoisted(() => ({
+  browser: vi.fn<(root: string, consumer: string) => void>(),
   execute:
     vi.fn<(file: string, args: readonly string[], options?: unknown) => string>(),
   compile:
     vi.fn<
       (file: string, args: readonly string[], options?: unknown) => CompilationResult
     >(),
+}));
+vi.mock('../tooling/package/bootstrap.js', () => ({
+  buildInstalledBootstrap: browser,
 }));
 vi.mock('node:child_process', () => ({ execFileSync: execute, spawnSync: compile }));
 vi.mock('node:fs/promises', async (importOriginal) => {
@@ -33,7 +37,7 @@ const root = process.cwd();
 const installedManifest = z.object({
   type: z.literal('module'),
   dependencies: z.object({
-    reacd: z.string(),
+    '@fastsprout/reacd': z.string(),
     react: z.literal('19.3.1'),
     'react-dom': z.literal('19.3.1'),
     jotai: z.literal('3.0.1'),
@@ -41,7 +45,7 @@ const installedManifest = z.object({
 });
 const archive = [
   {
-    filename: 'reacd-local.tgz',
+    filename: 'fastsprout-reacd-0.1.0.tgz',
     files: [
       { path: 'dist/index.js' },
       { path: 'LICENSE' },
@@ -53,7 +57,8 @@ const diagnostics = [
   'TS2745: Children must have type never.',
   'TS2322: Invalid style.',
   'TS2322: Invalid number.',
-  'TS2307: Missing reacd/dist/private.',
+  'TS2307: Missing @fastsprout/reacd/dist/private.',
+  'TS2339: Property render does not exist on the bootstrap handle.',
 ];
 async function temporaryPath() {
   const result = vi.mocked(mkdtemp).mock.results[0];
@@ -72,6 +77,7 @@ beforeEach(() => {
   vi.resetModules();
   execute.mockReset().mockReturnValue(JSON.stringify(archive));
   compile.mockReset();
+  browser.mockReset();
   for (const stdout of diagnostics)
     compile.mockReturnValueOnce({ status: 1, stdout, stderr: '' });
   vi.mocked(mkdtemp).mockReset().mockImplementation(actualFs.mkdtemp);
@@ -106,7 +112,7 @@ describe('packed consumer runner', () => {
           readFileSync(join(options.cwd, 'package.json'), 'utf8'),
         );
         const consumer = installedManifest.parse(metadata);
-        expect(consumer.dependencies.reacd).toMatch(/^file:.*\.tgz$/);
+        expect(consumer.dependencies['@fastsprout/reacd']).toMatch(/^file:.*\.tgz$/);
         expect(existsSync(join(options.cwd, 'node_modules'))).toBe(false);
         expect(args).toContain('--ignore-scripts');
         expect(args).not.toContain('--legacy-peer-deps');
@@ -116,6 +122,15 @@ describe('packed consumer runner', () => {
     });
     await import('./package-check.js');
     expect(installed).toBe(true);
+    expect(browser).toHaveBeenCalledExactlyOnceWith(
+      root, join(await temporaryPath(), 'clean-consumer'),
+    );
+    const extracted = join(
+      await temporaryPath(), 'node_modules', '@fastsprout/reacd',
+    );
+    expect(execute).toHaveBeenCalledWith('tar', expect.arrayContaining([
+      '-C', extracted,
+    ]));
     await expectRemoved();
   });
   it('uses an isolated real workspace and compiles all intended fixtures', async () => {
@@ -142,13 +157,13 @@ describe('packed consumer runner', () => {
       };
     });
     await import('./package-check.js');
-    expect(configurations).toHaveLength(4);
+    expect(configurations).toHaveLength(5);
     expect(configurations).toMatchObject(
-      ['native', 'style', 'value', 'private'].map((name) => ({
+      ['native', 'style', 'value', 'private', 'bootstrap-escape'].map((name) => ({
         compilerOptions: {
           strict: true,
           noEmit: true,
-          jsxImportSource: 'reacd',
+          jsxImportSource: '@fastsprout/reacd',
           skipLibCheck: false,
         },
         files: [`${name}.tsx`],
@@ -208,6 +223,13 @@ describe('packed consumer runner', () => {
       await expectRemoved();
     },
   );
+  it('cleans its workspace after an installed browser build fails', async () => {
+    const failure = new Error('Installed bootstrap build failed.');
+    browser.mockImplementation(() => { throw failure; });
+    await expect(import('./package-check.js')).rejects.toBe(failure);
+    expect(console.log).not.toHaveBeenCalled();
+    await expectRemoved();
+  });
   it.each([1, 2, 3, 4, 5, 6])(
     'cleans up after external command %s fails',
     async (stage) => {

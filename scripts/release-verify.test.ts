@@ -24,8 +24,10 @@ vi.mock('../tooling/release/verify.js', () => ({
 }));
 beforeEach(() => {
   vi.resetModules();
-  mocks.read.mockReset().mockReturnValue('{"name":"reacd"}');
-  mocks.metadata.mockReset().mockReturnValue({ name: 'reacd', version: '0.1.0' });
+  mocks.read.mockReset().mockReturnValue('{"name":"@fastsprout/reacd"}');
+  mocks.metadata.mockReset().mockReturnValue({
+    name: '@fastsprout/reacd', version: '0.1.0',
+  });
   mocks.environment.mockReset().mockReturnValue({
     sha: 'a'.repeat(40), tag: 'v0.1.0', version: '0.1.0',
   });
@@ -38,7 +40,9 @@ beforeEach(() => {
 describe('release verifier entry point', () => {
   it('validates identity before reporting checkout success', async () => {
     await import('./release-verify.js');
-    expect(mocks.metadata).toHaveBeenCalledExactlyOnceWith({ name: 'reacd' });
+    expect(mocks.metadata).toHaveBeenCalledExactlyOnceWith({
+      name: '@fastsprout/reacd',
+    });
     expect(mocks.environment).toHaveBeenCalledExactlyOnceWith(process.env);
     expect(mocks.runtime).toHaveBeenCalledExactlyOnceWith();
     expect(mocks.checkout).toHaveBeenCalledExactlyOnceWith(
@@ -46,13 +50,13 @@ describe('release verifier entry point', () => {
       { sha: 'a'.repeat(40), tag: 'v0.1.0', version: '0.1.0' },
     );
     expect(mocks.log).toHaveBeenCalledExactlyOnceWith(
-      'Release identity verified: reacd@0.1.0 (v0.1.0).',
+      'Release identity verified: @fastsprout/reacd@0.1.0 (v0.1.0).',
       'OIDC prerequisites present; npm authorization is not verified.',
     );
   });
 
   it('rejects inconsistent manifest version before consulting git', async () => {
-    mocks.metadata.mockReturnValue({ name: 'reacd', version: '0.2.0' });
+    mocks.metadata.mockReturnValue({ name: '@fastsprout/reacd', version: '0.2.0' });
     await expect(import('./release-verify.js')).rejects.toThrow('version');
     expect(mocks.checkout).not.toHaveBeenCalled();
     expect(mocks.log).not.toHaveBeenCalled();
@@ -76,7 +80,7 @@ describe('release verifier entry point', () => {
     mocks.metadata.mockImplementation(() => { throw new Error('Metadata'); });
     await expect(import('./release-verify.js')).rejects.toThrow('Metadata');
     vi.resetModules();
-    mocks.metadata.mockReturnValue({ name: 'reacd', version: '0.1.0' });
+    mocks.metadata.mockReturnValue({ name: '@fastsprout/reacd', version: '0.1.0' });
     mocks.environment.mockImplementation(() => { throw new Error('Identity'); });
     await expect(import('./release-verify.js')).rejects.toThrow('Identity');
     vi.resetModules();

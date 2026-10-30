@@ -1,7 +1,7 @@
 import { compileJsonSchema } from '../../../test-support/compile-json-schema.js';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { GENERATIVE_EXAMPLE } from '../../../demo/generative/example.js';
+import { GENERATIVE_EXAMPLE } from '../../../tooling/conformance/generative/example.js';
 import { validateGenerativeDocument } from './validate-document.js';
 
 const schema: unknown = JSON.parse(
@@ -12,10 +12,13 @@ const validate = compileJsonSchema(schema);
 describe('portable generative state schema', () => {
   it('preserves strict editorial calendar date validation', () => {
     for (const [date, valid] of [
-      ['2024-02-29', true], ['2025-02-29', false], ['2024-13-01', false],
+      ['2024-02-29', true],
+      ['2025-02-29', false],
+      ['2024-13-01', false],
     ] as const) {
       const document = {
-        schemaVersion: '0.2', state: [],
+        schemaVersion: '0.2',
+        state: [],
         root: { type: 'BlogPost', title: 'Calendar entry', date, children: [] },
       };
       expect(validate(document)).toBe(valid);

@@ -10,7 +10,7 @@ import {
   visitNodes,
 } from '../../index.js';
 import type { ReacdNode } from '../../index.js';
-import { createExample, scenarioSchema } from '../../../demo/example.js';
+import { createExample, scenarioSchema } from '../../../tooling/conformance/example.js';
 import { documentWith } from '../../../test-support/documents.js';
 
 describe('closed DSL contract', () => {

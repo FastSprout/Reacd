@@ -1,23 +1,31 @@
 import { renderToString } from 'react-dom/server';
-import { SelectMenu, Listbox, Toast, type ToastProps } from 'reacd';
-import { AuthForm, PageLogos, ContentNavigation, ContentToc } from 'reacd';
+import type { mountApplication } from '@fastsprout/reacd/bootstrap';
+import { SelectMenu, Listbox, Toast, type ToastProps } from '@fastsprout/reacd';
+import { AuthForm, PageLogos, ContentNavigation, ContentToc } from '@fastsprout/reacd';
 import { Accordion, Avatar, AvatarGroup, Button, CheckboxGroup, Collapsible,
   Grid, Input, Modal, Chip, Tooltip, Kbd, Popover, Skeleton, Empty,
   RadioGroup, ReacdProvider, Text,
-  VStack, createReacdStore, shadcnAdapter } from 'reacd';
-import type { GridProps } from 'reacd';
-import { ContentSurround, ContentSearch, ContentSearchButton } from 'reacd';
-import { Link, Tabs } from 'reacd';
-import type { TabsProps, LinkProps } from 'reacd';
-import { PageAside, PageBody, PageColumns, PageGrid, PageList } from 'reacd';
+  VStack, createReacdStore, shadcnAdapter } from '@fastsprout/reacd';
+import type { GridProps } from '@fastsprout/reacd';
+import { ContentSurround, ContentSearch, ContentSearchButton } from '@fastsprout/reacd';
+import { Link, Tabs } from '@fastsprout/reacd';
+import type { TabsProps, LinkProps } from '@fastsprout/reacd';
+import { PageAside, PageBody, PageColumns, PageGrid, PageList }
+  from '@fastsprout/reacd';
 import { PageHeader, PageFeature, PageCard, PageHero, PageSection,
   FooterColumns, NavigationMenu, Stepper, InputTags, Tree,
-  Sidebar, Splitter, PageAnchors, PageLinks, PageCTA, CommandPalette } from 'reacd';
+  Sidebar, Splitter, PageAnchors, PageLinks, PageCTA, CommandPalette }
+  from '@fastsprout/reacd';
 import { Container, Main, Header, Footer, Separator, User, ProgressGroup,
   Banner, InputNumber, PinInput, Pagination, Breadcrumb,
-  App, Error as ErrorView, Theme, Timeline, ScrollArea, InputRating } from 'reacd';
+  App, Error as ErrorView, Theme, Timeline, ScrollArea, InputRating }
+  from '@fastsprout/reacd';
 import { GenerativeUI, createDocumentState, defineGenerativeDeclaration,
-  createDataTableController } from 'reacd/generative';
+  createDataTableController } from '@fastsprout/reacd/generative';
+
+export function mountPackedBrowser(mount: typeof mountApplication) {
+  return mount(() => <Text>Packed browser application</Text>);
+}
 
 const properties: GridProps = { columns: 2 };
 const packedToast: ToastProps = { title: 'Packed toast notification', open: true,

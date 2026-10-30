@@ -1,7 +1,7 @@
 import { isReleaseVersion, PUBLICATION_POLICY } from './policy.js';
 
 export interface PublicationMetadata {
-  readonly name: 'reacd';
+  readonly name: '@fastsprout/reacd';
   readonly version: string;
   readonly peerDependencies: typeof PUBLICATION_POLICY.peers;
 }

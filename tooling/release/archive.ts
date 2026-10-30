@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PUBLICATION_POLICY } from './policy.js';
 import type { PublicationMetadata } from './metadata.js';
 
 export const RELEASE_ARCHIVE_POLICY = {
@@ -11,13 +12,16 @@ export const RELEASE_ARCHIVE_POLICY = {
     'schema/generative.schema.json',
     'dist/index.js',
     'dist/index.d.ts',
+    'dist/bootstrap.js',
+    'dist/bootstrap.d.ts',
+    'dist/renderer/bootstrap/bootstrap.d.ts',
     'dist/generative.js',
     'dist/generative.d.ts',
     'dist/jsx-runtime.js',
     'dist/jsx-runtime.d.ts',
     'dist/jsx-dev-runtime.js',
     'dist/jsx-dev-runtime.d.ts',
-    'dist/styles.css',
+    'dist/adapter/shadcn/styles.css',
   ],
   output: '.cache/release/package.tgz',
 } as const;
@@ -43,7 +47,7 @@ export function validateReleaseArchive(input: unknown, meta: PublicationMetadata
   if (
     archive.name !== meta.name ||
     archive.version !== meta.version ||
-    archive.filename !== `${meta.name}-${meta.version}.tgz`
+    archive.filename !== `${PUBLICATION_POLICY.archiveBasename}-${meta.version}.tgz`
   )
     throw new Error('Packed publication identity does not match its manifest.');
   const paths = archive.files.map((file) => file.path);

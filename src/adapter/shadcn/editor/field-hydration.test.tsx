@@ -3,8 +3,8 @@ import { renderToString } from 'react-dom/server';
 import { hydrateRoot } from 'react-dom/client';
 import { atom, createStore, useAtom } from 'jotai';
 import { expect, it, vi } from 'vitest';
-import { Editor, FormField, ReacdProvider } from 'reacd';
-import type { EditorDocument } from 'reacd';
+import { Editor, FormField, ReacdProvider } from '@fastsprout/reacd';
+import type { EditorDocument } from '@fastsprout/reacd';
 
 const initial: EditorDocument = {
   version: 1,

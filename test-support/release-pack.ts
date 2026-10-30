@@ -46,7 +46,7 @@ export function releasePackFixture() {
     writeFileSync(join(root, name), readFileSync(join(source, 'package', name)));
   }
   function pack(destination: string) {
-    const filename = 'reacd-0.1.0.tgz';
+    const filename = 'fastsprout-reacd-0.1.0.tgz';
     const archive = join(destination, filename);
     runFixtureCommand(
       'tar',

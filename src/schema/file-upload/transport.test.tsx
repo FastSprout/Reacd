@@ -5,7 +5,7 @@ import {
   GenerativeUI,
   createStateRegistry,
   validateGenerativeDocument,
-} from 'reacd/generative';
+} from '@fastsprout/reacd/generative';
 import { success } from '../../../test-support/data-table.js';
 const FILE = {
   id: 'saved',

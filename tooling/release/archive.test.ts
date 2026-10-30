@@ -12,9 +12,9 @@ function archive() {
     path,
   }));
   return {
-    name: 'reacd',
+    name: '@fastsprout/reacd',
     version: '0.1.0',
-    filename: 'reacd-0.1.0.tgz',
+    filename: 'fastsprout-reacd-0.1.0.tgz',
     integrity: 'sha512-dGVzdA==',
     files,
   };
@@ -39,7 +39,9 @@ describe('release tarball identity and allowlist', () => {
   it.each([
     { name: 'different' },
     { version: '0.2.0' },
-    { filename: '../reacd-0.1.0.tgz' },
+    { filename: '../fastsprout-reacd-0.1.0.tgz' },
+    { filename: '@fastsprout/reacd-0.1.0.tgz' },
+    { filename: 'reacd-0.1.0.tgz' },
     { integrity: 'unverified' },
   ])('rejects inconsistent archive metadata %s', (change) => {
     expect(() => validateReleaseArchive([{ ...archive(), ...change }], meta)).toThrow();

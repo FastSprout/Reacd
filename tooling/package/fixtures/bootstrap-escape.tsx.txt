@@ -1,0 +1,4 @@
+import { mountApplication } from '@fastsprout/reacd/bootstrap';
+
+const application = mountApplication(() => null);
+application.render(null);

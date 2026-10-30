@@ -1,16 +1,16 @@
+import * as Scene from '../../../tooling/conformance/catalog/chat-feedback-examples.js';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '../../index.js';
-import { ChatFeedbackExamples } from '../../../demo/catalog/chat-feedback-examples.js';
 
 it('hydrates feedback previews with stable disclosure labels', async () => {
   const user = userEvent.setup();
   for (const templateId of ['saas-modern-light', 'erp-compact']) {
     const element = (
       <ReacdProvider templateId={templateId}>
-        <ChatFeedbackExamples />
+        <Scene.ChatFeedbackExamples />
       </ReacdProvider>
     );
     const container = document.createElement('div');

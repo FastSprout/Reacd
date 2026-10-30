@@ -1,2 +1,2 @@
-import { Text } from 'reacd';
+import { Text } from '@fastsprout/reacd';
 export const invalid = <Text style={{ color: 'red' }}>Forbidden</Text>;

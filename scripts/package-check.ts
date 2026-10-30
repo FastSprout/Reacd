@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
+import { buildInstalledBootstrap } from '../tooling/package/bootstrap.js';
 
 const root = process.cwd();
 const temporary = await mkdtemp(join(tmpdir(), 'reacd-package-'));
@@ -25,7 +26,7 @@ const options = {
   module: 'NodeNext',
   moduleResolution: 'NodeNext',
   jsx: 'react-jsx',
-  jsxImportSource: 'reacd',
+  jsxImportSource: '@fastsprout/reacd',
   strict: true,
   noUncheckedIndexedAccess: true,
   exactOptionalPropertyTypes: true,
@@ -70,7 +71,7 @@ try {
     );
   }
   const modules = join(temporary, 'node_modules');
-  const installed = join(modules, 'reacd');
+  const installed = join(modules, '@fastsprout/reacd');
   await mkdir(installed, { recursive: true });
   execFileSync('tar', [
     '-xf',
@@ -105,7 +106,8 @@ try {
     { name: 'native', diagnostic: /TS2745[\s\S]*never/ },
     { name: 'style', diagnostic: /TS2322[\s\S]*style/ },
     { name: 'value', diagnostic: /TS2322[\s\S]*number/ },
-    { name: 'private', diagnostic: /TS2307[\s\S]*reacd\/dist/ },
+    { name: 'private', diagnostic: /TS2307[\s\S]*@fastsprout\/reacd\/dist/ },
+    { name: 'bootstrap-escape', diagnostic: /TS2339[\s\S]*render/ },
   ];
   for (const { name, diagnostic } of negatives) {
     await writeFile(join(temporary, `${name}.tsx`), await fixture(`${name}.tsx.txt`));
@@ -133,7 +135,7 @@ try {
       private: true,
       type: 'module',
       dependencies: {
-        reacd: pathToFileURL(join(temporary, archive.filename)).href,
+        '@fastsprout/reacd': pathToFileURL(join(temporary, archive.filename)).href,
         ...metadata.peerDependencies,
       },
     }),
@@ -152,6 +154,7 @@ try {
   );
   await writeFile(join(clean, 'installed.mjs'), await fixture('installed.mjs.txt'));
   execFileSync(process.execPath, ['installed.mjs'], { cwd: clean, stdio: 'inherit' });
+  buildInstalledBootstrap(root, clean);
 } finally {
   await rm(temporary, { recursive: true, force: true });
 }

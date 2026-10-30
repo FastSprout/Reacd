@@ -1,2 +1,2 @@
-import { isSafeContent } from 'reacd/dist/schema/shared/children.js';
+import { isSafeContent } from '@fastsprout/reacd/dist/schema/shared/children.js';
 export const invalid = isSafeContent;

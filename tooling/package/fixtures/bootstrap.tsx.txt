@@ -1,0 +1,11 @@
+import { ReacdProvider, Text, createReacdStore } from '@fastsprout/reacd';
+import { mountApplication } from '@fastsprout/reacd/bootstrap';
+
+const store = createReacdStore();
+mountApplication(function InstalledBrowserApplication() {
+  return (
+    <ReacdProvider store={store}>
+      <Text>Installed scoped browser application</Text>
+    </ReacdProvider>
+  );
+});

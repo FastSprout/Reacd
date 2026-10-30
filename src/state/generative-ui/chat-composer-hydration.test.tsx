@@ -1,9 +1,10 @@
+import * as Scene from '../../../tooling/conformance/catalog/chat-composer-examples.js';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '../../index.js';
-import { ChatComposerExamples } from '../../../demo/catalog/chat-composer-examples.js';
+
 import { ChatComposerNodeView } from './chat-composer-node-view.js';
 import { createStateRegistry } from '../registry/state-registry.js';
 import { success } from '../../../test-support/data-table.js';
@@ -13,7 +14,7 @@ it('hydrates labelled drafts and switches direction', async () => {
   for (const templateId of ['saas-modern-light', 'erp-compact']) {
     const element = (
       <ReacdProvider templateId={templateId}>
-        <ChatComposerExamples />
+        <Scene.ChatComposerExamples />
       </ReacdProvider>
     );
     const container = document.createElement('div');

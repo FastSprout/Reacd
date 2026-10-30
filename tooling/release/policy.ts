@@ -1,7 +1,8 @@
 import { valid } from 'semver';
 
 export const PUBLICATION_POLICY = {
-  name: 'reacd',
+  name: '@fastsprout/reacd',
+  archiveBasename: 'fastsprout-reacd',
   repository: 'git+https://github.com/FastSprout/Reacd.git',
   githubRepository: 'FastSprout/Reacd',
   homepage: 'https://reacd.dev/',

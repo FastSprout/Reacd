@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
-import { Editor, ReacdProvider } from 'reacd';
+import { Editor, ReacdProvider } from '@fastsprout/reacd';
 import type { EditorEdit } from '../../../core/editor-edit.js';
 import { installEditorGeometry } from '../../../../test-support/editor-geometry.js';
 import { editorEditSchema } from '../../../schema/editor/edit.schema.js';

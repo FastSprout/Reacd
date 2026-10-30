@@ -7,5 +7,5 @@ export function mountApplication(App: ComponentType) {
   if (element === null) throw new Error('Mount container #root was not found.');
   const root = createRoot(element);
   root.render(createElement(StrictMode, null, createElement(App)));
-  return root;
+  return Object.freeze({ unmount: () => root.unmount() });
 }

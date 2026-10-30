@@ -7,7 +7,7 @@ import { ChatAttachment } from '../../components/chat-attachment/index.js';
 import { ChatMessage } from '../../components/chat-message/index.js';
 import { ChatMessages } from '../../components/chat-messages/index.js';
 import { ChatAttachmentExample } from '../../../docs/examples/chat-attachment.js';
-import { ChatExamples } from '../../../demo/catalog/chat-examples.js';
+import { ChatExamples } from '../../../tooling/conformance/catalog/chat-examples.js';
 import { createReacdStore } from '../store.js';
 
 it('hydrates stable message identities in both template profiles', () => {

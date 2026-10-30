@@ -62,18 +62,22 @@ const display = consumer.first.bind({ state: 'name', mode: 'read' }, {
 });
 assert.equal(display.success, true);
 if (display.success) assert.equal('write' in display.data, false);
-for (const path of ['reacd', 'reacd/generative', 'reacd/jsx-runtime',
-  'reacd/jsx-dev-runtime']) await import(path);
-const { jsx } = await import('reacd/jsx-runtime');
+for (const path of [
+  '@fastsprout/reacd', '@fastsprout/reacd/generative',
+  '@fastsprout/reacd/jsx-runtime', '@fastsprout/reacd/jsx-dev-runtime',
+]) await import(path);
+const { jsx } = await import('@fastsprout/reacd/jsx-runtime');
 assert.throws(() => jsx('div', {}), /Native HTML/);
 for (const [path, version] of [
-  ['reacd/schema.json', '0.1'], ['reacd/generative-schema.json', '0.2'],
+  ['@fastsprout/reacd/schema.json', '0.1'],
+  ['@fastsprout/reacd/generative-schema.json', '0.2'],
 ]) {
   const schema = JSON.parse(readFileSync(new URL(import.meta.resolve(path)), 'utf8'));
   assert.equal(schema.$id, `https://reacd.dev/schema/${version}.json`);
 }
-const css = readFileSync(new URL(import.meta.resolve('reacd/styles.css')), 'utf8');
+const cssUrl = new URL(import.meta.resolve('@fastsprout/reacd/styles.css'));
+const css = readFileSync(cssUrl, 'utf8');
 assert.match(css, /reacd-slider/);
-await assert.rejects(import('reacd/dist/schema/shared/children.js'), {
+await assert.rejects(import('@fastsprout/reacd/dist/schema/shared/children.js'), {
   code: 'ERR_PACKAGE_PATH_NOT_EXPORTED',
 });

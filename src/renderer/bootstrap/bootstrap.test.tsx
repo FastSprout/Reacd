@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 describe('browser entry point', () => {
   it('reports a missing mount point', async () => {
     vi.resetModules();
-    await expect(import('../../../demo/main.js')).rejects.toThrow(
+    await expect(import('../../../tooling/conformance/main.js')).rejects.toThrow(
       'Mount container #root',
     );
   });
@@ -14,12 +14,15 @@ describe('browser entry point', () => {
     const element = document.createElement('div');
     element.id = 'root';
     document.body.append(element);
-    const module = await import('../../../demo/main.js');
+    const module = await import('../../../tooling/conformance/main.js');
     await act(async () => {
       await Promise.resolve();
     });
     expect(screen.getByRole('heading', { name: 'reacd' })).toBeInTheDocument();
+    expect(module.root).not.toHaveProperty('render');
+    expect(Object.isFrozen(module.root)).toBe(true);
     act(() => module.root.unmount());
+    expect(element.childNodes).toHaveLength(0);
     element.remove();
   });
 });
