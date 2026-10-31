@@ -7,14 +7,16 @@
         "../../packages/shadcn/dist/shadcn/shadcn.adapter.d.ts"
       ],
       "@fastsprout/reacd-shadcn/styles": [
-        "../../packages/shadcn/dist/styles-contract.d.ts"
+        "../../packages/shadcn/dist/shadcn/styles-contract.d.ts"
       ],
       "@fastsprout/reacd/adapter-runtime/core/*": ["../../dist/core/*"],
       "@fastsprout/reacd/adapter-runtime/schema/*": ["../../dist/schema/*"],
       "@fastsprout/reacd/adapter-runtime/components/*": ["../../dist/components/*"],
       "@fastsprout/reacd/adapter-runtime/renderer/*": ["../../dist/renderer/*"],
       "@fastsprout/reacd-mui": ["../../packages/mui/dist/mui/mui.adapter.d.ts"],
-      "@fastsprout/reacd-mui/styles": ["../../packages/mui/dist/styles-contract.d.ts"]
+      "@fastsprout/reacd-mui/styles": [
+        "../../packages/mui/dist/mui/styles-contract.d.ts"
+      ]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

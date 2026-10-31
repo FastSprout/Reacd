@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.0] - Unreleased
+## [0.3.0](https://github.com/FastSprout/Reacd/compare/v0.2.1...v0.3.0) (2026-10-31)
 
 ### Added
 
@@ -16,6 +16,8 @@
 - Wait for npm processing within a bounded window while checking exact archive bytes.
 
 ### Fixed
+
+- Resolve adapter styles declarations during clean-checkout type checks.
 
 - Propagate nested templates and application direction into Material UI themes.
 - Preserve isolated Jotai state across adapter changes.
