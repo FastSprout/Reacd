@@ -161,3 +161,13 @@ it('serializes normal and recovery releases through one publication queue', () =
       .safeParse(input).success,
   ).toBe(true);
 });
+
+it('installs Chromium on the publication runner before package acceptance', () => {
+  const steps = workflow().jobs['publish']?.steps ?? [];
+  const browser = steps.findIndex(
+    (s) => s.run === 'npx playwright install --with-deps chromium',
+  );
+  const acceptance = steps.findIndex((s) => s.run === 'npm run test:package');
+  expect(browser).toBeGreaterThanOrEqual(0);
+  expect(browser).toBeLessThan(acceptance);
+});

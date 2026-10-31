@@ -214,6 +214,10 @@ jobs:
         working-directory:
           ${{ github.event_name == 'workflow_dispatch' && '.cache/release-source' || '.'
           }}
+      - run: npx playwright install --with-deps chromium
+        working-directory:
+          ${{ github.event_name == 'workflow_dispatch' && '.cache/release-source' || '.'
+          }}
       - run: npm run test:package
         working-directory:
           ${{ github.event_name == 'workflow_dispatch' && '.cache/release-source' || '.'
