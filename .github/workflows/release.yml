@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: release-${{ github.event_name }}-${{ inputs.tag || 'main' }}
+  group: release-main
   cancel-in-progress: false
 
 env:

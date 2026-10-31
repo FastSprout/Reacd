@@ -147,3 +147,17 @@ it('rejects disabled publication and unchecked source SHAs', () => {
     expect(result.status === 0).toBe(accepted);
   }
 });
+
+it('serializes normal and recovery releases through one publication queue', () => {
+  const input: unknown = parse(readFileSync('.github/workflows/release.yml', 'utf8'));
+  expect(
+    z
+      .object({
+        concurrency: z.object({
+          group: z.literal('release-main'),
+          'cancel-in-progress': z.literal(false),
+        }),
+      })
+      .safeParse(input).success,
+  ).toBe(true);
+});
