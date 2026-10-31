@@ -28,7 +28,7 @@ it('serves built examples alongside both existing mandatory conformance hosts', 
       reuseExistingServer: false,
     })),
   ]);
-  expect(configuration.workers).toBe(2);
+  expect(configuration.workers).toBe(4);
   expect(configuration.retries).toBe(0);
   expect(configuration.forbidOnly).toBe(true);
   expect(configuration.testDir).toBe('test-support/browser/e2e');

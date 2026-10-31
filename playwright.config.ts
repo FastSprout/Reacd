@@ -2,7 +2,7 @@ import { defineConfig } from '@playwright/test';
 import type { ReporterDescription } from '@playwright/test';
 
 const BROWSER_EXECUTION_POLICY = {
-  maxWorkers: 2,
+  maxWorkers: 4,
 } as const;
 
 const GITHUB_REPORTERS: ReporterDescription[] =
