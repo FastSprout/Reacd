@@ -1,16 +1,10 @@
-import { useMemo } from 'react';
-import type { EditorEmojiMenuProps } from
-  '@fastsprout/reacd/adapter-runtime/components/editor-emoji-menu/index.js';
-import type { EditorMenuItem } from
-  '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
-import { useEditorMenu } from '../editor-menu/use-editor-menu.js';
-import { EditorMenuPanel } from '../editor-menu/menu-panel.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/editor-emoji-menu/editor-emoji-menu.adapter.js';
+import { SharedEditorEmojiMenu } from
+  '../../shared/editor-emoji-menu/editor-emoji-menu.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnEditorEmojiMenu(properties: EditorEmojiMenuProps) {
-  const items = useMemo<readonly EditorMenuItem[]>(
-    () => properties.items.map((item) => ({ ...item, kind: 'emoji' })),
-    [properties.items],
-  );
-  const menu = useEditorMenu('emoji', items, properties.disabled);
-  return <EditorMenuPanel label={properties.label} {...menu} />;
-}
+export type ShadcnEditorEmojiMenuProps = ComponentProps<typeof SharedEditorEmojiMenu>;
+export const ShadcnEditorEmojiMenu: ComponentType<ShadcnEditorEmojiMenuProps> =
+  bindPrimitives(SharedEditorEmojiMenu, shadcnPrimitives, 'ShadcnEditorEmojiMenu');

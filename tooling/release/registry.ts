@@ -8,8 +8,8 @@ export interface RegistryPublicationIdentity {
 }
 
 export const REGISTRY_VERIFICATION_POLICY = {
-  attempts: 6,
-  delayMs: 5_000,
+  attempts: 61,
+  delayMs: 20_000,
   requestTimeoutMs: 15_000,
   minimumArchiveBytes: 1,
 } as const;

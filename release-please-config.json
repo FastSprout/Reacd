@@ -20,6 +20,16 @@
           "type": "json",
           "path": "packages/shadcn/package.json",
           "jsonpath": "$.peerDependencies['@fastsprout/reacd']"
+        },
+        {
+          "type": "json",
+          "path": "packages/mui/package.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "packages/mui/package.json",
+          "jsonpath": "$.peerDependencies['@fastsprout/reacd']"
         }
       ]
     }

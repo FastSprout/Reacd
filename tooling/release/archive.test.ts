@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { PUBLICATION_POLICY } from './policy.js';
-import { RELEASE_ARCHIVE_POLICY, validateReleaseArchive } from './archive.js';
+import {
+  PUBLICATION_POLICY,
+  MUI_PUBLICATION_POLICY,
+  SHADCN_PUBLICATION_POLICY,
+} from './policy.js';
+import {
+  RELEASE_ARCHIVE_POLICY,
+  MUI_ARCHIVE_POLICY,
+  SHADCN_ARCHIVE_POLICY,
+  validateReleaseArchive,
+} from './archive.js';
 
 const meta = {
   name: PUBLICATION_POLICY.name,
@@ -74,4 +83,20 @@ describe('release tarball identity and allowlist', () => {
     value.files.push({ path: 'LICENSE' });
     expect(() => validateReleaseArchive([value], meta)).toThrow('duplicate');
   });
+});
+
+it.each([
+  [MUI_PUBLICATION_POLICY, MUI_ARCHIVE_POLICY, 'dist/shadcn/control.js'],
+  [SHADCN_PUBLICATION_POLICY, SHADCN_ARCHIVE_POLICY, 'dist/mui/control.js'],
+] as const)('rejects an opposite concrete adapter inside %s', (policy, files, path) => {
+  const input = {
+    name: policy.name,
+    version: '0.3.0',
+    filename: `${policy.archiveBasename}-0.3.0.tgz`,
+    integrity: 'sha512-dGVzdA==',
+    files: [...files.required.map((file) => ({ path: file })), { path }],
+  };
+  expect(() =>
+    validateReleaseArchive([input], { name: policy.name, version: '0.3.0' }),
+  ).toThrow('Cross-package');
 });

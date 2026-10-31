@@ -1,18 +1,12 @@
-import { Children } from 'react';
-import type { PageListProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-list/page-list.js';
-import { PAGE_COMPOSITION_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/page-composition-policy.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-list/page-list.adapter.js';
+import { SharedPageList } from '../../shared/page-list/page-list.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageList({
-  children,
-  divide = PAGE_COMPOSITION_DEFAULTS.divide,
-}: PageListProps) {
-  return (
-    <ul className="reacd-node reacd-page-list" role="list" data-divide={divide}>
-      {Children.map(Children.toArray(children), (child) => (
-        <li className="reacd-page-list-item">{child}</li>
-      ))}
-    </ul>
-  );
-}
+export type ShadcnPageListProps = ComponentProps<typeof SharedPageList>;
+export const ShadcnPageList: ComponentType<ShadcnPageListProps> = bindPrimitives(
+  SharedPageList,
+  shadcnPrimitives,
+  'ShadcnPageList',
+);

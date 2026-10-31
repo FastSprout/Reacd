@@ -1,6 +1,10 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it, vi } from 'vitest';
-import { completeRelease, verifyCandidateAssets } from './complete.js';
+import {
+  completeRelease,
+  verifyCandidateAssets,
+  verifyCandidateSnapshot,
+} from './complete.js';
 import type { ReleaseGitHub } from './github-client.js';
 import type { CheckedPackages, PublicationIO } from './publish.js';
 import { PUBLICATION_POLICY as P, SHADCN_PUBLICATION_POLICY as S } from './policy.js';
@@ -143,4 +147,14 @@ it('rejects a snapshot for a different draft ID', () => {
   expect(() =>
     verifyCandidateAssets({ ...identity, releaseId: 2 }, packages, f.io),
   ).toThrow('tag identity');
+});
+
+it('rejects consistently versioned packages for a different release identity', () => {
+  expect(() =>
+    verifyCandidateSnapshot(
+      { ...identity, version: '0.3.0', tag: 'v0.3.0' },
+      packages,
+      {},
+    ),
+  ).toThrow('package versions');
 });

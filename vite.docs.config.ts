@@ -19,7 +19,12 @@ export default defineConfig(
           ),
           output: {
             codeSplitting: {
-              groups: [{ name: 'reacd-adapter', test: /[\\/]src[\\/]adapter[\\/]/ }],
+              groups: [
+                { name: 'reacd-behavior', test: /[\\/]adapter[\\/]shared[\\/]/ },
+                { name: 'reacd-shadcn', test: /[\\/]adapter[\\/]shadcn[\\/]/ },
+                { name: 'reacd-mui', test: /[\\/]adapter[\\/]mui[\\/]/ },
+                { name: 'material-ui', test: /node_modules[\\/](@mui|@emotion)[\\/]/ },
+              ],
             },
           },
         },

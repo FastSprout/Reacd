@@ -3,6 +3,7 @@ import { basename } from 'node:path';
 import { z } from 'zod';
 import type { ReleaseGitHub } from './github-client.js';
 import { resolveReleaseTag, releaseShaSchema } from './github-client.js';
+import { validateCheckedPackages } from './publish.js';
 import type { CheckedPackages, PublicationIO } from './publish.js';
 import { verifyRegistryPublication } from './registry.js';
 import type { ReleaseIdentity } from './verify-environment.js';
@@ -45,6 +46,7 @@ export function verifyCandidateSnapshot(
   packages: CheckedPackages,
   input: unknown,
 ) {
+  validateCheckedPackages(packages);
   if (packages.some((item) => item.metadata.version !== identity.version)) {
     throw new Error('Release candidate package versions must match.');
   }
@@ -100,7 +102,7 @@ export async function completeRelease(
     make_latest: 'true',
     body: (release.body ?? '').replace(
       'npm publication is pending.',
-      'both npm packages are published and verified.',
+      'all npm packages are published and verified.',
     ),
   });
 }

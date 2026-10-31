@@ -1,15 +1,12 @@
-import type { PageAsideProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-aside/page-aside.js';
-import { useWidePage } from
-  '@fastsprout/reacd/adapter-runtime/renderer/page-aside/use-wide-page.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-aside/page-aside.adapter.js';
+import { SharedPageAside } from '../../shared/page-aside/page-aside.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageAside({ children, label, top, bottom }: PageAsideProps) {
-  const wide = useWidePage();
-  return (
-    <aside className="reacd-node reacd-page-aside" aria-label={label} data-wide={wide}>
-      {top !== undefined && <div className="reacd-page-aside-top">{top}</div>}
-      <div className="reacd-page-aside-body">{children}</div>
-      {bottom !== undefined && <div className="reacd-page-aside-bottom">{bottom}</div>}
-    </aside>
-  );
-}
+export type ShadcnPageAsideProps = ComponentProps<typeof SharedPageAside>;
+export const ShadcnPageAside: ComponentType<ShadcnPageAsideProps> = bindPrimitives(
+  SharedPageAside,
+  shadcnPrimitives,
+  'ShadcnPageAside',
+);

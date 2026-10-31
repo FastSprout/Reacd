@@ -10,13 +10,18 @@
   min-inline-size: 0;
 }
 .reacd-select-menu-trigger {
-  flex: 1;
+  flex: 1 1 var(--reacd-stack-track);
   min-inline-size: 0;
   max-inline-size: 100%;
   block-size: auto;
   white-space: normal;
   text-align: start;
   overflow-wrap: anywhere;
+}
+.reacd-select-menu-selection {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .reacd-select-menu-positioner {
   z-index: var(--reacd-popup-layer);

@@ -1,9 +1,12 @@
-import type { ReactNode } from 'react';
-import type { PageHeroProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-hero/page-hero.props.js';
-import { PageIntroduction } from
-  '@fastsprout/reacd/adapter-runtime/renderer/page-introduction/page-introduction.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-hero/page-hero.adapter.js';
+import { SharedPageHero } from '../../shared/page-hero/page-hero.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageHero(props: PageHeroProps): ReactNode {
-  return <PageIntroduction {...props} kind="hero" />;
-}
+export type ShadcnPageHeroProps = ComponentProps<typeof SharedPageHero>;
+export const ShadcnPageHero: ComponentType<ShadcnPageHeroProps> = bindPrimitives(
+  SharedPageHero,
+  shadcnPrimitives,
+  'ShadcnPageHero',
+);

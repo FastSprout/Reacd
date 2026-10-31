@@ -1,27 +1,12 @@
-import { useContext, useId } from 'react';
-import { useDirection } from '@radix-ui/react-direction';
-import type { ToastProps } from
-  '@fastsprout/reacd/adapter-runtime/components/toast/index.js';
-import {
-  PortalActiveContext,
-  PortalHostContext,
-} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
-import { ThemeVariablesContext } from
-  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
-import { ToastRegistration } from './toast-registration.js';
-export function ShadcnToast(properties: ToastProps) {
-  const id = useId();
-  const active = useContext(PortalActiveContext);
-  const variables = useContext(ThemeVariablesContext);
-  const direction = useDirection();
-  const host = useContext(PortalHostContext);
-  return properties.open && active ? (
-    <ToastRegistration
-      id={id}
-      properties={properties}
-      variables={variables}
-      direction={direction}
-      host={host}
-    />
-  ) : null;
-}
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/toast/toast.adapter.js';
+import { SharedToast } from '../../shared/toast/toast.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
+
+export type ShadcnToastProps = ComponentProps<typeof SharedToast>;
+export const ShadcnToast: ComponentType<ShadcnToastProps> = bindPrimitives(
+  SharedToast,
+  shadcnPrimitives,
+  'ShadcnToast',
+);

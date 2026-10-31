@@ -1,22 +1,17 @@
-import type { DashboardSearchButtonProps } from
-  '@fastsprout/reacd/adapter-runtime/components/dashboard-search-button/index.js';
-import { DASHBOARD_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
-import { Button } from '../vendor/ui/button.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/dashboard-search-button/dashboard-search-button.adapter.js';
+import { SharedDashboardSearchButton } from
+  '../../shared/dashboard-search-button/dashboard-search-button.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnDashboardSearchButton({
-  label = DASHBOARD_DEFAULTS.searchLabel,
-  onPress,
-  disabled,
-}: DashboardSearchButtonProps) {
-  return (
-    <Button
-      className="reacd-node reacd-button"
-      variant="secondary"
-      disabled={disabled}
-      onClick={() => onPress()}
-    >
-      {label}
-    </Button>
+export type ShadcnDashboardSearchButtonProps = ComponentProps<
+  typeof SharedDashboardSearchButton
+>;
+export const ShadcnDashboardSearchButton:
+  ComponentType<ShadcnDashboardSearchButtonProps> =
+  bindPrimitives(
+    SharedDashboardSearchButton,
+    shadcnPrimitives,
+    'ShadcnDashboardSearchButton',
   );
-}

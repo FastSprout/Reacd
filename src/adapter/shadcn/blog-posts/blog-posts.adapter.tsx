@@ -1,28 +1,12 @@
-import { Children } from 'react';
-import type { ReactNode } from 'react';
-import type { BlogPostsProps } from
-  '@fastsprout/reacd/adapter-runtime/components/blog-posts/blog-posts.props.js';
-import { BlogPost } from
-  '@fastsprout/reacd/adapter-runtime/components/blog-post/blog-post.js';
-import { EDITORIAL_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/editorial-policy.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/blog-posts/blog-posts.adapter.js';
+import { SharedBlogPosts } from '../../shared/blog-posts/blog-posts.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnBlogPosts({
-  children,
-  posts = EDITORIAL_DEFAULTS.entries,
-  orientation = EDITORIAL_DEFAULTS.collectionOrientation,
-}: BlogPostsProps): ReactNode {
-  return (
-    <ul
-      className="reacd-node reacd-editorial-collection"
-      data-orientation={orientation}
-    >
-      {posts.map(({ key, ...entry }) => (
-        <li key={key}>
-          <BlogPost {...entry} />
-        </li>
-      ))}
-      {Children.map(children, (child) => (child == null ? null : <li>{child}</li>))}
-    </ul>
-  );
-}
+export type ShadcnBlogPostsProps = ComponentProps<typeof SharedBlogPosts>;
+export const ShadcnBlogPosts: ComponentType<ShadcnBlogPostsProps> = bindPrimitives(
+  SharedBlogPosts,
+  shadcnPrimitives,
+  'ShadcnBlogPosts',
+);

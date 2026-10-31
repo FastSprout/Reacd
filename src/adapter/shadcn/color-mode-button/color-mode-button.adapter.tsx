@@ -1,37 +1,10 @@
-import { useId } from 'react';
-import type { ColorModeButtonProps } from
-  '@fastsprout/reacd/adapter-runtime/components/color-mode-button/index.js';
-import { oppositeColorMode } from
-  '@fastsprout/reacd/adapter-runtime/core/color-mode.js';
-import { Button } from '../vendor/ui/button.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/color-mode-button/color-mode-button.adapter.js';
+import { SharedColorModeButton } from
+  '../../shared/color-mode-button/color-mode-button.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnColorModeButton({
-  label,
-  value: _value,
-  resolvedMode,
-  onValueChange,
-  disabled,
-  readOnly,
-  description,
-}: ColorModeButtonProps) {
-  const id = useId();
-  return (
-    <div className="reacd-node reacd-field">
-      <Button
-        type="button"
-        variant="outline"
-        disabled={disabled}
-        aria-pressed={resolvedMode === 'dark'}
-        aria-disabled={readOnly || undefined}
-        aria-describedby={description === undefined ? undefined : id}
-        className="reacd-color-mode-button"
-        onClick={() => {
-          if (!readOnly) onValueChange(oppositeColorMode(resolvedMode));
-        }}
-      >
-        {label}
-      </Button>
-      {description === undefined ? null : <p id={id}>{description}</p>}
-    </div>
-  );
-}
+export type ShadcnColorModeButtonProps = ComponentProps<typeof SharedColorModeButton>;
+export const ShadcnColorModeButton: ComponentType<ShadcnColorModeButtonProps> =
+  bindPrimitives(SharedColorModeButton, shadcnPrimitives, 'ShadcnColorModeButton');

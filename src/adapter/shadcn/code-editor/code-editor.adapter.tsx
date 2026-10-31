@@ -1,26 +1,12 @@
-import { useId } from 'react';
-import type { CodeEditorProps } from
-  '@fastsprout/reacd/adapter-runtime/components/code-editor/code-editor.js';
-import {
-  CONTENT_POLICY,
-  DOCUMENT_POLICY,
-} from '@fastsprout/reacd/adapter-runtime/core/policy.js';
-import { Textarea } from '../vendor/ui/textarea.js';
-import { Label } from '../vendor/ui/label.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/code-editor/code-editor.adapter.js';
+import { SharedCodeEditor } from '../../shared/code-editor/code-editor.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnCodeEditor({ label, value, onValueChange }: CodeEditorProps) {
-  const id = useId();
-  return (
-    <div className="reacd-node reacd-field reacd-code-editor">
-      <Label htmlFor={id}>{label}</Label>
-      <Textarea
-        id={id}
-        value={value}
-        spellCheck={false}
-        rows={CONTENT_POLICY.codeEditorRows}
-        maxLength={DOCUMENT_POLICY.maxCharacters}
-        onChange={(event) => onValueChange(event.target.value)}
-      />
-    </div>
-  );
-}
+export type ShadcnCodeEditorProps = ComponentProps<typeof SharedCodeEditor>;
+export const ShadcnCodeEditor: ComponentType<ShadcnCodeEditorProps> = bindPrimitives(
+  SharedCodeEditor,
+  shadcnPrimitives,
+  'ShadcnCodeEditor',
+);

@@ -1,13 +1,12 @@
-import type { ChatPaletteProps } from
-  '@fastsprout/reacd/adapter-runtime/components/chat-palette/index.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/chat-palette/chat-palette.adapter.js';
+import { SharedChatPalette } from '../../shared/chat-palette/chat-palette.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnChatPalette({ label, children, prompt }: ChatPaletteProps) {
-  return (
-    <section className="reacd-node reacd-chat-palette" aria-label={label}>
-      <div className="reacd-chat-palette-content">{children}</div>
-      {prompt !== undefined && (
-        <footer className="reacd-chat-palette-prompt">{prompt}</footer>
-      )}
-    </section>
-  );
-}
+export type ShadcnChatPaletteProps = ComponentProps<typeof SharedChatPalette>;
+export const ShadcnChatPalette: ComponentType<ShadcnChatPaletteProps> = bindPrimitives(
+  SharedChatPalette,
+  shadcnPrimitives,
+  'ShadcnChatPalette',
+);

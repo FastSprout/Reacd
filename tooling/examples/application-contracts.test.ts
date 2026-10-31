@@ -24,8 +24,14 @@ it.each([
   const configuration = configurationSchema.parse(input);
   const prefix = '@fastsprout/reacd/adapter-runtime/';
   const expected = {
+    '@fastsprout/reacd-mui': [
+      `${entry.relative}packages/mui/dist/mui/mui.adapter.d.ts`,
+    ],
+    '@fastsprout/reacd-mui/styles': [
+      `${entry.relative}packages/mui/dist/styles-contract.d.ts`,
+    ],
     '@fastsprout/reacd-shadcn': [
-      `${entry.relative}packages/shadcn/dist/shadcn.adapter.d.ts`,
+      `${entry.relative}packages/shadcn/dist/shadcn/shadcn.adapter.d.ts`,
     ],
     '@fastsprout/reacd-shadcn/styles': [
       `${entry.relative}packages/shadcn/dist/styles-contract.d.ts`,

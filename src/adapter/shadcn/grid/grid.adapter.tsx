@@ -1,8 +1,12 @@
-import type { GridProps } from
-  '@fastsprout/reacd/adapter-runtime/components/grid/grid.js';
-import { Layout } from
-  '@fastsprout/reacd/adapter-runtime/renderer/layout/layout.renderer.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/grid/grid.adapter.js';
+import { SharedGrid } from '../../shared/grid/grid.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnGrid(props: GridProps) {
-  return <Layout kind="Grid" {...props} />;
-}
+export type ShadcnGridProps = ComponentProps<typeof SharedGrid>;
+export const ShadcnGrid: ComponentType<ShadcnGridProps> = bindPrimitives(
+  SharedGrid,
+  shadcnPrimitives,
+  'ShadcnGrid',
+);

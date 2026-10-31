@@ -1,27 +1,12 @@
-import type { NavigationProps } from
-  '@fastsprout/reacd/adapter-runtime/components/navigation/navigation.js';
-import { Button } from '../vendor/ui/button.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/navigation/navigation.adapter.js';
+import { SharedNavigation } from '../../shared/navigation/navigation.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnNavigation({
-  label,
-  value,
-  items,
-  onValueChange,
-}: NavigationProps) {
-  return (
-    <nav className="reacd-node reacd-navigation" aria-label={label}>
-      {items.map((item) => (
-        <Button
-          type="button"
-          className="reacd-node reacd-button"
-          key={item.value}
-          aria-current={item.value === value ? 'page' : undefined}
-          variant={item.value === value ? 'secondary' : 'ghost'}
-          onClick={() => onValueChange(item.value)}
-        >
-          {item.label}
-        </Button>
-      ))}
-    </nav>
-  );
-}
+export type ShadcnNavigationProps = ComponentProps<typeof SharedNavigation>;
+export const ShadcnNavigation: ComponentType<ShadcnNavigationProps> = bindPrimitives(
+  SharedNavigation,
+  shadcnPrimitives,
+  'ShadcnNavigation',
+);

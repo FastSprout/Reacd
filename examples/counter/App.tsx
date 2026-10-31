@@ -1,4 +1,4 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
+import { browserAdapter } from '../../test-support/browser/adapter.js';
 import { atom, useAtom } from 'jotai';
 import { Button, HStack, Page, ReacdProvider, Text, VStack } from '@fastsprout/reacd';
 
@@ -21,7 +21,7 @@ function Counter() {
 
 export function App() {
   return (
-    <ReacdProvider adapter={shadcnAdapter}>
+    <ReacdProvider adapter={browserAdapter}>
       <Counter />
     </ReacdProvider>
   );

@@ -1,0 +1,16 @@
+@import '../../renderer/styles.css';
+@import '../../renderer/styles/carousel.css';
+@import '../../renderer/styles/marquee.css';
+@import '../../renderer/styles/chart.css';
+@import '../../renderer/styles/color-mode.css';
+@import '../../renderer/styles/locale-select.css';
+
+.reacd-root[data-adapter='material-ui'] .sr-only,
+.reacd-portal-root .sr-only {
+  position: absolute;
+  inline-size: var(--reacd-border-width);
+  block-size: var(--reacd-border-width);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

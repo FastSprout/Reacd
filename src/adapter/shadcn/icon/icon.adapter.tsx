@@ -1,22 +1,12 @@
-import type { IconProps } from
-  '@fastsprout/reacd/adapter-runtime/components/icon/index.js';
-import { ICON_POLICY } from '@fastsprout/reacd/adapter-runtime/core/icon-policy.js';
-import { SEMANTIC_ICONS } from './icon-map.js';
-export function ShadcnIcon({
-  name,
-  label,
-  decorative,
-  size = ICON_POLICY.defaultSize,
-}: IconProps) {
-  const Glyph = SEMANTIC_ICONS[name];
-  return (
-    <Glyph
-      className="reacd-icon"
-      data-size={size}
-      role={decorative ? undefined : 'img'}
-      aria-label={decorative ? undefined : label}
-      aria-hidden={decorative ? true : undefined}
-      focusable="false"
-    />
-  );
-}
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/icon/icon.adapter.js';
+import { SharedIcon } from '../../shared/icon/icon.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
+
+export type ShadcnIconProps = ComponentProps<typeof SharedIcon>;
+export const ShadcnIcon: ComponentType<ShadcnIconProps> = bindPrimitives(
+  SharedIcon,
+  shadcnPrimitives,
+  'ShadcnIcon',
+);

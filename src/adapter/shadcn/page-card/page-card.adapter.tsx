@@ -1,9 +1,12 @@
-import type { ReactNode } from 'react';
-import type { PageCardProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-card/page-card.props.js';
-import { PageIntroduction } from
-  '@fastsprout/reacd/adapter-runtime/renderer/page-introduction/page-introduction.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-card/page-card.adapter.js';
+import { SharedPageCard } from '../../shared/page-card/page-card.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageCard(props: PageCardProps): ReactNode {
-  return <PageIntroduction {...props} kind="card" />;
-}
+export type ShadcnPageCardProps = ComponentProps<typeof SharedPageCard>;
+export const ShadcnPageCard: ComponentType<ShadcnPageCardProps> = bindPrimitives(
+  SharedPageCard,
+  shadcnPrimitives,
+  'ShadcnPageCard',
+);

@@ -21,6 +21,7 @@ describe('type checking runner', () => {
       [
         'tsconfig.build.json',
         'packages/shadcn/tsconfig.build.json',
+        'packages/mui/tsconfig.build.json',
         '.',
         'tooling/conformance',
         'docs/examples',

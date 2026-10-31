@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   stat: vi.fn<() => { isFile: () => boolean }>(),
   engine: vi.fn(),
   adapter: vi.fn(),
+  material: vi.fn(),
   publish: vi.fn(),
   lookup: vi.fn(),
   verify: vi.fn(),
@@ -18,6 +19,7 @@ vi.mock('node:child_process', () => ({ execFileSync: mocks.exec }));
 vi.mock('../tooling/release/metadata.js', () => ({
   parsePublicationManifest: mocks.engine,
   parseShadcnPublicationManifest: mocks.adapter,
+  parseMuiPublicationManifest: mocks.material,
 }));
 vi.mock('../tooling/release/publish.js', () => ({
   publishCheckedPackages: mocks.publish,
@@ -73,7 +75,7 @@ it('reads both fixed checked packages and invokes npm without a shell', async ()
   expect(mocks.engine).toHaveBeenCalledExactlyOnceWith({});
   expect(mocks.adapter).toHaveBeenCalledExactlyOnceWith({});
   expect(mocks.log).toHaveBeenCalledExactlyOnceWith(
-    'Both checked packages are publicly verified.',
+    'All checked packages are publicly verified.',
   );
 });
 
@@ -95,4 +97,26 @@ it('never reports success after manifest or publication failure', async () => {
   mocks.publish.mockRejectedValue(new Error('Unverified package.'));
   await expect(import('./release-publish.js')).rejects.toThrow('Unverified package');
   expect(mocks.log).not.toHaveBeenCalled();
+});
+
+it('requires the checked Material archive for a three-package release', async () => {
+  const version = '0.3.0';
+  const material = { name: '@fastsprout/reacd-mui', version };
+  mocks.engine.mockReturnValue({ ...engine, version });
+  mocks.adapter.mockReturnValue({ ...adapter, version });
+  mocks.material.mockReturnValue(material);
+  await import('./release-publish.js');
+  expect(mocks.publish).toHaveBeenCalledWith(
+    [
+      expect.objectContaining({ metadata: { ...engine, version } }),
+      expect.objectContaining({ metadata: { ...adapter, version } }),
+      expect.objectContaining({
+        metadata: material,
+        archivePath: fileURLToPath(
+          new URL('../.cache/release/mui.tgz', import.meta.url),
+        ),
+      }),
+    ],
+    expect.objectContaining({ verify: mocks.verify }),
+  );
 });

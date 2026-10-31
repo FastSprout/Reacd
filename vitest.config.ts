@@ -23,6 +23,15 @@ export default defineConfig({
       '@fastsprout/reacd/adapter-runtime/renderer': fileURLToPath(
         new URL('./src/renderer/', import.meta.url),
       ),
+      '@fastsprout/reacd-mui/styles.css': fileURLToPath(
+        new URL('./src/adapter/mui/styles.css', import.meta.url),
+      ),
+      '@fastsprout/reacd-mui/styles': fileURLToPath(
+        new URL('./src/adapter/mui/styles.ts', import.meta.url),
+      ),
+      '@fastsprout/reacd-mui': fileURLToPath(
+        new URL('./src/adapter/mui/mui.adapter.ts', import.meta.url),
+      ),
       '@fastsprout/reacd-shadcn/styles.css': fileURLToPath(
         new URL('./src/adapter/shadcn/styles.css', import.meta.url),
       ),
@@ -63,6 +72,16 @@ export default defineConfig({
             'tooling/**/*.test.{ts,tsx}',
             'docs/examples/**/*.test.tsx',
           ],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'material-contract',
+          environment: 'jsdom',
+          setupFiles: ['test-support/setup.ts'],
+          env: { REACD_TEST_ADAPTER: 'mui' },
+          include: ['src/adapter/shared/**/*.test.{ts,tsx}'],
         },
       },
       {

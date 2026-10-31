@@ -32,12 +32,13 @@ describe('independent engine and shadcn package boundaries', () => {
     const adapter = read('packages/shadcn/package.json');
     expect(adapter.name).toBe('@fastsprout/reacd-shadcn');
     expect(adapter.version).toBe(read('package.json').version);
-    expect(adapter.peerDependencies['@fastsprout/reacd'])
-      .toBe(read('package.json').version);
+    expect(adapter.peerDependencies['@fastsprout/reacd']).toBe(
+      read('package.json').version,
+    );
     expect(adapter.dependencies['@base-ui/react']).toBe('1.9.0');
     expect(adapter.exports['.']).toEqual({
-      types: './dist/shadcn.adapter.d.ts',
-      import: './dist/shadcn.adapter.js',
+      types: './dist/shadcn/shadcn.adapter.d.ts',
+      import: './dist/shadcn/shadcn.adapter.js',
     });
     expect(adapter.exports['./styles']).toEqual({
       types: './dist/styles-contract.d.ts',

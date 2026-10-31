@@ -1,5 +1,12 @@
-import { Separator } from '../vendor/ui/separator.js';
+import type { ComponentType } from 'react';
+export * from '../../shared/divider/divider.adapter.js';
+import { SharedDivider } from '../../shared/divider/divider.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnDivider() {
-  return <Separator className="reacd-node reacd-divider" decorative={false} />;
-}
+export type ShadcnDividerProps = object;
+export const ShadcnDivider: ComponentType<ShadcnDividerProps> = bindPrimitives(
+  SharedDivider,
+  shadcnPrimitives,
+  'ShadcnDivider',
+);

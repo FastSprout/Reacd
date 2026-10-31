@@ -1,4 +1,6 @@
 const TRUSTED_UI_SCOPES = [
+  '@mui/',
+  '@emotion/',
   '@radix-ui/',
   '@base-ui/',
   '@tiptap/',

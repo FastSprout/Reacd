@@ -1,19 +1,12 @@
-import { useId } from 'react';
-import type { ToggleProps } from
-  '@fastsprout/reacd/adapter-runtime/components/toggle/toggle.js';
-import { Switch } from '../vendor/ui/switch.js';
-import { Label } from '../vendor/ui/label.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/toggle/toggle.adapter.js';
+import { SharedToggle } from '../../shared/toggle/toggle.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnToggle({ label, onCheckedChange, ...properties }: ToggleProps) {
-  const id = useId();
-  return (
-    <div className="reacd-node reacd-check reacd-toggle">
-      <Switch
-        id={id}
-        {...properties}
-        onCheckedChange={(next) => onCheckedChange(next)}
-      />
-      <Label htmlFor={id}>{label}</Label>
-    </div>
-  );
-}
+export type ShadcnToggleProps = ComponentProps<typeof SharedToggle>;
+export const ShadcnToggle: ComponentType<ShadcnToggleProps> = bindPrimitives(
+  SharedToggle,
+  shadcnPrimitives,
+  'ShadcnToggle',
+);

@@ -4,7 +4,11 @@ import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { packReleaseArchive, packShadcnArchive } from '../tooling/release/pack.js';
+import {
+  packReleaseArchive,
+  packShadcnArchive,
+  packMuiArchive,
+} from '../tooling/release/pack.js';
 import {
   parseDistributionManifest,
   parseShadcnDistributionManifest,
@@ -13,6 +17,9 @@ import { verifyHeadlessInstall } from '../tooling/package/headless.js';
 import { buildInstalledBootstrap } from '../tooling/package/bootstrap.js';
 import { exerciseInstalledBootstrap } from '../tooling/package/browser.js';
 import { INSTALLED_COMPILER_POLICY } from '../tooling/package/compiler-policy.js';
+
+import { installedTypeDependencies } from '../tooling/package/development-types.js';
+import { verifyMaterialInstall } from '../tooling/package/material.js';
 
 const root = process.cwd();
 const temporary = await mkdtemp(join(tmpdir(), 'reacd-package-'));
@@ -96,35 +103,44 @@ try {
   }
   await writeFile(join(temporary, 'runtime.mjs'), await fixture('runtime.mjs.txt'));
   execFileSync(process.execPath, ['runtime.mjs'], { cwd: temporary, stdio: 'inherit' });
-  const clean = join(temporary, 'clean-consumer');
-  await mkdir(clean);
-  await writeFile(
-    join(clean, 'package.json'),
-    JSON.stringify({
-      private: true,
-      type: 'module',
-      dependencies: {
-        '@fastsprout/reacd': pathToFileURL(archive).href,
-        '@fastsprout/reacd-shadcn': pathToFileURL(adapterArchive).href,
-      },
-    }),
-  );
-  execFileSync(
-    'npm',
-    [
-      'install',
-      '--ignore-scripts',
-      '--no-audit',
-      '--no-fund',
-      '--package-lock=false',
-      '--registry=https://registry.npmjs.org/',
-    ],
-    { cwd: clean, stdio: 'inherit' },
-  );
-  await writeFile(join(clean, 'installed.mjs'), await fixture('installed.mjs.txt'));
-  execFileSync(process.execPath, ['installed.mjs'], { cwd: clean, stdio: 'inherit' });
-  buildInstalledBootstrap(root, clean);
-  await exerciseInstalledBootstrap(clean);
+  const isolated = await mkdtemp(join(tmpdir(), 'reacd-installed-'));
+  try {
+    const clean = join(isolated, 'clean-consumer');
+    await mkdir(clean);
+    await writeFile(
+      join(clean, 'package.json'),
+      JSON.stringify({
+        private: true,
+        type: 'module',
+        devDependencies: installedTypeDependencies(root),
+        dependencies: {
+          '@fastsprout/reacd': pathToFileURL(archive).href,
+          '@fastsprout/reacd-shadcn': pathToFileURL(adapterArchive).href,
+        },
+      }),
+    );
+    execFileSync(
+      'npm',
+      [
+        'install',
+        '--include=dev',
+        '--ignore-scripts',
+        '--no-audit',
+        '--no-fund',
+        '--package-lock=false',
+        '--registry=https://registry.npmjs.org/',
+      ],
+      { cwd: clean, stdio: 'inherit' },
+    );
+    await writeFile(join(clean, 'installed.mjs'), await fixture('installed.mjs.txt'));
+    execFileSync(process.execPath, ['installed.mjs'], { cwd: clean, stdio: 'inherit' });
+    buildInstalledBootstrap(root, clean);
+    await exerciseInstalledBootstrap(clean);
+    const materialArchive = packMuiArchive(root);
+    await verifyMaterialInstall(root, archive, materialArchive, isolated);
+  } finally {
+    await rm(isolated, { recursive: true, force: true });
+  }
 } finally {
   await rm(temporary, { recursive: true, force: true });
 }

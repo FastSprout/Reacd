@@ -7,7 +7,7 @@ const { execute, remove } = vi.hoisted(() => ({
   remove: vi.fn<(path: URL, options: unknown) => void>(),
 }));
 vi.mock('node:child_process', () => ({ execFileSync: execute }));
-vi.mock('node:fs', () => ({ rmSync: remove }));
+vi.mock('node:fs', () => ({ rmSync: remove, copyFileSync: vi.fn() }));
 const compiler = fileURLToPath(
   new URL('../node_modules/typescript/bin/tsc', import.meta.url),
 );
@@ -32,7 +32,7 @@ describe('production build runner', () => {
       new URL('../packages/shadcn/dist/', import.meta.url),
       { recursive: true, force: true },
     );
-    expect(remove.mock.invocationCallOrder[1]).toBeLessThan(
+    expect(remove.mock.invocationCallOrder[2]).toBeLessThan(
       execute.mock.invocationCallOrder[0] ?? 0,
     );
     expect(execute.mock.calls).toEqual([
@@ -44,7 +44,17 @@ describe('production build runner', () => {
       ],
       [
         process.execPath,
+        [compiler, '-p', 'packages/mui/tsconfig.build.json'],
+        { stdio: 'inherit' },
+      ],
+      [
+        process.execPath,
         [vite, 'build', '--config', 'vite.styles.config.ts'],
+        { stdio: 'inherit' },
+      ],
+      [
+        process.execPath,
+        [vite, 'build', '--config', 'vite.mui-styles.config.ts'],
         { stdio: 'inherit' },
       ],
       [
@@ -76,7 +86,7 @@ describe('production build runner', () => {
     await expect(import('./build.mjs')).rejects.toBe(failure);
     expect(execute).not.toHaveBeenCalled();
   });
-  it.each([1, 2, 3, 4, 5, 6, 7, 8])(
+  it.each([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])(
     'stops on build stage %s failure',
     async (stage) => {
       const failure = new Error('Build failed.');

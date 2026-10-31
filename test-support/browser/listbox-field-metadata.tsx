@@ -1,7 +1,11 @@
 import '@fastsprout/reacd-shadcn/styles';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ShadcnListbox } from '../../src/adapter/shadcn/listbox/listbox.adapter.js';
+import { SharedListbox } from '../../src/adapter/shared/listbox/listbox.adapter.js';
+import { PrimitiveScope } from '../../src/adapter/shared/primitives/context.js';
+import { muiPrimitives } from '../../src/adapter/mui/primitives/primitives.js';
+import { shadcnPrimitives } from '../../src/adapter/shadcn/primitives/primitives.js';
+import { browserAdapter } from './adapter.js';
 import { FieldMetadataContext } from '../../src/renderer/form-field/field-metadata.js';
 
 function Harness() {
@@ -65,7 +69,7 @@ function Harness() {
             descriptionIds: ['group-help', 'group-error', 'group-help'],
           }}
         >
-          <ShadcnListbox
+          <SharedListbox
             label="Control"
             items={[
               { value: '42', label: 'Answer' },
@@ -92,4 +96,10 @@ function Harness() {
 }
 const root = document.getElementById('root');
 if (root === null) throw new Error('Missing acceptance root.');
-createRoot(root).render(<Harness />);
+createRoot(root).render(
+  <PrimitiveScope
+    primitives={browserAdapter.id === 'material-ui' ? muiPrimitives : shadcnPrimitives}
+  >
+    <Harness />
+  </PrimitiveScope>,
+);

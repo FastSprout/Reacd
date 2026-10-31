@@ -118,7 +118,7 @@ it('awaits registry and GitHub completion before reporting a release', async () 
   expect(mocks.read).toHaveBeenCalledWith(new URL('../', import.meta.url), identity);
   expect(mocks.complete).toHaveBeenCalledWith(identity, packages, io);
   expect(mocks.log).toHaveBeenCalledWith(
-    'GitHub and both npm packages are verified: v0.2.0.',
+    'GitHub and all npm packages are verified: v0.2.0.',
   );
   expect(fileURLToPath(new URL('../', import.meta.url))).toBeTruthy();
 });

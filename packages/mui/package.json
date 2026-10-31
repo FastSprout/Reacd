@@ -1,0 +1,79 @@
+{
+  "version": "0.3.0",
+  "private": false,
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FastSprout/Reacd.git"
+  },
+  "homepage": "https://reacd.dev/",
+  "bugs": {
+    "url": "https://github.com/FastSprout/Reacd/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "packageManager": "npm@11.19.0",
+  "name": "@fastsprout/reacd-mui",
+  "description": "The complete Material UI theme adapter for reacd.",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/mui/mui.adapter.d.ts",
+      "import": "./dist/mui/mui.adapter.js"
+    },
+    "./styles": {
+      "types": "./dist/styles-contract.d.ts",
+      "import": "./dist/styles.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "dependencies": {
+    "@base-ui/react": "1.9.0",
+    "@daypicker/react": "10.0.2",
+    "@internationalized/date": "3.12.4",
+    "@radix-ui/react-accordion": "1.3.1",
+    "@radix-ui/react-checkbox": "1.4.1",
+    "@radix-ui/react-direction": "1.2.0",
+    "@radix-ui/react-label": "2.1.17",
+    "@radix-ui/react-progress": "1.2.1",
+    "@radix-ui/react-select": "2.4.1",
+    "@radix-ui/react-separator": "1.2.0",
+    "@radix-ui/react-slider": "1.6.1",
+    "@radix-ui/react-slot": "1.5.0",
+    "@radix-ui/react-switch": "1.4.1",
+    "@radix-ui/react-tabs": "1.2.1",
+    "@tiptap/core": "3.32.1",
+    "@tiptap/pm": "3.32.1",
+    "@tiptap/react": "3.32.1",
+    "@tiptap/starter-kit": "3.32.1",
+    "@tiptap/suggestion": "3.32.1",
+    "input-otp": "1.5.0",
+    "lucide-react": "1.63.0",
+    "react-aria-components": "1.22.1",
+    "zod": "4.6.7",
+    "@mui/material": "9.5.0",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1"
+  },
+  "peerDependencies": {
+    "@fastsprout/reacd": "0.3.0",
+    "jotai": "3.0.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "jotai": "3.0.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  }
+}

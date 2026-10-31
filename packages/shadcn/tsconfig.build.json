@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "noEmit": false,
-    "rootDir": "../../src/adapter/shadcn",
+    "rootDir": "../../src/adapter",
     "outDir": "dist",
     "declaration": true,
     "declarationMap": false,
@@ -16,5 +16,9 @@
     }
   },
   "include": ["../../src/adapter/shadcn"],
-  "exclude": ["../../src/adapter/**/*.test.*", "../../src/adapter/**/__tests__/**"]
+  "exclude": [
+    "../../src/adapter/**/*.test.*",
+    "../../src/adapter/**/__tests__/**",
+    "../../src/adapter/shadcn/styles.ts"
+  ]
 }

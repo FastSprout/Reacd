@@ -1,3 +1,1 @@
-export {
-  focusIncompleteSegment as focusTimeDraft,
-} from '../temporal/focus-incomplete-segment.js';
+export * from '../../shared/input-time/focus-draft.js';

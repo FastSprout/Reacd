@@ -1,9 +1,12 @@
-import type { ReactNode } from 'react';
-import type { PageSectionProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-section/page-section.props.js';
-import { PageIntroduction } from
-  '@fastsprout/reacd/adapter-runtime/renderer/page-introduction/page-introduction.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-section/page-section.adapter.js';
+import { SharedPageSection } from '../../shared/page-section/page-section.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageSection(props: PageSectionProps): ReactNode {
-  return <PageIntroduction {...props} kind="section" />;
-}
+export type ShadcnPageSectionProps = ComponentProps<typeof SharedPageSection>;
+export const ShadcnPageSection: ComponentType<ShadcnPageSectionProps> = bindPrimitives(
+  SharedPageSection,
+  shadcnPrimitives,
+  'ShadcnPageSection',
+);

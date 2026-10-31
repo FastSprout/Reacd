@@ -59,6 +59,13 @@ describe('installed browser bootstrap acceptance', () => {
     });
   });
 
+  it('compiles the independent Material installation example', () => {
+    buildInstalledBootstrap(root, consumer, 'mui');
+    expect(readFileSync(join(consumer, 'installation.tsx'))).toEqual(
+      readFileSync(join(root, 'docs/examples/installation-mui.tsx')),
+    );
+  });
+
   it('rejects a build without any stylesheet artifact', () => {
     execute.mockImplementation(() => {
       mkdirSync(join(consumer, 'dist/assets'), { recursive: true });

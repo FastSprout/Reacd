@@ -1,4 +1,1 @@
-import { FileUpload } from '../../../components/file-upload/index.js';
-export const FILE_UPLOAD_EXAMPLES = {
-  FileUpload: <FileUpload label="Files" value={[]} onValueChange={() => undefined} />,
-};
+export * from '../../../../test-support/adapter-examples/file-upload-examples.js';

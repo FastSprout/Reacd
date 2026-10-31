@@ -1,39 +1,12 @@
-import { useId } from 'react';
-import type { ProgressProps } from
-  '@fastsprout/reacd/adapter-runtime/components/progress/progress.js';
-import { PROGRESS_POLICY } from
-  '@fastsprout/reacd/adapter-runtime/core/element-policy.js';
-import { progressState } from
-  '@fastsprout/reacd/adapter-runtime/core/progress-state.js';
-import * as Progress from '@radix-ui/react-progress';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/progress/progress.adapter.js';
+import { SharedProgress } from '../../shared/progress/progress.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnProgress({
-  label,
-  value,
-  max = PROGRESS_POLICY.max,
-  description,
-  showValue = PROGRESS_POLICY.showValue,
-}: ProgressProps) {
-  const id = useId();
-  const state = progressState(value, max);
-  return (
-    <div className="reacd-node reacd-field">
-      <span id={id}>{label}</span>
-      <Progress.Root
-        value={value ?? null}
-        max={max}
-        className="reacd-progress-track"
-        aria-labelledby={id}
-        aria-describedby={description === undefined ? undefined : `${id}-help`}
-        data-indeterminate={state.indeterminate}
-      >
-        <Progress.Indicator
-          className="reacd-progress-fill"
-          style={{ inlineSize: `${state.percent}%` }}
-        />
-      </Progress.Root>
-      {description === undefined ? null : <span id={`${id}-help`}>{description}</span>}
-      {showValue ? <span>{state.text}</span> : null}
-    </div>
-  );
-}
+export type ShadcnProgressProps = ComponentProps<typeof SharedProgress>;
+export const ShadcnProgress: ComponentType<ShadcnProgressProps> = bindPrimitives(
+  SharedProgress,
+  shadcnPrimitives,
+  'ShadcnProgress',
+);

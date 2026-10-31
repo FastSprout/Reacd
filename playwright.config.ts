@@ -15,6 +15,18 @@ export default defineConfig({
   workers: BROWSER_EXECUTION_POLICY.maxWorkers,
   retries: 0,
   reporter: [['list'], ['html', { open: 'never' }], ...GITHUB_REPORTERS],
+  projects: ['mui', 'shadcn'].map((name) => ({
+    name,
+    use: {
+      storageState: {
+        cookies: [],
+        origins: [4174, 4175, 4176, 4177, 4178].map((port) => ({
+          origin: `http://127.0.0.1:${port}`,
+          localStorage: [{ name: 'reacd-conformance-adapter', value: name }],
+        })),
+      },
+    },
+  })),
   use: {
     baseURL: 'http://127.0.0.1:4174',
     browserName: 'chromium',

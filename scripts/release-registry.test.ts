@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
   stat: vi.fn<() => { isFile: () => boolean }>(),
   metadata: vi.fn(),
   adapterMetadata: vi.fn(),
+  materialMetadata: vi.fn(),
   verify: vi.fn<
     () => Promise<{
       name: string;
@@ -18,6 +19,7 @@ vi.mock('node:fs', () => ({ readFileSync: mocks.read, lstatSync: mocks.stat }));
 vi.mock('../tooling/release/metadata.js', () => ({
   parsePublicationManifest: mocks.metadata,
   parseShadcnPublicationManifest: mocks.adapterMetadata,
+  parseMuiPublicationManifest: mocks.materialMetadata,
 }));
 vi.mock('../tooling/release/registry.js', () => ({
   verifyRegistryPublication: mocks.verify,
@@ -129,5 +131,37 @@ it('rejects invalid source metadata before registry access', async () => {
   });
   await expect(import('./release-registry.js')).rejects.toThrow('Invalid metadata');
   expect(mocks.verify).not.toHaveBeenCalled();
+  expect(mocks.log).not.toHaveBeenCalled();
+});
+
+it('confirms the third public archive for a Material release', async () => {
+  const version = '0.3.0';
+  const material = { name: '@fastsprout/reacd-mui', version };
+  mocks.metadata.mockReturnValue({ ...metadata, version });
+  mocks.adapterMetadata.mockReturnValue({ ...adapterMetadata, version });
+  mocks.materialMetadata.mockReturnValue(material);
+  mocks.verify
+    .mockReset()
+    .mockResolvedValueOnce({ ...metadata, version, integrity: 'sha512-verified' })
+    .mockResolvedValueOnce({
+      ...adapterMetadata,
+      version,
+      integrity: 'sha512-verified',
+    })
+    .mockResolvedValueOnce({ ...material, integrity: 'sha512-verified' });
+  await import('./release-registry.js');
+  expect(mocks.verify).toHaveBeenNthCalledWith(3, material, archive);
+  expect(mocks.stat).toHaveBeenNthCalledWith(
+    3,
+    new URL('../.cache/release/mui.tgz', import.meta.url),
+  );
+});
+
+it('rejects an invalid adapter archive after the engine verifies', async () => {
+  mocks.stat
+    .mockReturnValueOnce({ isFile: () => true })
+    .mockReturnValueOnce({ isFile: () => false });
+  await expect(import('./release-registry.js')).rejects.toThrow('regular file');
+  expect(mocks.verify).toHaveBeenCalledExactlyOnceWith(metadata, archive);
   expect(mocks.log).not.toHaveBeenCalled();
 });

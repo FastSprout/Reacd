@@ -96,8 +96,18 @@ for (const profile of PROFILES) {
     });
     await expect(button).toHaveCSS('color', expectedColor);
     const measured = await button.evaluate((element) => {
-      const style = getComputedStyle(element);
-      return { foreground: style.color, background: style.backgroundColor };
+      const foreground = getComputedStyle(element).color;
+      for (
+        let surface: Element | null = element;
+        surface !== null;
+        surface = surface.parentElement
+      ) {
+        const background = getComputedStyle(surface).backgroundColor;
+        if (background !== 'rgba(0, 0, 0, 0)') {
+          return { foreground, background };
+        }
+      }
+      throw new Error('A visible control needs an opaque background surface.');
     });
     expect(
       contrastRatio(hexColor(measured.foreground), hexColor(measured.background)),

@@ -1,50 +1,12 @@
-import { useId } from 'react';
-import type { BannerProps } from
-  '@fastsprout/reacd/adapter-runtime/components/banner/banner.js';
-import { BANNER_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/banner-policy.js';
-import { Alert, AlertTitle, AlertDescription } from '../vendor/ui/alert.js';
-import { Button } from '../vendor/ui/button.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/banner/banner.adapter.js';
+import { SharedBanner } from '../../shared/banner/banner.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnBanner({
-  title,
-  description,
-  open,
-  onOpenChange,
-  dismissible = BANNER_DEFAULTS.dismissible,
-  closeLabel = BANNER_DEFAULTS.closeLabel,
-  intent = BANNER_DEFAULTS.intent,
-  actions,
-}: BannerProps) {
-  const identity = useId();
-  if (!open) return null;
-  const urgent = intent === 'warning' || intent === 'error';
-  return (
-    <Alert
-      className="reacd-node reacd-banner"
-      data-slot="banner"
-      data-intent={intent}
-      variant={intent === 'error' ? 'destructive' : 'default'}
-      role={urgent ? 'alert' : 'status'}
-      aria-labelledby={identity}
-    >
-      <div className="reacd-banner-content">
-        <AlertTitle id={identity}>{title}</AlertTitle>
-        {description !== undefined && (
-          <AlertDescription>{description}</AlertDescription>
-        )}
-      </div>
-      {actions !== undefined && <div className="reacd-banner-actions">{actions}</div>}
-      {dismissible && (
-        <Button
-          className="reacd-button reacd-banner-close"
-          variant="outline"
-          type="button"
-          onClick={() => onOpenChange(false)}
-        >
-          {closeLabel}
-        </Button>
-      )}
-    </Alert>
-  );
-}
+export type ShadcnBannerProps = ComponentProps<typeof SharedBanner>;
+export const ShadcnBanner: ComponentType<ShadcnBannerProps> = bindPrimitives(
+  SharedBanner,
+  shadcnPrimitives,
+  'ShadcnBanner',
+);

@@ -1,13 +1,12 @@
-import { Children } from 'react';
-import type { PageColumnsProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-columns/page-columns.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-columns/page-columns.adapter.js';
+import { SharedPageColumns } from '../../shared/page-columns/page-columns.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageColumns({ children }: PageColumnsProps) {
-  return (
-    <div className="reacd-node reacd-page-columns">
-      {Children.map(Children.toArray(children), (child) => (
-        <div className="reacd-page-column-item">{child}</div>
-      ))}
-    </div>
-  );
-}
+export type ShadcnPageColumnsProps = ComponentProps<typeof SharedPageColumns>;
+export const ShadcnPageColumns: ComponentType<ShadcnPageColumnsProps> = bindPrimitives(
+  SharedPageColumns,
+  shadcnPrimitives,
+  'ShadcnPageColumns',
+);

@@ -1,13 +1,10 @@
-import type { ColorModeAvatarProps } from
-  '@fastsprout/reacd/adapter-runtime/components/color-mode-avatar/index.js';
-import { ShadcnAvatar } from '../avatar/avatar.adapter.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/color-mode-avatar/color-mode-avatar.adapter.js';
+import { SharedColorModeAvatar } from
+  '../../shared/color-mode-avatar/color-mode-avatar.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnColorModeAvatar({
-  mode,
-  light,
-  dark,
-  ...properties
-}: ColorModeAvatarProps) {
-  const source = mode === 'light' ? light : dark;
-  return <ShadcnAvatar key={source} {...properties} src={source} />;
-}
+export type ShadcnColorModeAvatarProps = ComponentProps<typeof SharedColorModeAvatar>;
+export const ShadcnColorModeAvatar: ComponentType<ShadcnColorModeAvatarProps> =
+  bindPrimitives(SharedColorModeAvatar, shadcnPrimitives, 'ShadcnColorModeAvatar');

@@ -1,9 +1,12 @@
-import type { ReactNode } from 'react';
-import type { PageAnchorsProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-anchors/page-anchors.props.js';
-import { PageLinksSurface } from
-  '@fastsprout/reacd/adapter-runtime/renderer/page-links/page-links.renderer.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-anchors/page-anchors.adapter.js';
+import { SharedPageAnchors } from '../../shared/page-anchors/page-anchors.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageAnchors(props: PageAnchorsProps): ReactNode {
-  return <PageLinksSurface {...props} kind="anchors" />;
-}
+export type ShadcnPageAnchorsProps = ComponentProps<typeof SharedPageAnchors>;
+export const ShadcnPageAnchors: ComponentType<ShadcnPageAnchorsProps> = bindPrimitives(
+  SharedPageAnchors,
+  shadcnPrimitives,
+  'ShadcnPageAnchors',
+);

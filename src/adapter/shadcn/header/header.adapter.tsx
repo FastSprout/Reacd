@@ -1,38 +1,12 @@
-import type { HeaderProps } from
-  '@fastsprout/reacd/adapter-runtime/components/header/header.js';
-import { ShadcnHeaderMenu } from './header-menu.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/header/header.adapter.js';
+import { SharedHeader } from '../../shared/header/header.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnHeader({
-  title,
-  href,
-  children,
-  start,
-  end,
-  top,
-  bottom,
-  menu,
-}: HeaderProps) {
-  return (
-    <header className="reacd-node reacd-header">
-      {top !== undefined && <div className="reacd-shell-band">{top}</div>}
-      <div className="reacd-container reacd-shell-row">
-        <div className="reacd-shell-start">
-          {href === undefined ? (
-            <span className="reacd-shell-title">{title}</span>
-          ) : (
-            <a className="reacd-shell-title" href={href}>
-              {title}
-            </a>
-          )}
-          {start}
-        </div>
-        <div className="reacd-shell-center">{children}</div>
-        <div className="reacd-shell-end">
-          {end}
-          {menu !== undefined && <ShadcnHeaderMenu title={title} menu={menu} />}
-        </div>
-      </div>
-      {bottom !== undefined && <div className="reacd-shell-band">{bottom}</div>}
-    </header>
-  );
-}
+export type ShadcnHeaderProps = ComponentProps<typeof SharedHeader>;
+export const ShadcnHeader: ComponentType<ShadcnHeaderProps> = bindPrimitives(
+  SharedHeader,
+  shadcnPrimitives,
+  'ShadcnHeader',
+);

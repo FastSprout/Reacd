@@ -4,11 +4,14 @@ import { fileURLToPath } from 'node:url';
 import {
   parsePublicationManifest,
   parseShadcnPublicationManifest,
+  parseMuiPublicationManifest,
 } from '../tooling/release/metadata.js';
 import type { PackageMetadata } from '../tooling/release/metadata.js';
 import {
   PUBLICATION_POLICY,
   SHADCN_PUBLICATION_POLICY,
+  MUI_PUBLICATION_POLICY,
+  requiresMaterialPackage,
 } from '../tooling/release/policy.js';
 import { publishCheckedPackages } from '../tooling/release/publish.js';
 import {
@@ -44,7 +47,18 @@ const adapter = checkedPackage(
   SHADCN_PUBLICATION_POLICY.output,
   parseShadcnPublicationManifest,
 );
-await publishCheckedPackages([engine, adapter], {
+const packages = requiresMaterialPackage(engine.metadata.version)
+  ? ([
+      engine,
+      adapter,
+      checkedPackage(
+        'packages/mui/package.json',
+        MUI_PUBLICATION_POLICY.output,
+        parseMuiPublicationManifest,
+      ),
+    ] as const)
+  : ([engine, adapter] as const);
+await publishCheckedPackages(packages, {
   lookup: lookupRegistryPublication,
   verify: verifyRegistryPublication,
   upload(archivePath) {
@@ -53,4 +67,4 @@ await publishCheckedPackages([engine, adapter], {
     });
   },
 });
-console.log('Both checked packages are publicly verified.');
+console.log('All checked packages are publicly verified.');

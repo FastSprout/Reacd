@@ -1,6 +1,1 @@
-export function sdkAttribute(
-  entity: { readonly attrs: Readonly<Record<string, unknown>> },
-  key: string,
-): unknown {
-  return entity.attrs[key];
-}
+export * from '../../shared/editor-conversion/attribute.js';

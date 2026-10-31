@@ -1,4 +1,4 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
+import { browserAdapter } from '../../test-support/browser/adapter.js';
 import { atom, useAtom } from 'jotai';
 import {
   Button,
@@ -48,7 +48,7 @@ function ContactForm() {
 
 export function App() {
   return (
-    <ReacdProvider adapter={shadcnAdapter}>
+    <ReacdProvider adapter={browserAdapter}>
       <ContactForm />
     </ReacdProvider>
   );

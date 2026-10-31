@@ -1,0 +1,13 @@
+import { Children } from 'react';
+import type { PageColumnsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-columns/page-columns.js';
+
+export function SharedPageColumns({ children }: PageColumnsProps) {
+  return (
+    <div className="reacd-node reacd-page-columns">
+      {Children.map(Children.toArray(children), (child) => (
+        <div className="reacd-page-column-item">{child}</div>
+      ))}
+    </div>
+  );
+}

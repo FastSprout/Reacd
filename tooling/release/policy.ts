@@ -1,4 +1,4 @@
-import { valid } from 'semver';
+import { gte, valid } from 'semver';
 
 export const PUBLICATION_POLICY = {
   name: '@fastsprout/reacd',
@@ -30,8 +30,8 @@ export const PUBLICATION_POLICY = {
   homepage: 'https://reacd.dev/',
   issues: 'https://github.com/FastSprout/Reacd/issues',
   registry: 'https://registry.npmjs.org/',
-  node: '>=26.0.0',
-  minimumNodeVersion: '26.0.0',
+  node: '>=22.12.0',
+  minimumNodeVersion: '22.12.0',
   minimumNpmVersion: '11.5.1',
   main: 'refs/remotes/origin/main',
   peers: { react: '19.3.1', 'react-dom': '19.3.1', jotai: '3.0.1' },
@@ -49,8 +49,24 @@ export const SHADCN_PUBLICATION_POLICY = {
   corePeer: PUBLICATION_POLICY.name,
 } as const;
 
+export const MUI_PUBLICATION_POLICY = {
+  ...SHADCN_PUBLICATION_POLICY,
+  name: '@fastsprout/reacd-mui',
+  archiveBasename: 'fastsprout-reacd-mui',
+  output: '.cache/release/mui.tgz',
+  packagePath: 'packages/mui',
+  files: ['dist', 'README.md', 'LICENSE'],
+  firstVersion: '0.3.0',
+} as const;
+
 export type PublicationPolicy =
-  typeof PUBLICATION_POLICY | typeof SHADCN_PUBLICATION_POLICY;
+  | typeof PUBLICATION_POLICY
+  | typeof SHADCN_PUBLICATION_POLICY
+  | typeof MUI_PUBLICATION_POLICY;
+
+export function requiresMaterialPackage(version: string): boolean {
+  return gte(version, MUI_PUBLICATION_POLICY.firstVersion + '-0');
+}
 
 export function isReleaseVersion(input: unknown): input is string {
   return (

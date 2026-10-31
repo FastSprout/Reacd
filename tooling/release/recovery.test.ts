@@ -5,7 +5,7 @@ import type { ReleaseGitHub } from './github-client.js';
 const sha = 'a'.repeat(40);
 const workflowSha = 'b'.repeat(40);
 const context = {
-  tag: 'v0.2.0',
+  tag: 'v0.3.0',
   workflowSha,
   event: 'workflow_dispatch',
   ref: 'refs/heads/main',
@@ -21,7 +21,7 @@ function fixture(annotated = true) {
     if (path.startsWith('git/tags/')) return { object: { type: 'commit', sha } };
     if (path.startsWith('compare/')) return { status: 'ahead' };
     if (path.startsWith('releases?')) {
-      return [{ id: 1, tag_name: 'v0.2.0', draft: false }];
+      return [{ id: 1, tag_name: 'v0.3.0', draft: false }];
     }
     if (path.startsWith('actions/runs?')) {
       const head = path.includes(workflowSha) ? workflowSha : sha;
@@ -51,16 +51,16 @@ describe('main-only recovery of an already checked release', () => {
     const io = fixture(annotated);
     expect(resolveRecoveryRelease(context, io)).toEqual({
       sha,
-      tag: 'v0.2.0',
-      version: '0.2.0',
+      tag: 'v0.3.0',
+      version: '0.3.0',
       id: 1,
     });
     expect(io.get).toHaveBeenCalledWith(expect.stringContaining(workflowSha));
     expect(io.patch).toHaveBeenCalledExactlyOnceWith('releases/1', { draft: true });
   });
   it.each([
-    { tag: 'v0.2.0; injected' },
-    { tag: 'v00.2.0' },
+    { tag: 'v0.3.0; injected' },
+    { tag: 'v00.3.0' },
     { actions: 'false' },
     { repository: 'other/repo' },
     { runner: 'self-hosted' },
@@ -174,5 +174,14 @@ it('ignores unrelated, unfinished and unsuccessful check records', () => {
     return original?.(path);
   });
   expect(() => resolveRecoveryRelease(context, io)).toThrow('complete Check');
+  expect(io.patch).not.toHaveBeenCalled();
+});
+
+it('refuses historical runtime policy before querying or hiding a release', () => {
+  const io = fixture();
+  expect(() => resolveRecoveryRelease({ ...context, tag: 'v0.2.0' }, io)).toThrow(
+    'historical',
+  );
+  expect(io.get).not.toHaveBeenCalled();
   expect(io.patch).not.toHaveBeenCalled();
 });

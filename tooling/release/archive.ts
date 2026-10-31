@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { PUBLICATION_POLICY, SHADCN_PUBLICATION_POLICY } from './policy.js';
+import {
+  PUBLICATION_POLICY,
+  SHADCN_PUBLICATION_POLICY,
+  MUI_PUBLICATION_POLICY,
+} from './policy.js';
 import type { PublicationPolicy } from './policy.js';
 
 export const RELEASE_ARCHIVE_POLICY = {
@@ -30,13 +34,26 @@ export const SHADCN_ARCHIVE_POLICY = {
     'README.md',
     'LICENSE',
     'THIRD_PARTY_NOTICES.md',
-    'dist/shadcn.adapter.js',
-    'dist/shadcn.adapter.d.ts',
+    'dist/shadcn/shadcn.adapter.js',
+    'dist/shadcn/shadcn.adapter.d.ts',
     'dist/styles.js',
     'dist/styles-contract.d.ts',
     'dist/styles.css',
   ],
   output: SHADCN_PUBLICATION_POLICY.output,
+} as const;
+export const MUI_ARCHIVE_POLICY = {
+  required: [
+    'package.json',
+    'README.md',
+    'LICENSE',
+    'dist/mui/mui.adapter.js',
+    'dist/mui/mui.adapter.d.ts',
+    'dist/styles.js',
+    'dist/styles-contract.d.ts',
+    'dist/styles.css',
+  ],
+  output: MUI_PUBLICATION_POLICY.output,
 } as const;
 const distPath = new RegExp(
   '^dist/(?:[A-Za-z0-9_-]+/)*[A-Za-z0-9_-]+' +
@@ -61,10 +78,17 @@ export function validateReleaseArchive(
   },
 ) {
   const core = meta.name === PUBLICATION_POLICY.name;
-  const policy = core ? PUBLICATION_POLICY : SHADCN_PUBLICATION_POLICY;
+  const material = meta.name === MUI_PUBLICATION_POLICY.name;
+  const policy = core
+    ? PUBLICATION_POLICY
+    : material
+      ? MUI_PUBLICATION_POLICY
+      : SHADCN_PUBLICATION_POLICY;
   const required = core
     ? RELEASE_ARCHIVE_POLICY.required
-    : SHADCN_ARCHIVE_POLICY.required;
+    : material
+      ? MUI_ARCHIVE_POLICY.required
+      : SHADCN_ARCHIVE_POLICY.required;
   const roots = new Set<string>(required);
   const [archive] = packResult.parse(input);
   if (
@@ -80,7 +104,9 @@ export function validateReleaseArchive(
   for (const path of paths) {
     if (
       (core && (path.startsWith('dist/adapter/') || path.endsWith('.css'))) ||
-      (!core && /^dist\/(?:core|schema|components|renderer|state)\//.test(path))
+      (!core && /^dist\/(?:core|schema|components|renderer|state)\//.test(path)) ||
+      (material && path.startsWith('dist/shadcn/')) ||
+      (!core && !material && path.startsWith('dist/mui/'))
     ) {
       throw new Error(`Cross-package implementation in archive: ${path}`);
     }

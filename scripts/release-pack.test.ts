@@ -1,15 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fileURLToPath } from 'node:url';
 
-const mocks = vi.hoisted(() => ({ pack: vi.fn(), adapter: vi.fn(), log: vi.fn() }));
+const mocks = vi.hoisted(() => ({
+  pack: vi.fn(),
+  adapter: vi.fn(),
+  material: vi.fn(),
+  log: vi.fn(),
+}));
 vi.mock('../tooling/release/pack.js', () => ({
   packReleaseArchive: mocks.pack,
   packShadcnArchive: mocks.adapter,
+  packMuiArchive: mocks.material,
 }));
 beforeEach(() => {
   vi.resetModules();
   mocks.pack.mockReset().mockReturnValue('/repo/.cache/release/package.tgz');
   mocks.adapter.mockReset().mockReturnValue('/repo/.cache/release/shadcn.tgz');
+  mocks.material.mockReset().mockReturnValue('/repo/.cache/release/mui.tgz');
   mocks.log.mockReset();
   vi.spyOn(console, 'log').mockImplementation(mocks.log);
 });

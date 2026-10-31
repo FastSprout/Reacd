@@ -16,15 +16,22 @@ import {
   parseDistributionManifest,
   createShadcnDistributionManifest,
   parseShadcnDistributionManifest,
+  createMuiDistributionManifest,
+  parseMuiDistributionManifest,
 } from './distribution.js';
 import { stagePublication } from './workspace.js';
-import { PUBLICATION_POLICY, SHADCN_PUBLICATION_POLICY } from './policy.js';
+import {
+  PUBLICATION_POLICY,
+  SHADCN_PUBLICATION_POLICY,
+  MUI_PUBLICATION_POLICY,
+} from './policy.js';
 import type { PublicationPolicy } from './policy.js';
 import { parsePublicationManifest } from './metadata.js';
 
 function packArchive(root: string, profile: PublicationPolicy): string {
   const sourceRoot = resolve(root, profile.packagePath);
   const core = profile.name === PUBLICATION_POLICY.name;
+  const material = profile.name === MUI_PUBLICATION_POLICY.name;
   const output = resolve(root, profile.output);
   const directory = dirname(output);
   mkdirSync(directory, { recursive: true });
@@ -35,7 +42,9 @@ function packArchive(root: string, profile: PublicationPolicy): string {
     );
     const metadata = core
       ? createDistributionManifest(source)
-      : createShadcnDistributionManifest(source);
+      : material
+        ? createMuiDistributionManifest(source)
+        : createShadcnDistributionManifest(source);
     if (!core) {
       const engine: unknown = JSON.parse(
         readFileSync(join(root, 'package.json'), 'utf8'),
@@ -89,7 +98,9 @@ function packArchive(root: string, profile: PublicationPolicy): string {
         !isDeepStrictEqual(
           core
             ? parseDistributionManifest(manifest)
-            : parseShadcnDistributionManifest(manifest),
+            : material
+              ? parseMuiDistributionManifest(manifest)
+              : parseShadcnDistributionManifest(manifest),
           metadata,
         )
       ) {
@@ -119,4 +130,8 @@ export function packReleaseArchive(root: string): string {
 }
 export function packShadcnArchive(root: string): string {
   return packArchive(root, SHADCN_PUBLICATION_POLICY);
+}
+
+export function packMuiArchive(root: string): string {
+  return packArchive(root, MUI_PUBLICATION_POLICY);
 }

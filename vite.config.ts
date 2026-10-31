@@ -36,6 +36,15 @@ export default defineConfig({
       '@fastsprout/reacd/adapter-runtime/renderer': fileURLToPath(
         new NodeURL('./src/renderer/', import.meta.url),
       ),
+      '@fastsprout/reacd-mui/styles.css': fileURLToPath(
+        new NodeURL('./src/adapter/mui/styles.css', import.meta.url),
+      ),
+      '@fastsprout/reacd-mui/styles': fileURLToPath(
+        new NodeURL('./src/adapter/mui/styles.ts', import.meta.url),
+      ),
+      '@fastsprout/reacd-mui': fileURLToPath(
+        new NodeURL('./src/adapter/mui/mui.adapter.ts', import.meta.url),
+      ),
       '@fastsprout/reacd-shadcn/styles.css': fileURLToPath(
         new NodeURL('./src/adapter/shadcn/styles.css', import.meta.url),
       ),

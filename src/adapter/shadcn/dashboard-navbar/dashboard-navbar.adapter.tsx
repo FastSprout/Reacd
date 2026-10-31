@@ -1,39 +1,10 @@
-import { useContext } from 'react';
-import type { DashboardNavbarProps } from
-  '@fastsprout/reacd/adapter-runtime/components/dashboard-navbar/index.js';
-import { DASHBOARD_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
-import {
-  DashboardContext,
-  DashboardRegionContext,
-  DashboardMainContext,
-} from '@fastsprout/reacd/adapter-runtime/renderer/dashboard/dashboard-context.js';
-import { ShadcnDashboardSidebarToggle } from
-  '../dashboard-sidebar-toggle/dashboard-sidebar-toggle.adapter.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/dashboard-navbar/dashboard-navbar.adapter.js';
+import { SharedDashboardNavbar } from
+  '../../shared/dashboard-navbar/dashboard-navbar.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnDashboardNavbar({
-  title,
-  children,
-  leading,
-  trailing,
-  start,
-  end,
-}: DashboardNavbarProps) {
-  const group = useContext(DashboardContext);
-  const position = useContext(DashboardRegionContext);
-  const primary = useContext(DashboardMainContext);
-  const Heading = primary ? 'h1' : 'h2';
-  return (
-    <header className="reacd-node reacd-dashboard-navbar">
-      <div className="reacd-dashboard-actions">
-        {group !== null && <ShadcnDashboardSidebarToggle />}
-        {start}
-        {leading}
-        <Heading>{title ?? position?.region.label ?? DASHBOARD_DEFAULTS.title}</Heading>
-        {trailing}
-      </div>
-      {children}
-      <div className="reacd-dashboard-actions">{end}</div>
-    </header>
-  );
-}
+export type ShadcnDashboardNavbarProps = ComponentProps<typeof SharedDashboardNavbar>;
+export const ShadcnDashboardNavbar: ComponentType<ShadcnDashboardNavbarProps> =
+  bindPrimitives(SharedDashboardNavbar, shadcnPrimitives, 'ShadcnDashboardNavbar');

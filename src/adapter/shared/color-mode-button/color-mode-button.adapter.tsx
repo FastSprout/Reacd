@@ -1,0 +1,37 @@
+import { useId } from 'react';
+import type { ColorModeButtonProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-button/index.js';
+import { oppositeColorMode } from
+  '@fastsprout/reacd/adapter-runtime/core/color-mode.js';
+import { Button } from '../primitives/button.js';
+
+export function SharedColorModeButton({
+  label,
+  value: _value,
+  resolvedMode,
+  onValueChange,
+  disabled,
+  readOnly,
+  description,
+}: ColorModeButtonProps) {
+  const id = useId();
+  return (
+    <div className="reacd-node reacd-field">
+      <Button
+        type="button"
+        variant="outline"
+        disabled={disabled}
+        aria-pressed={resolvedMode === 'dark'}
+        aria-disabled={readOnly || undefined}
+        aria-describedby={description === undefined ? undefined : id}
+        className="reacd-color-mode-button"
+        onClick={() => {
+          if (!readOnly) onValueChange(oppositeColorMode(resolvedMode));
+        }}
+      >
+        {label}
+      </Button>
+      {description === undefined ? null : <p id={id}>{description}</p>}
+    </div>
+  );
+}

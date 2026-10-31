@@ -13,7 +13,7 @@ function manifest() {
     homepage: 'https://reacd.dev/',
     bugs: { url: 'https://github.com/FastSprout/Reacd/issues' },
     publishConfig: { access: 'public', registry: 'https://registry.npmjs.org/' },
-    engines: { node: '>=26.0.0' },
+    engines: { node: '>=22.12.0' },
     peerDependencies: { react: '19.3.1', 'react-dom': '19.3.1', jotai: '3.0.1' },
     devDependencies: { react: '19.3.1', 'react-dom': '19.3.1', jotai: '3.0.1' },
     dependencies: { zod: '4.6.7' },
@@ -28,8 +28,9 @@ describe('publication metadata', () => {
       peerDependencies: manifest().peerDependencies,
     });
     for (const version of ['1.0.0-rc.1', '1.0.0+build.42']) {
-      expect(parsePublicationManifest({ ...manifest(), version }).version)
-        .toBe(version);
+      expect(parsePublicationManifest({ ...manifest(), version }).version).toBe(
+        version,
+      );
     }
   });
 
@@ -57,17 +58,20 @@ describe('publication metadata', () => {
     { devDependencies: { ...manifest().devDependencies, jotai: '3.0.0' } },
     { dependencies: { react: '19.3.1' } },
   ])('rejects altered publication fields: %j', (change) => {
-    expect(() => parsePublicationManifest({ ...manifest(), ...change }))
-      .toThrow('Publication manifest');
+    expect(() => parsePublicationManifest({ ...manifest(), ...change })).toThrow(
+      'Publication manifest',
+    );
   });
 
   it('accepts absent runtime dependencies but rejects malformed maps', () => {
     const input = manifest();
     const withoutDependencies = { ...input };
     Reflect.deleteProperty(withoutDependencies, 'dependencies');
-    expect(parsePublicationManifest(withoutDependencies).name)
-      .toBe('@fastsprout/reacd');
-    expect(() => parsePublicationManifest({ ...input, dependencies: [] }))
-      .toThrow('Publication manifest');
+    expect(parsePublicationManifest(withoutDependencies).name).toBe(
+      '@fastsprout/reacd',
+    );
+    expect(() => parsePublicationManifest({ ...input, dependencies: [] })).toThrow(
+      'Publication manifest',
+    );
   });
 });

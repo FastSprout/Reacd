@@ -1,41 +1,10 @@
-import type { ChatReasoningProps } from
-  '@fastsprout/reacd/adapter-runtime/components/chat-reasoning/index.js';
-import { CHAT_FEEDBACK_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/chat-feedback-policy.js';
-import { ChatDisclosure } from '../chat-disclosure/chat-disclosure.js';
-import { useReasoningDisclosure } from './use-reasoning-disclosure.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/chat-reasoning/chat-reasoning.adapter.js';
+import { SharedChatReasoning } from
+  '../../shared/chat-reasoning/chat-reasoning.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnChatReasoning({
-  text,
-  open,
-  onOpenChange,
-  label = CHAT_FEEDBACK_DEFAULTS.reasoningLabel,
-  streaming = CHAT_FEEDBACK_DEFAULTS.streaming,
-  autoOpen = CHAT_FEEDBACK_DEFAULTS.autoOpen,
-  autoClose = CHAT_FEEDBACK_DEFAULTS.autoClose,
-  disabled = CHAT_FEEDBACK_DEFAULTS.disabled,
-}: ChatReasoningProps) {
-  const change = useReasoningDisclosure({
-    open,
-    onOpenChange,
-    streaming,
-    autoOpen,
-    autoClose,
-    disabled,
-  });
-  return (
-    <div className="reacd-node reacd-chat-reasoning">
-      <ChatDisclosure
-        label={label}
-        open={open}
-        onOpenChange={change}
-        disabled={disabled}
-        active={streaming}
-      >
-        <p className="reacd-chat-feedback-text">
-          {text.trim() === '' ? CHAT_FEEDBACK_DEFAULTS.emptyReasoning : text}
-        </p>
-      </ChatDisclosure>
-    </div>
-  );
-}
+export type ShadcnChatReasoningProps = ComponentProps<typeof SharedChatReasoning>;
+export const ShadcnChatReasoning: ComponentType<ShadcnChatReasoningProps> =
+  bindPrimitives(SharedChatReasoning, shadcnPrimitives, 'ShadcnChatReasoning');

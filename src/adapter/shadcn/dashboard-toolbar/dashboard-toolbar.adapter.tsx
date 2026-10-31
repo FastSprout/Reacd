@@ -1,17 +1,10 @@
-import type { DashboardToolbarProps } from
-  '@fastsprout/reacd/adapter-runtime/components/dashboard-toolbar/index.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/dashboard-toolbar/dashboard-toolbar.adapter.js';
+import { SharedDashboardToolbar } from
+  '../../shared/dashboard-toolbar/dashboard-toolbar.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnDashboardToolbar({
-  label,
-  start,
-  children,
-  end,
-}: DashboardToolbarProps) {
-  return (
-    <div role="group" aria-label={label} className="reacd-node reacd-dashboard-toolbar">
-      <div className="reacd-dashboard-actions">{start}</div>
-      {children}
-      <div className="reacd-dashboard-actions">{end}</div>
-    </div>
-  );
-}
+export type ShadcnDashboardToolbarProps = ComponentProps<typeof SharedDashboardToolbar>;
+export const ShadcnDashboardToolbar: ComponentType<ShadcnDashboardToolbarProps> =
+  bindPrimitives(SharedDashboardToolbar, shadcnPrimitives, 'ShadcnDashboardToolbar');

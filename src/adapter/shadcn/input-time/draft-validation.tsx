@@ -1,3 +1,1 @@
-export {
-  TemporalDraftValidity as TimeDraftValidation,
-} from '../temporal/draft-validity.js';
+export * from '../../shared/input-time/draft-validation.js';

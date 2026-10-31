@@ -1,4 +1,4 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
+import { browserAdapter } from './adapter.js';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createStore } from 'jotai';
@@ -11,7 +11,7 @@ function Root() {
   const [compact, setCompact] = useState(false);
   return (
     <ReacdProvider
-      adapter={shadcnAdapter}
+      adapter={browserAdapter}
       store={store}
       templateId={compact ? 'erp-compact' : 'saas-modern-light'}
     >

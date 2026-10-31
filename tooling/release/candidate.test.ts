@@ -12,14 +12,20 @@ afterEach(() => {
   for (const path of directories.splice(0))
     rmSync(path, { recursive: true, force: true });
 });
-function fixture() {
+function fixture(version = identity.version) {
   const path = mkdtempSync(join(tmpdir(), 'reacd-candidate-'));
   directories.push(path);
   const root = pathToFileURL(path + '/');
   const source = new URL('source/', root);
   mkdirSync(new URL('packages/shadcn/', source), { recursive: true });
   mkdirSync(new URL('.cache/release/', source), { recursive: true });
-  for (const manifest of ['package.json', 'packages/shadcn/package.json']) {
+  const manifests = ['package.json', 'packages/shadcn/package.json'];
+  if (version === '0.3.0') {
+    manifests.push('packages/mui/package.json');
+    mkdirSync(new URL('packages/mui/', source), { recursive: true });
+    writeFileSync(new URL('.cache/release/mui.tgz', source), 'material bytes');
+  }
+  for (const manifest of manifests) {
     const input: unknown = JSON.parse(readFileSync(manifest, 'utf8'));
     const record = z.record(z.string(), z.unknown()).parse(input);
     const peers = z.record(z.string(), z.string()).parse(record['peerDependencies']);
@@ -27,10 +33,10 @@ function fixture() {
       new URL(manifest, source),
       JSON.stringify({
         ...record,
-        version: identity.version,
+        version,
         peerDependencies: {
           ...peers,
-          ...(manifest.startsWith('packages/') ? { '@fastsprout/reacd': '0.2.0' } : {}),
+          ...(manifest.startsWith('packages/') ? { '@fastsprout/reacd': version } : {}),
         },
       }),
     );
@@ -82,4 +88,17 @@ it('refuses nonregular archive inputs', () => {
   expect(() => prepareReleaseCandidate(f.root, f.source, identity)).toThrow(
     'regular file',
   );
+});
+
+it('stages all three archives for Material releases', () => {
+  const f = fixture('0.3.0');
+  const release = { ...identity, tag: 'v0.3.0', version: '0.3.0' };
+  const packages = prepareReleaseCandidate(f.root, f.source, release);
+  expect(packages.map((p) => p.metadata.name)).toEqual([
+    '@fastsprout/reacd',
+    '@fastsprout/reacd-shadcn',
+    '@fastsprout/reacd-mui',
+  ]);
+  expect(packages[2]?.bytes.toString()).toBe('material bytes');
+  expect(readReleaseCandidate(f.root, release)).toEqual(packages);
 });

@@ -1,24 +1,10 @@
-import type { SubmitButtonProps } from
-  '@fastsprout/reacd/adapter-runtime/components/submit-button/index.js';
-import { DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
-import { Button } from '../vendor/ui/button.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/submit-button/submit-button.adapter.js';
+import { SharedSubmitButton } from
+  '../../shared/submit-button/submit-button.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-const VARIANTS = {
-  primary: 'default',
-  secondary: 'secondary',
-  danger: 'destructive',
-} as const;
-
-export function ShadcnSubmitButton({ label, intent, disabled }: SubmitButtonProps) {
-  return (
-    <Button
-      className="reacd-node reacd-button"
-      type="submit"
-      data-intent={intent ?? DEFAULTS.buttonIntent}
-      disabled={disabled}
-      variant={VARIANTS[intent ?? DEFAULTS.buttonIntent]}
-    >
-      {label}
-    </Button>
-  );
-}
+export type ShadcnSubmitButtonProps = ComponentProps<typeof SharedSubmitButton>;
+export const ShadcnSubmitButton: ComponentType<ShadcnSubmitButtonProps> =
+  bindPrimitives(SharedSubmitButton, shadcnPrimitives, 'ShadcnSubmitButton');

@@ -1,16 +1,12 @@
-import type { FooterProps } from
-  '@fastsprout/reacd/adapter-runtime/components/footer/footer.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/footer/footer.adapter.js';
+import { SharedFooter } from '../../shared/footer/footer.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnFooter({ children, start, end, top, bottom }: FooterProps) {
-  return (
-    <footer className="reacd-node reacd-footer">
-      {top !== undefined && <div className="reacd-shell-band">{top}</div>}
-      <div className="reacd-container reacd-shell-row">
-        <div className="reacd-shell-start">{start}</div>
-        <div className="reacd-shell-center">{children}</div>
-        <div className="reacd-shell-end">{end}</div>
-      </div>
-      {bottom !== undefined && <div className="reacd-shell-band">{bottom}</div>}
-    </footer>
-  );
-}
+export type ShadcnFooterProps = ComponentProps<typeof SharedFooter>;
+export const ShadcnFooter: ComponentType<ShadcnFooterProps> = bindPrimitives(
+  SharedFooter,
+  shadcnPrimitives,
+  'ShadcnFooter',
+);

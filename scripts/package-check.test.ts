@@ -28,12 +28,14 @@ const { execute, compile, browser, exercise, pack, adapterPack, headless } = vi.
       >(),
   }),
 );
+vi.mock('../tooling/package/material.js', () => ({ verifyMaterialInstall: vi.fn() }));
 vi.mock('../tooling/package/browser.js', () => ({
   exerciseInstalledBootstrap: exercise,
 }));
 vi.mock('../tooling/release/pack.js', () => ({
   packReleaseArchive: pack,
   packShadcnArchive: adapterPack,
+  packMuiArchive: vi.fn().mockReturnValue('/checked/mui.tgz'),
 }));
 vi.mock('../tooling/package/headless.js', () => ({ verifyHeadlessInstall: headless }));
 vi.mock('../tooling/package/bootstrap.js', () => ({
@@ -85,8 +87,8 @@ function external(file: string, args: readonly string[]): string {
   }
   return '';
 }
-async function temporaryPath() {
-  const result = vi.mocked(mkdtemp).mock.results[0];
+async function temporaryPath(index = 0) {
+  const result = vi.mocked(mkdtemp).mock.results[index];
   if (result?.type !== 'return') throw new Error('Temporary path was not allocated.');
   const path = await result.value;
   if (typeof path !== 'string') throw new Error('Expected a string path.');
@@ -148,10 +150,10 @@ describe('verified packed consumer runner', () => {
     expect(pack).toHaveBeenCalledExactlyOnceWith(root);
     expect(browser).toHaveBeenCalledExactlyOnceWith(
       root,
-      join(await temporaryPath(), 'clean-consumer'),
+      join(await temporaryPath(1), 'clean-consumer'),
     );
     expect(exercise).toHaveBeenCalledExactlyOnceWith(
-      join(await temporaryPath(), 'clean-consumer'),
+      join(await temporaryPath(1), 'clean-consumer'),
     );
     expect(execute).toHaveBeenCalledWith('tar', [
       '-xf',
@@ -291,6 +293,7 @@ describe('verified packed consumer runner', () => {
     vi.mocked(rm).mockRejectedValueOnce(failure);
     await expect(import('./package-check.js')).rejects.toBe(failure);
     expect(console.log).not.toHaveBeenCalled();
-    expect(existsSync(await temporaryPath())).toBe(true);
+    expect(existsSync(await temporaryPath())).toBe(false);
+    expect(existsSync(await temporaryPath(1))).toBe(true);
   });
 });

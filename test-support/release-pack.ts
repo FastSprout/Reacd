@@ -6,11 +6,13 @@ import { dirname, join } from 'node:path';
 import {
   RELEASE_ARCHIVE_POLICY,
   SHADCN_ARCHIVE_POLICY,
+  MUI_ARCHIVE_POLICY,
 } from '../tooling/release/archive.js';
 import { PUBLICATION_POLICY } from '../tooling/release/policy.js';
 import {
   createDistributionManifest,
   createShadcnDistributionManifest,
+  createMuiDistributionManifest,
 } from '../tooling/release/distribution.js';
 
 export function runFixtureCommand(
@@ -23,15 +25,22 @@ export function runFixtureCommand(
   return result.stdout;
 }
 
-export function releasePackFixture(adapter = false, version = '0.1.0') {
+export function releasePackFixture(
+  adapter: boolean | 'mui' = false,
+  version = '0.1.0',
+) {
+  const material = adapter === 'mui';
+  const packagePath = material ? 'packages/mui' : 'packages/shadcn';
   const root = mkdtempSync(join(tmpdir(), 'reacd-pack-test-'));
   const input: unknown = JSON.parse(
-    readFileSync(adapter ? 'packages/shadcn/package.json' : 'package.json', 'utf8'),
+    readFileSync(adapter ? `${packagePath}/package.json` : 'package.json', 'utf8'),
   );
-  const sourceRoot = adapter ? join(root, 'packages/shadcn') : root;
+  const sourceRoot = adapter ? join(root, packagePath) : root;
   const manifest = {
     ...(adapter
-      ? createShadcnDistributionManifest(input)
+      ? material
+        ? createMuiDistributionManifest(input)
+        : createShadcnDistributionManifest(input)
       : createDistributionManifest(input)),
     version,
     devDependencies: PUBLICATION_POLICY.peers,
@@ -50,7 +59,11 @@ export function releasePackFixture(adapter = false, version = '0.1.0') {
       }),
     );
   }
-  const required = adapter ? SHADCN_ARCHIVE_POLICY : RELEASE_ARCHIVE_POLICY;
+  const required = adapter
+    ? material
+      ? MUI_ARCHIVE_POLICY
+      : SHADCN_ARCHIVE_POLICY
+    : RELEASE_ARCHIVE_POLICY;
   const files: { path: string }[] = required.required.map((path) => ({
     path,
   }));
@@ -63,7 +76,11 @@ export function releasePackFixture(adapter = false, version = '0.1.0') {
   write('package.json', JSON.stringify(manifest));
   function pack(destination: string, workspace: string) {
     const filename = `${
-      adapter ? 'fastsprout-reacd-shadcn' : 'fastsprout-reacd'
+      adapter
+        ? material
+          ? 'fastsprout-reacd-mui'
+          : 'fastsprout-reacd-shadcn'
+        : 'fastsprout-reacd'
     }-${version}.tgz`;
     const archive = join(destination, filename);
     runFixtureCommand(

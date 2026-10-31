@@ -1,38 +1,12 @@
-import { useState } from 'react';
-import type { ContentTocProps } from
-  '@fastsprout/reacd/adapter-runtime/components/content-toc/index.js';
-import { CONTENT_OUTLINE_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/content-outline.js';
-import { TREE_POLICY } from '@fastsprout/reacd/adapter-runtime/core/tree-policy.js';
-import { OutlineBranch } from
-  '@fastsprout/reacd/adapter-runtime/renderer/content-outline/outline-branch.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/content-toc/content-toc.adapter.js';
+import { SharedContentToc } from '../../shared/content-toc/content-toc.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnContentToc({
-  label,
-  items,
-  emptyLabel = CONTENT_OUTLINE_DEFAULTS.emptyLabel,
-  ...properties
-}: ContentTocProps) {
-  const [issue, setIssue] = useState('');
-  return (
-    <nav className="reacd-node reacd-content-outline" aria-label={label}>
-      {issue !== '' && <p role="alert">{issue}</p>}
-      {items.length === 0 ? (
-        <p>{emptyLabel}</p>
-      ) : (
-        <ul>
-          {items.map((item) => (
-            <OutlineBranch
-              {...properties}
-              key={item.key}
-              item={item}
-              mode="toc"
-              level={TREE_POLICY.initialLevel}
-              report={setIssue}
-            />
-          ))}
-        </ul>
-      )}
-    </nav>
-  );
-}
+export type ShadcnContentTocProps = ComponentProps<typeof SharedContentToc>;
+export const ShadcnContentToc: ComponentType<ShadcnContentTocProps> = bindPrimitives(
+  SharedContentToc,
+  shadcnPrimitives,
+  'ShadcnContentToc',
+);

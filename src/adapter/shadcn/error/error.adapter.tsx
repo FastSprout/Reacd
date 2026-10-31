@@ -1,42 +1,12 @@
-import { useId } from 'react';
-import type { ErrorProps } from
-  '@fastsprout/reacd/adapter-runtime/components/error/error.js';
-import { APPLICATION_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/application-shell-policy.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/error/error.adapter.js';
+import { SharedError } from '../../shared/error/error.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnError({
-  statusCode,
-  title,
-  message,
-  children,
-  leading,
-  actions,
-  redirect,
-  recoveryLabel = APPLICATION_DEFAULTS.recoveryLabel,
-}: ErrorProps) {
-  const id = useId();
-  const titleId = `${id}-error-title`;
-  const messageId = `${id}-error-message`;
-  return (
-    <section
-      className="reacd-node reacd-error"
-      role="region"
-      aria-labelledby={titleId}
-      aria-describedby={message === undefined ? undefined : messageId}
-    >
-      {leading !== undefined && <div>{leading}</div>}
-      <p className="reacd-error-status">{statusCode}</p>
-      <h2 id={titleId}>{title}</h2>
-      {message !== undefined && <p id={messageId}>{message}</p>}
-      {children}
-      <div className="reacd-error-actions">
-        {actions}
-        {redirect !== undefined && (
-          <a className="reacd-node reacd-button" href={redirect}>
-            {recoveryLabel}
-          </a>
-        )}
-      </div>
-    </section>
-  );
-}
+export type ShadcnErrorProps = ComponentProps<typeof SharedError>;
+export const ShadcnError: ComponentType<ShadcnErrorProps> = bindPrimitives(
+  SharedError,
+  shadcnPrimitives,
+  'ShadcnError',
+);

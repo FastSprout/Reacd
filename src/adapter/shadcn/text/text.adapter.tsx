@@ -1,2 +1,2 @@
-export { TextSurface as ShadcnText } from
-  '@fastsprout/reacd/adapter-runtime/renderer/text/text.renderer.js';
+export * from '../../shared/text/text.adapter.js';
+export { SharedText as ShadcnText } from '../../shared/text/text.adapter.js';

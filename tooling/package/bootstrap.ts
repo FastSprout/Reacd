@@ -4,7 +4,11 @@ import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { INSTALLED_COMPILER_POLICY } from './compiler-policy.js';
 
-export function buildInstalledBootstrap(root: string, consumer: string): void {
+export function buildInstalledBootstrap(
+  root: string,
+  consumer: string,
+  adapter: 'shadcn' | 'mui' = 'shadcn',
+): void {
   const fixtures = resolve(root, 'tooling/package/fixtures');
   for (const [fixture, target] of [
     ['bootstrap.tsx.txt', 'bootstrap.tsx'],
@@ -17,7 +21,14 @@ export function buildInstalledBootstrap(root: string, consumer: string): void {
   }
   writeFileSync(
     join(consumer, 'installation.tsx'),
-    readFileSync(join(root, 'docs/examples/installation.tsx')),
+    readFileSync(
+      join(
+        root,
+        adapter === 'mui'
+          ? 'docs/examples/installation-mui.tsx'
+          : 'docs/examples/installation.tsx',
+      ),
+    ),
   );
   writeFileSync(
     join(consumer, 'tsconfig.json'),

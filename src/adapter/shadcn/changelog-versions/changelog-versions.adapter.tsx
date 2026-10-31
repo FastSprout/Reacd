@@ -1,29 +1,12 @@
-import { Children } from 'react';
-import type { ReactNode } from 'react';
-import type { ChangelogVersionsProps } from
-  '@fastsprout/reacd/adapter-runtime/components/changelog-versions/index.js';
-import { ChangelogVersion } from
-  '@fastsprout/reacd/adapter-runtime/components/changelog-version/changelog-version.js';
-import { EDITORIAL_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/editorial-policy.js';
-import { EditorialIndicatorContext } from
-  '@fastsprout/reacd/adapter-runtime/renderer/editorial/indicator-context.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/changelog-versions/changelog-versions.adapter.js';
+import { SharedChangelogVersions } from
+  '../../shared/changelog-versions/changelog-versions.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnChangelogVersions({
-  children,
-  versions = EDITORIAL_DEFAULTS.entries,
-  indicator = EDITORIAL_DEFAULTS.indicator,
-}: ChangelogVersionsProps): ReactNode {
-  return (
-    <EditorialIndicatorContext.Provider value={indicator}>
-      <ul className="reacd-node reacd-editorial-collection" data-orientation="vertical">
-        {versions.map(({ key, ...entry }) => (
-          <li key={key}>
-            <ChangelogVersion {...entry} />
-          </li>
-        ))}
-        {Children.map(children, (child) => (child == null ? null : <li>{child}</li>))}
-      </ul>
-    </EditorialIndicatorContext.Provider>
-  );
-}
+export type ShadcnChangelogVersionsProps = ComponentProps<
+  typeof SharedChangelogVersions
+>;
+export const ShadcnChangelogVersions: ComponentType<ShadcnChangelogVersionsProps> =
+  bindPrimitives(SharedChangelogVersions, shadcnPrimitives, 'ShadcnChangelogVersions');

@@ -5,7 +5,8 @@ import * as engine from '@fastsprout/reacd';
 import { mountApplication } from '@fastsprout/reacd/bootstrap';
 
 const require = createRequire(import.meta.url);
-for (const vendor of ['@fastsprout/reacd-shadcn', '@base-ui/react', '@tiptap/core',
+for (const vendor of ['@fastsprout/reacd-shadcn', '@fastsprout/reacd-mui',
+  '@mui/material', '@emotion/react', '@base-ui/react', '@tiptap/core',
   'react-aria-components', 'lucide-react', 'tailwind-merge']) {
   assert.throws(() => require.resolve(vendor), { code: 'MODULE_NOT_FOUND' });
 }

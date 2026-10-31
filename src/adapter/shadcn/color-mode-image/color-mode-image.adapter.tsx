@@ -1,13 +1,10 @@
-import type { ColorModeImageProps } from
-  '@fastsprout/reacd/adapter-runtime/components/color-mode-image/index.js';
-import { ModeImage } from './mode-image.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/color-mode-image/color-mode-image.adapter.js';
+import { SharedColorModeImage } from
+  '../../shared/color-mode-image/color-mode-image.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnColorModeImage({
-  mode,
-  light,
-  dark,
-  ...properties
-}: ColorModeImageProps) {
-  const source = mode === 'light' ? light : dark;
-  return <ModeImage key={source} {...properties} src={source} />;
-}
+export type ShadcnColorModeImageProps = ComponentProps<typeof SharedColorModeImage>;
+export const ShadcnColorModeImage: ComponentType<ShadcnColorModeImageProps> =
+  bindPrimitives(SharedColorModeImage, shadcnPrimitives, 'ShadcnColorModeImage');

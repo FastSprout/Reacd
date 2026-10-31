@@ -1,70 +1,12 @@
-import type { AlertProps } from
-  '@fastsprout/reacd/adapter-runtime/components/alert/alert.js';
-import { Alert, AlertDescription } from '../vendor/ui/alert.js';
-import { Button } from '../vendor/ui/button.js';
-import { ShadcnIcon } from '../icon/icon.adapter.js';
-import { ELEMENT_POLICY } from
-  '@fastsprout/reacd/adapter-runtime/core/element-policy.js';
-import { ELEMENT_BUTTON_VARIANTS } from '../element/variants.js';
-import { DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/alert/alert.adapter.js';
+import { SharedAlert } from '../../shared/alert/alert.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnAlert({
-  title,
-  message,
-  intent,
-  open,
-  onOpenChange,
-  closeLabel,
-  icon,
-  actions,
-}: AlertProps) {
-  if (open === false) return null;
-  const urgent = intent === 'error' || intent === 'warning';
-  return (
-    <Alert
-      className="reacd-node reacd-alert"
-      data-intent={intent}
-      role={urgent ? 'alert' : 'status'}
-      variant={intent === 'error' ? 'destructive' : 'default'}
-    >
-      <div className="reacd-alert-layout">
-        <div className="reacd-alert-content">
-          <div className="reacd-alert-heading">
-            <ShadcnIcon name={icon ?? intent} decorative />
-            <strong>{title}</strong>
-          </div>
-          <AlertDescription>{message}</AlertDescription>
-          {actions === undefined || actions.length === 0 ? null : (
-            <div className="reacd-alert-actions">
-              {actions.map((action) => (
-                <Button
-                  key={action.id}
-                  type="button"
-                  className="reacd-button"
-                  onClick={() => action.onPress()}
-                  disabled={action.disabled}
-                  variant={
-                    ELEMENT_BUTTON_VARIANTS[action.intent ?? DEFAULTS.buttonIntent]
-                  }
-                >
-                  {action.label}
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-        {onOpenChange === undefined ? null : (
-          <Button
-            type="button"
-            variant="ghost"
-            className="reacd-alert-close"
-            aria-label={closeLabel ?? `${ELEMENT_POLICY.dismissPrefix} ${title}`}
-            onClick={() => onOpenChange(false)}
-          >
-            <ShadcnIcon name="close" decorative />
-          </Button>
-        )}
-      </div>
-    </Alert>
-  );
-}
+export type ShadcnAlertProps = ComponentProps<typeof SharedAlert>;
+export const ShadcnAlert: ComponentType<ShadcnAlertProps> = bindPrimitives(
+  SharedAlert,
+  shadcnPrimitives,
+  'ShadcnAlert',
+);

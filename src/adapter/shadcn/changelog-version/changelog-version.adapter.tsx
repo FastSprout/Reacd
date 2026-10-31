@@ -1,9 +1,10 @@
-import type { ReactNode } from 'react';
-import type { ChangelogVersionProps } from
-  '@fastsprout/reacd/adapter-runtime/components/changelog-version/index.js';
-import { EditorialEntrySurface } from
-  '@fastsprout/reacd/adapter-runtime/renderer/editorial/editorial-entry.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/changelog-version/changelog-version.adapter.js';
+import { SharedChangelogVersion } from
+  '../../shared/changelog-version/changelog-version.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnChangelogVersion(props: ChangelogVersionProps): ReactNode {
-  return <EditorialEntrySurface {...props} kind="changelog" />;
-}
+export type ShadcnChangelogVersionProps = ComponentProps<typeof SharedChangelogVersion>;
+export const ShadcnChangelogVersion: ComponentType<ShadcnChangelogVersionProps> =
+  bindPrimitives(SharedChangelogVersion, shadcnPrimitives, 'ShadcnChangelogVersion');

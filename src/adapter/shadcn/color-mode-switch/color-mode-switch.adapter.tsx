@@ -1,18 +1,10 @@
-import type { ColorModeSwitchProps } from
-  '@fastsprout/reacd/adapter-runtime/components/color-mode-switch/index.js';
-import { ShadcnSwitch } from '../switch/switch.adapter.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/color-mode-switch/color-mode-switch.adapter.js';
+import { SharedColorModeSwitch } from
+  '../../shared/color-mode-switch/color-mode-switch.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnColorModeSwitch({
-  value: _value,
-  resolvedMode,
-  onValueChange,
-  ...properties
-}: ColorModeSwitchProps) {
-  return (
-    <ShadcnSwitch
-      {...properties}
-      checked={resolvedMode === 'dark'}
-      onCheckedChange={(checked) => onValueChange(checked ? 'dark' : 'light')}
-    />
-  );
-}
+export type ShadcnColorModeSwitchProps = ComponentProps<typeof SharedColorModeSwitch>;
+export const ShadcnColorModeSwitch: ComponentType<ShadcnColorModeSwitchProps> =
+  bindPrimitives(SharedColorModeSwitch, shadcnPrimitives, 'ShadcnColorModeSwitch');

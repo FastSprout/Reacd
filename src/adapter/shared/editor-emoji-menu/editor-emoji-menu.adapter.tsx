@@ -1,0 +1,16 @@
+import { useMemo } from 'react';
+import type { EditorEmojiMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/editor-emoji-menu/index.js';
+import type { EditorMenuItem } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
+import { useEditorMenu } from '../editor-menu/use-editor-menu.js';
+import { EditorMenuPanel } from '../editor-menu/menu-panel.js';
+
+export function SharedEditorEmojiMenu(properties: EditorEmojiMenuProps) {
+  const items = useMemo<readonly EditorMenuItem[]>(
+    () => properties.items.map((item) => ({ ...item, kind: 'emoji' })),
+    [properties.items],
+  );
+  const menu = useEditorMenu('emoji', items, properties.disabled);
+  return <EditorMenuPanel label={properties.label} {...menu} />;
+}

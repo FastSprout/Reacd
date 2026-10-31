@@ -1,4 +1,5 @@
 import { ADAPTER_PACKAGE_ERROR, isConcreteAdapterPackage } from './adapter-package.js';
+import { adapterOwnershipError } from './adapter-ownership.js';
 import { adapterRuntimeError } from './adapter-runtime.js';
 import { diagnostic } from './diagnostic.js';
 import type { PolicyDiagnostic } from './diagnostic.js';
@@ -64,7 +65,9 @@ export function checkArchitecture(
       add(offset, NATIVE_UI_DEPENDENCY_ERROR);
       return;
     }
-    const ownershipError = componentOwnershipError(file, target, root);
+    const ownershipError =
+      adapterOwnershipError(file, target, root) ??
+      componentOwnershipError(file, target, root);
     if (ownershipError !== null) {
       add(offset, ownershipError);
       return;

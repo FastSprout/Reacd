@@ -1,4 +1,4 @@
-import { ADAPTER_PACKAGE_POLICY, isConcreteAdapterPackage } from './adapter-package.js';
+import { isAdapterEntry, isConcreteAdapterPackage } from './adapter-package.js';
 import { diagnostic } from './diagnostic.js';
 import type { PolicyDiagnostic } from './diagnostic.js';
 import { importVisitor } from './imports.js';
@@ -42,9 +42,7 @@ export function checkApplication(file: string, source: string): PolicyDiagnostic
     } else if (
       value === ADAPTER_RUNTIME ||
       value.startsWith(`${ADAPTER_RUNTIME}/`) ||
-      (isConcreteAdapterPackage(value) &&
-        value !== ADAPTER_PACKAGE_POLICY.name &&
-        value !== ADAPTER_PACKAGE_POLICY.styles)
+      (isConcreteAdapterPackage(value) && !isAdapterEntry(value))
     ) {
       add(offset, 'Trusted adapter internals are not application APIs.');
     } else if (PRIVATE_PATH.test(value)) {

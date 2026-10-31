@@ -5,7 +5,11 @@ import {
   resolveReleaseTag,
 } from './github-client.js';
 import type { ReleaseGitHub } from './github-client.js';
-import { isReleaseVersion, PUBLICATION_POLICY } from './policy.js';
+import {
+  isReleaseVersion,
+  PUBLICATION_POLICY,
+  requiresMaterialPackage,
+} from './policy.js';
 
 const contextSchema = z.object({
   tag: z
@@ -76,6 +80,9 @@ function requireCheckedSource(sha: string, github: ReleaseGitHub): void {
 
 export function resolveRecoveryRelease(input: unknown, github: ReleaseGitHub) {
   const context = contextSchema.parse(input);
+  if (!requiresMaterialPackage(context.tag.slice(1))) {
+    throw new Error('Release recovery cannot apply current policy to historical tags.');
+  }
   const sha = resolveReleaseTag(context.tag, github);
   const comparison = z
     .object({ status: z.string() })

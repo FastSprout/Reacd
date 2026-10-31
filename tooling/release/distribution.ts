@@ -3,9 +3,10 @@ import { isReleaseVersion, PUBLICATION_POLICY } from './policy.js';
 import {
   parsePublicationManifest,
   parseShadcnPublicationManifest,
+  parseMuiPublicationManifest,
 } from './metadata.js';
 import { isDeepStrictEqual } from 'node:util';
-import { SHADCN_PUBLICATION_POLICY } from './policy.js';
+import { SHADCN_PUBLICATION_POLICY, MUI_PUBLICATION_POLICY } from './policy.js';
 import type { PublicationPolicy } from './policy.js';
 
 const asset = z
@@ -51,13 +52,14 @@ function distributionSchema(policy: PublicationPolicy) {
     .refine((value) =>
       isDeepStrictEqual(
         value.peerDependencies,
-        policy.name === SHADCN_PUBLICATION_POLICY.name
+        policy.name !== PUBLICATION_POLICY.name
           ? { ...policy.peers, '@fastsprout/reacd': value.version }
           : policy.peers,
       ),
     );
 }
 const schema = distributionSchema(PUBLICATION_POLICY);
+const muiSchema = distributionSchema(MUI_PUBLICATION_POLICY);
 const adapterSchema = distributionSchema(SHADCN_PUBLICATION_POLICY);
 export type DistributionManifest = z.infer<typeof schema>;
 
@@ -76,4 +78,12 @@ export function createShadcnDistributionManifest(input: unknown) {
 }
 export function parseShadcnDistributionManifest(input: unknown) {
   return adapterSchema.parse(input);
+}
+
+export function createMuiDistributionManifest(input: unknown) {
+  parseMuiPublicationManifest(input);
+  return muiSchema.parse(z.object(muiSchema.shape).parse(input));
+}
+export function parseMuiDistributionManifest(input: unknown) {
+  return muiSchema.parse(input);
 }

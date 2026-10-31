@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "../../src/adapter",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
+    "types": ["react"],
+    "paths": {
+      "@fastsprout/reacd/adapter-runtime/core/*": ["../../dist/core/*"],
+      "@fastsprout/reacd/adapter-runtime/schema/*": ["../../dist/schema/*"],
+      "@fastsprout/reacd/adapter-runtime/components/*": ["../../dist/components/*"],
+      "@fastsprout/reacd/adapter-runtime/renderer/*": ["../../dist/renderer/*"]
+    }
+  },
+  "include": ["../../src/adapter/mui"],
+  "exclude": [
+    "../../src/adapter/**/*.test.*",
+    "../../src/adapter/**/__tests__/**",
+    "../../src/adapter/mui/styles.ts"
+  ]
+}

@@ -1,17 +1,12 @@
-import type { ReactNode } from 'react';
-import type { PageFeatureProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-feature/page-feature.props.js';
-import { PageIntroduction } from
-  '@fastsprout/reacd/adapter-runtime/renderer/page-introduction/page-introduction.js';
-import { PAGE_PRESENTATION_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/page-presentation-policy.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-feature/page-feature.adapter.js';
+import { SharedPageFeature } from '../../shared/page-feature/page-feature.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageFeature(props: PageFeatureProps): ReactNode {
-  return (
-    <PageIntroduction
-      {...props}
-      kind="feature"
-      orientation={props.orientation ?? PAGE_PRESENTATION_DEFAULTS.featureOrientation}
-    />
-  );
-}
+export type ShadcnPageFeatureProps = ComponentProps<typeof SharedPageFeature>;
+export const ShadcnPageFeature: ComponentType<ShadcnPageFeatureProps> = bindPrimitives(
+  SharedPageFeature,
+  shadcnPrimitives,
+  'ShadcnPageFeature',
+);

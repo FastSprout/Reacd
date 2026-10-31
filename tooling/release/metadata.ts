@@ -1,6 +1,7 @@
 import {
   isReleaseVersion,
   PUBLICATION_POLICY,
+  MUI_PUBLICATION_POLICY,
   SHADCN_PUBLICATION_POLICY,
 } from './policy.js';
 import type { PublicationPolicy } from './policy.js';
@@ -16,7 +17,13 @@ export interface ShadcnPublicationMetadata {
   readonly peerDependencies: typeof PUBLICATION_POLICY.peers &
     Readonly<Record<'@fastsprout/reacd', string>>;
 }
-export type PackageMetadata = PublicationMetadata | ShadcnPublicationMetadata;
+export interface MuiPublicationMetadata {
+  readonly name: '@fastsprout/reacd-mui';
+  readonly version: string;
+  readonly peerDependencies: ShadcnPublicationMetadata['peerDependencies'];
+}
+export type PackageMetadata =
+  PublicationMetadata | ShadcnPublicationMetadata | MuiPublicationMetadata;
 
 function record(input: unknown): Record<string, unknown> {
   if (input === null || typeof input !== 'object' || Array.isArray(input)) {
@@ -51,10 +58,10 @@ function validate(input: unknown, policy: PublicationPolicy): string {
   const dependencies = record(
     manifest['dependencies'] === undefined ? {} : manifest['dependencies'],
   );
-  if (policy.name === SHADCN_PUBLICATION_POLICY.name) {
+  if (policy.name !== PUBLICATION_POLICY.name) {
     matches(peers[PUBLICATION_POLICY.name], version);
   }
-  if (policy.name === SHADCN_PUBLICATION_POLICY.name) {
+  if (policy.name !== PUBLICATION_POLICY.name) {
     matches(dependencies[PUBLICATION_POLICY.name], undefined);
     matches(dev[PUBLICATION_POLICY.name], undefined);
   }
@@ -80,6 +87,15 @@ export function parseShadcnPublicationManifest(
   const version = validate(input, SHADCN_PUBLICATION_POLICY);
   return {
     name: SHADCN_PUBLICATION_POLICY.name,
+    version,
+    peerDependencies: { ...PUBLICATION_POLICY.peers, '@fastsprout/reacd': version },
+  };
+}
+
+export function parseMuiPublicationManifest(input: unknown): MuiPublicationMetadata {
+  const version = validate(input, MUI_PUBLICATION_POLICY);
+  return {
+    name: MUI_PUBLICATION_POLICY.name,
     version,
     peerDependencies: { ...PUBLICATION_POLICY.peers, '@fastsprout/reacd': version },
   };

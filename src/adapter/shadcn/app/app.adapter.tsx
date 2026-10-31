@@ -1,21 +1,12 @@
-import { DirectionProvider } from '@base-ui/react/direction-provider';
-import { DirectionProvider as RadixDirectionProvider } from '@radix-ui/react-direction';
-import type { AppProps } from '@fastsprout/reacd/adapter-runtime/components/app/app.js';
-import { APPLICATION_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/application-shell-policy.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/app/app.adapter.js';
+import { SharedApp } from '../../shared/app/app.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnApp({
-  children,
-  direction = APPLICATION_DEFAULTS.direction,
-  language = APPLICATION_DEFAULTS.language,
-}: AppProps) {
-  return (
-    <DirectionProvider direction={direction}>
-      <RadixDirectionProvider dir={direction}>
-        <div className="reacd-node reacd-app" dir={direction} lang={language}>
-          {children}
-        </div>
-      </RadixDirectionProvider>
-    </DirectionProvider>
-  );
-}
+export type ShadcnAppProps = ComponentProps<typeof SharedApp>;
+export const ShadcnApp: ComponentType<ShadcnAppProps> = bindPrimitives(
+  SharedApp,
+  shadcnPrimitives,
+  'ShadcnApp',
+);

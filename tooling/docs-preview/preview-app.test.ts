@@ -85,3 +85,16 @@ it('contains failed imports and recovers on another example', async () => {
   expect(await screen.findByRole('button', { name: 'Request export' })).toBeVisible();
   expect(screen.queryByRole('alert')).toBeNull();
 });
+
+it('switches Material UI without resetting the runnable example state', async () => {
+  const user = userEvent.setup();
+  render(createElement(DocumentationPreview, { search: '?component=Button' }));
+  await user.click(await screen.findByRole('button', { name: 'Request export' }));
+  await user.click(screen.getByRole('switch', { name: 'Material UI preview' }));
+  expect(screen.getByText('Export requests: 1')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Request export' }).className).toContain(
+    'MuiButton-root',
+  );
+  await user.click(screen.getByRole('button', { name: 'Request export' }));
+  expect(screen.getByText('Export requests: 2')).toBeInTheDocument();
+});

@@ -1,20 +1,12 @@
-import type { ChatShimmerProps } from
-  '@fastsprout/reacd/adapter-runtime/components/chat-shimmer/index.js';
-import { CHAT_FEEDBACK_DEFAULTS } from
-  '@fastsprout/reacd/adapter-runtime/core/chat-feedback-policy.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/chat-shimmer/chat-shimmer.adapter.js';
+import { SharedChatShimmer } from '../../shared/chat-shimmer/chat-shimmer.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnChatShimmer({
-  text,
-  active = CHAT_FEEDBACK_DEFAULTS.active,
-}: ChatShimmerProps) {
-  return (
-    <span
-      className="reacd-chat-shimmer"
-      data-active={active}
-      role={active ? 'status' : undefined}
-      aria-live={active ? 'polite' : undefined}
-    >
-      {text}
-    </span>
-  );
-}
+export type ShadcnChatShimmerProps = ComponentProps<typeof SharedChatShimmer>;
+export const ShadcnChatShimmer: ComponentType<ShadcnChatShimmerProps> = bindPrimitives(
+  SharedChatShimmer,
+  shadcnPrimitives,
+  'ShadcnChatShimmer',
+);

@@ -1,0 +1,26 @@
+import { useContext } from 'react';
+import type { ReactNode } from 'react';
+import * as Select from '@radix-ui/react-select';
+import { PortalHostContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { SelectScrollUpButton, SelectScrollDownButton } from '../primitives/select.js';
+
+export function SharedSelectContent({ children }: { children: ReactNode }) {
+  const host = useContext(PortalHostContext);
+  const variables = useContext(ThemeVariablesContext);
+  return (
+    <Select.Portal container={host}>
+      <Select.Content
+        position="popper"
+        className="reacd-portal-root reacd-select-popup"
+        style={variables}
+      >
+        <SelectScrollUpButton />
+        <Select.Viewport className="reacd-select-viewport">{children}</Select.Viewport>
+        <SelectScrollDownButton />
+      </Select.Content>
+    </Select.Portal>
+  );
+}

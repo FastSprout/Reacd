@@ -10,4 +10,4 @@ await completeRelease(
   readReleaseCandidate(root, identity),
   createReleaseGitHub(),
 );
-console.log(`GitHub and both npm packages are verified: ${identity.tag}.`);
+console.log(`GitHub and all npm packages are verified: ${identity.tag}.`);

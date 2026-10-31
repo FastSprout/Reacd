@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { rmSync } from 'node:fs';
+import { copyFileSync, rmSync } from 'node:fs';
 
 const compiler = fileURLToPath(
   new URL('../node_modules/typescript/bin/tsc', import.meta.url),
@@ -14,6 +14,10 @@ rmSync(new URL('../packages/shadcn/dist/', import.meta.url), {
   recursive: true,
   force: true,
 });
+rmSync(new URL('../packages/mui/dist/', import.meta.url), {
+  recursive: true,
+  force: true,
+});
 execFileSync(process.execPath, [compiler, '-p', 'tsconfig.build.json'], {
   stdio: 'inherit',
 });
@@ -24,9 +28,28 @@ execFileSync(
     stdio: 'inherit',
   },
 );
+execFileSync(process.execPath, [compiler, '-p', 'packages/mui/tsconfig.build.json'], {
+  stdio: 'inherit',
+});
+for (const adapter of ['shadcn', 'mui']) {
+  for (const [source, target] of [
+    ['styles.ts', 'styles.js'],
+    ['styles-contract.ts', 'styles-contract.d.ts'],
+  ]) {
+    copyFileSync(
+      new URL(`../src/adapter/${adapter}/${source}`, import.meta.url),
+      new URL(`../packages/${adapter}/dist/${target}`, import.meta.url),
+    );
+  }
+}
 execFileSync(process.execPath, [vite, 'build', '--config', 'vite.styles.config.ts'], {
   stdio: 'inherit',
 });
+execFileSync(
+  process.execPath,
+  [vite, 'build', '--config', 'vite.mui-styles.config.ts'],
+  { stdio: 'inherit' },
+);
 execFileSync(
   process.execPath,
   [vite, 'build', '--config', 'vite.conformance.config.ts'],

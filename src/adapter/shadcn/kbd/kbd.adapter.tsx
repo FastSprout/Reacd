@@ -1,19 +1,12 @@
-import type { KbdProps } from '@fastsprout/reacd/adapter-runtime/components/kbd/kbd.js';
-import { keyboardKey } from '@fastsprout/reacd/adapter-runtime/core/keyboard-key.js';
-import { KBD_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/kbd-policy.js';
-import { KbdKey } from './kbd-key.adapter.js';
-export function ShadcnKbd({
-  value,
-  label,
-  platform = KBD_DEFAULTS.platform,
-  ...properties
-}: KbdProps) {
-  const presentation = keyboardKey(value, platform);
-  return (
-    <KbdKey
-      {...properties}
-      display={presentation.display}
-      label={label ?? presentation.label}
-    />
-  );
-}
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/kbd/kbd.adapter.js';
+import { SharedKbd } from '../../shared/kbd/kbd.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
+
+export type ShadcnKbdProps = ComponentProps<typeof SharedKbd>;
+export const ShadcnKbd: ComponentType<ShadcnKbdProps> = bindPrimitives(
+  SharedKbd,
+  shadcnPrimitives,
+  'ShadcnKbd',
+);

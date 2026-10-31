@@ -4,6 +4,7 @@ import { COMPONENT_NAMES } from '../../src/components/component-names.js';
 
 const previewRequestSchema = z.strictObject({
   component: z.enum(COMPONENT_NAMES),
+  adapter: z.enum(['shadcn', 'mui']).optional(),
   template: z
     .enum(['saas-modern-light', 'erp-compact'])
     .default(DOCS_PREVIEW_POLICY.defaultTemplate),

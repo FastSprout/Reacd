@@ -1,30 +1,12 @@
-import type { TableProps } from
-  '@fastsprout/reacd/adapter-runtime/components/table/index.js';
-import { TABLE_DEFAULTS as D } from
-  '@fastsprout/reacd/adapter-runtime/core/table-policy.js';
-import { TableSurface } from
-  '@fastsprout/reacd/adapter-runtime/renderer/table/table.renderer.js';
-import { ShadcnInteractiveTable } from './interactive-table.js';
-import { Button } from '../vendor/ui/button.js';
-export function ShadcnTable(props: TableProps) {
-  if (props.state === 'loading')
-    return <p role="status">{props.loadingMessage ?? D.loadingMessage}</p>;
-  if (props.state === 'error') {
-    const retry = props.onRetry;
-    return (
-      <div className="reacd-vstack">
-        <p role="alert">{props.errorMessage ?? D.errorMessage}</p>
-        {retry === undefined ? null : (
-          <Button type="button" className="reacd-button" onClick={() => retry()}>
-            {props.retryLabel ?? D.retryLabel}
-          </Button>
-        )}
-      </div>
-    );
-  }
-  return props.mode === 'interactive' ? (
-    <ShadcnInteractiveTable {...props} />
-  ) : (
-    <TableSurface {...props} />
-  );
-}
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/table/table.adapter.js';
+import { SharedTable } from '../../shared/table/table.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
+
+export type ShadcnTableProps = ComponentProps<typeof SharedTable>;
+export const ShadcnTable: ComponentType<ShadcnTableProps> = bindPrimitives(
+  SharedTable,
+  shadcnPrimitives,
+  'ShadcnTable',
+);

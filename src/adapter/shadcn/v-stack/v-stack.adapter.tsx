@@ -1,8 +1,12 @@
-import type { VStackProps } from
-  '@fastsprout/reacd/adapter-runtime/components/v-stack/v-stack.js';
-import { Layout } from
-  '@fastsprout/reacd/adapter-runtime/renderer/layout/layout.renderer.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/v-stack/v-stack.adapter.js';
+import { SharedVStack } from '../../shared/v-stack/v-stack.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnVStack(props: VStackProps) {
-  return <Layout kind="VStack" {...props} />;
-}
+export type ShadcnVStackProps = ComponentProps<typeof SharedVStack>;
+export const ShadcnVStack: ComponentType<ShadcnVStackProps> = bindPrimitives(
+  SharedVStack,
+  shadcnPrimitives,
+  'ShadcnVStack',
+);

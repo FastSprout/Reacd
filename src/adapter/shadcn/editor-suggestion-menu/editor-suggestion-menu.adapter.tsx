@@ -1,21 +1,17 @@
-import { useMemo } from 'react';
-import type { EditorSuggestionMenuProps } from
-  '@fastsprout/reacd/adapter-runtime/components/editor-suggestion-menu/index.js';
-import type { EditorMenuItem } from
-  '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
-import { useEditorMenu } from '../editor-menu/use-editor-menu.js';
-import { EditorMenuPanel } from '../editor-menu/menu-panel.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/editor-suggestion-menu/editor-suggestion-menu.adapter.js';
+import { SharedEditorSuggestionMenu } from
+  '../../shared/editor-suggestion-menu/editor-suggestion-menu.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnEditorSuggestionMenu(properties: EditorSuggestionMenuProps) {
-  const items = useMemo<readonly EditorMenuItem[]>(
-    () =>
-      properties.items.map((item) => ({
-        ...item,
-        kind: 'suggestion',
-        value: { command: item.command },
-      })),
-    [properties.items],
+export type ShadcnEditorSuggestionMenuProps = ComponentProps<
+  typeof SharedEditorSuggestionMenu
+>;
+export const ShadcnEditorSuggestionMenu:
+  ComponentType<ShadcnEditorSuggestionMenuProps> =
+  bindPrimitives(
+    SharedEditorSuggestionMenu,
+    shadcnPrimitives,
+    'ShadcnEditorSuggestionMenu',
   );
-  const menu = useEditorMenu('suggestion', items, properties.disabled);
-  return <EditorMenuPanel label={properties.label} {...menu} />;
-}

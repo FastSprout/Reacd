@@ -1,9 +1,12 @@
-import type { ReactNode } from 'react';
-import type { PageCTAProps } from
-  '@fastsprout/reacd/adapter-runtime/components/page-cta/page-cta.props.js';
-import { PageIntroduction } from
-  '@fastsprout/reacd/adapter-runtime/renderer/page-introduction/page-introduction.js';
+import type { ComponentProps, ComponentType } from 'react';
+export * from '../../shared/page-cta/page-cta.adapter.js';
+import { SharedPageCTA } from '../../shared/page-cta/page-cta.adapter.js';
+import { bindPrimitives } from '../../shared/primitives/context.js';
+import { shadcnPrimitives } from '../primitives/primitives.js';
 
-export function ShadcnPageCTA(props: PageCTAProps): ReactNode {
-  return <PageIntroduction {...props} kind="cta" />;
-}
+export type ShadcnPageCTAProps = ComponentProps<typeof SharedPageCTA>;
+export const ShadcnPageCTA: ComponentType<ShadcnPageCTAProps> = bindPrimitives(
+  SharedPageCTA,
+  shadcnPrimitives,
+  'ShadcnPageCTA',
+);

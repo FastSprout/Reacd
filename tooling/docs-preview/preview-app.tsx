@@ -1,3 +1,4 @@
+import { muiAdapter } from '@fastsprout/reacd-mui';
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { Suspense, useMemo } from 'react';
 import type { ReactNode } from 'react';
@@ -18,22 +19,34 @@ import { previewRegistry } from './registry.js';
 import { readPreviewRequest } from './request.js';
 import type { PreviewRequest } from './request.js';
 
-function Example({ component, template, direction }: PreviewRequest): ReactNode {
+function Example({
+  component,
+  template,
+  direction,
+  adapter,
+}: PreviewRequest): ReactNode {
   const store = useMemo(() => createReacdStore(), []);
   const compactAtom = useMemo(() => atom(template === 'erp-compact'), [template]);
+  const materialAtom = useMemo(() => atom(adapter === 'mui'), [adapter]);
+  const [material, setMaterial] = useAtom(materialAtom, { store });
   const directionAtom = useMemo(() => atom(direction === 'rtl'), [direction]);
   const [compact, setCompact] = useAtom(compactAtom, { store });
   const [rtl, setRtl] = useAtom(directionAtom, { store });
   const View = previewRegistry[component].View;
   return (
     <ReacdProvider
-      adapter={shadcnAdapter}
+      adapter={material ? muiAdapter : shadcnAdapter}
       store={store}
       templateId={compact ? 'erp-compact' : DOCS_PREVIEW_POLICY.defaultTemplate}
     >
       <App direction={rtl ? 'rtl' : 'ltr'}>
         <Section title={`${component} live example`}>
           <Toolbar label="Preview controls">
+            <Toggle
+              label="Material UI preview"
+              checked={material}
+              onCheckedChange={setMaterial}
+            />
             <Toggle
               label="Compact preview"
               checked={compact}
@@ -56,7 +69,13 @@ function Example({ component, template, direction }: PreviewRequest): ReactNode 
   );
 }
 
-export function DocumentationPreview({ search }: { search: string }): ReactNode {
+export function DocumentationPreview({
+  search,
+  initialAdapter = 'shadcn',
+}: {
+  readonly search: string;
+  readonly initialAdapter?: 'shadcn' | 'mui';
+}): ReactNode {
   const request = readPreviewRequest(search);
   if (request === null) {
     return (
@@ -74,5 +93,5 @@ export function DocumentationPreview({ search }: { search: string }): ReactNode 
       </ReacdProvider>
     );
   }
-  return <Example {...request} />;
+  return <Example {...request} adapter={request.adapter ?? initialAdapter} />;
 }
