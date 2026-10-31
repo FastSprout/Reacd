@@ -20,10 +20,10 @@ export function Application() {
 }
 ```
 
-The main adapter export supports Node SSR without importing styles. Load the
-browser styles entry in your client application. Token templates customize this
-adapter's appearance; they are not different adapters. MUI is planned.
+The main adapter export supports Node SSR without importing styles. Load the browser
+styles entry in your client application. Token templates customize this adapter's
+appearance; they are not different adapters. MUI is planned.
 
-Requires the matching reacd version and its declared React/Jotai peers.
-Licensed under Apache-2.0; upstream shadcn attribution is in
-THIRD_PARTY_NOTICES.md. Local build artifacts are not an npm publication claim.
+Requires the matching reacd version and its declared React/Jotai peers. Licensed under
+Apache-2.0; upstream shadcn attribution is in THIRD_PARTY_NOTICES.md. GitHub release
+archives do not imply npm availability.

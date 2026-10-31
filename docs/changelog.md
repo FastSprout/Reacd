@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.2.0] - 2026-10-31
 
 ### Changed
 
@@ -55,3 +55,4 @@
 - Apache-2.0, with the upstream shadcn MIT notice included in distributions.
 
 [0.1.0]: https://www.npmjs.com/package/@fastsprout/reacd/v/0.1.0
+[0.2.0]: https://github.com/FastSprout/Reacd/releases/tag/v0.2.0

@@ -12,8 +12,9 @@ minor versions are compatible. A GitHub release and an npm publication are separ
 states; check the actual npm version before installing it.
 
 The engine and adapter use one release version. Release-please updates the adapter
-manifest and its exact engine peer with the root version. The prepared 0.2.0 package
-split is unreleased; the public 0.1.0 package still bundles shadcn.
+manifest and its exact engine peer with the root version. Version 0.2.0 separates the
+adapter into its own package. Its npm publication is pending; the public npm version
+0.1.0 still bundles shadcn.
 
 ## Verification and documentation artifacts
 

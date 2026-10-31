@@ -1,7 +1,7 @@
 # Get started
 
-This guide targets the [unreleased 0.2.0 package split](changelog.md). The separate
-adapter package is prepared locally; published 0.1.0 bundles its adapter.
+This guide targets the [0.2.0 package split](changelog.md). Its npm publication is
+pending; currently published npm version 0.1.0 bundles its adapter.
 
 Install `@fastsprout/reacd` into an existing browser React and TypeScript application.
 Your React host owns mounting. Declare views with reacd components; the renderer and

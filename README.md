@@ -15,8 +15,8 @@ adapters][adapters] · [State][state] · [Changelog][changelog] ·
 
 ## Install
 
-This setup targets the [unreleased 0.2.0 package split][changelog]. The separate adapter
-is not published yet; npm version 0.1.0 bundles its adapter.
+This setup targets the [0.2.0 package split][changelog]. Its npm publication is pending;
+currently published npm version 0.1.0 bundles its adapter.
 
 Install `@fastsprout/reacd` into an existing React application:
 
