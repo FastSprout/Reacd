@@ -5,10 +5,12 @@ import { parseReleaseEnvironment } from '../tooling/release/verify-environment.j
 import { verifyPublicationRuntime } from '../tooling/release/verify-runtime.js';
 import { verifyReleaseCheckout } from '../tooling/release/verify.js';
 
-const root = new URL('../', import.meta.url);
-const input: unknown = JSON.parse(
-  readFileSync(new URL('package.json', root), 'utf8'),
-);
+const project = new URL('../', import.meta.url);
+const root =
+  process.env['RELEASE_RECOVERY'] === 'true'
+    ? new URL('.cache/release-source/', project)
+    : project;
+const input: unknown = JSON.parse(readFileSync(new URL('package.json', root), 'utf8'));
 const manifest = parsePublicationManifest(input);
 const identity = parseReleaseEnvironment(process.env);
 if (identity.version !== manifest.version) {

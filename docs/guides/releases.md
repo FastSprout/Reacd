@@ -2,7 +2,8 @@
 
 reacd uses release-please to propose reviewed releases from English Conventional
 Commits. The generated [changelog](../changelog.md) is the public release history. A
-release PR updates the version, lockfile and changelog together.
+release PR updates the version, lockfile and changelog together. GitHub releases stay
+private drafts until the same workflow verifies both published npm packages.
 
 ## Versions before 1.0
 
@@ -13,8 +14,8 @@ states; check the actual npm version before installing it.
 
 The engine and adapter use one release version. Release-please updates the adapter
 manifest and its exact engine peer with the root version. Version 0.2.0 separates the
-adapter into its own package. Its npm publication is pending; the public npm version
-0.1.0 still bundles shadcn.
+adapter into its own package. Both packages share one version and one completion
+operation; a GitHub-only release is incomplete.
 
 ## Verification and documentation artifacts
 
@@ -54,12 +55,26 @@ current. Review the version and notes, allow its checks to finish, and merge it 
 GitHub release is intended.
 
 A main-head preflight skips already superseded checks. It is not an atomic branch lock;
-main can still move before the release action finishes. A merged release PR can create
-its GitHub tag/release in the same workflow. Publication consumes the reported release
-SHA instead of a moving main checkout or a later bot tag event. GitHub-token-created PR
-checks may require a maintainer to approve their execution. An explicitly configured
-GitHub App can later automate those checks; a broad PAT is not required by the default
-setup.
+main can still move before the release action finishes. A merged release PR prepares a
+draft and its immutable tag in the same workflow. Publication consumes the reported
+release SHA instead of a moving main checkout or a later bot tag event.
+GitHub-token-created PR checks may require a maintainer to approve their execution. An
+explicitly configured GitHub App can later automate those checks; a broad PAT is not
+required by the default setup.
+
+## Recovering an interrupted release
+
+Run the Release workflow manually on main and enter the existing tag, such as v0.2.0.
+Recovery verifies successful complete Check jobs for both the immutable tag source and
+its workflow implementation. It rejects a tag outside main history and checks out the
+original source separately. Standard GitHub SHA variables are never overwritten. The
+normal release path still requires its release SHA to equal this run's checked SHA.
+
+The workflow compares existing GitHub archive digests before any npm upload. It then
+uploads and verifies both exact npm archives, transfers the checked candidate to its
+completion job, verifies npm again and makes the draft public. Failed publication or
+verification leaves the draft private. Existing matching npm versions are verified and
+reused on retry. A prepared candidate with publication disabled fails the release job.
 
 ## Enabling npm publication
 
@@ -81,9 +96,17 @@ setting the repository variable NPM_PUBLISH_ENABLED to the exact string true:
 
 The npm account needs package ownership and 2FA. npm trust requires an existing package.
 Staging a new name creates a publicly visible placeholder, so it is not a dry-run.
-Neither bootstrap publication nor service settings are automated here. Configure a
-trusted publisher near the intended release: a new trust entry must complete its first
-successful publish within npm's documented lifetime.
+Bootstrap publication runs in GitHub Actions too. Before a new package can have an OIDC
+publisher, provide a short-lived npm token with write access to the @fastsprout scope
+and CI publication permission. Store it directly as the npm environment secret
+NPM_TOKEN. Only the runner's publication step receives NODE_AUTH_TOKEN; neither the
+source nor the completion job receives that npm credential. The environment permits main
+only. Remove the bootstrap secret after both packages have working OIDC trust.
+
+Do not publish locally or paste a token into chat. npm publication still uses the exact
+checked archives and the same registry verifier. Configure a trusted publisher near the
+intended release: a new trust entry must complete its first successful publish within
+npm's documented lifetime.
 
 ## What the publish job verifies
 
@@ -124,9 +147,10 @@ checked archives that release publication uploads.
 Never substitute a package glob, disable a gate or overwrite an existing version to
 recover a failed release. An authorized maintainer can investigate the exact failed
 publish job and rerun that original job with its original release identity. A skipped
-publish job is not a successful npm publication. The initial disabled bootstrap release
-remains owner-managed, not an automatic or silently verified upload. Later publication
-must use the same controls.
+publish job is not a successful npm publication. A GitHub draft becomes public only
+after the completion job confirms both public npm versions and their archive bytes. The
+initial disabled bootstrap release remains owner-managed, not an automatic or silently
+verified upload. Later publication must use the same controls.
 
 A local pack/dry-run or a saved OIDC configuration does not prove npm publication.
 Verify the public version and matching tarball integrity after upload. A staging

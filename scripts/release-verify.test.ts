@@ -26,10 +26,13 @@ beforeEach(() => {
   vi.resetModules();
   mocks.read.mockReset().mockReturnValue('{"name":"@fastsprout/reacd"}');
   mocks.metadata.mockReset().mockReturnValue({
-    name: '@fastsprout/reacd', version: '0.1.0',
+    name: '@fastsprout/reacd',
+    version: '0.1.0',
   });
   mocks.environment.mockReset().mockReturnValue({
-    sha: 'a'.repeat(40), tag: 'v0.1.0', version: '0.1.0',
+    sha: 'a'.repeat(40),
+    tag: 'v0.1.0',
+    version: '0.1.0',
   });
   mocks.checkout.mockReset();
   mocks.runtime.mockReset();
@@ -63,30 +66,53 @@ describe('release verifier entry point', () => {
   });
 
   it('refuses an incompatible publication runtime before consulting git', async () => {
-    mocks.runtime.mockImplementation(() => { throw new Error('Runtime'); });
+    mocks.runtime.mockImplementation(() => {
+      throw new Error('Runtime');
+    });
     await expect(import('./release-verify.js')).rejects.toThrow('Runtime');
     expect(mocks.checkout).not.toHaveBeenCalled();
     expect(mocks.log).not.toHaveBeenCalled();
   });
 
   it('propagates missing/invalid manifest and prerequisite failures', async () => {
-    mocks.read.mockImplementation(() => { throw new Error('Missing manifest'); });
+    mocks.read.mockImplementation(() => {
+      throw new Error('Missing manifest');
+    });
     await expect(import('./release-verify.js')).rejects.toThrow('Missing manifest');
     vi.resetModules();
     mocks.read.mockReturnValue('invalid');
     await expect(import('./release-verify.js')).rejects.toBeInstanceOf(SyntaxError);
     vi.resetModules();
     mocks.read.mockReturnValue('{}');
-    mocks.metadata.mockImplementation(() => { throw new Error('Metadata'); });
+    mocks.metadata.mockImplementation(() => {
+      throw new Error('Metadata');
+    });
     await expect(import('./release-verify.js')).rejects.toThrow('Metadata');
     vi.resetModules();
     mocks.metadata.mockReturnValue({ name: '@fastsprout/reacd', version: '0.1.0' });
-    mocks.environment.mockImplementation(() => { throw new Error('Identity'); });
+    mocks.environment.mockImplementation(() => {
+      throw new Error('Identity');
+    });
     await expect(import('./release-verify.js')).rejects.toThrow('Identity');
     vi.resetModules();
     mocks.environment.mockReturnValue({ version: '0.1.0' });
-    mocks.checkout.mockImplementation(() => { throw new Error('Checkout'); });
+    mocks.checkout.mockImplementation(() => {
+      throw new Error('Checkout');
+    });
     await expect(import('./release-verify.js')).rejects.toThrow('Checkout');
     expect(mocks.log).not.toHaveBeenCalled();
   });
+});
+
+it('verifies the isolated checked source in explicit recovery mode', async () => {
+  vi.stubEnv('RELEASE_RECOVERY', 'true');
+  try {
+    await import('./release-verify.js');
+    expect(mocks.checkout).toHaveBeenCalledWith(
+      fileURLToPath(new URL('../.cache/release-source/', import.meta.url)),
+      expect.objectContaining({ sha: 'a'.repeat(40) }),
+    );
+  } finally {
+    vi.unstubAllEnvs();
+  }
 });

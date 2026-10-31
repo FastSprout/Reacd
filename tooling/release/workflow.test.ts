@@ -90,15 +90,15 @@ describe('publication workflow capability boundary', () => {
   });
   it('uses verified retryable publication before confirming both packages', () => {
     const steps = readWorkflow().jobs.publish.steps;
-    const upload = steps.findIndex(
-      (step) => step.run === 'npm run release:publish',
-    );
+    const upload = steps.findIndex((step) => step.run === 'npm run release:publish');
     expect(upload).toBeGreaterThanOrEqual(0);
     expect(steps[upload + 1]).toMatchObject({ run: 'npm run release:registry' });
     expect(steps[upload + 1]?.if).toBeUndefined();
     expect(steps[upload + 1]?.['continue-on-error']).toBeUndefined();
     expect(steps.some((step) => step.run?.startsWith('npm publish '))).toBe(false);
-    expect(steps.at(-1)?.run).toBe('npm run release:registry');
+    expect(
+      steps.findIndex((step) => step.run === 'npm run release:registry'),
+    ).toBeGreaterThan(upload);
   });
   it('normalizes raw enablement only in the non-OIDC job', () => {
     const { release, publish } = readWorkflow().jobs;
@@ -117,10 +117,12 @@ describe('publication workflow capability boundary', () => {
   it('gates the whole capability job on trusted enablement and exact source', () => {
     const { publish } = readWorkflow().jobs;
     expect(publish.if).not.toContain('vars.NPM_PUBLISH_ENABLED');
-    expect(publish.if.trim()).toBe(
-      "needs.release.outputs.release_created == 'true' && " +
-        'needs.release.outputs.sha == github.sha && ' +
-        "needs.release.outputs.publish_enabled == 'true'",
+    expect(publish.if).toContain("needs.release.outputs.release_created == 'true'");
+    expect(publish.if).toContain('needs.release.outputs.sha == github.sha');
+    expect(publish.if).toContain("needs.release.outputs.publish_enabled == 'true'");
+    expect(publish.if).toContain("needs.recover.result == 'success'");
+    expect(publish.if).toContain(
+      'needs.recover.outputs.sha == needs.recover.outputs.checked_sha',
     );
     const verify = publish.steps.find((step) => step.run === 'npm run release:verify');
     expect(verify?.env?.['NPM_PUBLISH_ENABLED']).toBe(

@@ -20,7 +20,9 @@ function environment() {
 describe('release environment identity', () => {
   it('returns only nonsecret release identity', () => {
     expect(parseReleaseEnvironment(environment())).toEqual({
-      sha, tag: 'v0.1.0', version: '0.1.0',
+      sha,
+      tag: 'v0.1.0',
+      version: '0.1.0',
     });
   });
 
@@ -42,4 +44,40 @@ describe('release environment identity', () => {
     expect(action).toThrow('Release verification');
     expect(action).not.toThrow('secret-never-print');
   });
+});
+
+it('accepts explicitly checked recovery without forging the workflow SHA', () => {
+  const input = {
+    ...environment(),
+    RELEASE_RECOVERY: 'true',
+    GITHUB_SHA: 'b'.repeat(40),
+    CHECKED_RELEASE_SHA: sha,
+    GITHUB_EVENT_NAME: 'workflow_dispatch',
+    GITHUB_REF: 'refs/heads/main',
+  };
+  expect(parseReleaseEnvironment(input)).toEqual({
+    sha,
+    tag: 'v0.1.0',
+    version: '0.1.0',
+  });
+  for (const change of [
+    { GITHUB_EVENT_NAME: 'push' },
+    { GITHUB_REF: 'refs/heads/feature' },
+    { CHECKED_RELEASE_SHA: undefined },
+    { CHECKED_RELEASE_SHA: 'b'.repeat(40) },
+    { GITHUB_SHA: 'main' },
+  ]) {
+    expect(() => parseReleaseEnvironment({ ...input, ...change })).toThrow();
+  }
+});
+
+it('validates draft IDs and rejects unsafe integers', () => {
+  expect(
+    parseReleaseEnvironment({ ...environment(), RELEASE_ID: '123' }),
+  ).toMatchObject({ releaseId: 123 });
+  for (const value of ['', '0', 'draft', '9007199254740992']) {
+    expect(() =>
+      parseReleaseEnvironment({ ...environment(), RELEASE_ID: value }),
+    ).toThrow('RELEASE_ID');
+  }
 });

@@ -4,12 +4,18 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing checked release tag to recover
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: release-main
+  group: release-${{ github.event_name }}-${{ inputs.tag || 'main' }}
   cancel-in-progress: false
 
 env:
@@ -17,10 +23,12 @@ env:
 
 jobs:
   check:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/check.yml
     permissions:
       contents: read
   release:
+    if: github.event_name == 'push'
     needs: check
     runs-on: ubuntu-latest
     permissions:
@@ -33,6 +41,8 @@ jobs:
       tag_name: ${{ steps.release.outputs.tag_name }}
       version: ${{ steps.release.outputs.version }}
       publish_enabled: ${{ steps.publication.outputs.enabled }}
+      release_id: ${{ steps.identity.outputs.release_id }}
+      details: ${{ steps.details.outputs.details }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -60,30 +70,121 @@ jobs:
           else
             echo "verified=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Create or update the release
+      - name: Prepare the draft release
         id: release
         if: steps.current.outputs.verified == 'true'
-        # release-please v5.0.0
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
           target-branch: main
+      - name: Require publication for a release candidate
+        if: steps.release.outputs.release_created == 'true'
+        env:
+          PUBLICATION_ENABLED: ${{ steps.publication.outputs.enabled }}
+          RELEASE_SHA: ${{ steps.release.outputs.sha }}
+          CHECKED_SHA: ${{ github.sha }}
+        run: |
+          test "$PUBLICATION_ENABLED" = true
+          test "$RELEASE_SHA" = "$CHECKED_SHA"
+      - name: Read the prepared draft identity
+        id: identity
+        if: steps.release.outputs.release_created == 'true'
+        env:
+          UPLOAD_URL: ${{ steps.release.outputs.upload_url }}
+        run: |
+          prefix="https://uploads.github.com/repos/FastSprout/Reacd/releases/"
+          release_id="${UPLOAD_URL#"$prefix"}"
+          release_id="${release_id%%/assets*}"
+          [[ "$release_id" =~ ^[1-9][0-9]*$ ]] || exit 1
+          echo "release_id=$release_id" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.release.outputs.release_created == 'true'
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm install --global npm@11.19.0
+        if: steps.release.outputs.release_created == 'true'
+      - run: npm ci
+        if: steps.release.outputs.release_created == 'true'
+      - name: Capture checked draft metadata
+        id: details
+        if: steps.release.outputs.release_created == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_ID: ${{ steps.identity.outputs.release_id }}
+          RELEASE_SHA: ${{ steps.release.outputs.sha }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag_name }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: npm run release:details
+  recover:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    outputs:
+      release_created: ${{ steps.source.outputs.release_created }}
+      sha: ${{ steps.source.outputs.sha }}
+      checked_sha: ${{ steps.source.outputs.checked_sha }}
+      tag_name: ${{ steps.source.outputs.tag_name }}
+      version: ${{ steps.source.outputs.version }}
+      publish_enabled: ${{ steps.source.outputs.publish_enabled }}
+      release_id: ${{ steps.source.outputs.release_id }}
+      details: ${{ steps.source.outputs.details }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm install --global npm@11.19.0
+      - run: npm ci
+      - name: Verify both checked sources and prepare recovery
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NPM_PUBLISH_ENABLED: ${{ vars.NPM_PUBLISH_ENABLED }}
+          RECOVERY_TAG: ${{ inputs.tag }}
+        run: npm run release:recover
   publish:
-    needs: [check, release]
+    needs: [check, release, recover]
     if: >-
-      needs.release.outputs.release_created == 'true' &&
-      needs.release.outputs.sha == github.sha &&
-      needs.release.outputs.publish_enabled == 'true'
+      always() && !cancelled() && (
+        (needs.release.result == 'success' &&
+          needs.release.outputs.release_created == 'true' &&
+          needs.release.outputs.sha == github.sha &&
+          needs.release.outputs.publish_enabled == 'true') ||
+        (needs.recover.result == 'success' &&
+          needs.recover.outputs.release_created == 'true' &&
+          needs.recover.outputs.sha == needs.recover.outputs.checked_sha &&
+          needs.recover.outputs.publish_enabled == 'true'))
     runs-on: ubuntu-latest
     environment: npm
     permissions:
       contents: read
       id-token: write
+    outputs:
+      release_id: >-
+        ${{ needs.recover.outputs.release_id ||
+            needs.release.outputs.release_id }}
+      sha: ${{ needs.recover.outputs.sha || needs.release.outputs.sha }}
+      tag_name: ${{ needs.recover.outputs.tag_name || needs.release.outputs.tag_name }}
+      version: ${{ needs.recover.outputs.version || needs.release.outputs.version }}
+    env:
+      RELEASE_ID: >-
+        ${{ needs.recover.outputs.release_id ||
+            needs.release.outputs.release_id }}
+      RELEASE_SHA: ${{ needs.recover.outputs.sha || needs.release.outputs.sha }}
+      RELEASE_TAG:
+        ${{ needs.recover.outputs.tag_name || needs.release.outputs.tag_name }}
+      RELEASE_VERSION:
+        ${{ needs.recover.outputs.version || needs.release.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ needs.release.outputs.sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
           fetch-depth: 0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -93,16 +194,83 @@ jobs:
           package-manager-cache: false
       - run: npm install --global npm@11.19.0
       - run: npm ci
-      - run: npm run build
-      - run: npm run test:package
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          ref: ${{ env.RELEASE_SHA }}
+          path: .cache/release-source
+          persist-credentials: false
+          fetch-depth: 0
+      - run: npm ci
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: .cache/release-source
       - name: Verify the exact checked release
         env:
-          RELEASE_SHA: ${{ needs.release.outputs.sha }}
-          RELEASE_TAG: ${{ needs.release.outputs.tag_name }}
-          RELEASE_VERSION: ${{ needs.release.outputs.version }}
           NPM_PUBLISH_ENABLED: ${{ vars.NPM_PUBLISH_ENABLED }}
+          RELEASE_RECOVERY: ${{ github.event_name == 'workflow_dispatch' }}
+          CHECKED_RELEASE_SHA: ${{ needs.recover.outputs.checked_sha || github.sha }}
         run: npm run release:verify
+      - run: npm run build
+        working-directory:
+          ${{ github.event_name == 'workflow_dispatch' && '.cache/release-source' || '.'
+          }}
+      - run: npm run test:package
+        working-directory:
+          ${{ github.event_name == 'workflow_dispatch' && '.cache/release-source' || '.'
+          }}
       - run: npm run release:pack
+        working-directory:
+          ${{ github.event_name == 'workflow_dispatch' && '.cache/release-source' || '.'
+          }}
+      - run: npm run release:candidate
+        env:
+          RELEASE_DETAILS: >-
+            ${{ needs.recover.outputs.details || needs.release.outputs.details }}
+          RELEASE_RECOVERY: ${{ github.event_name == 'workflow_dispatch' }}
       - run: npm run release:publish
-      - name: Verify the public registry publication
+        working-directory:
+          ${{ github.event_name == 'workflow_dispatch' && '.cache/release-source' || '.'
+          }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Verify both public npm versions
         run: npm run release:registry
+        working-directory:
+          ${{ github.event_name == 'workflow_dispatch' && '.cache/release-source' || '.'
+          }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: release-${{ env.RELEASE_SHA }}
+          path: .cache/release-candidate/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+  complete:
+    needs: publish
+    if: always() && !cancelled() && needs.publish.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm install --global npm@11.19.0
+      - run: npm ci
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: release-${{ needs.publish.outputs.sha }}
+          path: .cache/release-candidate/
+      - name: Complete the verified GitHub and npm release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_ID: ${{ needs.publish.outputs.release_id }}
+          RELEASE_SHA: ${{ needs.publish.outputs.sha }}
+          RELEASE_TAG: ${{ needs.publish.outputs.tag_name }}
+          RELEASE_VERSION: ${{ needs.publish.outputs.version }}
+        run: npm run release:complete

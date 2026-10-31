@@ -78,7 +78,11 @@
     "lint:layers": "tsx scripts/lint-layers.ts",
     "example": "vite --config vite.examples.config.ts --host 127.0.0.1",
     "fixtures": "tsx scripts/fixtures.ts",
-    "fixtures:check": "tsx scripts/fixtures.ts --check"
+    "fixtures:check": "tsx scripts/fixtures.ts --check",
+    "release:recover": "tsx scripts/release-recover.ts",
+    "release:candidate": "tsx scripts/release-candidate.ts",
+    "release:complete": "tsx scripts/release-complete.ts",
+    "release:details": "tsx scripts/release-details.ts"
   },
   "dependencies": {
     "zod": "4.6.7"
