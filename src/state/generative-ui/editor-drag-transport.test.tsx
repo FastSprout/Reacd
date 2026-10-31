@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
@@ -48,6 +49,7 @@ it('binds toolbar moves and protects readers during host updates', async () => {
   const stop = success(registry.subscribe('draft', notify));
   const view = render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       registry={registry}
       document={{
         schemaVersion: '0.2',
@@ -78,11 +80,11 @@ it('binds toolbar moves and protects readers during host updates', async () => {
     await waitFor(() => expect(reader.textContent).toBe('SecondFirst'));
     expect(writer.textContent).toBe('SecondFirst');
     expect(success(registry.read('draft')).value).toEqual(MOVED);
-      expect(notify).toHaveBeenCalledExactlyOnceWith({
-        key: 'draft',
-        kind: 'richDocument',
-        value: MOVED,
-      });
+    expect(notify).toHaveBeenCalledExactlyOnceWith({
+      key: 'draft',
+      kind: 'richDocument',
+      value: MOVED,
+    });
     expect(success(isolated.read('draft')).value).toEqual(INITIAL);
     act(() => {
       expect(registry.update('draft', INITIAL).success).toBe(true);

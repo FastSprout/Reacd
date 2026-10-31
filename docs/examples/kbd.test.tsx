@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -8,7 +9,7 @@ describe('documented Kbd example', () => {
   it('changes values, labels, platform, size, intent, and variant', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <KbdExample />
       </ReacdProvider>,
     );

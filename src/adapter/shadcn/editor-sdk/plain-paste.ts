@@ -1,6 +1,9 @@
 import type { JSONContent } from '@tiptap/core';
-import { EDITOR_ERRORS, EDITOR_POLICY } from '../../../core/editor-policy.js';
-import type { Result } from '../../../core/result.js';
+import {
+  EDITOR_ERRORS,
+  EDITOR_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
+import type { Result } from '@fastsprout/reacd/adapter-runtime/core/result.js';
 import { editorTextChunks } from '../editor-conversion/text-chunks.js';
 
 type PastePart =

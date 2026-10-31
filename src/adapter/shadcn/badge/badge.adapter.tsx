@@ -1,7 +1,9 @@
-import type { BadgeProps } from '../../../components/badge/badge.js';
-import { DEFAULTS } from '../../../core/policy.js';
+import type { BadgeProps } from
+  '@fastsprout/reacd/adapter-runtime/components/badge/badge.js';
+import { DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { Badge } from '../vendor/ui/badge.js';
-import { ELEMENT_POLICY } from '../../../core/element-policy.js';
+import { ELEMENT_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/element-policy.js';
 import { ShadcnIcon } from '../icon/icon.adapter.js';
 import { ELEMENT_BUTTON_VARIANTS } from '../element/variants.js';
 

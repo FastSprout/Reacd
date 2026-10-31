@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -8,7 +9,7 @@ describe('documented Pagination examples', () => {
   it('changes datasets, windows, page sizes and logical presentation', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PaginationExample />
       </ReacdProvider>,
     );
@@ -44,7 +45,7 @@ describe('documented Pagination examples', () => {
   });
   it('compiles native URL paging against the same public contract', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <UrlPaginationExample />
       </ReacdProvider>,
     );

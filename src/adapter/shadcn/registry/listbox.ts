@@ -1,5 +1,7 @@
-import { renderEntry } from '../../../renderer/contracts/render-entry.js';
-import { listboxSchema } from '../../../schema/listbox/listbox.schema.js';
+import { renderEntry } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/render-entry.js';
+import { listboxSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/listbox/listbox.schema.js';
 import { ShadcnListbox } from '../listbox/listbox.adapter.js';
 
 export const listboxEntries = {

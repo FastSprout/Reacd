@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -24,7 +25,7 @@ describe('semantic table of contents', () => {
     const user = userEvent.setup();
     const selected = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentToc
           label="On this page"
           items={ITEMS}
@@ -48,7 +49,7 @@ describe('semantic table of contents', () => {
     );
     expect(overview).toHaveAttribute('aria-current', 'location');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentToc
           label="On this page"
           items={ITEMS}
@@ -65,7 +66,7 @@ describe('semantic table of contents', () => {
     const user = userEvent.setup();
     const selected = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentToc
           label="Unavailable headings"
           items={ITEMS}
@@ -81,13 +82,13 @@ describe('semantic table of contents', () => {
     }
     expect(selected).not.toHaveBeenCalled();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentToc label="Empty page" items={[]} />
       </ReacdProvider>,
     );
     expect(screen.getByText('No document links.')).toBeVisible();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentToc label="Empty page" items={[]} emptyLabel="No headings yet." />
       </ReacdProvider>,
     );

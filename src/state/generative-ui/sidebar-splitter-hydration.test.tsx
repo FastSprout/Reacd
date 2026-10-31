@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { expect, it } from 'vitest';
@@ -55,16 +56,19 @@ it('hydrates stable IDs, isolated stores and a closed mobile sidebar', () => {
   const client = createDocumentState(documentValue);
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentValue} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={documentValue} registry={server} />,
   );
   document.body.appendChild(container);
   const controls = screen.getByRole('separator').getAttribute('aria-controls');
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentValue} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentValue} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   expect(screen.queryByRole('dialog')).toBeNull();
   expect(screen.getByRole('separator')).toHaveAttribute('aria-controls', controls);
   fireEvent.keyDown(screen.getByRole('separator'), { key: 'ArrowDown' });

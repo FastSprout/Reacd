@@ -1,8 +1,8 @@
 import { useId } from 'react';
-import type {
-  ContentSurroundProps,
-} from '../../../components/content-surround/index.js';
-import { CONTENT_SURROUND_DEFAULTS } from '../../../core/content-surround-policy.js';
+import type { ContentSurroundProps } from
+  '@fastsprout/reacd/adapter-runtime/components/content-surround/index.js';
+import { CONTENT_SURROUND_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/content-surround-policy.js';
 
 export function ShadcnContentSurround({
   label = CONTENT_SURROUND_DEFAULTS.label,

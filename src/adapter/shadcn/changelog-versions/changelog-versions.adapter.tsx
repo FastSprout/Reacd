@@ -1,12 +1,13 @@
 import { Children } from 'react';
 import type { ReactNode } from 'react';
-import type { ChangelogVersionsProps }
-  from '../../../components/changelog-versions/changelog-versions.props.js';
-import { ChangelogVersion }
-  from '../../../components/changelog-version/changelog-version.js';
-import { EDITORIAL_DEFAULTS } from '../../../core/editorial-policy.js';
-import { EditorialIndicatorContext }
-  from '../../../renderer/editorial/indicator-context.js';
+import type { ChangelogVersionsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/changelog-versions/index.js';
+import { ChangelogVersion } from
+  '@fastsprout/reacd/adapter-runtime/components/changelog-version/changelog-version.js';
+import { EDITORIAL_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/editorial-policy.js';
+import { EditorialIndicatorContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editorial/indicator-context.js';
 
 export function ShadcnChangelogVersions({
   children,

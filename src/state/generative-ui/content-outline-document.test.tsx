@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -19,17 +20,27 @@ function document() {
       type: 'VStack',
       children: [
         {
-          type: 'ContentNavigation', label: 'Generated document navigation',
+          type: 'ContentNavigation',
+          label: 'Generated document navigation',
           currentKey: { state: 'current', mode: 'readWrite' },
           expandedKeys: { state: 'expanded', mode: 'readWrite' },
-          items: [{
-            key: 'guide', label: 'Guide', children: [{
-              key: 'intro', label: 'Introduction document', href: '/intro',
-            }],
-          }],
+          items: [
+            {
+              key: 'guide',
+              label: 'Guide',
+              children: [
+                {
+                  key: 'intro',
+                  label: 'Introduction document',
+                  href: '/intro',
+                },
+              ],
+            },
+          ],
         },
         {
-          type: 'ContentToc', label: 'Generated table of contents',
+          type: 'ContentToc',
+          label: 'Generated table of contents',
           currentKey: { state: 'current', mode: 'readWrite' },
           items: [{ key: 'intro', label: 'Introduction heading' }],
         },
@@ -42,7 +53,7 @@ function document() {
 describe('whole-document content outline integration', () => {
   it('shares navigation and heading state through the public transport', async () => {
     const user = userEvent.setup();
-    render(<GenerativeUI document={document()} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={document()} />);
     const link = screen.getByRole('link', { name: 'Introduction document' });
     const heading = screen.getByRole('link', { name: 'Introduction heading' });
     await user.click(link);
@@ -70,7 +81,9 @@ describe('whole-document content outline integration', () => {
         { key: 'expanded', kind: 'selection', initial: ['intro'], access: 'readWrite' },
       ],
     ]) {
-      const view = render(<GenerativeUI document={{ ...document(), state }} />);
+      const view = render(
+        <GenerativeUI adapter={shadcnAdapter} document={{ ...document(), state }} />,
+      );
       expect(screen.getByRole('alert')).toBeInTheDocument();
       expect(screen.queryByRole('link')).toBeNull();
       view.unmount();

@@ -1,11 +1,13 @@
 import { useContext, useId } from 'react';
-import type {
-  PageLogosProps,
-} from '../../../components/page-logos/page-logos.props.js';
-import { MEDIA_DEFAULTS } from '../../../core/media-policy.js';
-import { HeadingLevelContext } from '../../../renderer/heading/heading-context.js';
-import { PageHeading } from '../../../renderer/page-introduction/page-heading.js';
-import { SafeImage } from '../../../renderer/media/safe-image.js';
+import type { PageLogosProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-logos/page-logos.props.js';
+import { MEDIA_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/media-policy.js';
+import { HeadingLevelContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/heading/heading-context.js';
+import { PageHeading } from
+  '@fastsprout/reacd/adapter-runtime/renderer/page-introduction/page-heading.js';
+import { SafeImage } from
+  '@fastsprout/reacd/adapter-runtime/renderer/media/safe-image.js';
 
 export function ShadcnPageLogos({
   label,

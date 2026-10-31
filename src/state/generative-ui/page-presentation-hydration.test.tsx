@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -29,14 +30,17 @@ describe('Page presentation hydration', () => {
     const container = document.createElement('div');
     document.body.append(container);
     container.innerHTML = renderToString(
-      <GenerativeUI document={declaration} actions={{ run }} />,
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
     );
     const errors: unknown[] = [];
-    const view = render(<GenerativeUI document={declaration} actions={{ run }} />, {
-      container,
-      hydrate: true,
-      onRecoverableError: (error) => errors.push(error),
-    });
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
+      {
+        container,
+        hydrate: true,
+        onRecoverableError: (error) => errors.push(error),
+      },
+    );
     expect(errors).toEqual([]);
     expect(
       screen.getByRole('heading', { name: 'Hydrated action', level: 2 }),
@@ -46,7 +50,13 @@ describe('Page presentation hydration', () => {
     view.unmount();
     container.remove();
     expect(
-      renderToString(<GenerativeUI document={declaration} actions={{ run }} />),
+      renderToString(
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={declaration}
+          actions={{ run }}
+        />,
+      ),
     ).toContain('Hydrated child');
   });
 });

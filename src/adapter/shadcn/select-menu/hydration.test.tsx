@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { expect, it } from 'vitest';
@@ -5,7 +6,7 @@ import { SelectMenu, ReacdProvider } from '../../../index.js';
 
 it('hydrates canonical labels and IDs without changing independent query', () => {
   const ui = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu
         label="Server records"
         mode="multiple"

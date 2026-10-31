@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -14,7 +15,7 @@ describe.each([
     const user = userEvent.setup();
     const lower = name.toLowerCase();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Component />
       </ReacdProvider>,
     );

@@ -1,3 +1,4 @@
+import { FRAMEWORK_ERRORS } from '../../core/errors.js';
 import { useContext, useState } from 'react';
 import { definitionSignature } from '../../schema/state/definition-signature.js';
 import { visitGenerativeNodes } from '../../schema/generative-v2/document.schema.js';
@@ -44,10 +45,23 @@ export function GenerativeApplication({
     }
   });
   if (issues.length > 0) return <Issues issues={issues} />;
+  const selectedAdapter = adapter ?? application?.adapter;
+  if (selectedAdapter === undefined) {
+    return (
+      <Issues
+        issues={[
+          {
+            path: 'GenerativeUI.adapter',
+            message: FRAMEWORK_ERRORS.missingAdapter,
+          },
+        ]}
+      />
+    );
+  }
   return (
     <ReacdProvider
       store={state.store}
-      adapter={adapter ?? application?.adapter}
+      adapter={selectedAdapter}
       templateId={templateId ?? application?.templateId ?? document.templateId}
       templates={templates ?? application?.templates}
     >

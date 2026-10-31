@@ -1,7 +1,8 @@
 import { useContext } from 'react';
 import type { ReactNode } from 'react';
 import { Collapsible as Primitive } from '@base-ui/react/collapsible';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { ShadcnChatShimmer } from '../chat-shimmer/chat-shimmer.adapter.js';
 import { Button } from '../vendor/ui/button.js';
 

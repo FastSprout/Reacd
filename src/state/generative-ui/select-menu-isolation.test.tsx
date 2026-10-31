@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -21,6 +22,7 @@ it('uses isolated stores for readonly multiple and writable single selection', (
   if (!registry.success) throw new Error('Missing registry.');
   const first = render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{ schemaVersion: '0.2', state, root: { ...node, mode: 'multiple' } }}
       registry={registry.data}
     />,
@@ -36,6 +38,7 @@ it('uses isolated stores for readonly multiple and writable single selection', (
   ];
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: singleState,
@@ -61,6 +64,7 @@ it('rejects missing membership and atomic multiline query writes', () => {
   if (!registry.success) throw new Error('Missing registry.');
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state,
@@ -94,6 +98,7 @@ it('writes a single canonical key without optional state channels', async () => 
   if (!registry.success) throw new Error('Missing registry.');
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state,

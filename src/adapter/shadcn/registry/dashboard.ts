@@ -1,38 +1,39 @@
-import { renderEntry } from '../../../renderer/contracts/render-entry.js';
+import { renderEntry } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/render-entry.js';
 import { dashboardGroupSchema } from
-  '../../../schema/dashboard-group/dashboard-group.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-group/dashboard-group.schema.js';
 import { ShadcnDashboardGroup } from '../dashboard-group/dashboard-group.adapter.js';
 import { dashboardSidebarSchema } from
-  '../../../schema/dashboard-sidebar/dashboard-sidebar.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-sidebar/index.js';
 import { ShadcnDashboardSidebar } from
   '../dashboard-sidebar/dashboard-sidebar.adapter.js';
 import { dashboardPanelSchema } from
-  '../../../schema/dashboard-panel/dashboard-panel.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-panel/dashboard-panel.schema.js';
 import { ShadcnDashboardPanel } from '../dashboard-panel/dashboard-panel.adapter.js';
 import { dashboardNavbarSchema } from
-  '../../../schema/dashboard-navbar/dashboard-navbar.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-navbar/index.js';
 import { ShadcnDashboardNavbar } from '../dashboard-navbar/dashboard-navbar.adapter.js';
 import { dashboardToolbarSchema } from
-  '../../../schema/dashboard-toolbar/dashboard-toolbar.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-toolbar/index.js';
 import { ShadcnDashboardToolbar } from
   '../dashboard-toolbar/dashboard-toolbar.adapter.js';
 import { dashboardSidebarCollapseSchema } from
-  '../../../schema/dashboard-sidebar-collapse/dashboard-sidebar-collapse.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-sidebar-collapse/index.js';
 import { ShadcnDashboardSidebarCollapse } from
   '../dashboard-sidebar-collapse/dashboard-sidebar-collapse.adapter.js';
 import { dashboardSidebarToggleSchema } from
-  '../../../schema/dashboard-sidebar-toggle/dashboard-sidebar-toggle.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-sidebar-toggle/index.js';
 import { ShadcnDashboardSidebarToggle } from
   '../dashboard-sidebar-toggle/dashboard-sidebar-toggle.adapter.js';
 import { dashboardResizeHandleSchema } from
-  '../../../schema/dashboard-resize-handle/dashboard-resize-handle.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-resize-handle/index.js';
 import { ShadcnDashboardResizeHandle } from
   '../dashboard-resize-handle/dashboard-resize-handle.adapter.js';
 import { dashboardSearchSchema } from
-  '../../../schema/dashboard-search/dashboard-search.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-search/index.js';
 import { ShadcnDashboardSearch } from '../dashboard-search/dashboard-search.adapter.js';
 import { dashboardSearchButtonSchema } from
-  '../../../schema/dashboard-search-button/dashboard-search-button.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-search-button/index.js';
 import { ShadcnDashboardSearchButton } from
   '../dashboard-search-button/dashboard-search-button.adapter.js';
 

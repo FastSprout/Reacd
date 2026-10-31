@@ -1,5 +1,6 @@
 import { useId } from 'react';
-import type { FooterColumnsProps } from '../../../components/footer-columns/index.js';
+import type { FooterColumnsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/footer-columns/index.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnFooterColumns({
@@ -54,4 +55,5 @@ export function ShadcnFooterColumns({
     </nav>
   );
 }
-import { pressHandler } from '../../../renderer/contracts/press-handler.js';
+import { pressHandler } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/press-handler.js';

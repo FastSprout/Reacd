@@ -1,11 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fileURLToPath } from 'node:url';
 
-const mocks = vi.hoisted(() => ({ pack: vi.fn(), log: vi.fn() }));
-vi.mock('../tooling/release/pack.js', () => ({ packReleaseArchive: mocks.pack }));
+const mocks = vi.hoisted(() => ({ pack: vi.fn(), adapter: vi.fn(), log: vi.fn() }));
+vi.mock('../tooling/release/pack.js', () => ({
+  packReleaseArchive: mocks.pack,
+  packShadcnArchive: mocks.adapter,
+}));
 beforeEach(() => {
   vi.resetModules();
   mocks.pack.mockReset().mockReturnValue('/repo/.cache/release/package.tgz');
+  mocks.adapter.mockReset().mockReturnValue('/repo/.cache/release/shadcn.tgz');
   mocks.log.mockReset();
   vi.spyOn(console, 'log').mockImplementation(mocks.log);
 });
@@ -16,8 +20,16 @@ describe('release pack CLI', () => {
     expect(mocks.pack).toHaveBeenCalledExactlyOnceWith(
       fileURLToPath(new URL('../', import.meta.url)),
     );
-    expect(mocks.log).toHaveBeenCalledExactlyOnceWith(
+    expect(mocks.log).toHaveBeenNthCalledWith(
+      1,
       'Verified local release archive: /repo/.cache/release/package.tgz',
+    );
+    expect(mocks.adapter).toHaveBeenCalledExactlyOnceWith(
+      fileURLToPath(new URL('../', import.meta.url)),
+    );
+    expect(mocks.log).toHaveBeenNthCalledWith(
+      2,
+      'Verified local shadcn archive: /repo/.cache/release/shadcn.tgz',
     );
   });
 

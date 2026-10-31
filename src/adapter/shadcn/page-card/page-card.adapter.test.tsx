@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -20,7 +21,7 @@ import { PAGE_SURFACE_VARIANTS } from '../../../core/page-presentation-policy.js
 describe('Page presentation contracts', () => {
   it('renders optional content and every region without an extra main', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Page title="Application">
           <PageHeader
             headline="Reference"
@@ -115,7 +116,7 @@ describe('Page presentation contracts', () => {
     const title = vi.fn();
     const child = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PageFeature title="Run feature" onPress={title}>
           <Button label="Run child" onPress={child} />
         </PageFeature>
@@ -149,7 +150,7 @@ describe('Page presentation contracts', () => {
       <Input label="Retained value" value="Retained" onValueChange={vi.fn()} />
     );
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PageHero title="Introduction" orientation="horizontal">
           {content}
         </PageHero>
@@ -158,7 +159,7 @@ describe('Page presentation contracts', () => {
     const input = screen.getByRole('textbox', { name: 'Retained value' });
     input.focus();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PageHero title="Introduction" orientation="vertical" reverse>
           {content}
         </PageHero>
@@ -176,7 +177,7 @@ describe('Page presentation contracts', () => {
 
   it('omits absent slots, bounds headings and renders every closed surface', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Section title="Parent">
           <PageHeader />
           <PageFeature />
@@ -204,7 +205,7 @@ describe('Page presentation contracts', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     expect(
       renderToString(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <PageHero title="Server title" />
         </ReacdProvider>,
       ),

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -28,7 +29,7 @@ it('shares time edits, protects readers and constrains host updates', async () =
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInputTime node={singleNode} registry={registry} />
       <BoundInputTime
         node={{
@@ -67,7 +68,7 @@ it('binds independent range endpoints and protects read-only views', async () =>
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInputTime node={rangeNode} registry={registry} />
       <BoundInputTime
         node={{ ...rangeNode, label: 'Protected', readOnly: true }}
@@ -93,7 +94,7 @@ it('binds independent range endpoints and protects read-only views', async () =>
 it('reports invalid single/range bindings without rendering editable fields', () => {
   const registry = success(createStateRegistry([]));
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInputTime node={singleNode} registry={registry} />
       <BoundInputTime node={rangeNode} registry={registry} />
     </ReacdProvider>,

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import {
   ACTION_MENU_DEFAULTS,
   menuDecision,
-} from '../../../core/action-menu-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/core/action-menu-policy.js';
 import { MenuSelectionContext } from './menu-items.js';
 
 export function MenuContent({

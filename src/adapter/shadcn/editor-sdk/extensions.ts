@@ -1,5 +1,8 @@
 import StarterKit from '@tiptap/starter-kit';
-import { EDITOR_BEHAVIOR, EDITOR_HEADING_LEVELS } from '../../../core/editor-policy.js';
+import {
+  EDITOR_BEHAVIOR,
+  EDITOR_HEADING_LEVELS,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
 import { createEditorAtom } from './atoms.js';
 import { createEditorIdentity } from './identity.js';
 import type { EditorIdentityOptions } from './identity-plugin.js';

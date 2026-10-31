@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import type { InputTagsProps } from '../../../components/input-tags/index.js';
-import { INPUT_TAGS_POLICY } from '../../../core/input-tags-policy.js';
-import { appendTags, sameTags } from '../../../core/tag-entry.js';
+import type { InputTagsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-tags/index.js';
+import { INPUT_TAGS_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-tags-policy.js';
+import {
+  appendTags,
+  sameTags,
+} from '@fastsprout/reacd/adapter-runtime/core/tag-entry.js';
 
 export function useTagDraft({
   value,

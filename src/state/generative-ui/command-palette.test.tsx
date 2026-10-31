@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -50,6 +51,7 @@ describe('generative CommandPalette', () => {
     });
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={{ run: action }}
@@ -78,6 +80,7 @@ describe('generative CommandPalette', () => {
     const action = vi.fn();
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={{ run: action }}
@@ -108,10 +111,16 @@ describe('generative CommandPalette', () => {
       },
     });
     const action = vi.fn();
-    const view = render(<GenerativeUI document={document} actions={{ run: action }} />);
+    const view = render(
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={document}
+        actions={{ run: action }}
+      />,
+    );
     await user.click(screen.getByRole('option', { name: 'Guide command' }));
     expect(action).toHaveBeenCalledOnce();
-    view.rerender(<GenerativeUI document={document} />);
+    view.rerender(<GenerativeUI adapter={shadcnAdapter} document={document} />);
     expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered');
     expect(
       validateGenerativeDocument({
@@ -129,7 +138,9 @@ describe('generative CommandPalette', () => {
     const action = vi.fn();
     const inherited = vi.fn();
     const actions = { run: action };
-    render(<GenerativeUI document={declaration} actions={actions} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={actions} />,
+    );
     Object.defineProperty(actions, 'run', { value: 42, configurable: true });
     await user.click(screen.getByRole('option', { name: 'Guide command' }));
     Reflect.deleteProperty(actions, 'run');
@@ -143,7 +154,7 @@ describe('generative CommandPalette', () => {
     'reports a missing live %s binding',
     (property) => {
       render(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <BoundCommandPalette
             node={{ ...node, [property]: { state: 'missing', mode: 'readWrite' } }}
             registry={createDocumentState(declaration)}
@@ -161,6 +172,7 @@ describe('generative CommandPalette', () => {
       const user = userEvent.setup();
       const content = (
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={declaration}
           templateId={templateId}
           actions={{ run: vi.fn() }}

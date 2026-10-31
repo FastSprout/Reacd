@@ -1,19 +1,26 @@
 import { useContext, useRef, useState } from 'react';
-import type { SelectMenuProps } from '../../../components/select-menu/index.js';
+import type { SelectMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/select-menu/index.js';
 import {
   canRequestSelection,
   multipleSelectionValueSchema,
-} from '../../../schema/selection/index.js';
-import { menuTextSchema } from '../../../schema/form-menu-shared/text.schema.js';
-import { FORM_MENU_DEFAULTS } from '../../../core/form-menu-policy.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/schema/selection/index.js';
+import { menuTextSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/form-menu-shared/text.schema.js';
+import { FORM_MENU_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/form-menu-policy.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
 import {
   SELECT_MENU_POLICY,
   SELECT_MENU_DEFAULTS,
-} from '../../../core/select-menu-policy.js';
-import { filterFormMenuItems } from '../../../core/form-menu-search.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import { useEscapeLayer } from '../../../renderer/theme/use-escape-layer.js';
+} from '@fastsprout/reacd/adapter-runtime/core/select-menu-policy.js';
+import { filterFormMenuItems } from
+  '@fastsprout/reacd/adapter-runtime/core/form-menu-search.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { useEscapeLayer } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/use-escape-layer.js';
 import { requestFormMenuChange } from '../form-menu-shared/request.js';
 
 export function useSelectMenu(properties: SelectMenuProps) {

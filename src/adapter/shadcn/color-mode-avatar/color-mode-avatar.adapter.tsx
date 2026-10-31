@@ -1,6 +1,5 @@
-import type {
-  ColorModeAvatarProps,
-} from '../../../components/color-mode-avatar/index.js';
+import type { ColorModeAvatarProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-avatar/index.js';
 import { ShadcnAvatar } from '../avatar/avatar.adapter.js';
 
 export function ShadcnColorModeAvatar({

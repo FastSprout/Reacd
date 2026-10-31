@@ -1,5 +1,7 @@
-import type { FieldGroupProps } from '../../../components/field-group/index.js';
-import { FIELD_GROUP_DEFAULTS } from '../../../core/field-group-policy.js';
+import type { FieldGroupProps } from
+  '@fastsprout/reacd/adapter-runtime/components/field-group/index.js';
+import { FIELD_GROUP_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/field-group-policy.js';
 
 export function ShadcnFieldGroup({
   label,

@@ -8,7 +8,6 @@ import {
 } from '../../schema/design/templates.schema.js';
 import { createRenderPort } from '../../renderer/port/create-render-port.js';
 import { Issues } from '../../renderer/issues/issues.renderer.js';
-import { shadcnAdapter } from '../../adapter/shadcn/shadcn.adapter.js';
 import type { providerSchema } from './provider.schema.js';
 import { createReacdStore } from '../store.js';
 import { templateAtom } from '../theme/template.atom.js';
@@ -16,7 +15,7 @@ import { ApplicationContext } from '../application-context.js';
 
 export function ActiveProvider({
   children,
-  adapter = shadcnAdapter,
+  adapter,
   templateId: controlledTemplateId,
   templates = defaults,
   store,

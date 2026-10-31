@@ -1,14 +1,16 @@
-import { EDITOR_LOOKUP_POLICY } from '../../../core/editor-lookup-policy.js';
+import { EDITOR_LOOKUP_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-lookup-policy.js';
 import {
   editorMentionLookupScopeSchema,
   editorMentionLookupQuerySchema,
   editorMentionLookupRequestSchema,
-} from '../../../schema/editor-mention-menu/lookup.schema.js';
+} from '@fastsprout/reacd/adapter-runtime/schema/editor-mention-menu/lookup.schema.js';
 import type {
   EditorMentionLookupRequest,
   EditorMentionLookupResult,
-} from '../../../schema/editor-mention-menu/lookup.schema.js';
-import type * as mention from '../../../schema/editor-mention-menu/item.schema.js';
+} from '@fastsprout/reacd/adapter-runtime/schema/editor-mention-menu/lookup.schema.js';
+import type * as mention from
+  '@fastsprout/reacd/adapter-runtime/schema/editor-mention-menu/item.schema.js';
 
 export interface EditorMentionLookupView {
   readonly request: EditorMentionLookupRequest | undefined;

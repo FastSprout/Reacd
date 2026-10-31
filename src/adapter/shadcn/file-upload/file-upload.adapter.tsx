@@ -7,13 +7,15 @@ import {
   useSyncExternalStore,
 } from 'react';
 import type { SyntheticEvent } from 'react';
-import type { FileUploadProps } from '../../../components/file-upload/index.js';
+import type { FileUploadProps } from
+  '@fastsprout/reacd/adapter-runtime/components/file-upload/index.js';
 import {
   FILE_ACCEPT_TYPES,
   FILE_UPLOAD_DEFAULTS as D,
   FILE_UPLOAD_POLICY as P,
-} from '../../../core/file-upload-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+} from '@fastsprout/reacd/adapter-runtime/core/file-upload-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Button } from '../vendor/ui/button.js';
 import { FileIntake } from './intake.js';
 import { readFile } from './read-file.js';

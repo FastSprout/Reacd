@@ -1,3 +1,5 @@
+import '@fastsprout/reacd-shadcn/styles';
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { COMPOSITION_HOST_EVENTS } from './composition-events.js';
 import { useEffect } from 'react';
 import { atom, useAtom } from 'jotai';
@@ -71,7 +73,10 @@ function CompositionSafety() {
     };
   }, [setDisabled, setSubmitting, setSelected, setShared]);
   return (
-    <ReacdProvider templateId={compact ? 'erp-compact' : 'saas-modern-light'}>
+    <ReacdProvider
+      adapter={shadcnAdapter}
+      templateId={compact ? 'erp-compact' : 'saas-modern-light'}
+    >
       <App direction="rtl">
         <VStack>
           <Toggle

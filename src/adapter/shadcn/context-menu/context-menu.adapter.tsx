@@ -1,7 +1,9 @@
 import { openKeyboardContextMenu } from './keyboard-trigger.js';
 import { ContextMenu } from '@base-ui/react/context-menu';
-import type { ContextMenuProps } from '../../../components/context-menu/index.js';
-import { EscapeScopeContext } from '../../../renderer/theme/escape-context.js';
+import type { ContextMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/context-menu/index.js';
+import { EscapeScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-context.js';
 import { useMenuFrame } from '../action-menu/use-menu-frame.js';
 import { MenuItems } from '../action-menu/menu-items.js';
 import { MenuSurface } from '../action-menu/menu-surface.js';

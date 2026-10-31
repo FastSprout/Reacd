@@ -1,6 +1,6 @@
 import { createToastFocus } from './toast-focus.js';
 import { atom, createStore } from 'jotai/vanilla';
-import { TOAST_POLICY } from '../../../core/toast-policy.js';
+import { TOAST_POLICY } from '@fastsprout/reacd/adapter-runtime/core/toast-policy.js';
 export function createToastQueue() {
   const keys = atom<ReadonlySet<string>>(new Set<string>());
   const store = createStore();

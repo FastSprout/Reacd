@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import * as Scene from '../../../tooling/conformance/catalog/chat-feedback-examples.js';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
@@ -9,7 +10,7 @@ it('hydrates feedback previews with stable disclosure labels', async () => {
   const user = userEvent.setup();
   for (const templateId of ['saas-modern-light', 'erp-compact']) {
     const element = (
-      <ReacdProvider templateId={templateId}>
+      <ReacdProvider adapter={shadcnAdapter} templateId={templateId}>
         <Scene.ChatFeedbackExamples />
       </ReacdProvider>
     );

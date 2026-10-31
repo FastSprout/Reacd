@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { expect, it } from 'vitest';
@@ -5,7 +6,7 @@ import { InputMenu, ReacdProvider } from '../../../index.js';
 
 it('hydrates explicit text without shared state or unstable label IDs', () => {
   const ui = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu
         label="Server text"
         value="Custom place"

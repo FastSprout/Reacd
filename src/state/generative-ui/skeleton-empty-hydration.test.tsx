@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -45,15 +46,26 @@ describe('Skeleton and Empty hydration', () => {
       };
       const container = document.createElement('div');
       container.innerHTML = renderToString(
-        <GenerativeUI document={declaration} actions={actions} />,
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={declaration}
+          actions={actions}
+        />,
       );
       document.body.appendChild(container);
       const errors: unknown[] = [];
-      const view = render(<GenerativeUI document={declaration} actions={actions} />, {
-        container,
-        hydrate: true,
-        onRecoverableError: (error) => errors.push(error),
-      });
+      const view = render(
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={declaration}
+          actions={actions}
+        />,
+        {
+          container,
+          hydrate: true,
+          onRecoverableError: (error) => errors.push(error),
+        },
+      );
       expect(screen.getByRole('region', { name: 'Hydrated results' })).toHaveAttribute(
         'data-loading',
         String(busy),
@@ -62,7 +74,13 @@ describe('Skeleton and Empty hydration', () => {
       await user.click(screen.getByRole('button', { name: 'Finish loading' }));
       expect(screen.queryByRole('status')).toBeNull();
       expect(
-        renderToString(<GenerativeUI document={declaration} actions={actions} />),
+        renderToString(
+          <GenerativeUI
+            adapter={shadcnAdapter}
+            document={declaration}
+            actions={actions}
+          />,
+        ),
       ).not.toContain('Client query');
       expect(errors).toEqual([]);
       view.unmount();

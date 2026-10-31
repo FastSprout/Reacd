@@ -1,10 +1,14 @@
 import { useContext, useState } from 'react';
 import type { Menu } from '@base-ui/react/menu';
 import type { ContextMenu } from '@base-ui/react/context-menu';
-import type { DropdownMenuProps } from '../../../components/dropdown-menu/index.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import { createEscapeScope } from '../../../renderer/theme/escape-scope.js';
-import { useEscapeLayer } from '../../../renderer/theme/use-escape-layer.js';
+import type { DropdownMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/dropdown-menu/index.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { createEscapeScope } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-scope.js';
+import { useEscapeLayer } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/use-escape-layer.js';
 
 export function useMenuFrame({
   open,

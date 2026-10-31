@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { PageLogos, ReacdProvider } from '../../../index.js';
@@ -5,13 +6,13 @@ import { PageLogos, ReacdProvider } from '../../../index.js';
 describe('PageLogos adapter', () => {
   it('exposes empty content and named static images', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PageLogos label="Example marks" items={[]} />
       </ReacdProvider>,
     );
     expect(screen.getByText('No logos to display.')).toBeVisible();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PageLogos
           label="Example marks"
           title="Host supplied marks"
@@ -28,7 +29,7 @@ describe('PageLogos adapter', () => {
     const first = { key: 'first', src: '/first.png', alt: 'First placeholder' };
     const second = { key: 'second', src: '/second.png', alt: 'Second placeholder' };
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PageLogos label="Example marks" items={[first, second]} />
       </ReacdProvider>,
     );
@@ -36,7 +37,7 @@ describe('PageLogos adapter', () => {
     expect(image).toHaveAttribute('width', '160');
     expect(image).toHaveAttribute('height', '80');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PageLogos label="Example marks" items={[second, first]} />
       </ReacdProvider>,
     );
@@ -46,7 +47,7 @@ describe('PageLogos adapter', () => {
       'Image unavailable:',
     );
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PageLogos
           label="Example marks"
           items={[{ ...first, src: '/replacement.png' }]}

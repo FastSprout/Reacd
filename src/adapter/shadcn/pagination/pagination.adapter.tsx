@@ -1,10 +1,15 @@
-import type { PaginationProps } from '../../../components/pagination/pagination.js';
+import type { PaginationProps } from
+  '@fastsprout/reacd/adapter-runtime/components/pagination/pagination.js';
 import {
   PAGINATION_POLICY,
   PAGINATION_DEFAULTS,
-} from '../../../core/pagination-policy.js';
-import { paginationTokens, paginationPageCount } from '../../../core/pagination.js';
-import { paginationHref } from '../../../core/pagination-href.js';
+} from '@fastsprout/reacd/adapter-runtime/core/pagination-policy.js';
+import {
+  paginationTokens,
+  paginationPageCount,
+} from '@fastsprout/reacd/adapter-runtime/core/pagination.js';
+import { paginationHref } from
+  '@fastsprout/reacd/adapter-runtime/core/pagination-href.js';
 import { PaginationControl } from './pagination-control.js';
 
 export function ShadcnPagination({

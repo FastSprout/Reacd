@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { atom, useAtom } from 'jotai';
@@ -20,7 +21,7 @@ function Host() {
 it('reuses table controls with atomic controlled model transitions', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Host />
     </ReacdProvider>,
   );
@@ -43,7 +44,7 @@ it('preserves rejected proposals and protects per-field permissions', async () =
   const change = vi.fn();
   const model = { ...TABLE_MODEL, pagination: { pageIndex: 1, pageSize: 1 } };
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnInteractiveTable
         mode="interactive"
         caption="Orders"
@@ -68,7 +69,7 @@ it('preserves rejected proposals and protects per-field permissions', async () =
     },
   ]) {
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnInteractiveTable
           mode="interactive"
           caption="Orders"
@@ -95,7 +96,7 @@ it('keeps native table action buttons out of implicit form submission', async ()
         submit();
       }}
     >
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnInteractiveTable
           mode="interactive"
           caption="Orders"

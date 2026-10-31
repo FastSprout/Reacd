@@ -1,3 +1,4 @@
+import { FRAMEWORK_ERRORS } from '../../core/errors.js';
 import type { ReactNode } from 'react';
 import { useContext } from 'react';
 import {
@@ -36,9 +37,22 @@ export function ReacdRenderer({
     }
   });
   if (issues.length > 0) return <Issues issues={issues} />;
+  const selectedAdapter = adapter ?? application?.adapter;
+  if (selectedAdapter === undefined) {
+    return (
+      <Issues
+        issues={[
+          {
+            path: 'ReacdRenderer.adapter',
+            message: FRAMEWORK_ERRORS.missingAdapter,
+          },
+        ]}
+      />
+    );
+  }
   return (
     <ReacdProvider
-      adapter={adapter ?? application?.adapter}
+      adapter={selectedAdapter}
       store={store ?? application?.store}
       templates={templates ?? application?.templates}
       templateId={templateId ?? application?.templateId ?? result.data.templateId}

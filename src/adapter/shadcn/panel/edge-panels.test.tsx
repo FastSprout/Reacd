@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -53,7 +54,7 @@ describe.each(['Drawer', 'Slideover'] as const)('shadcn %s', (kind) => {
   it('keeps retained nested panels inactive when an ancestor is closed', () => {
     const Component = PANELS[kind];
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Modal
           title="Closed ancestor"
           description="Retained outer."
@@ -76,7 +77,7 @@ describe.each(['Drawer', 'Slideover'] as const)('shadcn %s', (kind) => {
   it('opens, scopes nested Escape, activates slots and returns focus', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PanelExample kind={kind} />
       </ReacdProvider>,
     );
@@ -100,7 +101,7 @@ describe.each(['Drawer', 'Slideover'] as const)('shadcn %s', (kind) => {
   it('keeps locked panels open until an explicit close', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PanelExample kind={kind} dismissible={false} />
       </ReacdProvider>,
     );
@@ -116,7 +117,7 @@ describe.each(['Drawer', 'Slideover'] as const)('shadcn %s', (kind) => {
     const change = vi.fn();
     const Component = PANELS[kind];
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <App direction="rtl">
           <Component
             title="RTL resource"
@@ -141,7 +142,7 @@ describe.each(['Drawer', 'Slideover'] as const)('shadcn %s', (kind) => {
     expect(change).toHaveBeenCalledWith(false);
     expect(dialog).toBeInTheDocument();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <App direction="rtl">
           <Component
             title="RTL resource"
@@ -159,7 +160,7 @@ describe.each(['Drawer', 'Slideover'] as const)('shadcn %s', (kind) => {
   it('does not allow a disabled trigger to request opening', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PanelExample kind={kind} disabled overlay={false} />
       </ReacdProvider>,
     );
@@ -171,7 +172,7 @@ describe.each(['Drawer', 'Slideover'] as const)('shadcn %s', (kind) => {
 it('can hide the decorative drawer handle without affecting dismissal', async () => {
   const user = userEvent.setup();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Drawer
         title="No handle"
         description="Drawer body"

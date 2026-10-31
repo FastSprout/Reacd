@@ -1,9 +1,11 @@
 import { Children } from 'react';
 import type { ReactNode } from 'react';
-import type { BlogPostsProps }
-  from '../../../components/blog-posts/blog-posts.props.js';
-import { BlogPost } from '../../../components/blog-post/blog-post.js';
-import { EDITORIAL_DEFAULTS } from '../../../core/editorial-policy.js';
+import type { BlogPostsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/blog-posts/blog-posts.props.js';
+import { BlogPost } from
+  '@fastsprout/reacd/adapter-runtime/components/blog-post/blog-post.js';
+import { EDITORIAL_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/editorial-policy.js';
 
 export function ShadcnBlogPosts({
   children,

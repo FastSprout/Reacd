@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -29,7 +30,7 @@ it('shares dates, protects readers and intersects bounds', async () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundCalendar node={single} registry={registry} />
       <BoundCalendar
         node={{
@@ -76,7 +77,7 @@ it('commits date ranges with independent reader access', async () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundCalendar node={range} registry={registry} />
       <BoundCalendar
         node={{ ...range, label: 'Reader', value: { state: 'delivery', mode: 'read' } }}
@@ -143,7 +144,7 @@ it.each([
   ({ node, definitions }) => {
     const registry = success(createStateRegistry(definitions));
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundCalendar node={node} registry={registry} />
       </ReacdProvider>,
     );

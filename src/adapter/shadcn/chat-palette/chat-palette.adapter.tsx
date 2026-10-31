@@ -1,4 +1,5 @@
-import type { ChatPaletteProps } from '../../../components/chat-palette/index.js';
+import type { ChatPaletteProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-palette/index.js';
 
 export function ShadcnChatPalette({ label, children, prompt }: ChatPaletteProps) {
   return (

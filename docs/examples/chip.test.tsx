@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -9,7 +10,7 @@ describe('documented Chip example', () => {
   it('changes presentation and preserves actions and indicator meaning', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChipExample />
       </ReacdProvider>,
     );

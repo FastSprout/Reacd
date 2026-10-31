@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -19,13 +20,13 @@ it('keeps literal data declarative and guards stale retry capabilities', async (
   const registry = success(createStateRegistry([]));
   const retry = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <GenerativeChart node={BASE} registry={registry} actions={{}} />
     </ReacdProvider>,
   );
   expect(screen.getByRole('img', { name: 'Generated activity' })).toBeVisible();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <GenerativeChart
         node={{ ...BASE, state: 'error', retryAction: 'retry' }}
         registry={registry}
@@ -36,7 +37,7 @@ it('keeps literal data declarative and guards stale retry capabilities', async (
   await user.click(screen.getByRole('button', { name: 'Retry chart' }));
   expect(retry).toHaveBeenCalledExactlyOnceWith({ state: registry });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <GenerativeChart
         node={{ ...BASE, state: 'error', retryAction: 'retry' }}
         registry={registry}
@@ -55,11 +56,13 @@ it('validates retry intents before exposing generated chart controls', async () 
     state: [],
     root: { ...BASE, state: 'error', retryAction: 'retry' },
   };
-  const view = render(<GenerativeUI document={document} />);
+  const view = render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
   expect(screen.getByRole('alert')).toHaveTextContent('not registered: retry');
   expect(screen.queryByRole('button')).toBeNull();
   const retry = vi.fn();
-  view.rerender(<GenerativeUI document={document} actions={{ retry }} />);
+  view.rerender(
+    <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ retry }} />,
+  );
   await user.click(screen.getByRole('button', { name: 'Retry chart' }));
   expect(retry).toHaveBeenCalledOnce();
 });

@@ -1,4 +1,5 @@
-import type { HeaderProps } from '../../../components/header/header.js';
+import type { HeaderProps } from
+  '@fastsprout/reacd/adapter-runtime/components/header/header.js';
 import { ShadcnHeaderMenu } from './header-menu.js';
 
 export function ShadcnHeader({

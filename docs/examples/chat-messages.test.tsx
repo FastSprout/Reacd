@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -7,7 +8,7 @@ import { ChatMessagesExample } from './chat-messages.js';
 it('runs transcript, recovery, direction and following controls', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatMessagesExample />
     </ReacdProvider>,
   );

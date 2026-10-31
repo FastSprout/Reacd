@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -7,7 +8,7 @@ import { ContentSurroundExample } from './content-surround.js';
 it('preserves host data while the documented adjacent set becomes empty', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContentSurroundExample />
     </ReacdProvider>,
   );

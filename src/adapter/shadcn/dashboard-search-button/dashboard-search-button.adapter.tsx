@@ -1,6 +1,7 @@
 import type { DashboardSearchButtonProps } from
-  '../../../components/dashboard-search-button/index.js';
-import { DASHBOARD_DEFAULTS } from '../../../core/dashboard-policy.js';
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-search-button/index.js';
+import { DASHBOARD_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnDashboardSearchButton({

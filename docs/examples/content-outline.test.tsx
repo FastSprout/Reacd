@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -12,7 +13,7 @@ vi.mock('../../src/renderer/navigation/native-navigation.js', () => ({
 it('runs controlled navigation through veto and recovery', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContentNavigationExample />
     </ReacdProvider>,
   );
@@ -38,7 +39,7 @@ it('runs controlled navigation through veto and recovery', async () => {
 it('runs explicit outline state without claiming scroll observation', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContentTocExample />
     </ReacdProvider>,
   );

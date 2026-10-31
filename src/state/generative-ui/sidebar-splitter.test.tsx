@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -10,9 +11,8 @@ import { ReacdProvider } from '../../index.js';
 import { createStateRegistry } from '../registry/state-registry.js';
 import { BoundSidebar } from './bound-sidebar.js';
 import { BoundSplitter } from './bound-splitter.js';
-import {
-  sidebarSplitterBindings,
-} from '../../schema/generative-v2/sidebar-splitter-bindings.js';
+import { sidebarSplitterBindings } from
+  '../../schema/generative-v2/sidebar-splitter-bindings.js';
 import { success } from '../../../test-support/data-table.js';
 import {
   installLayout,
@@ -62,7 +62,9 @@ describe('Sidebar/Splitter generative state', () => {
     );
     const registry = createDocumentState(document);
     const isolated = createDocumentState(document);
-    render(<GenerativeUI document={document} registry={registry} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+    );
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: 'Toggle navigation' }));
     expect(success(registry.read('desktop')).value).toBe(false);
@@ -113,7 +115,7 @@ describe('Sidebar/Splitter generative state', () => {
   it('rejects missing references at each bound render boundary', () => {
     const registry = success(createStateRegistry(definitions));
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundSidebar
           node={{ ...sidebar, open: { state: 'missing', mode: 'readWrite' } }}
           registry={registry}
@@ -123,7 +125,7 @@ describe('Sidebar/Splitter generative state', () => {
     );
     expect(screen.getByRole('alert')).toBeVisible();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundSidebar
           node={{ ...sidebar, mobileOpen: { state: 'missing', mode: 'readWrite' } }}
           registry={registry}
@@ -133,7 +135,7 @@ describe('Sidebar/Splitter generative state', () => {
     );
     expect(screen.getByRole('alert')).toBeVisible();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundSplitter
           node={{ ...splitter, value: { state: 'missing', mode: 'readWrite' } }}
           registry={registry}
@@ -167,10 +169,12 @@ describe('Sidebar/Splitter generative state', () => {
         ],
       },
     };
-    const view = render(<GenerativeUI document={document} />);
+    const view = render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
     expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered');
     const run = vi.fn();
-    view.rerender(<GenerativeUI document={document} actions={{ run }} />);
+    view.rerender(
+      <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ run }} />,
+    );
     expect(screen.queryByRole('alert')).toBeNull();
     const first = screen.getAllByRole('button', { name: 'Action' })[0];
     if (!first) throw new Error('Missing declared slot action.');
@@ -187,7 +191,9 @@ describe('Sidebar/Splitter generative state', () => {
       }),
     );
     const registry = createDocumentState(document);
-    render(<GenerativeUI document={document} registry={registry} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+    );
     act(() => {
       expect(
         registry.update('layout', [

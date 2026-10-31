@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import type {
-  EditorEmojiMenuProps,
-} from '../../../components/editor-emoji-menu/index.js';
-import type { EditorMenuItem } from '../../../renderer/editor/menu-context.js';
+import type { EditorEmojiMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/editor-emoji-menu/index.js';
+import type { EditorMenuItem } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
 import { useEditorMenu } from '../editor-menu/use-editor-menu.js';
 import { EditorMenuPanel } from '../editor-menu/menu-panel.js';
 

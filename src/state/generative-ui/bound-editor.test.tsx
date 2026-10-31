@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { beforeEach, expect, it, vi } from 'vitest';
@@ -69,7 +70,7 @@ it('projects exact rich documents and rendered slots without store leakage', () 
     children: [{ type: 'Text', content: 'Unrendered transport node' }],
   };
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundEditor
         node={declaration}
         registry={first}
@@ -114,7 +115,7 @@ it('projects exact rich documents and rendered slots without store leakage', () 
 it('prevents read bindings and literal protected views from writing', () => {
   const state = registry();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundEditor
         node={{
           ...node,
@@ -152,7 +153,7 @@ it('reports missing or wrong-kind references before rendering Editor', () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundEditor node={node} registry={state} />
       <BoundEditor
         node={{ ...node, value: { state: 'text', mode: 'readWrite' } }}
@@ -172,12 +173,12 @@ it('server-projects independent documents without publishing state writes', () =
   const unsubscribe = success(first.subscribe('document', notify));
   try {
     const firstMarkup = renderToString(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundEditor node={node} registry={first} />
       </ReacdProvider>,
     );
     const otherMarkup = renderToString(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundEditor node={node} registry={other} />
       </ReacdProvider>,
     );

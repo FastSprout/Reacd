@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -20,7 +21,7 @@ describe('closed pricing adapters', () => {
     const choose = vi.fn();
     const edit = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PricingPlan
           title="Illustrative plan"
           description="Not a commercial offer"
@@ -61,7 +62,7 @@ describe('closed pricing adapters', () => {
 
   it('keeps collection scale defaults overridable and null children invisible', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PricingPlans
           compact
           scale
@@ -91,7 +92,7 @@ describe('closed pricing adapters', () => {
     );
     expect(
       renderToString(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <PricingPlan />
         </ReacdProvider>,
       ),
@@ -102,7 +103,7 @@ describe('closed pricing adapters', () => {
     const user = userEvent.setup();
     const select = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PricingTable
           caption="Illustrative comparison"
           tiers={[
@@ -142,9 +143,7 @@ describe('closed pricing adapters', () => {
     expect(
       within(table).getByRole('rowheader', { name: 'Example availability' }),
     ).toBeVisible();
-    expect(
-      within(table).getByRole('cell', { name: 'Included' }),
-    ).toBeVisible();
+    expect(within(table).getByRole('cell', { name: 'Included' })).toBeVisible();
     expect(within(table).getByRole('cell', { name: 'Not included' })).toBeVisible();
     expect(within(table).getByRole('cell', { name: '2' })).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Select tier one' }));
@@ -157,13 +156,13 @@ describe('closed pricing adapters', () => {
       <Input label="Pricing draft" value="Retained" onValueChange={vi.fn()} />
     );
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PricingPlan>{field}</PricingPlan>
       </ReacdProvider>,
     );
     const input = screen.getByRole('textbox');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PricingPlan orientation="horizontal" highlight scale>
           {field}
         </PricingPlan>

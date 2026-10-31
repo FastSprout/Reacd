@@ -1,0 +1,3 @@
+import { createReacdStore } from '@fastsprout/reacd/adapter-runtime/state/store.js';
+
+export const invalidPrivateState = createReacdStore();

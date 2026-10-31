@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -10,7 +11,7 @@ it('shows invalid runtime results and retains vetoed choice values', async () =>
     await import('../../../schema/action-menu/items.schema.js');
   const invalid = menuPressSchema.parse(() => 'invalid');
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example
         items={[
           { type: 'action', key: 'invalid', label: 'Invalid action', onPress: invalid },
@@ -68,7 +69,7 @@ it('shows invalid runtime results and retains vetoed choice values', async () =>
 });
 it('uses default context content and removes disabled context keyboard access', () => {
   const { rerender } = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContextMenu
         label="Context default"
         open={false}
@@ -80,7 +81,7 @@ it('uses default context content and removes disabled context keyboard access', 
   expect(screen.getByRole('group')).toHaveTextContent('Context default');
   expect(screen.getByRole('group')).toHaveAttribute('tabindex', '0');
   rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContextMenu
         label="Context default"
         disabled
@@ -95,7 +96,7 @@ it('uses default context content and removes disabled context keyboard access', 
 it('closes choice menus only after accepted explicit close requests', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example
         items={[
           {
@@ -132,7 +133,7 @@ it('closes choice menus only after accepted explicit close requests', async () =
 it('supports explicit context-menu keyboard gestures', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example
         context
         items={[{ type: 'action', key: 'run', label: 'Run', onPress: vi.fn() }]}
@@ -153,7 +154,7 @@ it('places logical submenus using the application direction context', async () =
   const user = userEvent.setup();
   const { App } = await import('../../../index.js');
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction="rtl">
         <Example
           items={[

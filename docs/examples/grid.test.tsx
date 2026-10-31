@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
@@ -5,7 +6,7 @@ import { GridExample } from './grid.js';
 
 it('runs the Grid public example', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <GridExample />
     </ReacdProvider>,
   );

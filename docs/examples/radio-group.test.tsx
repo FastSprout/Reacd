@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -8,7 +9,7 @@ describe('documented RadioGroup', () => {
   it('changes orientation, disables, selects, saves, and clears', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <RadioGroupExample />
       </ReacdProvider>,
     );

@@ -1,10 +1,15 @@
 import { dirname, extname, isAbsolute, join, resolve } from 'node:path';
+import { ADAPTER_RUNTIME_POLICY } from './adapter-runtime.js';
 
 const PACKAGE_IMPORT = '@fastsprout/reacd';
+const ADAPTER_RUNTIME = ADAPTER_RUNTIME_POLICY.prefix;
 
 export function internalPath(value: string, file: string, root: string): string | null {
   if (value === PACKAGE_IMPORT || value === 'reacd') {
     return resolve(root, 'src/index.ts');
+  }
+  if (value.startsWith(ADAPTER_RUNTIME)) {
+    return resolve(root, 'src', value.slice(ADAPTER_RUNTIME.length));
   }
   if (value.startsWith(`${PACKAGE_IMPORT}/`)) {
     return resolve(root, 'src', value.slice(PACKAGE_IMPORT.length + 1));

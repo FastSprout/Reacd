@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -19,7 +20,7 @@ it('retains selection/query on an exact logical veto', async () => {
   const change = vi.fn<(value: string) => boolean>(() => false);
   const search = vi.fn<(value: string) => boolean>(() => false);
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} onValueChange={change} query="" onQueryChange={search} />
     </ReacdProvider>,
   );
@@ -37,7 +38,7 @@ it('reports invalid callback returns without follow-ups', async () => {
   const user = userEvent.setup();
   const props = selectMenuSchema.parse({ ...base, onValueChange: () => 'invalid' });
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...props} />
     </ReacdProvider>,
   );
@@ -54,7 +55,7 @@ it('keeps popup on veto and restores focus on host close', async () => {
   const user = userEvent.setup();
   const close = vi.fn<(value: boolean) => boolean>(() => false);
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} open onOpenChange={close} />
     </ReacdProvider>,
   );
@@ -64,7 +65,7 @@ it('keeps popup on veto and restores focus on host close', async () => {
   expect(close).toHaveBeenCalledExactlyOnceWith(false);
   expect(query).toHaveFocus();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} open={false} onOpenChange={close} />
     </ReacdProvider>,
   );
@@ -78,7 +79,7 @@ it('does not activate during IME and commits final query once', async () => {
   const change = vi.fn();
   const search = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} onValueChange={change} query="" onQueryChange={search} />
     </ReacdProvider>,
   );
@@ -99,7 +100,7 @@ it('does not open or search from a composing trigger prefix', () => {
   const search = vi.fn();
   const open = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu
         {...base}
         query=""

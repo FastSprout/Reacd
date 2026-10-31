@@ -1,6 +1,8 @@
 import { useContext } from 'react';
-import type { MainProps } from '../../../components/main/main.js';
-import { MainScopeContext } from '../../../renderer/main/main-scope.js';
+import type { MainProps } from
+  '@fastsprout/reacd/adapter-runtime/components/main/main.js';
+import { MainScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/main/main-scope.js';
 
 export function ShadcnMain({ children }: MainProps) {
   const nested = useContext(MainScopeContext);

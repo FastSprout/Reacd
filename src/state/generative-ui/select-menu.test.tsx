@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -30,6 +31,7 @@ it('allows query writes while a read selection remains unchanged', async () => {
   if (!registry.success) throw new Error('Missing registry.');
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{ schemaVersion: '0.2', state: definitions, root: single }}
       registry={registry.data}
     />,
@@ -57,6 +59,7 @@ it('writes multiple keys and rejects an invalid transaction', async () => {
   };
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{ schemaVersion: '0.2', state: definitions, root: node }}
       registry={registry.data}
     />,

@@ -1,8 +1,8 @@
-import type { ChatMessagesProps } from '../../../components/chat-messages/index.js';
-import { CHAT_DEFAULTS } from '../../../core/chat-policy.js';
-import {
-  ChatLoadingScopeContext,
-} from '../../../renderer/chat-feedback/loading-scope.js';
+import type { ChatMessagesProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-messages/index.js';
+import { CHAT_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/chat-policy.js';
+import { ChatLoadingScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/chat-feedback/loading-scope.js';
 import { ShadcnChatMessage } from '../chat-message/chat-message.adapter.js';
 import { Button } from '../vendor/ui/button.js';
 import { useFollowLatest } from './use-follow-latest.js';

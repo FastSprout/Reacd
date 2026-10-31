@@ -9,8 +9,10 @@ import {
 } from 'react-aria-components/DateField';
 import { useLocale } from 'react-aria-components/I18nProvider';
 import { parseDate, type CalendarDate } from '@internationalized/date';
-import { INPUT_DATE_POLICY } from '../../../core/input-date-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import { INPUT_DATE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-date-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Button } from '../vendor/ui/button.js';
 import { TemporalDraftValidity } from '../temporal/draft-validity.js';
 

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
@@ -6,7 +7,7 @@ import { userEvent } from '@testing-library/user-event';
 
 it('renders the documented PageColumns declaration', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <PageColumnsExample />
     </ReacdProvider>,
   );
@@ -16,7 +17,7 @@ it('renders the documented PageColumns declaration', () => {
 it('preserves declaration identity when selecting flow content', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <PageColumnsExample />
     </ReacdProvider>,
   );

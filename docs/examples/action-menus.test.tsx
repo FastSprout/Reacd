@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -7,7 +8,7 @@ import { ContextMenuExample } from './context-menu.js';
 it('runs the documented dropdown choices, submenu and local action', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DropdownMenuExample />
     </ReacdProvider>,
   );
@@ -28,7 +29,7 @@ it('runs the documented dropdown choices, submenu and local action', async () =>
 it('runs the documented context actions with optional retained opening', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContextMenuExample />
     </ReacdProvider>,
   );

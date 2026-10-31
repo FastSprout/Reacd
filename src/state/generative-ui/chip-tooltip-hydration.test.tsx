@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -45,15 +46,20 @@ describe('Chip and Tooltip SSR hydration', () => {
       const declaration = createDeclaration(controlled);
       const user = userEvent.setup();
       const container = document.createElement('div');
-      container.innerHTML = renderToString(<GenerativeUI document={declaration} />);
+      container.innerHTML = renderToString(
+        <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+      );
       expect(container.querySelector('[role="tooltip"]')).toBeNull();
       document.body.appendChild(container);
       const errors: unknown[] = [];
-      const view = render(<GenerativeUI document={declaration} />, {
-        container,
-        hydrate: true,
-        onRecoverableError: (error) => errors.push(error),
-      });
+      const view = render(
+        <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+        {
+          container,
+          hydrate: true,
+          onRecoverableError: (error) => errors.push(error),
+        },
+      );
       expect(screen.getByRole('img', { name: 'Online' })).toBeInTheDocument();
       if (controlled) {
         expect(await screen.findByRole('tooltip')).toHaveTextContent('Hydrated hint');
@@ -61,9 +67,9 @@ describe('Chip and Tooltip SSR hydration', () => {
       }
       await user.click(screen.getByLabelText('Show hydrated indicator'));
       expect(screen.queryByRole('img')).toBeNull();
-      expect(renderToString(<GenerativeUI document={declaration} />)).toContain(
-        'Online',
-      );
+      expect(
+        renderToString(<GenerativeUI adapter={shadcnAdapter} document={declaration} />),
+      ).toContain('Online');
       expect(errors).toEqual([]);
       view.unmount();
       container.remove();

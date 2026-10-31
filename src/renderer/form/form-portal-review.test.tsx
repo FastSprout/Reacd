@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -10,7 +11,7 @@ it.each(['disabled', 'submitting'] as const)(
     const change = vi.fn();
     function view(blocked: boolean, value = 'reader') {
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Form
             label="Settings"
             onSubmit={vi.fn()}

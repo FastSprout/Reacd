@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { atom, useAtom } from 'jotai';
 import {
   Button,
@@ -56,7 +57,7 @@ function OrdersDashboard() {
 
 export function App() {
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <OrdersDashboard />
     </ReacdProvider>
   );

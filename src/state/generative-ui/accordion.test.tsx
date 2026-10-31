@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -37,7 +38,12 @@ describe('generative Accordion', () => {
     const registry = createDocumentState(document);
     const run = vi.fn();
     const { rerender } = render(
-      <GenerativeUI document={document} registry={registry} actions={{ run }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={document}
+        registry={registry}
+        actions={{ run }}
+      />,
     );
     await user.click(screen.getByRole('button', { name: 'Generated one' }));
     await user.click(screen.getByRole('button', { name: 'Nested action' }));
@@ -48,7 +54,7 @@ describe('generative Accordion', () => {
     });
     expect(screen.getByText('Other panel')).toBeVisible();
     expect(registry.update('expanded', ['missing']).success).toBe(false);
-    rerender(<GenerativeUI document={document} />);
+    rerender(<GenerativeUI adapter={shadcnAdapter} document={document} />);
     expect(screen.getByRole('alert')).toHaveTextContent('not registered');
   });
   it('rejects wrong initial selections and resolves binding failures safely', () => {

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
@@ -7,7 +8,7 @@ import { installLayout } from '../../../test-support/layout-observer.js';
 it('mounts the runnable dashboard in its own named reference section', () => {
   const restore = installLayout();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardExamples />
     </ReacdProvider>,
   );

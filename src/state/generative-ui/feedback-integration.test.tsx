@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -43,7 +44,12 @@ describe('public generative feedback integration', () => {
     const registry = createDocumentState(declaration);
     const actions = { openProfile, save };
     const view = render(
-      <GenerativeUI document={declaration} registry={registry} actions={actions} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        registry={registry}
+        actions={actions}
+      />,
     );
     expect(screen.getByRole('progressbar', { name: 'Capacity' })).toHaveAttribute(
       'aria-valuenow',
@@ -57,6 +63,7 @@ describe('public generative feedback integration', () => {
     expect(screen.queryByRole('status')).toBeNull();
     view.rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={actions}
@@ -68,10 +75,13 @@ describe('public generative feedback integration', () => {
     expect(screen.getByRole('status', { name: 'Maintenance' })).toBeInTheDocument();
   });
   it('checks registered actions inside banners and user identity declarations', () => {
-    const view = render(<GenerativeUI document={declaration} actions={{}} />);
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{}} />,
+    );
     expect(screen.getByRole('alert')).toHaveTextContent('openProfile');
     view.rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         actions={{ openProfile: () => undefined }}
       />,
@@ -92,6 +102,7 @@ describe('public generative feedback integration', () => {
       const actions = { openProfile: vi.fn(), save: vi.fn() };
       const content = (
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={declaration}
           actions={actions}
           templateId={templateId}

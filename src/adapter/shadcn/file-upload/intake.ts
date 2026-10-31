@@ -2,10 +2,13 @@ import {
   FILE_UPLOAD_DEFAULTS as D,
   FILE_UPLOAD_ERRORS as E,
   FILE_UPLOAD_POLICY as P,
-} from '../../../core/file-upload-policy.js';
-import { fileUploadValueSchema } from '../../../schema/file-upload/index.js';
-import type { FileUploadSettings } from '../../../schema/file-upload/index.js';
-import type { UploadFile } from '../../../schema/file-upload/index.js';
+} from '@fastsprout/reacd/adapter-runtime/core/file-upload-policy.js';
+import { fileUploadValueSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/file-upload/index.js';
+import type { FileUploadSettings } from
+  '@fastsprout/reacd/adapter-runtime/schema/file-upload/index.js';
+import type { UploadFile } from
+  '@fastsprout/reacd/adapter-runtime/schema/file-upload/index.js';
 import { inspectNativeFiles, sameUploadFiles } from './intake-validation.js';
 import type { ReadTask } from './read-file.js';
 export interface IntakeHost extends FileUploadSettings {

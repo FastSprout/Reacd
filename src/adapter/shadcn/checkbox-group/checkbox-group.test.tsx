@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -16,7 +17,7 @@ describe('shadcn CheckboxGroup', () => {
     function Scene() {
       const [value, setValue] = useState<readonly string[]>(['locked']);
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <CheckboxGroup
             label="Channels"
             description="Choose channels"
@@ -57,7 +58,7 @@ describe('shadcn CheckboxGroup', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <CheckboxGroup
           label="Channels"
           items={items}
@@ -76,7 +77,7 @@ describe('shadcn CheckboxGroup', () => {
       'false',
     );
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <CheckboxGroup
           label="Channels"
           items={items}

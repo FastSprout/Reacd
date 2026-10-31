@@ -17,6 +17,9 @@ describe('application boundary', () => {
 
   it.each([
     '<div />',
+    "import { x } from '@fastsprout/reacd/adapter-runtime/core/value.js'",
+    "export * from '@fastsprout/reacd-shadcn/vendor/ui/button'",
+    "import '@fastsprout/reacd-shadcn/styles.css'",
     '<svg:rect />',
     '<Card style={{}} />',
     '<Card className="x" />',
@@ -96,6 +99,8 @@ describe('application boundary', () => {
     "import { atom } from 'jotai'",
     "import { atomWithStorage } from 'jotai/utils'",
     "import { Text } from '@fastsprout/reacd'",
+    "import { shadcnAdapter } from '@fastsprout/reacd-shadcn'",
+    "import '@fastsprout/reacd-shadcn/styles'",
     "import { renderGenerative } from '@fastsprout/reacd/generative'",
     "import { z } from 'zod'",
     "import { parseDate } from '@internationalized/date'",

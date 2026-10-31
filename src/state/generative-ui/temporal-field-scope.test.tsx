@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -23,6 +24,7 @@ for (const kind of ['date', 'time'] as const) {
     };
     const { container } = render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         registry={registry}
         document={{
           schemaVersion: '0.2',

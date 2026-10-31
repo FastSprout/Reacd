@@ -3,8 +3,15 @@ import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { RELEASE_ARCHIVE_POLICY } from '../tooling/release/archive.js';
+import {
+  RELEASE_ARCHIVE_POLICY,
+  SHADCN_ARCHIVE_POLICY,
+} from '../tooling/release/archive.js';
 import { PUBLICATION_POLICY } from '../tooling/release/policy.js';
+import {
+  createDistributionManifest,
+  createShadcnDistributionManifest,
+} from '../tooling/release/distribution.js';
 
 export function runFixtureCommand(
   command: string,
@@ -16,41 +23,60 @@ export function runFixtureCommand(
   return result.stdout;
 }
 
-export function releasePackFixture() {
+export function releasePackFixture(adapter = false, version = '0.1.0') {
   const root = mkdtempSync(join(tmpdir(), 'reacd-pack-test-'));
-  const source = join(root, 'source');
+  const input: unknown = JSON.parse(
+    readFileSync(adapter ? 'packages/shadcn/package.json' : 'package.json', 'utf8'),
+  );
+  const sourceRoot = adapter ? join(root, 'packages/shadcn') : root;
   const manifest = {
-    name: PUBLICATION_POLICY.name,
-    version: '0.1.0',
-    private: false,
-    repository: { type: 'git', url: PUBLICATION_POLICY.repository },
-    homepage: PUBLICATION_POLICY.homepage,
-    bugs: { url: PUBLICATION_POLICY.issues },
-    publishConfig: { access: 'public', registry: PUBLICATION_POLICY.registry },
-    engines: { node: PUBLICATION_POLICY.node },
-    peerDependencies: PUBLICATION_POLICY.peers,
+    ...(adapter
+      ? createShadcnDistributionManifest(input)
+      : createDistributionManifest(input)),
+    version,
     devDependencies: PUBLICATION_POLICY.peers,
+    scripts: { example: 'vite --config vite.examples.config.ts' },
+    packageManager: 'npm@11.19.0',
   };
-  const files: { path: string }[] = RELEASE_ARCHIVE_POLICY.required.map((path) => ({
+  if (adapter) {
+    manifest.peerDependencies[PUBLICATION_POLICY.name] = version;
+    const engineInput: unknown = JSON.parse(readFileSync('package.json', 'utf8'));
+    writeFileSync(
+      join(root, 'package.json'),
+      JSON.stringify({
+        ...createDistributionManifest(engineInput),
+        version,
+        devDependencies: PUBLICATION_POLICY.peers,
+      }),
+    );
+  }
+  const required = adapter ? SHADCN_ARCHIVE_POLICY : RELEASE_ARCHIVE_POLICY;
+  const files: { path: string }[] = required.required.map((path) => ({
     path,
   }));
   function write(path: string, content: string) {
-    const target = join(source, 'package', path);
+    const target = join(sourceRoot, path);
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, content);
   }
   for (const { path } of files) write(path, `Fixture ${path}\n`);
   write('package.json', JSON.stringify(manifest));
-  writeFileSync(join(root, 'package.json'), JSON.stringify(manifest));
-  for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
-    writeFileSync(join(root, name), readFileSync(join(source, 'package', name)));
-  }
-  function pack(destination: string) {
-    const filename = 'fastsprout-reacd-0.1.0.tgz';
+  function pack(destination: string, workspace: string) {
+    const filename = `${
+      adapter ? 'fastsprout-reacd-shadcn' : 'fastsprout-reacd'
+    }-${version}.tgz`;
     const archive = join(destination, filename);
     runFixtureCommand(
       'tar',
-      ['-czf', archive, '-C', source, ...files.map(({ path }) => `package/${path}`)],
+      ['-czf', archive, '-C', workspace, ...files.map(({ path }) => path)],
+      root,
+    );
+    const unpacked = join(destination, 'tar-source');
+    mkdirSync(join(unpacked, 'package'), { recursive: true });
+    runFixtureCommand('tar', ['-xf', archive, '-C', join(unpacked, 'package')], root);
+    runFixtureCommand(
+      'tar',
+      ['-czf', archive, '-C', unpacked, ...files.map(({ path }) => `package/${path}`)],
       root,
     );
     const integrity =
@@ -59,5 +85,5 @@ export function releasePackFixture() {
       { name: manifest.name, version: manifest.version, filename, integrity, files },
     ];
   }
-  return { root, source, manifest, files, write, pack };
+  return { root, sourceRoot, manifest, files, write, pack };
 }

@@ -1,6 +1,8 @@
 import { useId } from 'react';
-import { DATA_TABLE_POLICY } from '../../../core/data-table-policy.js';
-import type { DataTableProps } from '../../../components/data-table/data-table.js';
+import { DATA_TABLE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/data-table-policy.js';
+import type { DataTableProps } from
+  '@fastsprout/reacd/adapter-runtime/components/data-table/data-table.js';
 import { Input } from '../vendor/ui/input.js';
 import { Label } from '../vendor/ui/label.js';
 import { ShadcnSelect } from '../select/select.adapter.js';

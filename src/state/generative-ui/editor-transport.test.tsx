@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import {
   act,
   fireEvent,
@@ -80,7 +81,9 @@ it('shares native edits, formatting and quiet host replacement', async () => {
   const other = success(createStateRegistry(DEFINITIONS));
   const notify = vi.fn();
   const unsubscribe = success(first.subscribe('notes', notify));
-  const view = render(<GenerativeUI document={model()} registry={first} />);
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={model()} registry={first} />,
+  );
   try {
     const writer = await screen.findByRole('textbox', { name: 'Writer' });
     const reader = await screen.findByRole('textbox', { name: 'Reader' });
@@ -121,6 +124,7 @@ it('protects readonly, disabled and read bindings', async () => {
   const unsubscribe = success(state.subscribe('notes', notify));
   const view = render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={model([
         editor('Literal reader', 'readWrite', { readOnly: true }),
         editor('Disabled', 'readWrite', { disabled: true }),
@@ -165,7 +169,7 @@ it('hydrates isolated documents before publishing native edits', async () => {
   const stopClient = success(client.subscribe('notes', clientNotify));
   const documentModel = model();
   const markup = renderToString(
-    <GenerativeUI document={documentModel} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={server} />,
   );
   expect(markup).toContain('Writer preview');
   expect(markup).toContain('Initial draft');
@@ -174,11 +178,14 @@ it('hydrates isolated documents before publishing native edits', async () => {
   container.innerHTML = markup;
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentModel} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   try {
     const writer = await screen.findByRole('textbox', { name: 'Writer' });
     await screen.findByRole('textbox', { name: 'Reader' });
@@ -205,6 +212,7 @@ it('dispatches three native menu kinds into valid document nodes', async () => {
   const declaration = editor('Menus');
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       registry={state}
       document={model([
         {

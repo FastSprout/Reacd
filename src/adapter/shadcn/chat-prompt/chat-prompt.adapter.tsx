@@ -1,18 +1,19 @@
 import { useId } from 'react';
-import type { ChatPromptProps } from '../../../components/chat-prompt/index.js';
+import type { ChatPromptProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-prompt/index.js';
 import {
   CHAT_COMPOSER_DEFAULTS,
   CHAT_COMPOSER_POLICY,
-} from '../../../core/chat-composer-policy.js';
-import {
-  ChatLoadingScopeContext,
-} from '../../../renderer/chat-feedback/loading-scope.js';
-import { PromptScopeContext } from '../../../renderer/chat-prompt/prompt-context.js';
-import { TrustedFormBoundary } from '../../../renderer/form/form-boundary.js';
+} from '@fastsprout/reacd/adapter-runtime/core/chat-composer-policy.js';
+import { ChatLoadingScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/chat-feedback/loading-scope.js';
+import { PromptScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/chat-prompt/prompt-context.js';
+import { TrustedFormBoundary } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form/form-boundary.js';
 import { ShadcnChatAttachment } from '../chat-attachment/chat-attachment.adapter.js';
-import {
-  ShadcnChatPromptSubmit,
-} from '../chat-prompt-submit/chat-prompt-submit.adapter.js';
+import { ShadcnChatPromptSubmit } from
+  '../chat-prompt-submit/chat-prompt-submit.adapter.js';
 import { usePromptControls } from './use-prompt-controls.js';
 
 export function ShadcnChatPrompt(properties: ChatPromptProps) {

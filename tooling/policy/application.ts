@@ -1,3 +1,4 @@
+import { ADAPTER_PACKAGE_POLICY, isConcreteAdapterPackage } from './adapter-package.js';
 import { diagnostic } from './diagnostic.js';
 import type { PolicyDiagnostic } from './diagnostic.js';
 import { importVisitor } from './imports.js';
@@ -23,6 +24,7 @@ const DOM_GLOBALS = new Set([
   'customElements',
 ]);
 const PRIVATE_PATH = /(?:^|\/)(?:core|schema|renderer|adapter|internal)(?:\/|$)/;
+const ADAPTER_RUNTIME = '@fastsprout/reacd/adapter-runtime';
 const RAW_RUNTIME = /(?:react(?:-dom)?(?:\/|$)|jsx(?:-dev)?-runtime)/;
 
 export function checkApplication(file: string, source: string): PolicyDiagnostic[] {
@@ -37,6 +39,14 @@ export function checkApplication(file: string, source: string): PolicyDiagnostic
       add(offset, 'Styles belong to the renderer or adapter.');
     } else if (isTrustedUiDependency(value)) {
       add(offset, 'Vendor UI and styling integrations belong to renderer or adapter.');
+    } else if (
+      value === ADAPTER_RUNTIME ||
+      value.startsWith(`${ADAPTER_RUNTIME}/`) ||
+      (isConcreteAdapterPackage(value) &&
+        value !== ADAPTER_PACKAGE_POLICY.name &&
+        value !== ADAPTER_PACKAGE_POLICY.styles)
+    ) {
+      add(offset, 'Trusted adapter internals are not application APIs.');
     } else if (PRIVATE_PATH.test(value)) {
       add(offset, 'Private framework paths are not application APIs.');
     } else if (RAW_RUNTIME.test(value) && value !== 'react') {

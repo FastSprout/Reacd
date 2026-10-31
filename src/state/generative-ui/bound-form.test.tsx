@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -25,7 +26,7 @@ it('honors capability revocation and replacement at submission time', () => {
   const inherited = vi.fn();
   const actions: Record<string, GenerativeActions[string]> = { save: original };
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundForm
         node={{ type: 'Form', label: 'Capabilities', submitAction: 'save' }}
         registry={registry}
@@ -60,7 +61,7 @@ it('submits logical actions and follows protected state', async () => {
   );
   const save = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundForm node={node} registry={registry} actions={{ save }}>
         <Input
           label="Email"
@@ -98,7 +99,7 @@ it('reports missing capabilities and unresolved flags', () => {
   const registry = success(createStateRegistry([]));
   const save = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundForm
         node={{ type: 'Form', label: 'Missing', submitAction: 'missing' }}
         registry={registry}

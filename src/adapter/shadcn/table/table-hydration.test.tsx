@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -9,7 +10,7 @@ import * as tableTest from '../../../../test-support/data-table.js';
 it('hydrates native table controls and isolates SSR request models', async () => {
   const user = userEvent.setup();
   const tree = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <TableExample />
     </ReacdProvider>
   );
@@ -46,7 +47,9 @@ it('subscribes controller leases only on the client and releases them', async ()
       bindings: tableTest.TABLE_BINDINGS,
     },
   };
-  const tree = <GenerativeUI document={documentModel} registry={port} />;
+  const tree = (
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={port} />
+  );
   const html = renderToString(tree);
   expect(constrain).not.toHaveBeenCalled();
   const container = document.createElement('div');

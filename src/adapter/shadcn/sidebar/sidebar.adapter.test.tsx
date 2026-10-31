@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useContext, useEffect, useState } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -21,7 +22,7 @@ function Scene(properties: Partial<SidebarProps>) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [value, setValue] = useState('Retained state');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction="rtl">
         <Sidebar
           title="Workspace"
@@ -42,9 +43,16 @@ function Scene(properties: Partial<SidebarProps>) {
 function EscapeLayer({ dismiss }: { dismiss: () => void }) {
   const scope = useContext(EscapeScopeContext);
   const [active, setActive] = useState(true);
-  useEffect(() => active ? scope?.register(() => {
-    dismiss(); setActive(false);
-  }) : undefined, [active, scope, dismiss]);
+  useEffect(
+    () =>
+      active
+        ? scope?.register(() => {
+            dismiss();
+            setActive(false);
+          })
+        : undefined,
+    [active, scope, dismiss],
+  );
   return <Text>Nested escape layer</Text>;
 }
 
@@ -54,8 +62,9 @@ describe('Sidebar desktop and mobile behavior', () => {
     render(<Scene />);
     expect(screen.getByRole('complementary', { name: 'Workspace' })).toBeVisible();
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(screen.getByRole('complementary').closest('.reacd-sidebar-shell'))
-      .not.toBeNull();
+    expect(
+      screen.getByRole('complementary').closest('.reacd-sidebar-shell'),
+    ).not.toBeNull();
     expect(document.body).not.toHaveAttribute('inert');
     const query = screen.getByRole('textbox', { name: 'Workspace query' });
     await user.clear(query);

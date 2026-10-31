@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -7,7 +8,7 @@ import { ChartExample } from '../../../../docs/examples/chart.js';
 it('hydrates deterministic SVG and isolates request-local data', async () => {
   const user = userEvent.setup();
   const tree = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChartExample />
     </ReacdProvider>
   );

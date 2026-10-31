@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -25,7 +26,7 @@ it('constrains shared writes, vetoes refused requests and recovers', async () =>
     ]),
   );
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundListbox node={node} registry={registry} />
       <BoundListbox
         node={{
@@ -54,7 +55,7 @@ it('constrains shared writes, vetoes refused requests and recovers', async () =>
     expect(registry.update('choice', 'b').success).toBe(false);
   });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundListbox node={node} registry={registry} />
     </ReacdProvider>,
   );
@@ -71,7 +72,7 @@ it('writes complete multiple selections and protects read bindings', async () =>
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundListbox node={{ ...node, mode: 'multiple' }} registry={registry} />
       <BoundListbox
         node={{
@@ -105,7 +106,7 @@ it.each([undefined, 'multiple' as const])(
   (mode) => {
     const registry = success(createStateRegistry([]));
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundListbox node={{ ...node, mode }} registry={registry} />
       </ReacdProvider>,
     );

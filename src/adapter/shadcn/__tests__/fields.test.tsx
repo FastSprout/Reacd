@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { installLayout } from '../../../../test-support/layout-observer.js';
 import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
@@ -29,7 +30,7 @@ describe('field behavior', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <TextArea label="Description" value="" rows={6} onValueChange={change} />
         <CodeEditor label="Source" value="" onValueChange={change} />
       </ReacdProvider>,
@@ -46,7 +47,7 @@ describe('field behavior', () => {
     const checkbox = vi.fn();
     const toggle = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Checkbox label="Consent" checked={false} onCheckedChange={checkbox} />
         <Toggle label="Updates" checked={false} onCheckedChange={toggle} />
       </ReacdProvider>,
@@ -63,7 +64,7 @@ describe('field behavior', () => {
     function Example() {
       const [value, setValue] = useState('');
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Form label="Profile" onSubmit={submit}>
             <Input label="Name" value={value} required onValueChange={setValue} />
             <SubmitButton label="Save" intent="secondary" />
@@ -86,7 +87,7 @@ describe('field behavior', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Slider
           label="Volume"
           value={50}
@@ -122,7 +123,7 @@ describe('field behavior', () => {
       onValueChange() {},
     }),
   ])('rejects invalid field properties', (view) => {
-    render(<ReacdProvider>{view}</ReacdProvider>);
+    render(<ReacdProvider adapter={shadcnAdapter}>{view}</ReacdProvider>);
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Unable to render this interface.',
     );

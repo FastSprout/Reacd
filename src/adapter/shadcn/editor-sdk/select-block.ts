@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/core';
-import { EDITOR_NATIVE_POLICY } from '../../../core/editor-native-policy.js';
+import { EDITOR_NATIVE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-native-policy.js';
 
 export function selectSdkBlock(editor: Editor, id: string): boolean {
   let target: { position: number; text: boolean } | undefined;

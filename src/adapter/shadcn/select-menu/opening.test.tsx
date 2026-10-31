@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -10,7 +11,7 @@ it('requests one logical open and exposes the searchable popup', async () => {
   function Example() {
     const [open, setOpen] = useState(false);
     return (
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <SelectMenu
           label="Opening"
           value=""
@@ -35,7 +36,7 @@ it('opens with Space and commits only after keyboard activation', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu
         label="Keyboard records"
         value=""

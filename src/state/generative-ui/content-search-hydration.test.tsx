@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -31,12 +32,14 @@ it('hydrates search state and isolates a new SSR request', async () => {
       ],
     },
   });
-  const html = renderToString(<GenerativeUI document={declaration} />);
+  const html = renderToString(
+    <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+  );
   const container = document.createElement('div');
   container.innerHTML = html;
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={declaration} />, {
+  const view = render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />, {
     container,
     hydrate: true,
     onRecoverableError: (error) => errors.push(error),
@@ -47,7 +50,9 @@ it('hydrates search state and isolates a new SSR request', async () => {
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   await user.click(screen.getByRole('button', { name: 'Open hydrated search' }));
   expect(screen.getByRole('combobox')).toHaveValue('guide');
-  expect(renderToString(<GenerativeUI document={declaration} />)).toBe(html);
+  expect(
+    renderToString(<GenerativeUI adapter={shadcnAdapter} document={declaration} />),
+  ).toBe(html);
   expect(errors).toEqual([]);
   view.unmount();
   container.remove();

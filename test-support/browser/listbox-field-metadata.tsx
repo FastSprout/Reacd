@@ -1,3 +1,4 @@
+import '@fastsprout/reacd-shadcn/styles';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ShadcnListbox } from '../../src/adapter/shadcn/listbox/listbox.adapter.js';
@@ -15,45 +16,72 @@ function Harness() {
     <main>
       <h1>Listbox metadata acceptance</h1>
       <label>
-        <input type="checkbox" checked={disabled}
-          onChange={(event) => setDisabled(event.target.checked)} />
+        <input
+          type="checkbox"
+          checked={disabled}
+          onChange={(event) => setDisabled(event.target.checked)}
+        />
         Disable group
       </label>
       <label>
-        <input type="checkbox" checked={readOnly}
-          onChange={(event) => setReadOnly(event.target.checked)} />
+        <input
+          type="checkbox"
+          checked={readOnly}
+          onChange={(event) => setReadOnly(event.target.checked)}
+        />
         Readonly choice
       </label>
       <label>
-        <input type="checkbox" checked={override}
-          onChange={(event) => setOverride(event.target.checked)} />
+        <input
+          type="checkbox"
+          checked={override}
+          onChange={(event) => setOverride(event.target.checked)}
+        />
         Override required
       </label>
       <label>
-        <input type="checkbox" checked={error}
-          onChange={(event) => setError(event.target.checked)} />
+        <input
+          type="checkbox"
+          checked={error}
+          onChange={(event) => setError(event.target.checked)}
+        />
         Group error
       </label>
-      <form aria-label="Metadata form" onSubmit={(event) => {
-        event.preventDefault();
-        setSubmits((previous) => previous + 1);
-      }}>
+      <form
+        aria-label="Metadata form"
+        onSubmit={(event) => {
+          event.preventDefault();
+          setSubmits((previous) => previous + 1);
+        }}
+      >
         <p id="group-help">Group help</p>
         <p id="group-error">{error ? 'Server rejected selection' : ''}</p>
-        <FieldMetadataContext.Provider value={{
-          name: 'inherited', required: true, disabled,
-          error: error ? 'Server rejected selection' : '',
-          descriptionIds: ['group-help', 'group-error', 'group-help'],
-        }}>
-          <ShadcnListbox label="Control" items={[
-            { value: '42', label: 'Answer' }, { value: 'b', label: 'Beta' },
-          ]} value={value} disabled={false} readOnly={readOnly}
-            required={override ? false : undefined} description="Local help"
+        <FieldMetadataContext.Provider
+          value={{
+            name: 'inherited',
+            required: true,
+            disabled,
+            error: error ? 'Server rejected selection' : '',
+            descriptionIds: ['group-help', 'group-error', 'group-help'],
+          }}
+        >
+          <ShadcnListbox
+            label="Control"
+            items={[
+              { value: '42', label: 'Answer' },
+              { value: 'b', label: 'Beta' },
+            ]}
+            value={value}
+            disabled={false}
+            readOnly={readOnly}
+            required={override ? false : undefined}
+            description="Local help"
             onValueChange={(...args: readonly unknown[]) => {
               setCalls((previous) => [...previous, args]);
               const [next] = args;
               if (typeof next === 'string') setValue(next);
-            }} />
+            }}
+          />
         </FieldMetadataContext.Provider>
         <button type="submit">Save</button>
       </form>

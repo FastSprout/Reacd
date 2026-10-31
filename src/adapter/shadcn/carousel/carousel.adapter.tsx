@@ -1,11 +1,15 @@
 import type { KeyboardEvent } from 'react';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { CarouselProps } from '../../../components/carousel/index.js';
-import { CAROUSEL_DEFAULTS, CAROUSEL_POLICY } from '../../../core/carousel-policy.js';
+import type { CarouselProps } from
+  '@fastsprout/reacd/adapter-runtime/components/carousel/index.js';
+import {
+  CAROUSEL_DEFAULTS,
+  CAROUSEL_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/carousel-policy.js';
 import {
   carouselSlideLabel,
   carouselTarget,
-} from '../../../core/carousel-navigation.js';
+} from '@fastsprout/reacd/adapter-runtime/core/carousel-navigation.js';
 import { Button } from '../vendor/ui/button.js';
 import { CarouselFocusBoundary } from './focus-boundary.js';
 import { CarouselPanel } from './carousel-panel.js';

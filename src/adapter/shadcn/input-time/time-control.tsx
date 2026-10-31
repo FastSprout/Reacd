@@ -9,9 +9,12 @@ import {
 import { useLocale } from 'react-aria-components/I18nProvider';
 import { toTime, type ZonedDateTime } from '@internationalized/date';
 import { useId, useMemo, useState } from 'react';
-import { DATE_TIME_POLICY } from '../../../core/date-time-policy.js';
-import { INPUT_TIME_POLICY } from '../../../core/input-time-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import { DATE_TIME_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/date-time-policy.js';
+import { INPUT_TIME_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-time-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Button } from '../vendor/ui/button.js';
 import { anchoredTime } from './anchored-time.js';
 import { TimeDraftValidation } from './draft-validation.js';

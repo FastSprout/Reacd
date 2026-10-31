@@ -1,5 +1,6 @@
-import type { ChipProps } from '../../../components/chip/chip.js';
-import { CHIP_DEFAULTS } from '../../../core/chip-policy.js';
+import type { ChipProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chip/chip.js';
+import { CHIP_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/chip-policy.js';
 import { Badge } from '../vendor/ui/badge.js';
 
 const VARIANTS = {

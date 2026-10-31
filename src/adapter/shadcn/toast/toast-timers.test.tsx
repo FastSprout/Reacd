@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, expect, it, vi } from 'vitest';
 import { ReacdProvider, Toast } from '../../../index.js';
@@ -9,7 +10,7 @@ it('automatically dismisses ordinary messages and stops retries when held', () =
   vi.useFakeTimers();
   const close = vi.fn(() => false);
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast title="Timed message" open onOpenChange={close} />
     </ReacdProvider>,
   );
@@ -28,7 +29,7 @@ it('pauses native timers during hover and cleans up without stale callbacks', ()
   vi.useFakeTimers();
   const close = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast title="Hover message" open onOpenChange={close} />
     </ReacdProvider>,
   );
@@ -54,7 +55,7 @@ it('does not expire actionable notifications by default', () => {
   vi.useFakeTimers();
   const close = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast
         title="Actionable message"
         open
@@ -73,7 +74,7 @@ it('restarts timing only when the declared duration policy changes', () => {
   vi.useFakeTimers();
   const close = vi.fn(() => false);
   const { rerender, unmount } = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast title="Changed duration" open onOpenChange={close} duration="normal" />
     </ReacdProvider>,
   );
@@ -81,7 +82,7 @@ it('restarts timing only when the declared duration policy changes', () => {
     vi.advanceTimersByTime(TOAST_DURATIONS.normal / 2);
   });
   rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast title="Changed duration" open onOpenChange={close} duration="long" />
     </ReacdProvider>,
   );

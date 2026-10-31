@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -49,7 +50,7 @@ describe('controlled content navigation', () => {
       );
     }
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Scene />
       </ReacdProvider>,
     );
@@ -89,7 +90,7 @@ describe('controlled content navigation', () => {
     const expanded = vi.fn();
     const selected = vi.fn(() => false);
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentNavigation
           label="Read-only tree"
           items={ITEMS}
@@ -105,7 +106,7 @@ describe('controlled content navigation', () => {
     expect(selected).toHaveBeenCalledExactlyOnceWith('guide');
     expect(expanded).not.toHaveBeenCalled();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentNavigation
           label="Disabled branch"
           items={[{ ...ITEMS[0], key: 'guide', label: 'Guide', disabled: true }]}
@@ -148,7 +149,7 @@ describe('controlled content navigation', () => {
 
   it('renders default and explicit empty feedback', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentNavigation
           label="No documents"
           items={[]}
@@ -159,7 +160,7 @@ describe('controlled content navigation', () => {
     );
     expect(screen.getByText('No document links.')).toBeVisible();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentNavigation
           label="No documents"
           items={[]}

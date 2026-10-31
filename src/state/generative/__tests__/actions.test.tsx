@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -26,7 +27,7 @@ describe('Generative rendering: actions', () => {
       ],
     });
     const { rerender, container } = render(
-      <ReacdRenderer document={document} actions={{ save }} />,
+      <ReacdRenderer adapter={shadcnAdapter} document={document} actions={{ save }} />,
     );
     await user.click(screen.getByRole('button', { name: 'Save' }));
     expect(save).toHaveBeenLastCalledWith({
@@ -35,7 +36,12 @@ describe('Generative rendering: actions', () => {
     await user.clear(screen.getByLabelText('Name'));
     await user.type(screen.getByLabelText('Name'), 'Edited');
     rerender(
-      <ReacdRenderer document={document} actions={{ save }} templateId="erp-compact" />,
+      <ReacdRenderer
+        adapter={shadcnAdapter}
+        document={document}
+        actions={{ save }}
+        templateId="erp-compact"
+      />,
     );
     expect(screen.getByLabelText('Name')).toHaveValue('Edited');
     expect(container.querySelector('.reacd-root')).toHaveAttribute(
@@ -58,12 +64,20 @@ describe('Generative rendering: actions', () => {
       type: 'VStack',
       children: [{ type: 'Input', id: 'constructor', label: 'Safe' }, button],
     });
-    const { rerender } = render(<ReacdRenderer document={first} actions={{ save }} />);
+    const { rerender } = render(
+      <ReacdRenderer adapter={shadcnAdapter} document={first} actions={{ save }} />,
+    );
     expect(screen.getByLabelText('Safe')).toHaveValue('');
     fireEvent.change(screen.getByLabelText('Safe'), { target: { value: 'Private' } });
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
     expect(save).toHaveBeenLastCalledWith({ values: { constructor: 'Private' } });
-    rerender(<ReacdRenderer document={documentWith(button)} actions={{ save }} />);
+    rerender(
+      <ReacdRenderer
+        adapter={shadcnAdapter}
+        document={documentWith(button)}
+        actions={{ save }}
+      />,
+    );
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
     expect(save).toHaveBeenLastCalledWith({ values: {} });
   });
@@ -80,8 +94,8 @@ describe('Generative rendering: actions', () => {
     });
     render(
       <>
-        <ReacdRenderer document={document} actions={{ save }} />
-        <ReacdRenderer document={document} actions={{ save }} />
+        <ReacdRenderer adapter={shadcnAdapter} document={document} actions={{ save }} />
+        <ReacdRenderer adapter={shadcnAdapter} document={document} actions={{ save }} />
       </>,
     );
     const inputs = screen.getAllByLabelText('Value');
@@ -98,13 +112,16 @@ describe('Generative rendering: actions', () => {
 
   it('rejects missing, inherited, and non-function actions', () => {
     const document = documentWith({ type: 'Button', label: 'Run', action: 'run' });
-    const { rerender } = render(<ReacdRenderer document={document} actions={{}} />);
+    const { rerender } = render(
+      <ReacdRenderer adapter={shadcnAdapter} document={document} actions={{}} />,
+    );
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Action is not registered: run',
     );
     expect(screen.queryByRole('button')).toBeNull();
     rerender(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={documentWith({ type: 'Button', label: 'Run', action: 'toString' })}
         actions={{}}
       />,
@@ -114,7 +131,9 @@ describe('Generative rendering: actions', () => {
     );
     const actions: ActionHandlers = {};
     Object.defineProperty(actions, 'run', { value: 'not-a-function' });
-    rerender(<ReacdRenderer document={document} actions={actions} />);
+    rerender(
+      <ReacdRenderer adapter={shadcnAdapter} document={document} actions={actions} />,
+    );
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Action is not registered: run',
     );
@@ -125,6 +144,7 @@ describe('Generative rendering: actions', () => {
     const actions: Record<string, ActionHandlers[string]> = { run: handler };
     render(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={documentWith({ type: 'Button', label: 'Run', action: 'run' })}
         actions={actions}
       />,

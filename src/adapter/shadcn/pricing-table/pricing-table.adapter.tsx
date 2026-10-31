@@ -1,12 +1,16 @@
 import type { ReactNode } from 'react';
-import type { PricingTableProps }
-  from '../../../components/pricing-table/pricing-table.props.js';
-import { PRICING_DEFAULTS } from '../../../core/pricing-policy.js';
-import { PricingPrice } from '../../../renderer/pricing/pricing-price.js';
-import { pricingValue } from '../../../renderer/pricing/pricing-value.js';
-import { revealFocusedControl }
-  from '../../../renderer/scroll/reveal-focused-control.js';
-import { scrollRegionByKey } from '../../../renderer/scroll/scroll-region-key.js';
+import type { PricingTableProps } from
+  '@fastsprout/reacd/adapter-runtime/components/pricing-table/pricing-table.props.js';
+import { PRICING_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/pricing-policy.js';
+import { PricingPrice } from
+  '@fastsprout/reacd/adapter-runtime/renderer/pricing/pricing-price.js';
+import { pricingValue } from
+  '@fastsprout/reacd/adapter-runtime/renderer/pricing/pricing-value.js';
+import { revealFocusedControl } from
+  '@fastsprout/reacd/adapter-runtime/renderer/scroll/reveal-focused-control.js';
+import { scrollRegionByKey } from
+  '@fastsprout/reacd/adapter-runtime/renderer/scroll/scroll-region-key.js';
 
 export function ShadcnPricingTable({
   caption,

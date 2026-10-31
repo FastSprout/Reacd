@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -16,7 +17,7 @@ it.each(['saas-modern-light', 'erp-compact'] as const)(
     const store = createReacdStore();
     store.set(templateAtom, profile);
     const view = render(
-      <ReacdProvider store={store}>
+      <ReacdProvider adapter={shadcnAdapter} store={store}>
         <ColorModeExample />
       </ReacdProvider>,
     );

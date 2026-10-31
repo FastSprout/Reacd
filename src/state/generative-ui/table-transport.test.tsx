@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -25,7 +26,9 @@ const DOCUMENT = {
 it('registers typed transport and independent compound constraints', async () => {
   const user = userEvent.setup();
   const registry = success(createStateRegistry(tableDefinitions()));
-  const view = render(<GenerativeUI document={DOCUMENT} registry={registry} />);
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={DOCUMENT} registry={registry} />,
+  );
   await user.click(screen.getByRole('button', { name: 'Next page' }));
   await user.click(screen.getByRole('button', { name: 'Sort Amount' }));
   expect(success(registry.read('orders.pagination')).value).toEqual({
@@ -39,7 +42,7 @@ it('registers typed transport and independent compound constraints', async () =>
   view.unmount();
   expect(registry.update('orders.selection', ['missing']).success).toBe(true);
   const fresh = success(createStateRegistry(tableDefinitions()));
-  render(<GenerativeUI document={DOCUMENT} registry={fresh} />);
+  render(<GenerativeUI adapter={shadcnAdapter} document={DOCUMENT} registry={fresh} />);
   expect(success(fresh.read('orders.sorting')).value).toEqual([]);
 });
 it('rejects bad initial relationships and invalid static dimensions', () => {
@@ -79,7 +82,13 @@ it('reconciles source replacement through the existing host controller', () => {
       bindings: TABLE_BINDINGS,
     }),
   );
-  render(<GenerativeUI document={{ ...DOCUMENT, state }} registry={registry} />);
+  render(
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={{ ...DOCUMENT, state }}
+      registry={registry}
+    />,
+  );
   expect(registry.update('orders.rows', []).success).toBe(false);
   act(() => {
     expect(controller.replaceRows(TABLE_MODEL.rows.slice(0, 1)).success).toBe(true);
@@ -105,10 +114,12 @@ it('resolves static retry intents and rejects unregistered callbacks', async () 
       retryAction: 'retry',
     },
   };
-  const view = render(<GenerativeUI document={document} />);
+  const view = render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
   expect(screen.getByRole('alert')).toHaveTextContent('not registered: retry');
   const retry = vi.fn();
-  view.rerender(<GenerativeUI document={document} actions={{ retry }} />);
+  view.rerender(
+    <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ retry }} />,
+  );
   await user.click(screen.getByRole('button', { name: 'Retry table' }));
   expect(retry).toHaveBeenCalledOnce();
 });

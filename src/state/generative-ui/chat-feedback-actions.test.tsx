@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -25,7 +26,7 @@ it('dispatches decisions, disclosure writes and retry explicitly', async () => {
   const retry = vi.fn();
   const user = userEvent.setup();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView
         node={node}
         registry={registry}
@@ -40,7 +41,7 @@ it('dispatches decisions, disclosure writes and retry explicitly', async () => {
   expect(approve).toHaveBeenCalledWith({ state: registry });
   expect(reject).toHaveBeenCalledWith({ state: registry });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView
         node={{
           ...node,
@@ -65,7 +66,7 @@ it('protects read bindings and ignores absent or inherited decisions', async () 
   const actions = {};
   Object.setPrototypeOf(actions, { approve: inherited, reject: inherited });
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView node={node} registry={registry} actions={actions} />
     </ReacdProvider>,
   );
@@ -73,7 +74,7 @@ it('protects read bindings and ignores absent or inherited decisions', async () 
   await user.click(screen.getByRole('button', { name: 'Reject tool request' }));
   expect(inherited).not.toHaveBeenCalled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView
         node={{ ...node, open: { state: 'expanded', mode: 'read' } }}
         registry={registry}
@@ -84,7 +85,7 @@ it('protects read bindings and ignores absent or inherited decisions', async () 
   expect(screen.getByRole('button', { name: 'Approve tool request' })).toBeDisabled();
   expect(screen.getByRole('button', { name: 'Read reference' })).toBeDisabled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView
         node={{ ...node, disabled: true }}
         registry={registry}
@@ -94,7 +95,7 @@ it('protects read bindings and ignores absent or inherited decisions', async () 
   );
   expect(screen.getByRole('button', { name: 'Read reference' })).toBeDisabled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView
         node={{ ...node, open: { state: 'missing', mode: 'readWrite' } }}
         registry={registry}

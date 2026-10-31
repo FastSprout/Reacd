@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -50,15 +51,18 @@ it('hydrates canonical time transport with isolated server/client stores', async
   const client = success(createStateRegistry(definitions));
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentModel} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={server} />,
   );
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentModel} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   screen.getByRole('spinbutton', { name: /hour, Arrival$/i }).focus();
   await user.keyboard('{ArrowUp}');
   expect(success(client.read('arrival')).value).toBe('13:30:00');
@@ -84,6 +88,7 @@ it('hydrates canonical time transport with isolated server/client stores', async
 it('rejects incompatible kinds before exposing an editable time field', () => {
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...documentModel,
         state: [

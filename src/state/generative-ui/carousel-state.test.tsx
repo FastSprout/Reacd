@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -25,7 +26,7 @@ it('shares bounded indexes and preserves explicit reader access', async () => {
     ]),
   );
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <CarouselNodeView
         node={node}
         registry={registry}
@@ -40,7 +41,7 @@ it('shares bounded indexes and preserves explicit reader access', async () => {
     expect(registry.update('index', 2).success).toBe(false);
   });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <CarouselNodeView
         node={{ ...node, value: { state: 'index', mode: 'read' } }}
         registry={registry}
@@ -51,7 +52,7 @@ it('shares bounded indexes and preserves explicit reader access', async () => {
   );
   expect(screen.getByRole('button', { name: 'Previous slide' })).toBeDisabled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <CarouselNodeView
         node={{ ...node, readOnly: true }}
         registry={registry}
@@ -71,7 +72,7 @@ it('guards stale retry handlers and reports unavailable state', async () => {
   );
   const retry = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <CarouselNodeView
         node={{ ...node, state: 'error', retryAction: 'retry' }}
         registry={registry}
@@ -83,7 +84,7 @@ it('guards stale retry handlers and reports unavailable state', async () => {
   await user.click(screen.getByRole('button', { name: 'Retry slides' }));
   expect(retry).toHaveBeenCalledWith({ state: registry });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <CarouselNodeView
         node={{ ...node, state: 'error', retryAction: 'retry' }}
         registry={registry}
@@ -95,7 +96,7 @@ it('guards stale retry handlers and reports unavailable state', async () => {
   await user.click(screen.getByRole('button', { name: 'Retry slides' }));
   expect(retry).toHaveBeenCalledOnce();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <CarouselNodeView
         node={node}
         registry={success(createStateRegistry([]))}

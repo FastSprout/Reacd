@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -15,7 +16,7 @@ function Example({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContentSearchButton
         label="Open reference search"
         open={open}
@@ -48,7 +49,7 @@ describe('controlled content search', () => {
     const action = vi.fn();
     const change = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentSearch
           title="Search defaults"
           label="Find defaults"
@@ -92,7 +93,7 @@ describe('controlled content search', () => {
       ],
     });
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentSearch {...props} />
       </ReacdProvider>,
     );
@@ -101,7 +102,7 @@ describe('controlled content search', () => {
     expect(action).not.toHaveBeenCalled();
     expect(change).not.toHaveBeenCalled();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentSearch {...props} onSelect={() => true} />
       </ReacdProvider>,
     );

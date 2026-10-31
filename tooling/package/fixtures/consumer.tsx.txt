@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { renderToString } from 'react-dom/server';
 import type { mountApplication } from '@fastsprout/reacd/bootstrap';
 import { SelectMenu, Listbox, Toast, type ToastProps } from '@fastsprout/reacd';
@@ -5,7 +6,7 @@ import { AuthForm, PageLogos, ContentNavigation, ContentToc } from '@fastsprout/
 import { Accordion, Avatar, AvatarGroup, Button, CheckboxGroup, Collapsible,
   Grid, Input, Modal, Chip, Tooltip, Kbd, Popover, Skeleton, Empty,
   RadioGroup, ReacdProvider, Text,
-  VStack, createReacdStore, shadcnAdapter } from '@fastsprout/reacd';
+  VStack, createReacdStore } from '@fastsprout/reacd';
 import type { GridProps } from '@fastsprout/reacd';
 import { ContentSurround, ContentSearch, ContentSearchButton } from '@fastsprout/reacd';
 import { Link, Tabs } from '@fastsprout/reacd';
@@ -157,7 +158,8 @@ export const first = createDocumentState(declaration);
 export const second = createDocumentState(declaration);
 export const update = first.update('name', 'Edited');
 export const generated = renderToString(
-  <GenerativeUI document={declaration} registry={first} />,
+  <GenerativeUI adapter={shadcnAdapter} document={declaration}
+    registry={first} />,
 );
 const columns = [{ key: 'title', label: 'Title', kind: 'text' }] as const;
 const bindings = {
@@ -186,5 +188,6 @@ if (!table.success) throw new Error(JSON.stringify(table.issues));
 export const sorted = table.data.sort([{ column: 'title', direction: 'ascending' }]);
 export const tableSnapshot = table.data.read();
 export const tableMarkup = renderToString(
-  <GenerativeUI document={tableDocument} registry={tableState} />,
+  <GenerativeUI adapter={shadcnAdapter} document={tableDocument}
+    registry={tableState} />,
 );

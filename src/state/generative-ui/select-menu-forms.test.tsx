@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { GenerativeUI } from './generative-ui.js';
@@ -19,6 +20,7 @@ it.each(['single', 'multiple'])('validates readonly generative mode %s', (mode) 
   render(
     <form aria-label="Generative record form">
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           schemaVersion: '0.2',
           state,

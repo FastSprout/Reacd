@@ -1,8 +1,10 @@
 import { useId, useRef, useState } from 'react';
 import type { SyntheticEvent } from 'react';
-import type { InputProps } from '../../../components/input/input.js';
-import { INPUT_POLICY } from '../../../core/input-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { InputProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input/input.js';
+import { INPUT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/input-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Input } from '../vendor/ui/input.js';
 import { Label } from '../vendor/ui/label.js';
 import { inputValidationMessage } from './validation-message.js';

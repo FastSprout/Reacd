@@ -1,6 +1,7 @@
 import type { Node } from '@tiptap/pm/model';
-import { EDITOR_POLICY } from '../../../core/editor-policy.js';
-import { stateKeySchema } from '../../../schema/state/shared/definition.js';
+import { EDITOR_POLICY } from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
+import { stateKeySchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/state/shared/definition.js';
 import { EDITOR_SDK_BLOCK_TYPES } from '../editor-sdk/block-types.js';
 import { sdkAttribute } from './attribute.js';
 

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { expect, it } from 'vitest';
@@ -18,13 +19,23 @@ it('hydrates stable IDs, isolated state and closed mobile navigation', () => {
   const actions = { inspect: () => undefined, openSearch: () => undefined };
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentValue} registry={server} actions={actions} />,
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={documentValue}
+      registry={server}
+      actions={actions}
+    />,
   );
   document.body.appendChild(container);
   const controls = screen.getByRole('separator').getAttribute('aria-controls');
   const errors: unknown[] = [];
   const view = render(
-    <GenerativeUI document={documentValue} registry={client} actions={actions} />,
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={documentValue}
+      registry={client}
+      actions={actions}
+    />,
     { container, hydrate: true, onRecoverableError: (error) => errors.push(error) },
   );
   expect(screen.queryByRole('dialog')).toBeNull();

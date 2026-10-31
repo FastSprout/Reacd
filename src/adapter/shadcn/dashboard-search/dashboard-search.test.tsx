@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -6,7 +7,6 @@ import {
   DashboardSearch,
   DashboardSearchButton,
   ReacdProvider,
-  shadcnAdapter,
 } from '../../../index.js';
 import type { DashboardSearchProps } from
   '../../../components/dashboard-search/index.js';
@@ -27,7 +27,7 @@ function Scene({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardSearchButton onPress={() => setOpen(true)} />
       <DashboardSearch
         label="Find workspace"
@@ -118,7 +118,7 @@ describe('controlled dashboard search composition', () => {
       ],
     };
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         {shadcnAdapter.components.DashboardSearch.render(properties)}
       </ReacdProvider>,
     );
@@ -135,14 +135,14 @@ describe('controlled dashboard search composition', () => {
     const user = userEvent.setup();
     const pressed = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <DashboardSearchButton label="Find workspace" onPress={pressed} disabled />
       </ReacdProvider>,
     );
     await user.click(screen.getByRole('button', { name: 'Find workspace' }));
     expect(pressed).not.toHaveBeenCalled();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <DashboardSearchButton label="Find workspace" onPress={pressed} />
       </ReacdProvider>,
     );
@@ -150,7 +150,7 @@ describe('controlled dashboard search composition', () => {
     expect(pressed).toHaveBeenLastCalledWith();
     pressed.mockClear();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <DashboardSearch
           label="Find links"
           query=""

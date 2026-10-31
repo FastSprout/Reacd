@@ -11,6 +11,6 @@ export const providerSchema = z.strictObject({
   children: childrenSchema,
   templateId: labelSchema.optional(),
   templates: z.record(z.string(), templateSchema).optional(),
-  adapter: z.custom<ThemeAdapter>(isThemeAdapter, 'Invalid theme adapter.').optional(),
+  adapter: z.custom<ThemeAdapter>(isThemeAdapter, 'Invalid theme adapter.'),
   store: z.custom<ReacdStore>(isReacdStore, 'Invalid Jotai store.').optional(),
 });

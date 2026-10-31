@@ -1,8 +1,9 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { COMPONENT_NAMES } from '../../../components/component-names.js';
-import { Button, ReacdProvider, ReacdRenderer, shadcnAdapter } from '../../../index.js';
+import { Button, ReacdProvider, ReacdRenderer } from '../../../index.js';
 import { documentWith } from '../../../../test-support/documents.js';
 import { EXAMPLES } from './examples.js';
 

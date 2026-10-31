@@ -1,10 +1,12 @@
 import { useId, useRef } from 'react';
-import type { FormFieldProps } from '../../../components/form-field/index.js';
-import { FORM_FIELD_POLICY } from '../../../core/form-field-policy.js';
+import type { FormFieldProps } from
+  '@fastsprout/reacd/adapter-runtime/components/form-field/index.js';
+import { FORM_FIELD_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/form-field-policy.js';
 import {
   FieldMetadataContext,
   useFieldMetadata,
-} from '../../../renderer/form-field/field-metadata.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { focusFieldControl } from './focus-control.js';
 
 export function ShadcnFormField({

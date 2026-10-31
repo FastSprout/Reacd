@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it } from 'vitest';
 import { z } from 'zod';
@@ -94,7 +95,7 @@ it('reports every missing bound state at its renderer boundary', () => {
     content: <Text>Bound content</Text>,
   }));
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundDashboardGroup
         node={{ ...node, value: { state: 'missing', mode: 'readWrite' } }}
         regions={regions}
@@ -107,7 +108,7 @@ it('reports every missing bound state at its renderer boundary', () => {
   expect(screen.getByRole('alert')).toBeVisible();
   for (const property of ['open', 'mobileOpen'] as const) {
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundDashboardGroup
           node={{ ...node, [property]: { state: 'missing', mode: 'readWrite' } }}
           regions={regions}
@@ -123,7 +124,7 @@ it('reports every missing bound state at its renderer boundary', () => {
   if (!search) throw new Error('Missing search fixture.');
   for (const property of ['open', 'query', 'selection'] as const) {
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundDashboardSearch
           node={{ ...search, [property]: { state: 'missing', mode: 'readWrite' } }}
           registry={registry}
@@ -146,11 +147,12 @@ it('preflights missing state, access modes and descendant actions', () => {
   }));
   expect(validateGenerativeDocument(readonly).success).toBe(false);
   const document = success(validateGenerativeDocument(dashboardDocument()));
-  const view = render(<GenerativeUI document={document} />);
+  const view = render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
   expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered');
   expect(screen.queryByRole('group', { name: 'Workspace' })).toBeNull();
   view.rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={document}
       actions={{
         inspect: () => undefined,

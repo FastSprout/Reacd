@@ -1,3 +1,4 @@
+import '@fastsprout/reacd-shadcn/styles';
 import { mountApplication } from '../../src/state/bootstrap.js';
 import { DocumentationPreview } from './preview-app.js';
 

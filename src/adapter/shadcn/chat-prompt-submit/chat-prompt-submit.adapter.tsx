@@ -1,7 +1,10 @@
 import { useContext } from 'react';
-import type { ChatPromptSubmitProps } from '../../../components/index.js';
-import { PromptScopeContext } from '../../../renderer/chat-prompt/prompt-context.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+import type { ChatPromptSubmitProps } from
+  '@fastsprout/reacd/adapter-runtime/components/index.js';
+import { PromptScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/chat-prompt/prompt-context.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 import { Button } from '../vendor/ui/button.js';
 import { resolvePromptAction } from './prompt-action.js';
 

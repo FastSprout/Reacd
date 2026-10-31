@@ -1,5 +1,7 @@
-import { EDITOR_MENU_POLICY } from '../../../core/editor-menu-policy.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+import { EDITOR_MENU_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-menu-policy.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 import type { EditorMenuSnapshot } from './menu-store.js';
 
 interface MenuPanelProps {
@@ -28,8 +30,12 @@ export function EditorMenuPanel({
   return (
     <div className="reacd-node reacd-editor-menu">
       <p id={`${listId}-label`}>{label}</p>
-      <div role="listbox" id={listId} aria-labelledby={`${listId}-label`}
-        aria-busy={status === 'loading'}>
+      <div
+        role="listbox"
+        id={listId}
+        aria-labelledby={`${listId}-label`}
+        aria-busy={status === 'loading'}
+      >
         {items.map((item, index) => (
           <button
             type="button"
@@ -54,8 +60,9 @@ export function EditorMenuPanel({
       </div>
       {status === 'loading' && <p role="status">{EDITOR_MENU_POLICY.loading}</p>}
       {status === 'error' && <p role="alert">{error}</p>}
-      {status === 'ready' && items.length === 0 &&
-        <p role="status">{EDITOR_MENU_POLICY.empty}</p>}
+      {status === 'ready' && items.length === 0 && (
+        <p role="status">{EDITOR_MENU_POLICY.empty}</p>
+      )}
     </div>
   );
 }

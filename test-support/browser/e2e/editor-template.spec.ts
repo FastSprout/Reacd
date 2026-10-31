@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { readFileSync, readdirSync } from 'node:fs';
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
@@ -31,7 +32,7 @@ for (const profile of ['saas-modern-light', 'erp-compact'] as const) {
     const html = renderToString(
       createElement(
         ReacdProvider,
-        null,
+        { adapter: shadcnAdapter },
         createElement(
           Theme,
           { template },

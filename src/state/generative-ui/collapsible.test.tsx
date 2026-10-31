@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -29,6 +30,7 @@ describe('generative Collapsible', () => {
     const apply = vi.fn();
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         registry={registry}
         actions={{ apply }}
         document={{
@@ -65,7 +67,7 @@ describe('generative Collapsible', () => {
     expect(screen.getByRole('region', { name: 'Generated disclosure' })).toBeVisible();
   });
   it('validates references, permissions, and nested actions while closed', () => {
-    render(<GenerativeUI document={document} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
     expect(screen.getByRole('alert')).toHaveTextContent('not registered');
     for (const state of [
       [{ key: 'open', kind: 'text', initial: '', access: 'readWrite' }],

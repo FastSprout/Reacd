@@ -1,10 +1,14 @@
 import { useId } from 'react';
 import { RadioGroup } from '@base-ui/react/radio-group';
 import { Radio } from '@base-ui/react/radio';
-import type { RadioGroupProps } from '../../../components/radio-group/radio-group.js';
-import { CHOICE_DEFAULTS } from '../../../core/choice-policy.js';
-import { ChoiceHeader } from '../../../renderer/choice/choice-header.renderer.js';
-import { ChoiceText } from '../../../renderer/choice/choice-text.renderer.js';
+import type { RadioGroupProps } from
+  '@fastsprout/reacd/adapter-runtime/components/radio-group/radio-group.js';
+import { CHOICE_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/choice-policy.js';
+import { ChoiceHeader } from
+  '@fastsprout/reacd/adapter-runtime/renderer/choice/choice-header.renderer.js';
+import { ChoiceText } from
+  '@fastsprout/reacd/adapter-runtime/renderer/choice/choice-text.renderer.js';
 
 export function ShadcnRadioGroup({
   label,

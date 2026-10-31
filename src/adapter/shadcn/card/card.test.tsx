@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -7,7 +8,7 @@ it('renders working actions in validated header/body/footer slots', async () => 
   const user = userEvent.setup();
   const action = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Card
         label="Delivery"
         header={<Text>Header</Text>}
@@ -23,7 +24,7 @@ it('renders working actions in validated header/body/footer slots', async () => 
   await user.click(screen.getByRole('button', { name: 'Review' }));
   expect(action).toHaveBeenCalledOnce();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Card>
         <Text>Simple card</Text>
       </Card>
@@ -36,20 +37,20 @@ it('renders working actions in validated header/body/footer slots', async () => 
 
 it('omits empty slot wrappers while preserving rendered zero values', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Card header={[]} footer={false} />
     </ReacdProvider>,
   );
   expect(view.container.querySelector('[data-slot="reacd-card-header"]')).toBeNull();
   expect(view.container.querySelector('[data-slot="reacd-card-footer"]')).toBeNull();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Card header="" footer={null} />
     </ReacdProvider>,
   );
   expect(view.container.querySelector('[data-slot="reacd-card-header"]')).toBeNull();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Card header={0} />
     </ReacdProvider>,
   );

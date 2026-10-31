@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import type { DashboardSearchProps } from
-  '../../../components/dashboard-search/index.js';
-import { DASHBOARD_DEFAULTS } from '../../../core/dashboard-policy.js';
-import { COMMAND_DEFAULTS } from '../../../core/command-policy.js';
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-search/index.js';
+import { DASHBOARD_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
+import { COMMAND_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/command-policy.js';
 import { ShadcnModal } from '../modal/modal.adapter.js';
 import { ShadcnCommandPalette } from '../command-palette/command-palette.adapter.js';
 

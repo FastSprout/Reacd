@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -42,15 +43,18 @@ it('hydrates selected labels and isolates constrained application stores', async
   const client = success(createStateRegistry(definitions));
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentModel} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={server} />,
   );
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentModel} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   const trigger = screen.getByRole('combobox', { name: 'Language' });
   expect(trigger).toHaveTextContent('English');
   await user.click(trigger);
@@ -77,7 +81,7 @@ it('hydrates selected labels and isolates constrained application stores', async
 it('reports missing, incompatible and out-of-list locale bindings', () => {
   const registry = success(createStateRegistry([]));
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundLocaleSelect node={node} registry={registry} />
     </ReacdProvider>,
   );
@@ -86,7 +90,9 @@ it('reports missing, incompatible and out-of-list locale bindings', () => {
     [{ key: 'locale', kind: 'boolean', access: 'readWrite', initial: true }],
     [{ ...definitions[0], initial: 'fr-FR' }],
   ]) {
-    view.rerender(<GenerativeUI document={{ ...documentModel, state }} />);
+    view.rerender(
+      <GenerativeUI adapter={shadcnAdapter} document={{ ...documentModel, state }} />,
+    );
     expect(screen.getByRole('alert')).toBeVisible();
     expect(screen.queryByRole('combobox')).toBeNull();
   }

@@ -1,6 +1,6 @@
 import type { Node } from '@tiptap/pm/model';
 import { z } from 'zod';
-import { EDITOR_MARKS } from '../../../core/editor-policy.js';
+import { EDITOR_MARKS } from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
 import { sdkAttribute } from './attribute.js';
 import { editorTextChunks } from './text-chunks.js';
 

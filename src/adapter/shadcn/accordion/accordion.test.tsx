@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -8,7 +9,7 @@ import type { AccordionProps } from '../../../index.js';
 function Example(properties: Partial<AccordionProps>) {
   const [value, setValue] = useState<readonly string[]>(['one']);
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Accordion
         label="Sections"
         value={value}
@@ -40,7 +41,7 @@ describe('shadcn Accordion', () => {
       active?: boolean;
     }) {
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Collapsible
             label="Ancestor"
             open={active}

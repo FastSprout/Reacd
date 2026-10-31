@@ -1,8 +1,10 @@
 import { useId, useState } from 'react';
 import * as Slider from '@radix-ui/react-slider';
 import { useDirection } from '@radix-ui/react-direction';
-import type { InputRatingProps } from '../../../components/input-rating/index.js';
-import { INPUT_RATING_POLICY } from '../../../core/input-rating-policy.js';
+import type { InputRatingProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-rating/index.js';
+import { INPUT_RATING_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-rating-policy.js';
 import { RatingStars } from './rating-stars.js';
 import { Button } from '../vendor/ui/button.js';
 

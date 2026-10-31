@@ -1,6 +1,8 @@
 import type { Selection } from 'react-aria-components/ListBox';
-import type { ListboxProps } from '../../../components/listbox/index.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
+import type { ListboxProps } from
+  '@fastsprout/reacd/adapter-runtime/components/listbox/index.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
 
 export function listboxKeys(properties: ListboxProps): readonly string[] {
   if (properties.mode === 'multiple') return properties.value;

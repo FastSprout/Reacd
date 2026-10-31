@@ -1,13 +1,19 @@
 import { Dialog } from '@base-ui/react/dialog';
-import type { SlideoverProps } from '../../../components/slideover/index.js';
-import { MODAL_DEFAULTS } from '../../../core/modal-policy.js';
-import { PANEL_DEFAULTS, resolvePanelEdge } from '../../../core/panel-policy.js';
-import { EscapeScopeContext } from '../../../renderer/theme/escape-context.js';
-import { initialLayerFocus } from '../../../renderer/theme/initial-layer-focus.js';
+import type { SlideoverProps } from
+  '@fastsprout/reacd/adapter-runtime/components/slideover/index.js';
+import { MODAL_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/modal-policy.js';
+import {
+  PANEL_DEFAULTS,
+  resolvePanelEdge,
+} from '@fastsprout/reacd/adapter-runtime/core/panel-policy.js';
+import { EscapeScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-context.js';
+import { initialLayerFocus } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/initial-layer-focus.js';
 import {
   PortalActiveContext,
   PortalHostContext,
-} from '../../../renderer/theme/portal-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { Button } from '../vendor/ui/button.js';
 import { usePanelFrame } from '../panel/use-panel-frame.js';
 

@@ -1,5 +1,9 @@
-import type { TreeProps } from '../../../components/tree/tree.js';
-import { TREE_DEFAULTS, TREE_POLICY } from '../../../core/tree-policy.js';
+import type { TreeProps } from
+  '@fastsprout/reacd/adapter-runtime/components/tree/tree.js';
+import {
+  TREE_DEFAULTS,
+  TREE_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/tree-policy.js';
 import { Button } from '../vendor/ui/button.js';
 import { useTree } from './use-tree.js';
 import { focusTreeElement } from './focus-element.js';

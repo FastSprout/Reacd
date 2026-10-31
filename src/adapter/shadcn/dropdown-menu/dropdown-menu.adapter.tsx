@@ -1,7 +1,10 @@
 import { Menu } from '@base-ui/react/menu';
-import type { DropdownMenuProps } from '../../../components/dropdown-menu/index.js';
-import { ACTION_MENU_DEFAULTS } from '../../../core/action-menu-policy.js';
-import { EscapeScopeContext } from '../../../renderer/theme/escape-context.js';
+import type { DropdownMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/dropdown-menu/index.js';
+import { ACTION_MENU_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/action-menu-policy.js';
+import { EscapeScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-context.js';
 import { useMenuFrame } from '../action-menu/use-menu-frame.js';
 import { MenuItems } from '../action-menu/menu-items.js';
 import { MenuSurface } from '../action-menu/menu-surface.js';

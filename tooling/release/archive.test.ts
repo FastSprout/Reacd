@@ -25,7 +25,7 @@ describe('release tarball identity and allowlist', () => {
     const value = archive();
     value.files.push({ path: 'dist/core/policy.js' });
     value.files.push({
-      path: 'dist/adapter/shadcn/accordion/accordion.adapter.d.ts',
+      path: 'dist/renderer/accordion/accordion.renderer.d.ts',
     });
     value.files.push({ path: 'dist/schema/grid/grid.schema.js' });
     expect(validateReleaseArchive([value], meta)).toEqual(value);
@@ -62,6 +62,8 @@ describe('release tarball identity and allowlist', () => {
     'dist/../outside.js',
     'dist/.hidden.js',
     'dist/test-support/private.js',
+    'dist/adapter/shadcn/hidden.js',
+    'dist/hidden.css',
   ])('rejects unshippable or unsafe path %s', (path) => {
     const value = archive();
     value.files.push({ path });

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -25,7 +26,13 @@ it('validates nested references and dispatches child actions', async () => {
   const user = userEvent.setup();
   const action = vi.fn();
   expect(validateGenerativeDocument(document).success).toBe(true);
-  render(<GenerativeUI document={document} actions={{ search: action }} />);
+  render(
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={document}
+      actions={{ search: action }}
+    />,
+  );
   await user.type(screen.getByRole('textbox', { name: 'Query' }), 'Reacd');
   await user.click(screen.getByRole('button', { name: 'Search' }));
   expect(action).toHaveBeenCalledOnce();

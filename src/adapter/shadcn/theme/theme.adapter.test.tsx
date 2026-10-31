@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useContext } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
@@ -28,7 +29,7 @@ function InvalidDeclaration() {
 describe('scoped appearance adapter', () => {
   it('preserves fail-closed diagnostics within a theme scope', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnTheme>
           <InvalidDeclaration />
         </ShadcnTheme>
@@ -38,7 +39,7 @@ describe('scoped appearance adapter', () => {
   });
   it('inherits provider variables and applies only closed defaults', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnTheme defaults={{ Text: { role: 'caption' } }}>
           <Text>Caption default</Text>
           <Text role="body">Explicit body</Text>
@@ -52,7 +53,7 @@ describe('scoped appearance adapter', () => {
   it('inherits nested defaults and portal appearance', () => {
     const compact = templates['erp-compact'];
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnTheme defaults={{ Text: { role: 'caption' } }}>
           <ShadcnTheme template={compact} defaults={{ Text: { weight: 'bold' } }}>
             <Text>Nested text</Text>

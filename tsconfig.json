@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "jsx": "react-jsx",
@@ -22,7 +26,30 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": false,
-    "types": ["node", "vitest/globals"]
+    "types": [
+      "node",
+      "vitest/globals"
+    ],
+    "paths": {
+      "@fastsprout/reacd-shadcn": [
+        "./src/adapter/shadcn/shadcn.adapter.ts"
+      ],
+      "@fastsprout/reacd-shadcn/styles": [
+        "./src/adapter/shadcn/styles.ts"
+      ],
+      "@fastsprout/reacd/adapter-runtime/core/*": [
+        "./src/core/*"
+      ],
+      "@fastsprout/reacd/adapter-runtime/schema/*": [
+        "./src/schema/*"
+      ],
+      "@fastsprout/reacd/adapter-runtime/components/*": [
+        "./src/components/*"
+      ],
+      "@fastsprout/reacd/adapter-runtime/renderer/*": [
+        "./src/renderer/*"
+      ]
+    }
   },
   "include": [
     "src",

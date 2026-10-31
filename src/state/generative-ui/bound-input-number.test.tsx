@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -23,7 +24,7 @@ describe('bound InputNumber', () => {
       ]),
     );
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundInputNumber node={node} registry={registry} />
         <BoundInputNumber
           node={{ ...node, label: 'Reader', value: { ...reference, mode: 'read' } }}
@@ -51,7 +52,7 @@ describe('bound InputNumber', () => {
       ]),
     );
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundInputNumber
           node={{
             type: 'InputNumber',
@@ -77,7 +78,7 @@ describe('bound InputNumber', () => {
     ({ definitions }) => {
       const registry = success(createStateRegistry(definitions));
       render(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <BoundInputNumber node={node} registry={registry} />
         </ReacdProvider>,
       );

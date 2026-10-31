@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -37,7 +38,7 @@ it('writes isolated drafts and dispatches explicit actions', async () => {
     ],
   } as const;
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatComposerNodeView
         node={{ ...node, attachments: [...node.attachments] }}
         registry={registry}
@@ -66,7 +67,7 @@ it('writes isolated drafts and dispatches explicit actions', async () => {
   await user.click(screen.getByRole('button', { name: 'Retry response' }));
   expect(retry).toHaveBeenCalledExactlyOnceWith({ state: registry });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatComposerNodeView
         node={{ ...prompt, value: { state: 'draft', mode: 'read' } }}
         registry={registry}
@@ -86,7 +87,7 @@ it('protects invalid drafts and unavailable actions', async () => {
   const actions = {};
   Object.setPrototypeOf(actions, { send: inherited });
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatComposerNodeView
         node={prompt}
         registry={registry}
@@ -98,7 +99,7 @@ it('protects invalid drafts and unavailable actions', async () => {
   await user.click(screen.getByRole('button', { name: 'Send message' }));
   expect(inherited).not.toHaveBeenCalled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatComposerNodeView
         node={{ ...prompt, value: { state: 'missing', mode: 'readWrite' } }}
         registry={registry}
@@ -110,7 +111,7 @@ it('protects invalid drafts and unavailable actions', async () => {
   expect(screen.getByRole('alert')).toHaveTextContent('missing');
   const send = vi.fn();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatComposerNodeView
         node={{ type: 'ChatPromptSubmit', submitAction: 'send' }}
         registry={registry}
@@ -122,7 +123,7 @@ it('protects invalid drafts and unavailable actions', async () => {
   await user.click(screen.getByRole('button', { name: 'Send message' }));
   expect(send).toHaveBeenCalledExactlyOnceWith({ state: registry });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatComposerNodeView
         node={{
           type: 'ChatPalette',
@@ -140,7 +141,7 @@ it('protects invalid drafts and unavailable actions', async () => {
     'TranscriptPrompt',
   );
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatComposerNodeView
         node={{ type: 'ChatPalette', label: 'Empty palette', children: [] }}
         registry={registry}

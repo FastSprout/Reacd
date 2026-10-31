@@ -1,100 +1,70 @@
 # Get started
 
-reacd applications use React, TypeScript, TSX component declarations, and Jotai for
-application state. Native rendering and styling belong to the framework host and the
-selected adapter. Import UI components from reacd and compose them in your own views.
-Direct UI SDKs and styling utilities belong to the adapter, including Radix, Base UI,
-React Aria, TipTap, DayPicker, icon SDKs and class-name styling utilities. Named React
-hooks/types, Jotai, validation/date utilities and your own business modules remain
-available.
+This guide targets the [unreleased 0.2.0 package split](changelog.md). The separate
+adapter package is prepared locally; published 0.1.0 bundles its adapter.
 
-## Work from the local checkout
+Install `@fastsprout/reacd` into an existing browser React and TypeScript application.
+Your React host owns mounting. Declare views with reacd components; the renderer and
+selected adapter own native rendering, styles and responsive layout. Jotai owns state.
 
-```sh
-npm ci
-npm run dev
-```
+## Install
 
-Open `http://127.0.0.1:5173/` to use the counter application. The three applications
-below have isolated stores and local sample data. Reloading resets their unsaved state.
-
-## Run a small TSX application
-
-The repository includes standalone [counter][counter], [contact form][form] and
-[dashboard][dashboard] applications. After npm ci, choose one command:
+Use Node.js 26 or newer for the toolchain:
 
 ```sh
-npm run example -- --mode counter
-npm run example -- --mode form
-npm run example -- --mode dashboard
+npm install @fastsprout/reacd @fastsprout/reacd-shadcn
 ```
 
-Each serves its selected application at http://127.0.0.1:5173/. Its App.tsx uses closed
-components and its own Jotai store. Its main.tsx imports the browser-only
-@fastsprout/reacd/bootstrap entry, which supplies the trusted renderer and styles. The
-shared HTML host belongs to the framework; application files contain no HTML or CSS.
-Sample form submissions and filtering stay in the browser.
+Supported React, ReactDOM and Jotai versions are declared in the package peer
+dependencies. npm installs missing peers automatically and checks an existing host
+against that contract.
 
-## Declare a view
+## Configure TSX
 
-```tsx
-import { atom, useAtom } from 'jotai';
-import { Button, Card, Input, Text, VStack } from '@fastsprout/reacd';
+Set the following options in your application's TypeScript configuration:
 
-const nameAtom = atom('');
-
-export function Profile() {
-  const [name, setName] = useAtom(nameAtom);
-
-  return (
-    <Card>
-      <VStack spacing="medium">
-        <Text role="subheadline">Profile</Text>
-        <Input label="Name" value={name} onValueChange={setName} />
-        <Button label="Clear name" onPress={() => setName('')} />
-      </VStack>
-    </Card>
-  );
+```json
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@fastsprout/reacd"
+  }
 }
 ```
 
-Render views inside the application's configured provider. The provider selects the
-adapter and template; a Jotai provider owns the application's store.
+The custom JSX runtime checks closed component props. Import view components from
+`@fastsprout/reacd`; native HTML, styling SDKs and CSS belong to the framework layers.
+React hooks, Jotai, validation utilities and your business modules remain available.
 
-## Continue
+## Add a browser view
 
-The full local check requires Chromium and Python 3.13 documentation tools:
+This compiled and tested setup selects the separate shadcn adapter and imports its
+browser-only styles entry. It does not mount an application. Render its exported
+`InstallationExample` from your existing React host. Keep this module in the
+browser/client part of your application.
 
-```sh
-npx playwright install chromium
-python3 -m venv .venv-docs
-.venv-docs/bin/python -m pip install -r requirements-docs.txt
-npm run check
+```tsx
+--8<-- "examples/installation.tsx"
 ```
 
-This includes strict typing, coverage, built-package acceptance, browser conformance,
-and the strict documentation build. Use `npm run docs:check` to build documentation
-independently. Checks generate local artifacts and never deploy the site.
+`ReacdProvider` requires a complete explicit adapter and owns an isolated Jotai store.
+The child reads its atom inside that provider. Separate provider roots keep independent
+values even when the view declarations use the same atom definition.
 
-Build checks also validate bundle budgets and the installed package's synchronous
-server-rendering API. Internal conformance fixtures are separate from public examples.
+The adapter styles entry is browser-only. Server code can import the engine and adapter
+without importing styles. This setup documents a browser React integration; it does not
+establish Next.js or React Server Components compatibility.
+
+## Continue
 
 - [Component catalog](components/index.md)
 - [Theme adapters](guides/theme-adapters.md)
 - [State with Jotai](guides/state.md)
 - [Generative UI](guides/generative-ui.md)
 
-Each component reference embeds its runnable TSX example. Its source block includes the
-same file used by the preview. Examples use isolated Jotai stores and the shadcn theme
-adapter. Open the example link to work in a separate tab; editing one preview does not
-change another. Reloading an example resets its unsaved state.
+Each component reference embeds its runnable TSX example and displays that same source.
+Previews use isolated Jotai stores and the shadcn adapter. Open the example link to work
+in a separate tab. Reloading an example resets its unsaved state.
 
-`npm run docs:check` compiles the preview assets, builds strict MkDocs output and checks
-all component references. Serve the generated site locally with
-`npm run preview -- --config vite.site.config.ts --port 8000 --strictPort`. Run the
-documentation build before invoking `npm run test:browser` independently. The complete
-`npm run check` command keeps that order automatically.
-
-[counter]: https://github.com/FastSprout/Reacd/tree/main/examples/counter
-[form]: https://github.com/FastSprout/Reacd/tree/main/examples/form
-[dashboard]: https://github.com/FastSprout/Reacd/tree/main/examples/dashboard
+Repository development, examples and local documentation builds are described in
+[Contributing](https://github.com/FastSprout/Reacd/blob/main/CONTRIBUTING.md).

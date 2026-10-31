@@ -1,11 +1,14 @@
-import type { ChatPromptSubmitProps } from '../../../components/index.js';
-import type { ChatComposerStatus } from '../../../core/chat-composer.js';
+import type { ChatPromptSubmitProps } from
+  '@fastsprout/reacd/adapter-runtime/components/index.js';
+import type { ChatComposerStatus } from
+  '@fastsprout/reacd/adapter-runtime/core/chat-composer.js';
 import {
   CHAT_COMPOSER_DEFAULTS,
   CHAT_COMPOSER_ERRORS,
-} from '../../../core/chat-composer-policy.js';
-import type { Result } from '../../../core/result.js';
-import type { PromptScope } from '../../../renderer/chat-prompt/prompt-context.js';
+} from '@fastsprout/reacd/adapter-runtime/core/chat-composer-policy.js';
+import type { Result } from '@fastsprout/reacd/adapter-runtime/core/result.js';
+import type { PromptScope } from
+  '@fastsprout/reacd/adapter-runtime/renderer/chat-prompt/prompt-context.js';
 
 interface PromptAction {
   label: string;

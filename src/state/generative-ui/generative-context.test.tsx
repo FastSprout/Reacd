@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -37,7 +38,9 @@ describe('generative application context', () => {
   it('applies direction, template and defaults around recovery actions', async () => {
     const user = userEvent.setup();
     const retry = vi.fn();
-    const view = render(<GenerativeUI document={document} actions={{ retry }} />);
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ retry }} />,
+    );
     expect(view.container.querySelector('[lang="ar"]')).toHaveAttribute('dir', 'rtl');
     expect(screen.getByText('Please try again.')).toHaveAttribute(
       'data-role',
@@ -46,7 +49,13 @@ describe('generative application context', () => {
     await user.click(screen.getByRole('button', { name: 'Retry safely' }));
     expect(retry).toHaveBeenCalledOnce();
     expect(
-      renderToStaticMarkup(<GenerativeUI document={document} actions={{ retry }} />),
+      renderToStaticMarkup(
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={document}
+          actions={{ retry }}
+        />,
+      ),
     ).toContain('Service unavailable');
   });
 
@@ -54,6 +63,7 @@ describe('generative application context', () => {
     for (const slot of ['children', 'leading', 'actions']) {
       const view = render(
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={{
             ...document,
             root: {

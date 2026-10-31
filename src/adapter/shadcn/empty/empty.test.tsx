@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -7,7 +8,7 @@ import { Avatar, Button, Empty, Input, ReacdProvider, Text } from '../../../inde
 describe('shadcn Empty', () => {
   it('names a region and supports a minimal empty state', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Empty title="No records" />
       </ReacdProvider>,
     );
@@ -34,7 +35,10 @@ describe('shadcn Empty', () => {
       compact?: boolean;
     }) {
       return (
-        <ReacdProvider templateId={compact ? 'erp-compact' : 'saas-modern-light'}>
+        <ReacdProvider
+          adapter={shadcnAdapter}
+          templateId={compact ? 'erp-compact' : 'saas-modern-light'}
+        >
           <Empty
             title="No matches"
             description="Change the query to continue."
@@ -77,14 +81,14 @@ describe('shadcn Empty', () => {
   });
   it('uses its default loading label and supports all logical sizes', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Empty title="Pending" loading />
       </ReacdProvider>,
     );
     expect(screen.getByRole('status')).toHaveTextContent('Loading');
     for (const size of ['small', 'medium', 'large'] as const) {
       view.rerender(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Empty title="Pending" size={size} />
         </ReacdProvider>,
       );

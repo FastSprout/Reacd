@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, renderHook } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import type { ReactNode } from 'react';
@@ -9,7 +10,7 @@ import { ReacdProvider } from '../provider/provider.js';
 import { useColorMode } from './use-color-mode.js';
 
 function Scope({ children }: { children: ReactNode }) {
-  return <ReacdProvider>{children}</ReacdProvider>;
+  return <ReacdProvider adapter={shadcnAdapter}>{children}</ReacdProvider>;
 }
 
 it('keeps preferences isolated and resolves explicit system snapshots', () => {
@@ -42,7 +43,7 @@ it('keeps a nested foreign Jotai provider outside application preference state',
   const foreign = createReacdStore();
   const hook = renderHook(() => useColorMode('light'), {
     wrapper: ({ children }) => (
-      <ReacdProvider store={application}>
+      <ReacdProvider adapter={shadcnAdapter} store={application}>
         <Provider store={foreign}>{children}</Provider>
       </ReacdProvider>
     ),

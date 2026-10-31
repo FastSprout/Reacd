@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { atom, useAtom } from 'jotai';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -7,7 +8,7 @@ import { ReacdProvider } from './provider.js';
 import { createReacdStore, isReacdStore } from '../store.js';
 import { Text } from '../../components/text/text.js';
 import { Input } from '../../components/input/input.js';
-import { shadcnAdapter } from '../../adapter/shadcn/shadcn.adapter.js';
+
 import { templates } from '../../schema/design/templates.schema.js';
 import { jsx } from '../../jsx-runtime.js';
 
@@ -22,19 +23,19 @@ describe('Jotai composition root', () => {
   it('isolates app stores and preserves state when designs change', async () => {
     const user = userEvent.setup();
     const first = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Editor />
       </ReacdProvider>,
     );
     const second = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Editor />
       </ReacdProvider>,
     );
     await user.type(within(first.container).getByLabelText('Name'), 'Illia');
     expect(within(second.container).getByLabelText('Name')).toHaveValue('');
     first.rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <Editor />
       </ReacdProvider>,
     );
@@ -65,14 +66,14 @@ describe('Jotai composition root', () => {
     second.set(nameAtom, 'Request B');
     expect(
       renderToStaticMarkup(
-        <ReacdProvider store={first}>
+        <ReacdProvider adapter={shadcnAdapter} store={first}>
           <Editor />
         </ReacdProvider>,
       ),
     ).toContain('Request A');
     expect(
       renderToStaticMarkup(
-        <ReacdProvider store={second}>
+        <ReacdProvider adapter={shadcnAdapter} store={second}>
           <Editor />
         </ReacdProvider>,
       ),
@@ -83,7 +84,7 @@ describe('Jotai composition root', () => {
     'rejects unregistered or inherited template %s',
     (templateId) => {
       render(
-        <ReacdProvider templateId={templateId}>
+        <ReacdProvider adapter={shadcnAdapter} templateId={templateId}>
           <Text>Hidden</Text>
         </ReacdProvider>,
       );
@@ -98,7 +99,7 @@ describe('Jotai composition root', () => {
     { style: {} },
     { templates: { invalid: {} } },
   ])('rejects invalid composition properties: %o', (properties) => {
-    render(jsx(ReacdProvider, properties));
+    render(jsx(ReacdProvider, { adapter: shadcnAdapter, ...properties }));
     expect(screen.getByRole('alert')).toHaveTextContent('ReacdProvider');
   });
 

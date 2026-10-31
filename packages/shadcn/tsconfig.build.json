@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "../../src/adapter/shadcn",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
+    "types": ["react"],
+    "paths": {
+      "@fastsprout/reacd/adapter-runtime/core/*": ["../../dist/core/*"],
+      "@fastsprout/reacd/adapter-runtime/schema/*": ["../../dist/schema/*"],
+      "@fastsprout/reacd/adapter-runtime/components/*": ["../../dist/components/*"],
+      "@fastsprout/reacd/adapter-runtime/renderer/*": ["../../dist/renderer/*"]
+    }
+  },
+  "include": ["../../src/adapter/shadcn"],
+  "exclude": ["../../src/adapter/**/*.test.*", "../../src/adapter/**/__tests__/**"]
+}

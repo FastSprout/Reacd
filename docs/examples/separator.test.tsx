@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
@@ -6,7 +7,7 @@ import { SeparatorExample } from './separator.js';
 describe('documented Separator example', () => {
   it('renders its public declaration', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <SeparatorExample />
       </ReacdProvider>,
     );

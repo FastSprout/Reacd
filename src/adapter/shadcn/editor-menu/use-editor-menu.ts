@@ -6,10 +6,13 @@ import {
   useState,
   useSyncExternalStore,
 } from 'react';
-import type { EditorMenuKind } from '../../../core/editor-menu-policy.js';
-import { EditorMenuScopeContext } from '../../../renderer/editor/menu-context.js';
-import type { EditorMenuItem } from '../../../renderer/editor/menu-context.js';
-import type { MentionLookupSource } from './menu-store.js';
+import type { EditorMenuKind } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-menu-policy.js';
+import { EditorMenuScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
+import type { EditorMenuItem } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
+import type { EditorMenuSnapshot, MentionLookupSource } from './menu-store.js';
 import { createEditorMenuStore } from './menu-store.js';
 
 export function useEditorMenu(
@@ -17,7 +20,10 @@ export function useEditorMenu(
   items: readonly EditorMenuItem[],
   disabled: boolean | undefined,
   lookup?: MentionLookupSource,
-) {
+): {
+  listId: string; orphan: boolean; snapshot: EditorMenuSnapshot;
+  choose: (index: number) => void;
+} {
   const listId = useId();
   const port = useContext(EditorMenuScopeContext);
   const [store] = useState(() => createEditorMenuStore(items, listId));

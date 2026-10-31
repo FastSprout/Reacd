@@ -1,7 +1,11 @@
 import { z } from 'zod';
-import { EDITOR_DEFAULTS, EDITOR_POLICY } from '../../../core/editor-policy.js';
-import { stateKeySchema } from '../../../schema/state/shared/definition.js';
-import { labelSchema } from '../../../schema/shared/values.js';
+import {
+  EDITOR_DEFAULTS,
+  EDITOR_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
+import { stateKeySchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/state/shared/definition.js';
+import { labelSchema } from '@fastsprout/reacd/adapter-runtime/schema/shared/values.js';
 
 const mentionSchema = z.strictObject({ id: stateKeySchema, label: labelSchema });
 const emojiSchema = z.strictObject({

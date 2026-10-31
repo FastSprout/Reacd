@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -10,7 +11,7 @@ describe('AuthForm app boundaries', () => {
   it('hydrates stable form semantics without duplicating submission', async () => {
     const submit = vi.fn();
     const tree = (
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AuthForm
           label="Hydrated example"
           submitLabel="Submit hydration example"
@@ -35,10 +36,10 @@ describe('AuthForm app boundaries', () => {
     const user = userEvent.setup();
     render(
       <>
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <AuthFormExample />
         </ReacdProvider>
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <AuthFormExample />
         </ReacdProvider>
       </>,

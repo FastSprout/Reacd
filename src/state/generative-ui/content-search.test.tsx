@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -54,6 +55,7 @@ it('commits selection and closes before invoking the action', async () => {
   });
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={declaration}
       registry={registry}
       actions={{ help, read }}
@@ -75,6 +77,7 @@ it('vetoes selection atomically and recovers inside the dialog', async () => {
   const read = vi.fn();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={declaration}
       registry={registry}
       actions={{ help: vi.fn(), read }}
@@ -111,6 +114,7 @@ it('supports persistent selection and explicit dismissal', async () => {
   const read = vi.fn();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       actions={{ read }}
       document={{
         ...declaration,
@@ -206,7 +210,7 @@ it('reports a rejected trigger write and clears the error after recovery', async
   );
   if (!node) throw new Error('Expected trigger.');
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundContentSearchButton node={node} registry={registry} />
     </ReacdProvider>,
   );
@@ -220,14 +224,17 @@ it('reports a rejected trigger write and clears the error after recovery', async
 });
 
 it('preflights footer actions and rejects unknown state', () => {
-  const view = render(<GenerativeUI document={declaration} />);
+  const view = render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />);
   expect(screen.getByRole('alert')).toHaveTextContent('not registered');
   expect(screen.queryByRole('button')).not.toBeInTheDocument();
-  view.rerender(<GenerativeUI document={{ ...declaration, state: [] }} />);
+  view.rerender(
+    <GenerativeUI adapter={shadcnAdapter} document={{ ...declaration, state: [] }} />,
+  );
   expect(screen.getByRole('alert')).toHaveTextContent('not registered');
   expect(
     renderToString(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         actions={{ help: vi.fn(), read: vi.fn() }}
       />,

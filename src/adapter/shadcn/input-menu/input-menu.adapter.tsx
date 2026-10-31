@@ -1,12 +1,14 @@
 import { useId, useRef } from 'react';
 import { Autocomplete } from '@base-ui/react/autocomplete';
-import type { InputMenuProps } from '../../../components/input-menu/index.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
-import { CONTENT_POLICY } from '../../../core/policy.js';
+import type { InputMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-menu/index.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
+import { CONTENT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import {
   FORM_MENU_DEFAULTS,
   FORM_MENU_POLICY,
-} from '../../../core/form-menu-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/core/form-menu-policy.js';
 import { Input } from '../vendor/ui/input.js';
 import { Button } from '../vendor/ui/button.js';
 import { useInputMenu } from './use-input-menu.js';

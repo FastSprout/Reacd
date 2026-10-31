@@ -1,6 +1,10 @@
 import { useId } from 'react';
-import type { CodeEditorProps } from '../../../components/code-editor/code-editor.js';
-import { CONTENT_POLICY, DOCUMENT_POLICY } from '../../../core/policy.js';
+import type { CodeEditorProps } from
+  '@fastsprout/reacd/adapter-runtime/components/code-editor/code-editor.js';
+import {
+  CONTENT_POLICY,
+  DOCUMENT_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { Textarea } from '../vendor/ui/textarea.js';
 import { Label } from '../vendor/ui/label.js';
 

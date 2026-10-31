@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 import { Calendar } from '../../../components/calendar/index.js';
@@ -36,7 +37,7 @@ function mountCalendar(properties: CalendarProps) {
         submit();
       }}
     >
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Calendar {...properties} />
       </ReacdProvider>
     </form>,
@@ -51,9 +52,7 @@ it.each(incompleteCases)(
     form().requestSubmit();
     expect(submit).not.toHaveBeenCalled();
     expect(form().checkValidity()).toBe(false);
-    expect(
-      screen.getByRole('group', { name: BASE.label }),
-    ).toHaveFocus();
+    expect(screen.getByRole('group', { name: BASE.label })).toHaveFocus();
   },
 );
 
@@ -134,7 +133,7 @@ it.each(bindingCases)(
           submit();
         }}
       >
-        <GenerativeUI document={document} />
+        <GenerativeUI adapter={shadcnAdapter} document={document} />
       </form>,
     );
     expect(screen.getByRole('group', { name: BASE.label })).toHaveAttribute(

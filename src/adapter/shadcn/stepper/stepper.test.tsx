@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -27,7 +28,7 @@ describe('shadcn Stepper', () => {
   it('gates enabled steps and leaves transitions to the host', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ControlledStepper />
       </ReacdProvider>,
     );
@@ -58,7 +59,7 @@ describe('shadcn Stepper', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Stepper
           label="Controlled"
           items={items}
@@ -76,7 +77,7 @@ describe('shadcn Stepper', () => {
       'step',
     );
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Stepper
           label="Controlled"
           items={items}
@@ -90,7 +91,7 @@ describe('shadcn Stepper', () => {
       screen.getAllByRole('button').every((button) => button.hasAttribute('disabled')),
     ).toBe(true);
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Stepper
           label="Controlled"
           items={items}
@@ -101,7 +102,7 @@ describe('shadcn Stepper', () => {
     );
     await user.click(screen.getByRole('button', { name: /Confirm/ }));
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Stepper label="Controlled" items={items} value="one" onValueChange={change} />
       </ReacdProvider>,
     );
@@ -114,7 +115,7 @@ describe('shadcn Stepper', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <App direction="rtl">
           <Stepper label="RTL steps" items={items} value="one" onValueChange={change} />
         </App>
@@ -124,7 +125,7 @@ describe('shadcn Stepper', () => {
     await user.keyboard('{ArrowLeft}');
     expect(screen.getByRole('button', { name: /Payment/ })).toHaveFocus();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <App direction="rtl">
           <Stepper
             label="RTL steps"

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -7,7 +8,7 @@ import { InputDateExample } from './input-date.js';
 it('runs date, range, locale, protection and form examples', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputDateExample />
     </ReacdProvider>,
   );
@@ -38,7 +39,7 @@ it('runs date, range, locale, protection and form examples', async () => {
 it('restores same-value sample dates and clears a partial draft', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputDateExample />
     </ReacdProvider>,
   );

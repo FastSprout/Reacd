@@ -1,5 +1,7 @@
-import type { PageAsideProps } from '../../../components/page-aside/page-aside.js';
-import { useWidePage } from '../../../renderer/page-aside/use-wide-page.js';
+import type { PageAsideProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-aside/page-aside.js';
+import { useWidePage } from
+  '@fastsprout/reacd/adapter-runtime/renderer/page-aside/use-wide-page.js';
 
 export function ShadcnPageAside({ children, label, top, bottom }: PageAsideProps) {
   const wide = useWidePage();

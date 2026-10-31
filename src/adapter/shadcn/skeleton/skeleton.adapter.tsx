@@ -1,5 +1,7 @@
-import type { SkeletonProps } from '../../../components/skeleton/skeleton.js';
-import { SKELETON_DEFAULTS } from '../../../core/skeleton-policy.js';
+import type { SkeletonProps } from
+  '@fastsprout/reacd/adapter-runtime/components/skeleton/skeleton.js';
+import { SKELETON_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/skeleton-policy.js';
 
 export function ShadcnSkeleton({
   shape = SKELETON_DEFAULTS.shape,

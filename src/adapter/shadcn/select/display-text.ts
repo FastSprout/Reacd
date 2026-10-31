@@ -1,6 +1,8 @@
-import type { SelectProps } from '../../../components/select/index.js';
-import { SELECT_POLICY } from '../../../core/select-policy.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
+import type { SelectProps } from
+  '@fastsprout/reacd/adapter-runtime/components/select/index.js';
+import { SELECT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/select-policy.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
 
 export function selectDisplayText(properties: SelectProps): string {
   const values =

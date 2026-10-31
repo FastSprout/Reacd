@@ -1,17 +1,20 @@
 import { Drawer } from '@base-ui/react/drawer';
-import type { DrawerProps } from '../../../components/drawer/index.js';
-import { MODAL_DEFAULTS } from '../../../core/modal-policy.js';
+import type { DrawerProps } from
+  '@fastsprout/reacd/adapter-runtime/components/drawer/index.js';
+import { MODAL_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/modal-policy.js';
 import {
   PANEL_DEFAULTS,
   PANEL_SWIPE,
   resolvePanelEdge,
-} from '../../../core/panel-policy.js';
-import { EscapeScopeContext } from '../../../renderer/theme/escape-context.js';
-import { initialLayerFocus } from '../../../renderer/theme/initial-layer-focus.js';
+} from '@fastsprout/reacd/adapter-runtime/core/panel-policy.js';
+import { EscapeScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-context.js';
+import { initialLayerFocus } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/initial-layer-focus.js';
 import {
   PortalActiveContext,
   PortalHostContext,
-} from '../../../renderer/theme/portal-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { Button } from '../vendor/ui/button.js';
 import { usePanelFrame } from '../panel/use-panel-frame.js';
 

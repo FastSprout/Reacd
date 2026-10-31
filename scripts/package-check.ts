@@ -4,86 +4,54 @@ import { mkdtemp, mkdir, readFile, rm, symlink, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { z } from 'zod';
+import { packReleaseArchive, packShadcnArchive } from '../tooling/release/pack.js';
+import {
+  parseDistributionManifest,
+  parseShadcnDistributionManifest,
+} from '../tooling/release/distribution.js';
+import { verifyHeadlessInstall } from '../tooling/package/headless.js';
 import { buildInstalledBootstrap } from '../tooling/package/bootstrap.js';
+import { exerciseInstalledBootstrap } from '../tooling/package/browser.js';
+import { INSTALLED_COMPILER_POLICY } from '../tooling/package/compiler-policy.js';
 
 const root = process.cwd();
 const temporary = await mkdtemp(join(tmpdir(), 'reacd-package-'));
-const dependencyMap = z.record(z.string(), z.string());
-const manifestSchema = z.object({
-  dependencies: dependencyMap,
-  peerDependencies: dependencyMap.default({}),
-});
 const compiler = resolve(root, 'node_modules/typescript/bin/tsc');
 const fixtureRoot = resolve(root, 'tooling/package/fixtures');
 
 async function fixture(name: string) {
   return readFile(join(fixtureRoot, name), 'utf8');
 }
-const options = {
-  target: 'ES2022',
-  lib: ['ES2022', 'DOM', 'DOM.Iterable'],
-  module: 'NodeNext',
-  moduleResolution: 'NodeNext',
-  jsx: 'react-jsx',
-  jsxImportSource: '@fastsprout/reacd',
-  strict: true,
-  noUncheckedIndexedAccess: true,
-  exactOptionalPropertyTypes: true,
-  noPropertyAccessFromIndexSignature: true,
-  noUncheckedSideEffectImports: true,
-  skipLibCheck: false,
-  noUnusedLocals: true,
-  noUnusedParameters: true,
-  noImplicitOverride: true,
-  noImplicitReturns: true,
-  noFallthroughCasesInSwitch: true,
-  noEmitOnError: true,
-  types: ['node', 'react', 'react-dom'],
-  outDir: 'dist',
-};
+const options = INSTALLED_COMPILER_POLICY;
 
 try {
-  const packed: unknown = JSON.parse(
-    execFileSync(
-      'npm',
-      ['pack', '--ignore-scripts', '--json', '--pack-destination', temporary],
-      { cwd: root, encoding: 'utf8' },
-    ),
-  );
-  const [archive] = z
-    .tuple([
-      z.object({
-        filename: z.string(),
-        files: z.array(z.object({ path: z.string() })),
-      }),
-    ])
-    .parse(packed);
-  for (const file of archive.files)
-    assert.doesNotMatch(
-      file.path,
-      /(?:__tests__|test-support|fixtures|specs)\/|\.(?:test|spec)\.|\.map$/,
-    );
-  for (const required of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
-    assert(
-      archive.files.some((file) => file.path === required),
-      `Missing packed license: ${required}`,
-    );
-  }
+  const archive = packReleaseArchive(root);
+  const adapterArchive = packShadcnArchive(root);
+  verifyHeadlessInstall(root, archive, temporary);
   const modules = join(temporary, 'node_modules');
   const installed = join(modules, '@fastsprout/reacd');
   await mkdir(installed, { recursive: true });
+  execFileSync('tar', ['-xf', archive, '-C', installed, '--strip-components=1']);
+  const manifest: unknown = JSON.parse(
+    await readFile(join(installed, 'package.json'), 'utf8'),
+  );
+  const metadata = parseDistributionManifest(manifest);
+  const adapterPath = join(modules, '@fastsprout/reacd-shadcn');
+  await mkdir(adapterPath, { recursive: true });
   execFileSync('tar', [
     '-xf',
-    join(temporary, archive.filename),
+    adapterArchive,
     '-C',
-    installed,
+    adapterPath,
     '--strip-components=1',
   ]);
-  const manifest: unknown = JSON.parse(await readFile('package.json', 'utf8'));
-  const metadata = manifestSchema.parse(manifest);
+  const adapterInput: unknown = JSON.parse(
+    await readFile(join(adapterPath, 'package.json'), 'utf8'),
+  );
+  const adapter = parseShadcnDistributionManifest(adapterInput);
   const dependencies = new Set([
     ...Object.keys(metadata.dependencies),
+    ...Object.keys(adapter.dependencies),
     ...Object.keys(metadata.peerDependencies),
     '@types',
   ]);
@@ -108,6 +76,7 @@ try {
     { name: 'value', diagnostic: /TS2322[\s\S]*number/ },
     { name: 'private', diagnostic: /TS2307[\s\S]*@fastsprout\/reacd\/dist/ },
     { name: 'bootstrap-escape', diagnostic: /TS2339[\s\S]*render/ },
+    { name: 'runtime-state', diagnostic: /TS2307[\s\S]*adapter-runtime/ },
   ];
   for (const { name, diagnostic } of negatives) {
     await writeFile(join(temporary, `${name}.tsx`), await fixture(`${name}.tsx.txt`));
@@ -135,8 +104,8 @@ try {
       private: true,
       type: 'module',
       dependencies: {
-        '@fastsprout/reacd': pathToFileURL(join(temporary, archive.filename)).href,
-        ...metadata.peerDependencies,
+        '@fastsprout/reacd': pathToFileURL(archive).href,
+        '@fastsprout/reacd-shadcn': pathToFileURL(adapterArchive).href,
       },
     }),
   );
@@ -155,6 +124,7 @@ try {
   await writeFile(join(clean, 'installed.mjs'), await fixture('installed.mjs.txt'));
   execFileSync(process.execPath, ['installed.mjs'], { cwd: clean, stdio: 'inherit' });
   buildInstalledBootstrap(root, clean);
+  await exerciseInstalledBootstrap(clean);
 } finally {
   await rm(temporary, { recursive: true, force: true });
 }

@@ -1,7 +1,9 @@
 import { useContext, useId } from 'react';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import type { TabsProps } from '../../../components/tabs/tabs.js';
-import { TABS_POLICY } from '../../../core/tabs-policy.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import type { TabsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/tabs/tabs.js';
+import { TABS_POLICY } from '@fastsprout/reacd/adapter-runtime/core/tabs-policy.js';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../vendor/ui/tabs.js';
 
 export function ShadcnTabs({

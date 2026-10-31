@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -29,7 +30,9 @@ it('constrains range updates through the generative dispatcher', async () => {
   if (!registry.success) throw new Error('Calendar registry creation failed.');
   const model = { schemaVersion: '0.2', state: definitions, root: node };
   expect(validateGenerativeDocument(model).success).toBe(true);
-  render(<GenerativeUI document={model} registry={registry.data} />);
+  render(
+    <GenerativeUI adapter={shadcnAdapter} document={model} registry={registry.data} />,
+  );
   const calendar = screen.getByRole('group', { name: 'Booking calendar' });
   await user.click(
     within(calendar).getByRole('button', {

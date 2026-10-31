@@ -1,5 +1,6 @@
 import { StarIcon } from 'lucide-react';
-import { INPUT_RATING_POLICY } from '../../../core/input-rating-policy.js';
+import { INPUT_RATING_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-rating-policy.js';
 
 export function RatingStars({ value, length }: { value: number; length: number }) {
   return Array.from({ length }, (_, index) => {

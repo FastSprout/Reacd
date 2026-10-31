@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -50,6 +51,7 @@ it('renders declared state writers, feedback readers and actions', async () => {
   const user = userEvent.setup();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={document}
       registry={registry}
       actions={{ approve, reject }}
@@ -71,7 +73,7 @@ it('renders declared state writers, feedback readers and actions', async () => {
 });
 
 it('rejects unregistered tool actions before exposing controls', () => {
-  render(<GenerativeUI document={document} />);
+  render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
   expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered');
   expect(screen.queryByRole('button')).toBeNull();
 });

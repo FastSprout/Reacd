@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { CHAT_POLICY } from '../../../core/chat-policy.js';
+import { CHAT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/chat-policy.js';
 
 export function useFollowLatest(enabled: boolean, revision: object, status: string) {
   const viewport = useRef<HTMLDivElement>(null);

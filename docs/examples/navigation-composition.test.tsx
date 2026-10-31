@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -10,7 +11,7 @@ describe('compiled navigation composition examples', () => {
   it('retains footer state and honors disabled actions', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <FooterColumnsExample />
       </ReacdProvider>,
     );
@@ -28,7 +29,7 @@ describe('compiled navigation composition examples', () => {
   it('operates both submenu orientations and disables actions', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <NavigationMenuExample />
       </ReacdProvider>,
     );
@@ -59,7 +60,7 @@ describe('compiled navigation composition examples', () => {
   it('retains Jotai step and field values across mode changes', async () => {
     const user = userEvent.setup();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <StepperExample />
       </ReacdProvider>,
     );
@@ -81,7 +82,7 @@ describe('compiled navigation composition examples', () => {
       await user.click(screen.getByRole('switch', { name }));
     }
     view.rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <StepperExample />
       </ReacdProvider>,
     );

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -8,7 +9,7 @@ import { CarouselExample } from '../../../../docs/examples/carousel.js';
 it('hydrates slide forms and isolates request-local application state', async () => {
   const user = userEvent.setup();
   const tree = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <CarouselExample />
     </ReacdProvider>
   );

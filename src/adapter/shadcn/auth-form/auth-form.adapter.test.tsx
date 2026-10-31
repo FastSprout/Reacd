@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -10,7 +11,7 @@ describe('AuthForm adapter', () => {
     const submit = vi.fn();
     const provider = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AuthForm
           label="Local credentials"
           title="Local example"
@@ -60,7 +61,7 @@ describe('AuthForm adapter', () => {
       providers: [{ key: 'local', label: 'Provider', onPress: provider }],
     };
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AuthForm {...props} loading />
       </ReacdProvider>,
     );
@@ -73,7 +74,7 @@ describe('AuthForm adapter', () => {
     ).toHaveAttribute('aria-busy', 'true');
     expect(screen.getByRole('button', { name: 'Provider' })).toBeDisabled();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AuthForm {...props} disabled />
       </ReacdProvider>,
     );
@@ -81,13 +82,13 @@ describe('AuthForm adapter', () => {
     expect(submit).not.toHaveBeenCalled();
     expect(screen.queryByRole('status')).toBeNull();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AuthForm {...props} loading loadingLabel="Checking local example" />
       </ReacdProvider>,
     );
     expect(screen.getByRole('status')).toHaveTextContent('Checking local example');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AuthForm
           {...props}
           providers={[
@@ -105,7 +106,7 @@ describe('AuthForm adapter', () => {
     expect(provider).not.toHaveBeenCalled();
     expect(
       renderToString(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <AuthForm {...props} />
         </ReacdProvider>,
       ),

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -30,12 +31,13 @@ const document = defineGenerativeDeclaration({
 describe('generative avatars', () => {
   it('shares identity contracts, overflow disclosure, and host updates', async () => {
     const user = userEvent.setup();
-    const view = render(<GenerativeUI document={document} />);
+    const view = render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
     expect(screen.getByRole('img', { name: 'Example Reader' })).toBeInTheDocument();
     await user.click(screen.getByText('Show 1 more person'));
     expect(screen.getByText('Example Reviewer', { exact: true })).toBeVisible();
     view.rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...document,
           root: { type: 'Avatar', name: 'Replacement', fallback: 'RP' },
@@ -54,10 +56,12 @@ describe('generative avatars', () => {
   });
   it('hydrates fallback identities without recoverable mismatch', () => {
     const container = globalThis.document.createElement('div');
-    container.innerHTML = renderToString(<GenerativeUI document={document} />);
+    container.innerHTML = renderToString(
+      <GenerativeUI adapter={shadcnAdapter} document={document} />,
+    );
     globalThis.document.body.appendChild(container);
     const errors: unknown[] = [];
-    const view = render(<GenerativeUI document={document} />, {
+    const view = render(<GenerativeUI adapter={shadcnAdapter} document={document} />, {
       container,
       hydrate: true,
       onRecoverableError: (error) => errors.push(error),

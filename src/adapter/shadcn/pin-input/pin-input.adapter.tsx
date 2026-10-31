@@ -1,7 +1,9 @@
 import { useId } from 'react';
 import { OTPInput } from 'input-otp';
-import type { PinInputProps } from '../../../components/pin-input/index.js';
-import { PIN_INPUT_POLICY } from '../../../core/pin-input-policy.js';
+import type { PinInputProps } from
+  '@fastsprout/reacd/adapter-runtime/components/pin-input/index.js';
+import { PIN_INPUT_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/pin-input-policy.js';
 import { Label } from '../vendor/ui/label.js';
 import { PinSlots } from './pin-slots.js';
 

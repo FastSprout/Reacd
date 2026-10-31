@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -52,15 +53,18 @@ it('hydrates isolated modes and constrains host writes', async () => {
   const client = success(createStateRegistry(definitions));
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentModel} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={server} />,
   );
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentModel} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   try {
     await user.click(screen.getByRole('button', { name: 'Clear Writer' }));
     await user.click(screen.getByRole('button', { name: 'Clear Many writer' }));
@@ -86,6 +90,7 @@ it('hydrates isolated modes and constrains host writes', async () => {
 it('rejects mode-kind mismatch before any choice control mounts', () => {
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...documentModel,
         state: [

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -42,7 +43,12 @@ describe('numeric and PIN generative transport', () => {
     const registry = success(createStateRegistry(state));
     const verify = vi.fn();
     render(
-      <GenerativeUI document={document} registry={registry} actions={{ verify }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={document}
+        registry={registry}
+        actions={{ verify }}
+      />,
     );
     await user.click(screen.getByRole('button', { name: 'Increase Amount' }));
     expect(screen.getByRole('textbox', { name: 'Amount reader' })).toHaveValue('0');
@@ -53,13 +59,14 @@ describe('numeric and PIN generative transport', () => {
     expect(success(registry.read('amount')).value).toBeNull();
   });
   it('rejects unregistered completion actions before exposing controls', () => {
-    render(<GenerativeUI document={document} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
     expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered');
     expect(screen.queryByRole('textbox')).toBeNull();
   });
   it('rejects invalid bound values before rendering', () => {
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...document,
           state: [

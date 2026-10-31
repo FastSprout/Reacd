@@ -5,12 +5,13 @@ import type {
   EditorMenuPort,
   EditorMenuRequest,
   EditorMenuView,
-} from '../../../renderer/editor/menu-context.js';
-import type { ValidationIssue } from '../../../core/render-port.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
+import type { ValidationIssue } from
+  '@fastsprout/reacd/adapter-runtime/core/render-port.js';
 import type {
   EditorMentionLookupRequest,
   EditorMentionLookupResult,
-} from '../../../schema/editor-mention-menu/lookup.schema.js';
+} from '@fastsprout/reacd/adapter-runtime/schema/editor-mention-menu/lookup.schema.js';
 import { createMentionLookupController } from './lookup-controller.js';
 
 export interface MentionLookupSource {

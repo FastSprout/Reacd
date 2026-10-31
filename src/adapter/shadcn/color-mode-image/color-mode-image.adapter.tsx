@@ -1,6 +1,5 @@
-import type {
-  ColorModeImageProps,
-} from '../../../components/color-mode-image/index.js';
+import type { ColorModeImageProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-image/index.js';
 import { ModeImage } from './mode-image.js';
 
 export function ShadcnColorModeImage({

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { createPortal } from 'react-dom';
 import type { ReactNode } from 'react';
@@ -14,7 +15,7 @@ it('submits only a physically separate portal form', async () => {
   const host = document.createElement('div');
   document.body.append(host);
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Form label="Outer form" onSubmit={outer}>
         <PortalFixture host={host}>
           <AuthForm label="Portal auth" submitLabel="Submit portal" onSubmit={inner} />

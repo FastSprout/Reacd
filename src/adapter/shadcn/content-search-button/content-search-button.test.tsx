@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -7,7 +8,7 @@ it('announces expansion and emits only the logical open value', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContentSearchButton open={false} disabled onOpenChange={change} />
     </ReacdProvider>,
   );
@@ -17,7 +18,7 @@ it('announces expansion and emits only the logical open value', async () => {
   await user.click(button);
   expect(change).not.toHaveBeenCalled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContentSearchButton open onOpenChange={change} label="Open docs" />
     </ReacdProvider>,
   );

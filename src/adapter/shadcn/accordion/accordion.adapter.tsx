@@ -1,7 +1,10 @@
 import { useContext } from 'react';
-import type { AccordionProps } from '../../../components/accordion/accordion.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import { ACCORDION_DEFAULTS } from '../../../core/accordion-policy.js';
+import type { AccordionProps } from
+  '@fastsprout/reacd/adapter-runtime/components/accordion/accordion.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { ACCORDION_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/accordion-policy.js';
 import {
   Accordion,
   AccordionItem,

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -9,7 +10,7 @@ import { FormFieldExample } from './form-field.js';
 it('runs Switch controlled submission, protection and loading examples', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SwitchExample />
     </ReacdProvider>,
   );
@@ -28,7 +29,7 @@ it('runs Switch controlled submission, protection and loading examples', async (
 it('runs bounded Textarea autoresize and protection examples', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <TextareaExample />
     </ReacdProvider>,
   );
@@ -49,7 +50,7 @@ it('runs bounded Textarea autoresize and protection examples', async () => {
 it('runs field errors, direction and native submission', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <FormFieldExample />
     </ReacdProvider>,
   );

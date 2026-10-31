@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -6,7 +7,7 @@ import { AlertExample } from './alert.js';
 it('runs documented alert actions, dismissal and readonly visibility', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <AlertExample />
     </ReacdProvider>,
   );

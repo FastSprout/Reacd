@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -79,15 +80,18 @@ it('hydrates isolated preference readers and resolves system mode', async () => 
   const client = success(createStateRegistry(definitions));
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentModel} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={server} />,
   );
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentModel} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   await user.click(screen.getByRole('button', { name: 'Dark appearance' }));
   expect(success(client.read('preference')).value).toBe('dark');
   expect(success(server.read('preference')).value).toBe('system');
@@ -122,6 +126,7 @@ it('hydrates isolated preference readers and resolves system mode', async () => 
 it('rejects invalid initial modes and writable asset references', () => {
   const view = render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...documentModel,
         state: [definitions[0], { ...definitions[1], initial: 'system' }],
@@ -131,6 +136,7 @@ it('rejects invalid initial modes and writable asset references', () => {
   expect(screen.getByRole('alert')).toBeVisible();
   view.rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: definitions,

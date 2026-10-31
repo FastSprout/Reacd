@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import {
   PortalActiveContext,
   PortalHostContext,
-} from '../../../renderer/theme/portal-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 
 export function CarouselPanel({
   children,

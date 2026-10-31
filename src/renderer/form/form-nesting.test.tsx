@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
@@ -17,7 +18,7 @@ describe('native form nesting protection', () => {
     const outer = vi.fn();
     const inner = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AuthForm label="Outer auth" submitLabel="Submit outer" onSubmit={outer}>
           <HiddenInnerForm onSubmit={inner} />
         </AuthForm>
@@ -51,7 +52,9 @@ describe('native form nesting protection', () => {
         ],
       },
     };
-    const tree = <GenerativeUI document={document} actions={{ run }} />;
+    const tree = (
+      <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ run }} />
+    );
     render(tree);
     expect(screen.getAllByRole('form')).toHaveLength(1);
     expect(screen.queryByRole('button', { name: 'Submit inner' })).toBeNull();

@@ -1,7 +1,10 @@
 import { useId } from 'react';
-import type { ProgressGroupProps } from '../../../components/progress-group/index.js';
-import { PROGRESS_GROUP_DEFAULTS } from '../../../core/progress-group-policy.js';
-import { progressGroupLayout } from '../../../core/progress-group-layout.js';
+import type { ProgressGroupProps } from
+  '@fastsprout/reacd/adapter-runtime/components/progress-group/index.js';
+import { PROGRESS_GROUP_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/progress-group-policy.js';
+import { progressGroupLayout } from
+  '@fastsprout/reacd/adapter-runtime/core/progress-group-layout.js';
 
 export function ShadcnProgressGroup({
   label,

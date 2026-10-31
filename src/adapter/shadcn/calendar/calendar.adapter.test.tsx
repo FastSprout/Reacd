@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -23,7 +24,7 @@ it('requests single selection, clearing and keyboard navigation', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCalendar {...BASE} value={null} onValueChange={change} />
     </ReacdProvider>,
   );
@@ -31,7 +32,7 @@ it('requests single selection, clearing and keyboard navigation', async () => {
   expect(change).toHaveBeenLastCalledWith('2026-10-29');
   expect(day(29).closest('[role="gridcell"]')).not.toHaveAttribute('aria-selected');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCalendar {...BASE} value="2026-10-29" onValueChange={change} />
     </ReacdProvider>,
   );
@@ -51,7 +52,7 @@ it('protects disabled, readonly, required and bounded selection', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCalendar
         {...BASE}
         value="2026-10-29"
@@ -67,7 +68,7 @@ it('protects disabled, readonly, required and bounded selection', async () => {
   await user.click(day(29));
   expect(change).not.toHaveBeenCalled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCalendar {...BASE} value={null} onValueChange={change} readOnly />
     </ReacdProvider>,
   );
@@ -76,7 +77,7 @@ it('protects disabled, readonly, required and bounded selection', async () => {
   await user.click(screen.getByRole('button', { name: 'Next month' }));
   expect(screen.getByRole('grid', { name: 'November 2026' })).toBeInTheDocument();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCalendar {...BASE} value={null} onValueChange={change} disabled />
     </ReacdProvider>,
   );
@@ -99,7 +100,7 @@ it('creates and completes ordered partial ranges', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCalendar
         {...BASE}
         mode="range"
@@ -111,7 +112,7 @@ it('creates and completes ordered partial ranges', async () => {
   await user.click(day(29));
   expect(change).toHaveBeenLastCalledWith({ start: '2026-10-29', end: null });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCalendar
         {...BASE}
         mode="range"
@@ -127,7 +128,7 @@ it('creates and completes ordered partial ranges', async () => {
 it('formats Gregorian locale and follows App RTL keys', async () => {
   const user = userEvent.setup();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction="rtl">
         <Example value="2026-10-29" />
       </App>
@@ -137,7 +138,7 @@ it('formats Gregorian locale and follows App RTL keys', async () => {
   await user.keyboard('{ArrowLeft}');
   expect(day(30)).toHaveFocus();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example value="2026-10-29" locale="pl-PL" />
     </ReacdProvider>,
   );
@@ -147,7 +148,7 @@ it('formats Gregorian locale and follows App RTL keys', async () => {
 it('serializes form values and redirects invalid required focus', () => {
   const view = render(
     <form aria-label="Delivery form">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnCalendar
           {...BASE}
           value={null}
@@ -166,7 +167,7 @@ it('serializes form values and redirects invalid required focus', () => {
   expect(new FormData(form).get('delivery')).toBe('');
   view.rerender(
     <form aria-label="Delivery form">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnCalendar
           {...BASE}
           mode="range"

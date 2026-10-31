@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { userEvent } from '@testing-library/user-event';
@@ -63,15 +64,18 @@ it('hydrates recursive fields with isolated server/client stores', async () => {
   const client = success(createStateRegistry(definitions));
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentModel} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={server} />,
   );
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentModel} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   const notes = screen.getByRole('textbox', { name: 'Notes' });
   expect(notes).toHaveAccessibleDescription('Review pending');
   act(() => {
@@ -100,6 +104,7 @@ it('hydrates recursive fields with isolated server/client stores', async () => {
 it('validates literal, empty and incompatible error bindings', () => {
   const { rerender } = render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: [],
@@ -115,6 +120,7 @@ it('validates literal, empty and incompatible error bindings', () => {
   expect(screen.getByRole('alert')).toHaveTextContent('Rejected');
   rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: [],
@@ -125,6 +131,7 @@ it('validates literal, empty and incompatible error bindings', () => {
   expect(screen.queryByRole('alert')).toBeNull();
   rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...documentModel,
         state: definitions.map((definition) =>

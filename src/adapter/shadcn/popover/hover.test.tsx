@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -10,7 +11,7 @@ describe('Popover hover focus policy', () => {
     function Example() {
       const [open, setOpen] = useState(false);
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Popover
             title="Hover panel"
             triggerLabel="Hover trigger"

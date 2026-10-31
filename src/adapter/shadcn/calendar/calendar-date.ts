@@ -1,5 +1,9 @@
-import { CALENDAR_POLICY } from '../../../core/calendar-policy.js';
-import type { TemporalLimits, TemporalRange } from '../../../core/date-time.js';
+import { CALENDAR_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/calendar-policy.js';
+import type {
+  TemporalLimits,
+  TemporalRange,
+} from '@fastsprout/reacd/adapter-runtime/core/date-time.js';
 
 export function toCalendarDate(value: string): Date {
   const parts = value.split('-');

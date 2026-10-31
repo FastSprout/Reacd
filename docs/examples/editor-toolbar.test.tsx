@@ -1,10 +1,5 @@
-import {
-  act,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
@@ -21,7 +16,7 @@ afterEach(() => restore());
 it('runs scoped literal toolbar commands and host-controlled protection', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <EditorToolbarExample />
     </ReacdProvider>,
   );

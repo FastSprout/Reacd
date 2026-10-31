@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { Kbd, ReacdProvider, Tooltip, Text } from '../../../index.js';
@@ -5,13 +6,13 @@ import { Kbd, ReacdProvider, Tooltip, Text } from '../../../index.js';
 describe('shadcn Kbd', () => {
   it('names symbols and supports custom labels and logical variants', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Kbd value="meta" />
       </ReacdProvider>,
     );
     expect(screen.getByRole('img', { name: 'Control' })).toHaveTextContent('Ctrl');
     view.rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <Kbd value="meta" platform="apple" label="Command key" />
       </ReacdProvider>,
     );
@@ -20,7 +21,7 @@ describe('shadcn Kbd', () => {
       for (const variant of ['outline', 'soft', 'subtle', 'solid'] as const)
         for (const intent of ['primary', 'secondary', 'danger'] as const) {
           view.rerender(
-            <ReacdProvider>
+            <ReacdProvider adapter={shadcnAdapter}>
               <Kbd value="F12" size={size} variant={variant} intent={intent} />
             </ReacdProvider>,
           );
@@ -31,7 +32,7 @@ describe('shadcn Kbd', () => {
   });
   it('keeps existing tooltip shortcut labels literal', async () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Tooltip
           text="Literal shortcuts"
           open

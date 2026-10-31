@@ -1,17 +1,22 @@
 import { useContext, useState } from 'react';
 import { Dialog } from '@base-ui/react/dialog';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { ModalProps } from '../../../components/modal/modal.js';
-import { MODAL_DEFAULTS } from '../../../core/modal-policy.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
+import type { ModalProps } from
+  '@fastsprout/reacd/adapter-runtime/components/modal/modal.js';
+import { MODAL_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/modal-policy.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
 import { Button } from '../vendor/ui/button.js';
-import { EscapeScopeContext } from '../../../renderer/theme/escape-context.js';
-import { createEscapeScope } from '../../../renderer/theme/escape-scope.js';
-import { initialLayerFocus } from '../../../renderer/theme/initial-layer-focus.js';
+import { EscapeScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-context.js';
+import { createEscapeScope } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-scope.js';
+import { initialLayerFocus } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/initial-layer-focus.js';
 import {
   PortalHostContext,
   PortalActiveContext,
-} from '../../../renderer/theme/portal-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 
 export function ShadcnModal({
   title,

@@ -1,5 +1,7 @@
-import type { SeparatorProps } from '../../../components/separator/separator.js';
-import { SEPARATOR_DEFAULTS } from '../../../core/shell-policy.js';
+import type { SeparatorProps } from
+  '@fastsprout/reacd/adapter-runtime/components/separator/separator.js';
+import { SEPARATOR_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/shell-policy.js';
 import { Separator } from '../vendor/ui/separator.js';
 
 export function ShadcnSeparator({

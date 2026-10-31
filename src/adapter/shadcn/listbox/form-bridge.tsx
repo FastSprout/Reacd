@@ -1,6 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { LISTBOX_POLICY } from '../../../core/listbox-policy.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
+import { LISTBOX_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/listbox-policy.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
 
 interface FormBridgeProps {
   readonly values: readonly string[];

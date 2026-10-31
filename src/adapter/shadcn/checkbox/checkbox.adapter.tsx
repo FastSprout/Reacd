@@ -1,7 +1,10 @@
 import { useId, useRef, useState } from 'react';
-import type { CheckboxProps } from '../../../components/checkbox/checkbox.js';
-import { CHECKBOX_POLICY } from '../../../core/checkbox-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { CheckboxProps } from
+  '@fastsprout/reacd/adapter-runtime/components/checkbox/checkbox.js';
+import { CHECKBOX_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/checkbox-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Checkbox } from '../vendor/ui/checkbox.js';
 import { Label } from '../vendor/ui/label.js';
 

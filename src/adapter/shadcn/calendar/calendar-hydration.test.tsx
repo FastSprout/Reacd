@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -9,7 +10,7 @@ import { success } from '../../../../test-support/data-table.js';
 
 it('renders UTC references consistently across timezones and early years', () => {
   const view = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Calendar
         label="Historical date"
         referenceDate="0001-01-01"
@@ -45,15 +46,18 @@ it('hydrates dates and keeps server/client stores isolated', async () => {
   const client = success(createStateRegistry(state));
   const container = globalThis.document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={document} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={document} registry={server} />,
   );
   globalThis.document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={document} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={document} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   await user.click(screen.getByRole('button', { name: /October 29, 2026$/ }));
   expect(success(client.read('delivery')).value).toBe('2026-10-29');
   expect(success(server.read('delivery')).value).toBe(null);

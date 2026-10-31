@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
-import type { SelectProps } from '../../../components/select/index.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
+import type { SelectProps } from
+  '@fastsprout/reacd/adapter-runtime/components/select/index.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
 import {
   singleSelectionValueSchema,
   multipleSelectionValueSchema,
   canRequestSelection,
-} from '../../../schema/selection/index.js';
+} from '@fastsprout/reacd/adapter-runtime/schema/selection/index.js';
 
 export function useSelectChange(
   properties: SelectProps,

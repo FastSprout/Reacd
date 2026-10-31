@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
-import type { DataTableProps } from '../../../components/data-table/data-table.js';
+import type { DataTableProps } from
+  '@fastsprout/reacd/adapter-runtime/components/data-table/data-table.js';
 import { ShadcnButton } from '../button/button.adapter.js';
 import { ShadcnCheckbox } from '../checkbox/checkbox.adapter.js';
 import { TableColumnFilter } from './filters.adapter.js';

@@ -1,9 +1,14 @@
 import { useContext, useId } from 'react';
-import type * as Handle from '../../../components/editor-drag-handle/index.js';
-import { editorBlockIds } from '../../../core/editor-blocks.js';
-import { EDITOR_DRAG_POLICY as P } from '../../../core/editor-drag-handle-policy.js';
-import { EditorScopeContext } from '../../../renderer/editor/editor-context.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+import type * as Handle from
+  '@fastsprout/reacd/adapter-runtime/components/editor-drag-handle/index.js';
+import { editorBlockIds } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-blocks.js';
+import { EDITOR_DRAG_POLICY as P } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-drag-handle-policy.js';
+import { EditorScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/editor-context.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 import { Button } from '../vendor/ui/button.js';
 import { useDragSession } from './use-drag-session.js';
 function issue(message: string) {

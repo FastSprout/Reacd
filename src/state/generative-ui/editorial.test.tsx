@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -48,11 +49,19 @@ describe('editorial generative transport', () => {
   it('resolves standalone and collection entry actions', async () => {
     const user = userEvent.setup();
     const run = vi.fn();
-    render(<GenerativeUI document={declaration} actions={{ run }} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
+    );
     for (const button of screen.getAllByRole('button')) await user.click(button);
     expect(run).toHaveBeenCalledTimes(screen.getAllByRole('button').length);
     expect(
-      renderToString(<GenerativeUI document={declaration} actions={{ run }} />),
+      renderToString(
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={declaration}
+          actions={{ run }}
+        />,
+      ),
     ).toContain('2024-02-29');
   });
 
@@ -68,6 +77,7 @@ describe('editorial generative transport', () => {
       ]) {
         const view = render(
           <GenerativeUI
+            adapter={shadcnAdapter}
             document={{
               ...declaration,
               root: {
@@ -83,7 +93,9 @@ describe('editorial generative transport', () => {
         view.unmount();
       }
     }
-    const view = render(<GenerativeUI document={declaration} />);
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+    );
     expect(screen.getByRole('alert')).toHaveTextContent('not registered');
     view.unmount();
     for (const root of [
@@ -94,7 +106,9 @@ describe('editorial generative transport', () => {
         children: [],
       },
     ]) {
-      const item = render(<GenerativeUI document={{ ...declaration, root }} />);
+      const item = render(
+        <GenerativeUI adapter={shadcnAdapter} document={{ ...declaration, root }} />,
+      );
       expect(screen.getByRole('alert')).toHaveTextContent('not registered');
       item.unmount();
     }
@@ -121,7 +135,9 @@ describe('editorial generative transport', () => {
     const user = userEvent.setup();
     const inherited = vi.fn();
     const actions: Record<string, () => void> = { run: vi.fn() };
-    render(<GenerativeUI document={declaration} actions={actions} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={actions} />,
+    );
     Object.setPrototypeOf(actions, { run: inherited });
     delete actions['run'];
     const button = screen.getAllByRole('button', { name: 'Editorial title action' })[0];

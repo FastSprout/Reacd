@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -19,7 +20,7 @@ describe('editorial article and collection adapters', () => {
     const inspect = vi.fn();
     const edit = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BlogPost
           title="Inspect example"
           onPress={inspect}
@@ -47,7 +48,7 @@ describe('editorial article and collection adapters', () => {
 
   it('reserves media space and resets source failure', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BlogPost
           title="Media entry"
           image={{
@@ -63,7 +64,7 @@ describe('editorial article and collection adapters', () => {
     fireEvent.error(image);
     expect(screen.getByRole('img')).toHaveTextContent('Image unavailable');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BlogPost
           title="Media entry"
           image={{
@@ -78,7 +79,7 @@ describe('editorial article and collection adapters', () => {
 
   it('composes keyed entries and safe children in source order', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BlogPosts
           posts={[
             {
@@ -129,7 +130,7 @@ describe('editorial article and collection adapters', () => {
     expect(screen.getByText('2026-10-29')).toHaveAttribute('datetime', '2026-10-29');
     expect(
       renderToString(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <BlogPost title="Server entry" />
         </ReacdProvider>,
       ),

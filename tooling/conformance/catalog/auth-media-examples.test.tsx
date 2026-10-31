@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -7,7 +8,7 @@ import { AuthMediaExamples } from './auth-media-examples.js';
 it('keeps local state while changing scoped direction', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <AuthMediaExamples />
     </ReacdProvider>,
   );

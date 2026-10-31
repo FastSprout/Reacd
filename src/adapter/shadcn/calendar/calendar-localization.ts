@@ -1,4 +1,7 @@
-import { CALENDAR_DEFAULTS, CALENDAR_POLICY } from '../../../core/calendar-policy.js';
+import {
+  CALENDAR_DEFAULTS,
+  CALENDAR_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/calendar-policy.js';
 
 export function calendarLocalization(locale: string) {
   const options = { calendar: 'gregory', timeZone: CALENDAR_POLICY.timeZone };

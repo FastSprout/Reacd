@@ -1,9 +1,12 @@
 import { useContext } from 'react';
 import type { DashboardSidebarCollapseProps } from
-  '../../../components/dashboard-sidebar-collapse/index.js';
-import { DASHBOARD_DEFAULTS } from '../../../core/dashboard-policy.js';
-import { DashboardContext } from '../../../renderer/dashboard/dashboard-context.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-sidebar-collapse/index.js';
+import { DASHBOARD_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
+import { DashboardContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/dashboard/dashboard-context.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnDashboardSidebarCollapse({

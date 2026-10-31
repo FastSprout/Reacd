@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -25,14 +26,14 @@ it('writes pause state and keeps readonly bindings static', async () => {
     ]),
   );
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundMarquee node={node} registry={registry} />
     </ReacdProvider>,
   );
   await user.click(screen.getByRole('button', { name: 'Resume movement' }));
   expect(success(registry.read('paused')).value).toBe(false);
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundMarquee
         node={{ ...node, paused: { state: 'paused', mode: 'read' } }}
         registry={registry}
@@ -42,7 +43,7 @@ it('writes pause state and keeps readonly bindings static', async () => {
   expect(screen.getByRole('list', { name: 'Notices' })).toBeInTheDocument();
   expect(screen.queryByRole('button')).toBeNull();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundMarquee node={{ ...node, readOnly: true }} registry={registry} />
     </ReacdProvider>,
   );
@@ -51,7 +52,7 @@ it('writes pause state and keeps readonly bindings static', async () => {
 });
 it('rejects missing or mistyped shared pause state', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundMarquee node={node} registry={success(createStateRegistry([]))} />
     </ReacdProvider>,
   );

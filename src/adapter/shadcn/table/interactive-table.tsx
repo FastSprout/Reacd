@@ -1,7 +1,10 @@
-import type { InteractiveTableProps } from '../../../components/table/index.js';
-import { TABLE_EDITABLE } from '../../../core/table-policy.js';
-import { queryTable } from '../../../schema/data-table/query.js';
-import { transitionTableModel } from '../../../schema/table/transition.js';
+import type { InteractiveTableProps } from
+  '@fastsprout/reacd/adapter-runtime/components/table/index.js';
+import { TABLE_EDITABLE } from '@fastsprout/reacd/adapter-runtime/core/table-policy.js';
+import { queryTable } from
+  '@fastsprout/reacd/adapter-runtime/schema/data-table/query.js';
+import { transitionTableModel } from
+  '@fastsprout/reacd/adapter-runtime/schema/table/transition.js';
 import { ShadcnDataTable } from '../data-table/data-table.adapter.js';
 type Model = InteractiveTableProps['model'];
 export function ShadcnInteractiveTable({

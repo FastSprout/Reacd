@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -21,7 +22,7 @@ it('shares scalar and array writes with readonly readers', async () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundSelect
         node={{ ...base, value: { state: 'single', mode: 'readWrite' } }}
         registry={registry}
@@ -74,7 +75,7 @@ it('shares scalar and array writes with readonly readers', async () => {
 it('reports missing or incompatible scalar and array bindings', () => {
   const registry = success(createStateRegistry([]));
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundSelect
         node={{ ...base, value: { state: 'missing', mode: 'read' } }}
         registry={registry}

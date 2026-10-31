@@ -1,6 +1,8 @@
 import { NavigationMenu } from '@base-ui/react/navigation-menu';
-import type { NavigationMenuProps } from '../../../components/navigation-menu/index.js';
-import { pressHandler } from '../../../renderer/contracts/press-handler.js';
+import type { NavigationMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/navigation-menu/index.js';
+import { pressHandler } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/press-handler.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function MenuTarget({ item }: { item: NavigationMenuProps['items'][number] }) {

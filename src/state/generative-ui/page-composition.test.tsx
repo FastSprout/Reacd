@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -46,7 +47,9 @@ describe('generative page composition', () => {
   it('validates every slot and preserves interactive children', async () => {
     const user = userEvent.setup();
     const help = vi.fn();
-    render(<GenerativeUI document={document} actions={{ help }} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ help }} />,
+    );
     expect(
       screen.getByRole('complementary', {
         name: 'Generated page navigation',
@@ -66,6 +69,7 @@ describe('generative page composition', () => {
     for (const slot of ['top', 'bottom', 'children']) {
       const view = render(
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={{
             ...document,
             root: {
@@ -96,7 +100,11 @@ describe('generative page composition', () => {
 
   it('server-renders safe page content without a second main landmark', () => {
     const output = renderToStaticMarkup(
-      <GenerativeUI document={document} actions={{ help: () => undefined }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={document}
+        actions={{ help: () => undefined }}
+      />,
     );
     expect(output).toContain('Aside body');
     expect(output).toContain('Grid body');

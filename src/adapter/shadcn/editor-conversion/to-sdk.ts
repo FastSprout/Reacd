@@ -4,7 +4,7 @@ import type {
   EditorDocument,
   EditorInline,
   EditorListItem,
-} from '../../../core/editor-document.js';
+} from '@fastsprout/reacd/adapter-runtime/core/editor-document.js';
 
 function inlineToSdk(inline: EditorInline): JSONContent {
   if (inline.type === 'hardBreak') return { type: 'hardBreak' };

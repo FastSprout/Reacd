@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -13,7 +14,7 @@ const items = [
 function Single() {
   const [value, setValue] = useState('');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu
         label="Records"
         items={items}
@@ -44,7 +45,7 @@ it('requests a complete array and keeps multiple choices open', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu
         label="Records"
         items={items}
@@ -64,7 +65,7 @@ it('clears disabled old selection and returns trigger focus', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu
         label="Records"
         items={items}

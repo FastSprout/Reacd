@@ -1,14 +1,17 @@
 import { useContext } from 'react';
 import type { DashboardResizeHandleProps } from
-  '../../../components/dashboard-resize-handle/index.js';
-import { DASHBOARD_DEFAULTS } from '../../../core/dashboard-policy.js';
-import { pairBounds } from '../../../core/splitter.js';
-import { splitterKey } from '../../../renderer/splitter/splitter-key.js';
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-resize-handle/index.js';
+import { DASHBOARD_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
+import { pairBounds } from '@fastsprout/reacd/adapter-runtime/core/splitter.js';
+import { splitterKey } from
+  '@fastsprout/reacd/adapter-runtime/renderer/splitter/splitter-key.js';
 import {
   DashboardContext,
   DashboardRegionContext,
-} from '../../../renderer/dashboard/dashboard-context.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/dashboard/dashboard-context.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 
 export function ShadcnDashboardResizeHandle({
   label,

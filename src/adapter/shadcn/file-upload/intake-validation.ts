@@ -1,14 +1,19 @@
-import type { Result } from '../../../core/result.js';
+import type { Result } from '@fastsprout/reacd/adapter-runtime/core/result.js';
 import {
   FILE_UPLOAD_DEFAULTS as D,
   FILE_UPLOAD_ERRORS as E,
   FILE_UPLOAD_POLICY as P,
-} from '../../../core/file-upload-policy.js';
-import { acceptsUpload } from '../../../core/file-upload-accept.js';
-import { fileUploadLimit } from '../../../schema/file-upload/index.js';
-import type { FileUploadSettings } from '../../../schema/file-upload/index.js';
-import { uploadMetadataSchema } from '../../../schema/file-upload/index.js';
-import type { UploadFile } from '../../../schema/file-upload/index.js';
+} from '@fastsprout/reacd/adapter-runtime/core/file-upload-policy.js';
+import { acceptsUpload } from
+  '@fastsprout/reacd/adapter-runtime/core/file-upload-accept.js';
+import { fileUploadLimit } from
+  '@fastsprout/reacd/adapter-runtime/schema/file-upload/index.js';
+import type { FileUploadSettings } from
+  '@fastsprout/reacd/adapter-runtime/schema/file-upload/index.js';
+import { uploadMetadataSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/file-upload/index.js';
+import type { UploadFile } from
+  '@fastsprout/reacd/adapter-runtime/schema/file-upload/index.js';
 export interface IntakeSettings extends FileUploadSettings {
   readonly value: readonly UploadFile[];
 }

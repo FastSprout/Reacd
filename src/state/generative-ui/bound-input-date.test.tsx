@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -29,7 +30,7 @@ it('shares dates, protects readers and constrains host writes', async () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInputDate node={singleNode} registry={registry} />
       <BoundInputDate
         node={{
@@ -74,7 +75,7 @@ it('binds date ranges and protects shared access and limits', async () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInputDate node={rangeNode} registry={registry} />
       <BoundInputDate
         node={{
@@ -113,7 +114,7 @@ it('binds date ranges and protects shared access and limits', async () => {
 it('reports failed single and range binding resolution', () => {
   const registry = success(createStateRegistry([]));
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInputDate node={singleNode} registry={registry} />
       <BoundInputDate node={rangeNode} registry={registry} />
     </ReacdProvider>,

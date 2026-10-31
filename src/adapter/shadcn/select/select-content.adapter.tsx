@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 import type { ReactNode } from 'react';
 import * as Select from '@radix-ui/react-select';
-import { PortalHostContext } from '../../../renderer/theme/portal-context.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
+import { PortalHostContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
 import { SelectScrollUpButton, SelectScrollDownButton } from '../vendor/ui/select.js';
 
 export function ShadcnSelectContent({ children }: { children: ReactNode }) {

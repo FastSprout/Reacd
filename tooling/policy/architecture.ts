@@ -1,3 +1,5 @@
+import { ADAPTER_PACKAGE_ERROR, isConcreteAdapterPackage } from './adapter-package.js';
+import { adapterRuntimeError } from './adapter-runtime.js';
 import { diagnostic } from './diagnostic.js';
 import type { PolicyDiagnostic } from './diagnostic.js';
 import { importVisitor } from './imports.js';
@@ -5,6 +7,7 @@ import { inspectSource } from './parse.js';
 import { LAYERS, layerOf, isTestModule, isVendorModule } from './layers.js';
 import { internalPath } from './module-path.js';
 import { isTrustedUiDependency } from './ui-dependencies.js';
+import { componentOwnershipError, reactOwnershipError } from './ownership.js';
 
 export { LAYERS } from './layers.js';
 
@@ -27,13 +30,28 @@ export function checkArchitecture(
   }
   const name = LAYERS[layer];
   const nativeUi = name === 'renderer' || name === 'adapter';
-  const visitor = importVisitor(({ value, offset }) => {
+  const visitor = importVisitor((reference) => {
+    const { value, offset } = reference;
     if (value === null) {
       add(offset, 'Computed imports cannot be verified. Use a literal path.');
       return;
     }
+    if (isConcreteAdapterPackage(value)) {
+      add(offset, ADAPTER_PACKAGE_ERROR);
+      return;
+    }
+    const sdkError = adapterRuntimeError(value);
+    if (sdkError !== null) {
+      add(offset, sdkError);
+      return;
+    }
     if (!nativeUi && isTrustedUiDependency(value)) {
       add(offset, NATIVE_UI_DEPENDENCY_ERROR);
+      return;
+    }
+    const reactError = reactOwnershipError(name, reference);
+    if (reactError !== null) {
+      add(offset, reactError);
       return;
     }
     const target = internalPath(value, file, root);
@@ -44,6 +62,11 @@ export function checkArchitecture(
     }
     if (isVendorModule(target, root) && !nativeUi) {
       add(offset, NATIVE_UI_DEPENDENCY_ERROR);
+      return;
+    }
+    const ownershipError = componentOwnershipError(file, target, root);
+    if (ownershipError !== null) {
+      add(offset, ownershipError);
       return;
     }
     const dependency = layerOf(target, root);
@@ -60,7 +83,14 @@ export function checkArchitecture(
 export function checkFacade(file: string, source: string): PolicyDiagnostic[] {
   const issues: PolicyDiagnostic[] = [];
   const references = importVisitor(({ value, offset }) => {
-    if (value !== null && isTrustedUiDependency(value)) {
+    const sdkError = value === null ? null : adapterRuntimeError(value);
+    if (value !== null && isConcreteAdapterPackage(value)) {
+      issues.push(
+        diagnostic(file, source, offset, 'architecture', ADAPTER_PACKAGE_ERROR),
+      );
+    } else if (sdkError !== null) {
+      issues.push(diagnostic(file, source, offset, 'architecture', sdkError));
+    } else if (value !== null && isTrustedUiDependency(value)) {
       issues.push(
         diagnostic(file, source, offset, 'architecture', NATIVE_UI_DEPENDENCY_ERROR),
       );

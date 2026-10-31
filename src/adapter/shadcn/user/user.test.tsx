@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -9,7 +10,7 @@ describe('shadcn User', () => {
     const user = userEvent.setup();
     const press = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <User name="Ada Lovelace" />
       </ReacdProvider>,
     );
@@ -17,7 +18,7 @@ describe('shadcn User', () => {
     expect(screen.queryByRole('button')).toBeNull();
     expect(screen.queryByRole('img')).toBeNull();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <User
           name="Ada Lovelace"
           description="Engineer"
@@ -38,7 +39,7 @@ describe('shadcn User', () => {
     );
     for (const size of ['medium', 'large'] as const) {
       view.rerender(
-        <ReacdProvider templateId="erp-compact">
+        <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
           <User
             name="Ada Lovelace"
             avatar={{}}
@@ -56,7 +57,7 @@ describe('shadcn User', () => {
     }
     expect(press).toHaveBeenCalledTimes(2);
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <User name="Ada Lovelace" onPress={press} disabled />
       </ReacdProvider>,
     );

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import type { ReactNode } from 'react';
@@ -42,7 +43,9 @@ describe('binding boundary failures', () => {
     (example) => {
       const result = createStateRegistry([]);
       if (!result.success) throw new Error('Expected an empty registry');
-      render(<ReacdProvider>{example(result.data)}</ReacdProvider>);
+      render(
+        <ReacdProvider adapter={shadcnAdapter}>{example(result.data)}</ReacdProvider>,
+      );
       expect(screen.getByRole('alert')).toHaveTextContent('not registered');
     },
   );

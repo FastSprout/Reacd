@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import { installLayout } from '../../test-support/layout-observer.js';
 import { chooseOption } from '../../test-support/select-choice.js';
@@ -16,7 +17,7 @@ describe('documented AvatarGroup example', () => {
   it('changes visible counts, empty state, and maximum-size data', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AvatarGroupExample />
       </ReacdProvider>,
     );

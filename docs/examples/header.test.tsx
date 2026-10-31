@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
@@ -8,7 +9,7 @@ import { userEvent } from '@testing-library/user-event';
 describe('documented Header example', () => {
   it('renders its public declaration', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <HeaderExample />
       </ReacdProvider>,
     );
@@ -19,7 +20,7 @@ describe('documented Header example', () => {
   it('opens and closes its isolated Jotai menu', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <HeaderExample />
       </ReacdProvider>,
     );
@@ -37,7 +38,7 @@ describe('documented Header example', () => {
   it('changes every placement and preserves its title input', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <HeaderExample />
       </ReacdProvider>,
     );

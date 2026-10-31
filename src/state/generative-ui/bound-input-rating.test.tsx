@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -17,7 +18,7 @@ describe('bound InputRating', () => {
       ]),
     );
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundInputRating node={node} registry={registry} />
         <BoundInputRating
           node={{ ...node, label: 'Reader', value: { ...reference, mode: 'read' } }}
@@ -47,7 +48,7 @@ describe('bound InputRating', () => {
       ]),
     );
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundInputRating
           node={{ ...node, step: 0.5, length: 10, readOnly: true }}
           registry={registry}
@@ -69,7 +70,7 @@ describe('bound InputRating', () => {
   )('rejects unavailable or invalid state', ({ definitions }) => {
     const registry = success(createStateRegistry(definitions));
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundInputRating node={node} registry={registry} />
       </ReacdProvider>,
     );

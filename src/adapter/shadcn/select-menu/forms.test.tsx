@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -33,7 +34,7 @@ it.each(emptyCases)(
   (props) => {
     render(
       <form aria-label="Record form">
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <SelectMenu {...props} />
         </ReacdProvider>
       </form>,
@@ -66,7 +67,7 @@ it.each(completeCases)(
   ({ properties, data }) => {
     const view = render(
       <form aria-label="Record form">
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <SelectMenu {...properties} />
         </ReacdProvider>
       </form>,
@@ -75,7 +76,7 @@ it.each(completeCases)(
     expect(Array.from(new FormData(form()))).toEqual(data);
     view.rerender(
       <form aria-label="Record form">
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <SelectMenu {...properties} disabled />
         </ReacdProvider>
       </form>,
@@ -90,7 +91,7 @@ it('omits query from FormData and permits required clear', async () => {
   const change = vi.fn<(value: string) => void>();
   render(
     <form aria-label="Record form">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <SelectMenu
           {...base}
           readOnly={false}

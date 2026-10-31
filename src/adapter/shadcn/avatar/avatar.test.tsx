@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { Avatar, ReacdProvider } from '../../../index.js';
@@ -5,7 +6,7 @@ import { Avatar, ReacdProvider } from '../../../index.js';
 describe('shadcn Avatar', () => {
   it('preserves identity through image load, error, and source changes', async () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Avatar name="Example Reader" src="/first.png" />
       </ReacdProvider>,
     );
@@ -20,7 +21,7 @@ describe('shadcn Avatar', () => {
     fireEvent.error(image);
     await waitFor(() => expect(screen.getByText('ER')).toBeInTheDocument());
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Avatar name="Example Editor" src="/second.png" />
       </ReacdProvider>,
     );
@@ -31,7 +32,7 @@ describe('shadcn Avatar', () => {
   });
   it('supports absent sources, custom graphemes, and all logical sizes', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Avatar name="Small" size="small" fallback="👩‍💻" />
         <Avatar name="Large" size="large" />
       </ReacdProvider>,

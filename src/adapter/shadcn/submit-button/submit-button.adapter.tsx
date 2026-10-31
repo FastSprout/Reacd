@@ -1,5 +1,6 @@
-import type { SubmitButtonProps } from '../../../components/submit-button/index.js';
-import { DEFAULTS } from '../../../core/policy.js';
+import type { SubmitButtonProps } from
+  '@fastsprout/reacd/adapter-runtime/components/submit-button/index.js';
+import { DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { Button } from '../vendor/ui/button.js';
 
 const VARIANTS = {

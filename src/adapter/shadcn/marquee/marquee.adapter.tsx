@@ -1,8 +1,13 @@
 import type { CSSProperties } from 'react';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { MarqueeProps } from '../../../components/marquee/index.js';
-import { MARQUEE_DEFAULTS, MARQUEE_POLICY } from '../../../core/marquee-policy.js';
-import { useReducedMotion } from '../../../renderer/motion/use-reduced-motion.js';
+import type { MarqueeProps } from
+  '@fastsprout/reacd/adapter-runtime/components/marquee/index.js';
+import {
+  MARQUEE_DEFAULTS,
+  MARQUEE_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/marquee-policy.js';
+import { useReducedMotion } from
+  '@fastsprout/reacd/adapter-runtime/renderer/motion/use-reduced-motion.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnMarquee({

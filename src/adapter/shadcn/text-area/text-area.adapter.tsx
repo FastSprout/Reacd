@@ -1,6 +1,7 @@
 import { useId } from 'react';
-import type { TextAreaProps } from '../../../components/text-area/text-area.js';
-import { CONTENT_POLICY } from '../../../core/policy.js';
+import type { TextAreaProps } from
+  '@fastsprout/reacd/adapter-runtime/components/text-area/text-area.js';
+import { CONTENT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { Textarea } from '../vendor/ui/textarea.js';
 import { Label } from '../vendor/ui/label.js';
 

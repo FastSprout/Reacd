@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -12,7 +13,7 @@ const base = {
 
 it('announces empty/custom statuses and exposes associated description', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu
         {...base}
         items={[]}
@@ -29,13 +30,13 @@ it('announces empty/custom statuses and exposes associated description', () => {
   );
   expect(screen.getByRole('status')).toHaveTextContent('No records found.');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} status="loading" loadingMessage="Fetching records." />
     </ReacdProvider>,
   );
   expect(screen.getByRole('status')).toHaveTextContent('Fetching records.');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} status="error" errorMessage="Records unavailable." />
     </ReacdProvider>,
   );
@@ -46,7 +47,7 @@ it('opens printable search without closed-trigger selection', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} onValueChange={change} />
     </ReacdProvider>,
   );
@@ -66,7 +67,7 @@ it('retains value and focused clear on veto', async () => {
   const user = userEvent.setup();
   const change = vi.fn<(value: string) => boolean>(() => false);
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} value="42" onValueChange={change} />
     </ReacdProvider>,
   );

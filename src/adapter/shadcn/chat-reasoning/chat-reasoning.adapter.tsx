@@ -1,5 +1,7 @@
-import type { ChatReasoningProps } from '../../../components/chat-reasoning/index.js';
-import { CHAT_FEEDBACK_DEFAULTS } from '../../../core/chat-feedback-policy.js';
+import type { ChatReasoningProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-reasoning/index.js';
+import { CHAT_FEEDBACK_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/chat-feedback-policy.js';
 import { ChatDisclosure } from '../chat-disclosure/chat-disclosure.js';
 import { useReasoningDisclosure } from './use-reasoning-disclosure.js';
 

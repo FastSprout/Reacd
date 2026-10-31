@@ -1,7 +1,10 @@
 import type { Editor } from '@tiptap/core';
-import type { EditorMenuKind } from '../../../core/editor-menu-policy.js';
-import { EDITOR_MENU_POLICY } from '../../../core/editor-menu-policy.js';
-import type { EditorMenuPort } from '../../../renderer/editor/menu-context.js';
+import type { EditorMenuKind } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-menu-policy.js';
+import { EDITOR_MENU_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-menu-policy.js';
+import type { EditorMenuPort } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
 import { mountEditorMenu } from './menu-plugin.js';
 
 export function createEditorMenuPort(

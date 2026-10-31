@@ -9,7 +9,19 @@
     ".": {
       "package-name": "@fastsprout/reacd",
       "initial-version": "0.1.0",
-      "changelog-path": "docs/changelog.md"
+      "changelog-path": "docs/changelog.md",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "packages/shadcn/package.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "packages/shadcn/package.json",
+          "jsonpath": "$.peerDependencies['@fastsprout/reacd']"
+        }
+      ]
     }
   }
 }

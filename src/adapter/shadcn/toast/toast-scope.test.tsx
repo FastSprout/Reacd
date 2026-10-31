@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { createToastQueue } from './toast-queue.js';
 import { ToastQueueContext } from './toast-queue-context.js';
 import { useEffect } from 'react';
@@ -10,7 +11,7 @@ import { ShadcnToastViewport } from './toast-viewport.js';
 it('keeps one viewport per independent Surface and preserves scoped RTL', async () => {
   render(
     <>
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <App direction="rtl">
           <Toast
             title="First application"
@@ -20,7 +21,7 @@ it('keeps one viewport per independent Surface and preserves scoped RTL', async 
           />
         </App>
       </ReacdProvider>
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Toast
           title="Second application"
           open
@@ -40,7 +41,7 @@ it('keeps one viewport per independent Surface and preserves scoped RTL', async 
 });
 it('does not register notifications inside inactive retained ancestors', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Modal
         title="Closed ancestor"
         description="Retained"
@@ -56,7 +57,7 @@ it('does not register notifications inside inactive retained ancestors', () => {
 });
 it('portals modal-scoped notifications into an accessible active host', async () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Modal
         title="Active ancestor"
         description="Current resource"
@@ -90,7 +91,9 @@ it('bounds concurrent registrations', async () => {
       />
     ),
   );
-  const { rerender } = render(<ReacdProvider>{declarations}</ReacdProvider>);
+  const { rerender } = render(
+    <ReacdProvider adapter={shadcnAdapter}>{declarations}</ReacdProvider>,
+  );
   expect(await screen.findByText('The notification queue is full.')).toBeVisible();
   expect(document.querySelectorAll('.reacd-toast')).toHaveLength(
     TOAST_POLICY.maximumQueued,
@@ -98,7 +101,9 @@ it('bounds concurrent registrations', async () => {
   expect(document.querySelectorAll('.reacd-toast[data-limited]')).toHaveLength(
     TOAST_POLICY.maximumQueued - TOAST_POLICY.maximumVisible,
   );
-  rerender(<ReacdProvider>{declarations.slice(1)}</ReacdProvider>);
+  rerender(
+    <ReacdProvider adapter={shadcnAdapter}>{declarations.slice(1)}</ReacdProvider>,
+  );
   await waitFor(() =>
     expect(screen.queryByText('The notification queue is full.')).toBeNull(),
   );
@@ -127,7 +132,7 @@ it('reports invalid close callbacks', async () => {
   const { toastChangeSchema } = await import('../../../schema/toast/toast.schema.js');
   const invalid = toastChangeSchema.parse(() => Promise.resolve());
   const { rerender } = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast title="Invalid close" open duration="persistent" onOpenChange={invalid} />
     </ReacdProvider>,
   );
@@ -136,7 +141,7 @@ it('reports invalid close callbacks', async () => {
   fireEvent.click(screen.getByRole('button', { name: 'Dismiss notification' }));
   expect(screen.getByRole('alert')).toHaveTextContent('callbacks must return');
   rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast
         title="Invalid close"
         open

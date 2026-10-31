@@ -2,10 +2,13 @@ import { useContext, useId } from 'react';
 import { Slider } from '@base-ui/react/slider';
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { useDirection } from '@radix-ui/react-direction';
-import type { SliderProps } from '../../../components/slider/index.js';
-import { SLIDER_POLICY } from '../../../core/slider-policy.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { SliderProps } from
+  '@fastsprout/reacd/adapter-runtime/components/slider/index.js';
+import { SLIDER_POLICY } from '@fastsprout/reacd/adapter-runtime/core/slider-policy.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { requestSliderChange } from './request-change.js';
 import { SliderThumb } from './slider-thumb.js';
 

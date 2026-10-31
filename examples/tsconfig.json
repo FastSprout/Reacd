@@ -1,6 +1,32 @@
 {
   "extends": "../tsconfig.json",
-  "compilerOptions": { "jsxImportSource": "@fastsprout/reacd" },
-  "include": ["**/*.tsx"],
-  "exclude": ["**/*.test.tsx"]
+  "compilerOptions": {
+    "jsxImportSource": "@fastsprout/reacd",
+    "paths": {
+      "@fastsprout/reacd-shadcn": [
+        "../packages/shadcn/dist/shadcn.adapter.d.ts"
+      ],
+      "@fastsprout/reacd-shadcn/styles": [
+        "../packages/shadcn/dist/styles-contract.d.ts"
+      ],
+      "@fastsprout/reacd/adapter-runtime/core/*": [
+        "../dist/core/*"
+      ],
+      "@fastsprout/reacd/adapter-runtime/schema/*": [
+        "../dist/schema/*"
+      ],
+      "@fastsprout/reacd/adapter-runtime/components/*": [
+        "../dist/components/*"
+      ],
+      "@fastsprout/reacd/adapter-runtime/renderer/*": [
+        "../dist/renderer/*"
+      ]
+    }
+  },
+  "include": [
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "**/*.test.tsx"
+  ]
 }

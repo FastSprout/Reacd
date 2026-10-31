@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { lazy } from 'react';
 import type { ReactNode } from 'react';
@@ -16,7 +17,7 @@ describe('deferred workspace view', () => {
     });
     const View = lazy(() => pending);
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <DeferredView label="Fields">
           <View />
         </DeferredView>
@@ -35,7 +36,7 @@ describe('deferred workspace view', () => {
       throw new Error('Failed module request.');
     });
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <DeferredView label="Fields">
           <Failed />
         </DeferredView>
@@ -50,7 +51,7 @@ describe('deferred workspace view', () => {
     );
     expect(screen.getByRole('alert')).toHaveTextContent('unsaved local changes');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <DeferredView label="Layout">
           <Text>Other view</Text>
         </DeferredView>

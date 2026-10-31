@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import { installLayout } from '../../test-support/layout-observer.js';
 import { render, screen } from '@testing-library/react';
@@ -17,7 +18,7 @@ describe('documented feedback examples', () => {
   it('controls identity orientation, disabled actions and action count', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <UserExample />
       </ReacdProvider>,
     );
@@ -45,7 +46,7 @@ describe('documented feedback examples', () => {
   it('updates segmented storage using keyboard and toggles the total', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ProgressGroupExample />
       </ReacdProvider>,
     );
@@ -67,7 +68,7 @@ describe('documented feedback examples', () => {
   it('runs banner actions, closes through state and restores visibility', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BannerExample />
       </ReacdProvider>,
     );

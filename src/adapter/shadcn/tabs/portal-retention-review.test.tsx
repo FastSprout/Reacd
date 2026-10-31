@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 import { Modal, ReacdProvider, Tabs, Text } from '../../../index.js';
@@ -6,7 +7,7 @@ it('deactivates a dialog when its retained panel becomes inactive', async () => 
   const change = vi.fn();
   function view(value: string) {
     return (
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Tabs
           label="Panels"
           value={value}

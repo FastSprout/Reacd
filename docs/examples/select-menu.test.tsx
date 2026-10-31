@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -7,7 +8,7 @@ import { SelectMenuExample } from './select-menu.js';
 it('runs documented single/multiple forms and canonical selection output', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenuExample />
     </ReacdProvider>,
   );
@@ -27,7 +28,7 @@ it('runs documented single/multiple forms and canonical selection output', async
 it('runs both explicit selection vetoes', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenuExample />
     </ReacdProvider>,
   );
@@ -51,7 +52,7 @@ it('runs both explicit selection vetoes', async () => {
 it('runs status and independent access controls', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenuExample />
     </ReacdProvider>,
   );
@@ -72,7 +73,7 @@ it('runs status and independent access controls', async () => {
 it('keeps selected labels across external filtering and runs scoped RTL', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenuExample />
     </ReacdProvider>,
   );
@@ -93,7 +94,7 @@ it('keeps selected labels across external filtering and runs scoped RTL', async 
 it('restores history and shares nested selection', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenuExample />
     </ReacdProvider>,
   );

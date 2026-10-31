@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -15,7 +16,7 @@ const base = { label: 'Destination', items };
 function Example(properties: Partial<InputMenuProps>) {
   const [value, setValue] = useState('');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu {...base} value={value} onValueChange={setValue} {...properties} />
     </ReacdProvider>
   );

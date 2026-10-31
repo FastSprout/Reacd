@@ -1,8 +1,13 @@
 import type { Node } from '@tiptap/pm/model';
-import type { EditorDocument } from '../../../core/editor-document.js';
-import { EDITOR_ERRORS, EDITOR_POLICY } from '../../../core/editor-policy.js';
-import type { Result } from '../../../core/result.js';
-import { editorDocumentSchema } from '../../../schema/editor/document/index.js';
+import type { EditorDocument } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-document.js';
+import {
+  EDITOR_ERRORS,
+  EDITOR_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
+import type { Result } from '@fastsprout/reacd/adapter-runtime/core/result.js';
+import { editorDocumentSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/editor/document/index.js';
 import { boundedSdkDocument } from './budget.js';
 import { blockFromSdk, sdkChildren } from './from-sdk-block.js';
 import { createSdkIdAllocator } from './id-allocator.js';

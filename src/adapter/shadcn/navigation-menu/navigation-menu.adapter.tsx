@@ -1,13 +1,16 @@
 import { useContext } from 'react';
 import { NavigationMenu } from '@base-ui/react/navigation-menu';
 import { useDirection } from '@radix-ui/react-direction';
-import type { NavigationMenuProps } from '../../../components/navigation-menu/index.js';
+import type { NavigationMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/navigation-menu/index.js';
 import {
   NAVIGATION_COMPOSITION_DEFAULTS,
   NAVIGATION_COMPOSITION_POLICY,
-} from '../../../core/navigation-composition-policy.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
-import { PortalHostContext } from '../../../renderer/theme/portal-context.js';
+} from '@fastsprout/reacd/adapter-runtime/core/navigation-composition-policy.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { PortalHostContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { Button } from '../vendor/ui/button.js';
 import { MenuTarget } from './menu-target.js';
 
@@ -43,8 +46,12 @@ export function ShadcnNavigationMenu({
                   render={<Button type="button" variant="ghost" />}
                 >
                   {item.label}
-                  <NavigationMenu.Icon aria-hidden="true"
-                    className="reacd-menu-disclosure">⌄</NavigationMenu.Icon>
+                  <NavigationMenu.Icon
+                    aria-hidden="true"
+                    className="reacd-menu-disclosure"
+                  >
+                    ⌄
+                  </NavigationMenu.Icon>
                 </NavigationMenu.Trigger>
                 <NavigationMenu.Content className="reacd-menu-content">
                   {item.description !== undefined && <p>{item.description}</p>}

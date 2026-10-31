@@ -1,14 +1,18 @@
 import { useMemo } from 'react';
 import { I18nProvider } from 'react-aria-components/I18nProvider';
 import { useDirection } from '@radix-ui/react-direction';
-import type { InputDateProps } from '../../../components/input-date/index.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
-import { DATE_TIME_POLICY } from '../../../core/date-time-policy.js';
-import { INPUT_DATE_POLICY } from '../../../core/input-date-policy.js';
+import type { InputDateProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-date/index.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
+import { DATE_TIME_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/date-time-policy.js';
+import { INPUT_DATE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-date-policy.js';
 import {
   boundedDateValueSchema,
   dateRangeValueSchema,
-} from '../../../schema/date-time/index.js';
+} from '@fastsprout/reacd/adapter-runtime/schema/date-time/index.js';
 import { DateControl } from './date-control.js';
 import { useTemporalChange } from '../temporal/use-temporal-change.js';
 

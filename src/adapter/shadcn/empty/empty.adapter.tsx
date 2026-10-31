@@ -1,7 +1,9 @@
 import { useId } from 'react';
-import type { EmptyProps } from '../../../components/empty/empty.js';
-import { EMPTY_DEFAULTS } from '../../../core/empty-policy.js';
-import { SpinnerSurface } from '../../../renderer/spinner/spinner.renderer.js';
+import type { EmptyProps } from
+  '@fastsprout/reacd/adapter-runtime/components/empty/empty.js';
+import { EMPTY_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/empty-policy.js';
+import { SpinnerSurface } from
+  '@fastsprout/reacd/adapter-runtime/renderer/spinner/spinner.renderer.js';
 
 export function ShadcnEmpty({
   title,

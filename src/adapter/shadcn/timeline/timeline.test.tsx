@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -12,7 +13,7 @@ const items = [
 describe('shadcn Timeline', () => {
   it('renders chronological statuses, optional dates and readonly titles', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Timeline label="Delivery" items={items} />
       </ReacdProvider>,
     );
@@ -23,7 +24,7 @@ describe('shadcn Timeline', () => {
     expect(screen.queryByRole('button')).toBeNull();
     for (const intent of ['primary', 'secondary', 'danger'] as const) {
       view.rerender(
-        <ReacdProvider templateId="erp-compact">
+        <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
           <Timeline
             label="Delivery"
             items={items}
@@ -44,7 +45,7 @@ describe('shadcn Timeline', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Timeline
           label="Delivery"
           items={items}

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -38,7 +39,9 @@ it('keeps rejected shared-state pages on the current route', async () => {
       : { success: false, issues: [{ path: 'page', message: 'At most page 2.' }] };
   });
   if (!lease.success) throw new Error('Expected a valid constraint.');
-  const view = render(<GenerativeUI document={document} registry={registry} />);
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+  );
   await user.click(screen.getByRole('link', { name: 'Last page' }));
   expect(followHref).not.toHaveBeenCalled();
   expect(screen.getByRole('alert')).toHaveTextContent('At most page 2.');

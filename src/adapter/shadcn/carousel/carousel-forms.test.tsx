@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { InputNumber, ReacdProvider } from '../../../index.js';
@@ -33,7 +34,7 @@ const items = [
 it('excludes inactive required fields from validation and submitted form data', () => {
   const view = render(
     <form aria-label="Slide form">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnCarousel
           label="Form slides"
           items={items}
@@ -49,7 +50,7 @@ it('excludes inactive required fields from validation and submitted form data', 
   expect(Array.from(new FormData(form).entries())).toEqual([['first', '1']]);
   view.rerender(
     <form aria-label="Slide form">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnCarousel
           label="Form slides"
           items={items}

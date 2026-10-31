@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
@@ -26,6 +27,7 @@ it('composes dashboard nodes with live constraints and atomic selection', async 
   const inspect = vi.fn();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={document}
       registry={registry}
       actions={{
@@ -78,6 +80,7 @@ it('vetoes targets after rejected selection writes and recovers', async () => {
   const inspect = vi.fn();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={document}
       registry={registry}
       actions={{
@@ -122,7 +125,14 @@ it('supports optional selection and blocks action registry mutation', async () =
   const registry = createDocumentState(document);
   const inspect = vi.fn();
   const actions = { inspect, openSearch: () => undefined };
-  render(<GenerativeUI document={document} registry={registry} actions={actions} />);
+  render(
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={document}
+      registry={registry}
+      actions={actions}
+    />,
+  );
   Reflect.deleteProperty(actions, 'openSearch');
   Object.setPrototypeOf(actions, { openSearch: inspect });
   await user.click(screen.getByRole('button', { name: 'Search dashboard' }));
@@ -177,6 +187,7 @@ it('supports safe link-only search results', async () => {
   const registry = createDocumentState(success(validateGenerativeDocument(document)));
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={document}
       registry={registry}
       actions={{
@@ -199,6 +210,7 @@ it('surfaces declined query and dismissal writes', async () => {
   const registry = createDocumentState(document);
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={document}
       registry={registry}
       actions={{

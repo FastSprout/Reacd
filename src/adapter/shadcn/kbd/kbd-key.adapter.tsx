@@ -1,6 +1,7 @@
-import type { KbdProps } from '../../../components/kbd/kbd.js';
-import type { KeyPresentation } from '../../../core/keyboard-key.js';
-import { KBD_DEFAULTS } from '../../../core/kbd-policy.js';
+import type { KbdProps } from '@fastsprout/reacd/adapter-runtime/components/kbd/kbd.js';
+import type { KeyPresentation } from
+  '@fastsprout/reacd/adapter-runtime/core/keyboard-key.js';
+import { KBD_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/kbd-policy.js';
 type KbdKeyProps = KeyPresentation & Pick<KbdProps, 'size' | 'variant' | 'intent'>;
 export function KbdKey({
   display,

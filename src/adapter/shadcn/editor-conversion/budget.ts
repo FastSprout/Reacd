@@ -1,5 +1,5 @@
 import type { Node } from '@tiptap/pm/model';
-import { EDITOR_POLICY } from '../../../core/editor-policy.js';
+import { EDITOR_POLICY } from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
 import { EDITOR_SDK_BLOCK_TYPES } from '../editor-sdk/block-types.js';
 import { sdkProjectionWeight } from './projection-weight.js';
 

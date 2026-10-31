@@ -7,8 +7,17 @@
     "declaration": true,
     "declarationMap": false,
     "sourceMap": false,
-    "types": ["react"]
+    "types": [
+      "react"
+    ]
   },
-  "include": ["src"],
-  "exclude": ["test-support", "src/**/*.test.*", "src/**/__tests__/**"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "test-support",
+    "src/**/*.test.*",
+    "src/**/__tests__/**",
+    "src/adapter"
+  ]
 }

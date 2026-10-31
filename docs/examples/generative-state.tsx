@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import {
   GenerativeUI,
   defineGenerativeDeclaration,
@@ -36,6 +37,7 @@ export const SHARED_STATE_DOCUMENT = defineGenerativeDeclaration({
 export function GenerativeStateExample() {
   return (
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={SHARED_STATE_DOCUMENT}
       actions={{
         refreshStatus: ({ state }) => {

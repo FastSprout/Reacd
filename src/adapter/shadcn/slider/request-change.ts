@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import type { SliderProps } from '../../../components/slider/index.js';
+import type { SliderProps } from
+  '@fastsprout/reacd/adapter-runtime/components/slider/index.js';
 import {
   sliderNumberSchema,
   sliderRangeSchema,
-} from '../../../schema/slider/value.schema.js';
+} from '@fastsprout/reacd/adapter-runtime/schema/slider/value.schema.js';
 
 const endpointsSchema = z.tuple([z.number().finite(), z.number().finite()]);
 

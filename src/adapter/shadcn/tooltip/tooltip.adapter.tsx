@@ -1,18 +1,21 @@
 import { useContext, useState } from 'react';
 import { Tooltip } from '@base-ui/react/tooltip';
-import type { TooltipProps } from '../../../components/tooltip/tooltip.js';
+import type { TooltipProps } from
+  '@fastsprout/reacd/adapter-runtime/components/tooltip/tooltip.js';
 import {
   TOOLTIP_DEFAULTS,
   TOOLTIP_DELAYS,
   TOOLTIP_POLICY,
-} from '../../../core/tooltip-policy.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
+} from '@fastsprout/reacd/adapter-runtime/core/tooltip-policy.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
 import {
   PortalActiveContext,
   PortalHostContext,
-} from '../../../renderer/theme/portal-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { useTooltipAnchor } from './use-tooltip-anchor.js';
-import { useEscapeLayer } from '../../../renderer/theme/use-escape-layer.js';
+import { useEscapeLayer } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/use-escape-layer.js';
 import { KbdKey } from '../kbd/kbd-key.adapter.js';
 
 export function ShadcnTooltip({

@@ -11,6 +11,27 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      '@fastsprout/reacd/adapter-runtime/core': fileURLToPath(
+        new URL('./src/core/', import.meta.url),
+      ),
+      '@fastsprout/reacd/adapter-runtime/schema': fileURLToPath(
+        new URL('./src/schema/', import.meta.url),
+      ),
+      '@fastsprout/reacd/adapter-runtime/components': fileURLToPath(
+        new URL('./src/components/', import.meta.url),
+      ),
+      '@fastsprout/reacd/adapter-runtime/renderer': fileURLToPath(
+        new URL('./src/renderer/', import.meta.url),
+      ),
+      '@fastsprout/reacd-shadcn/styles.css': fileURLToPath(
+        new URL('./src/adapter/shadcn/styles.css', import.meta.url),
+      ),
+      '@fastsprout/reacd-shadcn/styles': fileURLToPath(
+        new URL('./src/adapter/shadcn/styles.ts', import.meta.url),
+      ),
+      '@fastsprout/reacd-shadcn': fileURLToPath(
+        new URL('./src/adapter/shadcn/shadcn.adapter.ts', import.meta.url),
+      ),
       '@fastsprout/reacd/jsx-runtime': fileURLToPath(
         new URL('./src/jsx-runtime.ts', import.meta.url),
       ),

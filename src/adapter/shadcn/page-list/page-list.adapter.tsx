@@ -1,6 +1,8 @@
 import { Children } from 'react';
-import type { PageListProps } from '../../../components/page-list/page-list.js';
-import { PAGE_COMPOSITION_DEFAULTS } from '../../../core/page-composition-policy.js';
+import type { PageListProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-list/page-list.js';
+import { PAGE_COMPOSITION_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/page-composition-policy.js';
 
 export function ShadcnPageList({
   children,

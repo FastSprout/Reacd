@@ -1,12 +1,15 @@
 import { useId, useRef } from 'react';
 import { Combobox } from '@base-ui/react/combobox';
-import type { SelectMenuProps } from '../../../components/select-menu/index.js';
+import type { SelectMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/select-menu/index.js';
 import {
   FORM_MENU_DEFAULTS,
   FORM_MENU_POLICY,
-} from '../../../core/form-menu-policy.js';
-import { SELECT_MENU_DEFAULTS } from '../../../core/select-menu-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+} from '@fastsprout/reacd/adapter-runtime/core/form-menu-policy.js';
+import { SELECT_MENU_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/select-menu-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Button } from '../vendor/ui/button.js';
 import { useSelectMenu } from './use-select-menu.js';
 import { SelectMenuRoot } from './select-menu-root.js';

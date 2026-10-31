@@ -1,8 +1,13 @@
-import type { EditorDocument } from '../../../core/editor-document.js';
-import { editorBlockMoves } from '../../../core/editor-reorder.js';
-import { moveEditorBlockTo } from '../../../core/editor-drop.js';
-import { EDITOR_NATIVE_POLICY } from '../../../core/editor-native-policy.js';
-import { stateKeySchema } from '../../../schema/state/shared/definition.js';
+import type { EditorDocument } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-document.js';
+import { editorBlockMoves } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-reorder.js';
+import { moveEditorBlockTo } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-drop.js';
+import { EDITOR_NATIVE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-native-policy.js';
+import { stateKeySchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/state/shared/definition.js';
 
 export function createEditorDragSession() {
   let source: string | undefined;

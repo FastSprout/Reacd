@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 import { Form, ReacdProvider, Text } from '../../index.js';
@@ -6,7 +7,7 @@ it('rejects raw native ancestry before mounting a form', () => {
   const errors = vi.spyOn(console, 'error').mockImplementation(() => undefined);
   render(
     <form aria-label="Host form">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Form label="Nested application form" onSubmit={vi.fn()}>
           <Text>Inner controls</Text>
         </Form>

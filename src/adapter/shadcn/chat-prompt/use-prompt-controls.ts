@@ -1,11 +1,16 @@
 import { useContext, useRef, type KeyboardEvent } from 'react';
-import type { ChatPromptProps } from '../../../components/chat-prompt/index.js';
-import { canSendPrompt, promptKeyIntent } from '../../../core/chat-composer.js';
+import type { ChatPromptProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-prompt/index.js';
+import {
+  canSendPrompt,
+  promptKeyIntent,
+} from '@fastsprout/reacd/adapter-runtime/core/chat-composer.js';
 import {
   CHAT_COMPOSER_DEFAULTS,
   CHAT_COMPOSER_POLICY,
-} from '../../../core/chat-composer-policy.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
+} from '@fastsprout/reacd/adapter-runtime/core/chat-composer-policy.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { usePromptEscape } from './use-prompt-escape.js';
 
 export function usePromptControls(properties: ChatPromptProps) {

@@ -1,13 +1,13 @@
 import { useId, useRef, useState } from 'react';
 import { useDirection } from '@radix-ui/react-direction';
-import type { StepperProps } from '../../../components/stepper/index.js';
-import {
-  NAVIGATION_COMPOSITION_DEFAULTS,
-} from '../../../core/navigation-composition-policy.js';
+import type { StepperProps } from
+  '@fastsprout/reacd/adapter-runtime/components/stepper/index.js';
+import { NAVIGATION_COMPOSITION_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/navigation-composition-policy.js';
 import {
   reachableStepKeys,
   stepFocusTarget,
-} from '../../../core/stepper-navigation.js';
+} from '@fastsprout/reacd/adapter-runtime/core/stepper-navigation.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnStepper({

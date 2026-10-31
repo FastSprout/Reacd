@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '../provider/provider.js';
@@ -12,7 +13,7 @@ it('reports unresolved preference, system and asset readers', () => {
     value: { state: 'missing', mode: 'readWrite' },
   } as const;
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ColorModeNodeView
         node={{ ...control, type: 'ColorModeButton', systemMode: 'light' }}
         registry={registry}

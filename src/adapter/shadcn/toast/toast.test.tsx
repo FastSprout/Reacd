@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
@@ -18,7 +19,7 @@ function Example() {
 describe('declarative toast', () => {
   it('announces a notification and closes controlled state', async () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example />
       </ReacdProvider>,
     );
@@ -40,7 +41,7 @@ describe('declarative toast', () => {
 it('preserves host vetoes and passes only the logical close value', async () => {
   const onOpenChange = vi.fn(() => false);
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast
         title="Vetoed notice"
         open
@@ -59,7 +60,7 @@ it('preserves host vetoes and passes only the logical close value', async () => 
 it('keeps notifications open when the host holds its controlled value', async () => {
   const onOpenChange = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast
         title="Held notice"
         open
@@ -79,7 +80,7 @@ it('runs zero-argument actions, honors veto and reports runtime failures', async
   const onOpenChange = vi.fn();
   const action = vi.fn<() => boolean | void>(() => false);
   const { rerender } = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast
         title="Action notice"
         open
@@ -100,7 +101,7 @@ it('runs zero-argument actions, honors veto and reports runtime failures', async
   expect(screen.getByRole('alert')).toHaveTextContent('notification action failed');
   const invalid = toastActionSchema.parse({ label: 'Invalid', onPress: () => 'wrong' });
   rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast title="Action notice" open onOpenChange={onOpenChange} action={invalid} />
     </ReacdProvider>,
   );
@@ -111,7 +112,7 @@ it('supports logical action closure policies', async () => {
   const onOpenChange = vi.fn();
   const action = vi.fn();
   const { rerender } = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast
         title="Action notice"
         open
@@ -125,7 +126,7 @@ it('supports logical action closure policies', async () => {
   fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
   expect(onOpenChange).not.toHaveBeenCalled();
   rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Toast
         title="Action notice"
         open

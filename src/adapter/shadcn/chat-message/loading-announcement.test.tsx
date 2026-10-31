@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import {
@@ -19,7 +20,7 @@ const message = {
 describe('Chat message loading announcements', () => {
   it('keeps standalone streaming and upload statuses outside busy content', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatMessage {...message} />
       </ReacdProvider>,
     );
@@ -41,7 +42,7 @@ describe('Chat message loading announcements', () => {
       attachments: [],
     };
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatMessages label="Busy transcript" messages={[message]} status="streaming" />
         <ChatMessage {...independent} />
         <ChatShimmer text="Independent sibling status" />
@@ -58,7 +59,7 @@ describe('Chat message loading announcements', () => {
       expect(status.closest('[aria-busy="true"]')).toBeNull();
     }
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatMessages label="Busy transcript" messages={[message]} status="ready" />
         <ChatMessage {...independent} />
         <ChatShimmer text="Independent sibling status" />

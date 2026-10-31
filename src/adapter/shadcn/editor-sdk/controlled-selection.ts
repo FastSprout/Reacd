@@ -1,4 +1,5 @@
-import type { EditorSelection } from '../../../core/editor-document.js';
+import type { EditorSelection } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-document.js';
 
 export function sameEditorSelection(
   left: EditorSelection | undefined,

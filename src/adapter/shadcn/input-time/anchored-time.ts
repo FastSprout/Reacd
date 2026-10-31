@@ -1,5 +1,6 @@
 import { parseZonedDateTime } from '@internationalized/date';
-import { INPUT_TIME_POLICY } from '../../../core/input-time-policy.js';
+import { INPUT_TIME_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-time-policy.js';
 
 export function anchoredTime(value: string) {
   return parseZonedDateTime(

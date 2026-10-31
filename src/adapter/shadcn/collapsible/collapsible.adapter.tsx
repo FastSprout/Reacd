@@ -1,9 +1,12 @@
 import { useContext } from 'react';
 import { Collapsible as Primitive } from '@base-ui/react/collapsible';
 import { ChevronDownIcon } from 'lucide-react';
-import type { CollapsibleProps } from '../../../components/collapsible/collapsible.js';
-import { COLLAPSIBLE_DEFAULTS } from '../../../core/collapsible-policy.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
+import type { CollapsibleProps } from
+  '@fastsprout/reacd/adapter-runtime/components/collapsible/collapsible.js';
+import { COLLAPSIBLE_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/collapsible-policy.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnCollapsible({

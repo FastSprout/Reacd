@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -26,7 +27,7 @@ function requestKey() {
 }
 it('simulates correlated results, stale replies and real fuzzy insertion', async () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <EditorMentionLookupExample />
     </ReacdProvider>,
   );
@@ -99,7 +100,7 @@ it('simulates correlated results, stale replies and real fuzzy insertion', async
 
 it('hydrates without requests and isolates independent provider sessions', async () => {
   const tree = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <EditorMentionLookupExample />
     </ReacdProvider>
   );

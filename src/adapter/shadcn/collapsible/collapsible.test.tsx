@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -18,7 +19,7 @@ function LocalField() {
 function Scene({ retainContent = false }: { retainContent?: boolean }) {
   const [open, setOpen] = useState(false);
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Collapsible
         label="Details"
         open={open}
@@ -69,7 +70,7 @@ describe('shadcn Collapsible', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Collapsible label="Controlled" open={false} onOpenChange={change}>
           <Text>Controlled body</Text>
         </Collapsible>
@@ -79,7 +80,7 @@ describe('shadcn Collapsible', () => {
     expect(change).toHaveBeenCalledExactlyOnceWith(true);
     expect(screen.queryByText('Controlled body')).toBeNull();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Collapsible label="Controlled" open onOpenChange={change} disabled>
           <Text>Controlled body</Text>
         </Collapsible>
@@ -88,7 +89,7 @@ describe('shadcn Collapsible', () => {
     expect(screen.getByRole('button', { name: 'Controlled' })).toBeDisabled();
     expect(screen.getByRole('region', { name: 'Controlled' })).toBeVisible();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Collapsible label="Controlled" open onOpenChange={change} showTrigger={false}>
           <Text>External body</Text>
         </Collapsible>
@@ -102,7 +103,7 @@ describe('shadcn Collapsible', () => {
     const change = vi.fn();
     function Host({ open }: { open: boolean }) {
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Collapsible label="Host" open={open} onOpenChange={change} retainContent>
             <Select
               label="Role"
@@ -128,7 +129,7 @@ describe('shadcn Collapsible', () => {
     expect(screen.queryByRole('button', { name: 'Open nested' })).toBeNull();
     view.unmount();
     const menu = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Collapsible label="Menu host" open onOpenChange={change} retainContent>
           <Select
             label="Role"
@@ -142,7 +143,7 @@ describe('shadcn Collapsible', () => {
     await user.click(screen.getByRole('combobox', { name: 'Role' }));
     expect(screen.getByRole('listbox')).toBeVisible();
     menu.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Collapsible label="Menu host" open={false} onOpenChange={change} retainContent>
           <Select
             label="Role"

@@ -1,5 +1,7 @@
-import type { BreadcrumbProps } from '../../../components/breadcrumb/breadcrumb.js';
-import { BREADCRUMB_DEFAULTS } from '../../../core/breadcrumb-policy.js';
+import type { BreadcrumbProps } from
+  '@fastsprout/reacd/adapter-runtime/components/breadcrumb/breadcrumb.js';
+import { BREADCRUMB_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/breadcrumb-policy.js';
 import { Button } from '../vendor/ui/button.js';
 import { useDirection } from '@radix-ui/react-direction';
 
@@ -63,4 +65,5 @@ export function ShadcnBreadcrumb({
     </nav>
   );
 }
-import { pressHandler } from '../../../renderer/contracts/press-handler.js';
+import { pressHandler } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/press-handler.js';

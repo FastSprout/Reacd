@@ -1,6 +1,7 @@
 import { useLayoutEffect } from 'react';
 import type { RefObject } from 'react';
-import { TEXTAREA_POLICY } from '../../../core/textarea-policy.js';
+import { TEXTAREA_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/textarea-policy.js';
 
 function positive(value: string, fallback: number): number {
   const parsed = Number.parseFloat(value);

@@ -1,7 +1,10 @@
 import { useId, useRef, useState } from 'react';
-import type { TextareaProps } from '../../../components/textarea/textarea.props.js';
-import { TEXTAREA_POLICY } from '../../../core/textarea-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { TextareaProps } from
+  '@fastsprout/reacd/adapter-runtime/components/textarea/textarea.props.js';
+import { TEXTAREA_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/textarea-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Textarea } from '../vendor/ui/textarea.js';
 import { Label } from '../vendor/ui/label.js';
 import { useAutoRows } from './use-auto-rows.js';

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -12,7 +13,7 @@ describe('shadcn Pagination', () => {
   it('keeps a rejected state transition on the current route', () => {
     vi.mocked(followHref).mockClear();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Pagination
           label="Rejected navigation"
           totalItems={30}
@@ -31,7 +32,7 @@ describe('shadcn Pagination', () => {
     function Example() {
       const [value, setValue] = useState({ pageIndex: 0, pageSize: 10 });
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Pagination
             label="Results"
             totalItems={100}
@@ -58,7 +59,7 @@ describe('shadcn Pagination', () => {
   });
   it('has read-only, disabled and empty modes without unusable extra pages', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Pagination
           label="Readonly"
           totalItems={0}
@@ -68,7 +69,7 @@ describe('shadcn Pagination', () => {
     );
     for (const control of screen.getAllByRole('button')) expect(control).toBeDisabled();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Pagination
           label="Readonly"
           totalItems={90}
@@ -88,7 +89,7 @@ describe('shadcn Pagination', () => {
   it('builds safe URLs and keeps modifier activation out of local state', () => {
     const change = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Pagination
           label="Linked pages"
           totalItems={30}
@@ -126,7 +127,7 @@ describe('shadcn Pagination', () => {
       expect(previous).toHaveAttribute('aria-disabled', 'true');
       expect(previous).not.toHaveAttribute('href');
       view.rerender(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Pagination
             label="Linked pages"
             totalItems={30}

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -25,6 +26,7 @@ describe('Generative rendering: layout', () => {
     ];
     const { container } = render(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={documentWith({ type: 'VStack', children: nodes })}
         actions={{}}
       />,
@@ -53,6 +55,7 @@ describe('Generative rendering: layout', () => {
     const user = userEvent.setup();
     render(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={documentWith({ type: 'Text', content: 'Long heading', lineLimit: 1 })}
         actions={{}}
       />,
@@ -69,6 +72,7 @@ describe('Generative rendering: layout', () => {
   it('escapes markup and never executes document content', () => {
     const { container } = render(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={documentWith({
           type: 'Text',
           content: '<script>alert(1)</script><img src=x>',
@@ -87,6 +91,7 @@ describe('Generative rendering: layout', () => {
     const save = vi.fn<ActionHandlers[string]>();
     render(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={documentWith({
           type: 'VStack',
           children: [
@@ -124,7 +129,11 @@ describe('Generative rendering: layout', () => {
 
   it('reports invalid documents, templates, and tokens', () => {
     const { rerender } = render(
-      <ReacdRenderer document={{ root: { type: 'div' } }} actions={{}} />,
+      <ReacdRenderer
+        adapter={shadcnAdapter}
+        document={{ root: { type: 'div' } }}
+        actions={{}}
+      />,
     );
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Unable to render this interface',
@@ -132,7 +141,12 @@ describe('Generative rendering: layout', () => {
     const document = documentWith({ type: 'Text', content: 'Safe' });
     for (const templateId of ['missing', 'toString']) {
       rerender(
-        <ReacdRenderer document={document} actions={{}} templateId={templateId} />,
+        <ReacdRenderer
+          adapter={shadcnAdapter}
+          document={document}
+          actions={{}}
+          templateId={templateId}
+        />,
       );
       expect(screen.getByRole('alert')).toHaveTextContent(
         `Template is not registered: ${templateId}`,
@@ -143,6 +157,7 @@ describe('Generative rendering: layout', () => {
     };
     rerender(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={document}
         actions={{}}
         templateId="custom"
@@ -158,6 +173,7 @@ describe('Generative rendering: layout', () => {
     const custom = { ...templates['saas-modern-light'], name: 'Custom', radius: 0.4 };
     const { container } = render(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={document}
         actions={{}}
         templateId="custom"
@@ -174,6 +190,7 @@ describe('Generative rendering: layout', () => {
   it('renders without a browser during server-side rendering', () => {
     const html = renderToString(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={createExample('standard')}
         actions={{ 'save-note': () => undefined }}
       />,

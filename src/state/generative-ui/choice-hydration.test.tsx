@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -42,17 +43,20 @@ it('hydrates choice groups with stable IDs and isolated server state', async () 
   const server = createDocumentState(document);
   const container = globalThis.document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={document} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={document} registry={server} />,
   );
   globalThis.document.body.appendChild(container);
   const before = screen.getByRole('radiogroup').getAttribute('aria-labelledby');
   const client = createDocumentState(document);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={document} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={document} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-labelledby', before);
   await user.click(screen.getByRole('radio', { name: 'B' }));
   await user.click(screen.getByRole('checkbox', { name: 'B' }));

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -10,7 +11,7 @@ describe('AuthForm portalled field blocking', () => {
       const user = userEvent.setup();
       const change = vi.fn();
       const form = (blocked: boolean) => (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <AuthForm
             label="Portalled credentials"
             submitLabel="Submit credentials"
@@ -50,7 +51,7 @@ describe('AuthForm portalled field blocking', () => {
     const change = vi.fn();
     const items = [{ value: 'reader', label: 'Reader' }];
     const form = (blocked: boolean) => (
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <FormField
           name="outer"
           required

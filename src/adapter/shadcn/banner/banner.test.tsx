@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -10,7 +11,7 @@ describe('shadcn Banner', () => {
     const change = vi.fn();
     const action = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Banner
           title="Maintenance"
           description="Save before midnight."
@@ -31,7 +32,7 @@ describe('shadcn Banner', () => {
     expect(change).toHaveBeenCalledWith(false);
     expect(screen.getByRole('status')).toBeInTheDocument();
     view.rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <Banner title="Maintenance" open={false} onOpenChange={change} />
       </ReacdProvider>,
     );
@@ -40,14 +41,14 @@ describe('shadcn Banner', () => {
   it('supports every intent, optional content and custom close labels', () => {
     const change = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Banner title="Notice" open onOpenChange={change} />
       </ReacdProvider>,
     );
     expect(screen.queryByRole('button')).toBeNull();
     for (const intent of ['info', 'success', 'warning', 'error'] as const) {
       view.rerender(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Banner
             title="Notice"
             open

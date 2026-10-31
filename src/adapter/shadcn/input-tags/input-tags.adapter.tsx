@@ -1,11 +1,12 @@
 import { useId } from 'react';
 import { Combobox } from '@base-ui/react/combobox';
 import { XIcon } from 'lucide-react';
-import type { InputTagsProps } from '../../../components/input-tags/index.js';
+import type { InputTagsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-tags/index.js';
 import {
   INPUT_TAGS_POLICY,
   TAG_DELIMITER_CHARACTERS,
-} from '../../../core/input-tags-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/core/input-tags-policy.js';
 import { Label } from '../vendor/ui/label.js';
 import { useTagDraft } from './use-tag-draft.js';
 

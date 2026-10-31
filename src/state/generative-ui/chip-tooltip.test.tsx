@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -50,7 +51,9 @@ describe('generative Chip and Tooltip', () => {
   it('shares displays, host updates, and controlled visibility', async () => {
     const user = userEvent.setup();
     const registry = createDocumentState(document);
-    render(<GenerativeUI document={document} registry={registry} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+    );
     expect(screen.getByRole('img', { name: 'Unread: 5' })).toBeInTheDocument();
     act(() => {
       expect(registry.update('count', 8).success).toBe(true);
@@ -74,6 +77,7 @@ describe('generative Chip and Tooltip', () => {
   it('supports automatic hints and literal/dot/standalone chips', async () => {
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           schemaVersion: '0.2',
           state: [],

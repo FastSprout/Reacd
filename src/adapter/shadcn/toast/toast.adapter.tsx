@@ -1,11 +1,13 @@
 import { useContext, useId } from 'react';
 import { useDirection } from '@radix-ui/react-direction';
-import type { ToastProps } from '../../../components/toast/index.js';
+import type { ToastProps } from
+  '@fastsprout/reacd/adapter-runtime/components/toast/index.js';
 import {
   PortalActiveContext,
   PortalHostContext,
-} from '../../../renderer/theme/portal-context.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
 import { ToastRegistration } from './toast-registration.js';
 export function ShadcnToast(properties: ToastProps) {
   const id = useId();

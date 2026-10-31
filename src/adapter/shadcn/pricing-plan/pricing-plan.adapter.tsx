@@ -1,13 +1,19 @@
 import { useContext, useId } from 'react';
 import type { ReactNode } from 'react';
-import type { PricingPlanProps }
-  from '../../../components/pricing-plan/pricing-plan.props.js';
-import { PRICING_DEFAULTS } from '../../../core/pricing-policy.js';
-import { HeadingLevelContext } from '../../../renderer/heading/heading-context.js';
-import { nextHeadingLevel } from '../../../core/heading-policy.js';
-import { PageHeading } from '../../../renderer/page-introduction/page-heading.js';
-import { PricingScaleContext } from '../../../renderer/pricing/scale-context.js';
-import { PricingPrice } from '../../../renderer/pricing/pricing-price.js';
+import type { PricingPlanProps } from
+  '@fastsprout/reacd/adapter-runtime/components/pricing-plan/pricing-plan.props.js';
+import { PRICING_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/pricing-policy.js';
+import { HeadingLevelContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/heading/heading-context.js';
+import { nextHeadingLevel } from
+  '@fastsprout/reacd/adapter-runtime/core/heading-policy.js';
+import { PageHeading } from
+  '@fastsprout/reacd/adapter-runtime/renderer/page-introduction/page-heading.js';
+import { PricingScaleContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/pricing/scale-context.js';
+import { PricingPrice } from
+  '@fastsprout/reacd/adapter-runtime/renderer/pricing/pricing-price.js';
 
 export function ShadcnPricingPlan({
   title,

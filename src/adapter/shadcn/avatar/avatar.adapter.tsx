@@ -1,7 +1,11 @@
 import { Avatar as Primitive } from '@base-ui/react/avatar';
-import type { AvatarProps } from '../../../components/avatar/avatar.js';
-import { AVATAR_DEFAULTS, AVATAR_DIMENSIONS } from '../../../core/avatar-policy.js';
-import { avatarInitials } from '../../../core/avatar-text.js';
+import type { AvatarProps } from
+  '@fastsprout/reacd/adapter-runtime/components/avatar/avatar.js';
+import {
+  AVATAR_DEFAULTS,
+  AVATAR_DIMENSIONS,
+} from '@fastsprout/reacd/adapter-runtime/core/avatar-policy.js';
+import { avatarInitials } from '@fastsprout/reacd/adapter-runtime/core/avatar-text.js';
 
 export function ShadcnAvatar({
   name,

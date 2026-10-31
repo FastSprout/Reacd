@@ -7,7 +7,8 @@
 - Update affected requirements before changing behavior.
 - Implement acceptance tests, then code, then record verification evidence.
 - This is an enterprise implementation, not a JSON-first prototype.
-- Keep Git changes local; do not commit, push, deploy, or change DNS.
+- Commit and push verified changes only when explicitly requested by the user.
+- Do not deploy or change DNS without a separate explicit request.
 - Publish a verified npm package only when the user explicitly requests it.
 
 ## Architecture

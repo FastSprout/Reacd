@@ -3,7 +3,7 @@ import { LAYERS, checkArchitecture, checkFacade } from './architecture.js';
 import { diagnostic } from './diagnostic.js';
 
 const root = '/workspace';
-const file = `${root}/src/components/button.tsx`;
+const file = `${root}/src/components/button/button.tsx`;
 const inspect = (source: string) => checkArchitecture(file, source, root);
 const UI_IMPORTS = [
   "import { Root } from '@base-ui/react/combobox';",
@@ -18,9 +18,9 @@ describe('layer direction', () => {
     expect(
       inspect(`
       import { z } from 'zod';
-      import { x } from '../schema/button.js';
+      import { x } from '../../schema/button.js';
       import type { Y } from './types.js';
-      export { value } from '../core/value.js';
+      export { value } from '../../core/value.js';
       export const ownValue = 1;
     `),
     ).toEqual([]);
@@ -93,13 +93,12 @@ describe('native UI dependency boundary', () => {
     });
   }
 
-  it('preserves hooks, state, validation and business date imports everywhere', () => {
+  it('preserves React types, state, validation and business date imports', () => {
     for (const layer of LAYERS)
       expect(
         checkArchitecture(
           `${root}/src/${layer}/module.ts`,
-          `import { useState } from 'react';
-          import type { ReactNode } from 'react';
+          `import type { ReactNode } from 'react';
           import { atom } from 'jotai';
           import { z } from 'zod';
           import { CalendarDate } from '@internationalized/date';`,

@@ -1,5 +1,6 @@
-import type { IconProps } from '../../../components/icon/index.js';
-import { ICON_POLICY } from '../../../core/icon-policy.js';
+import type { IconProps } from
+  '@fastsprout/reacd/adapter-runtime/components/icon/index.js';
+import { ICON_POLICY } from '@fastsprout/reacd/adapter-runtime/core/icon-policy.js';
 import { SEMANTIC_ICONS } from './icon-map.js';
 export function ShadcnIcon({
   name,

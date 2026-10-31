@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -6,7 +7,7 @@ import { ContentSurround, ReacdProvider } from '../../../index.js';
 describe('adjacent document navigation', () => {
   it('exposes labeled native links and only real destinations', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentSurround
           label="Adjacent reference"
           previous={{ title: 'Earlier document', href: '/' }}
@@ -30,14 +31,14 @@ describe('adjacent document navigation', () => {
     expect(screen.getByRole('link', { name: 'Next Later document' })).toBeVisible();
     expect(links[1]).toHaveAttribute('rel', 'noopener noreferrer');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentSurround next={{ title: 'Only next', href: '/' }} />
       </ReacdProvider>,
     );
     expect(screen.getAllByRole('link')).toHaveLength(1);
     expect(screen.getByRole('link')).not.toHaveAttribute('target');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentSurround previous={{ title: 'Only previous', href: '/' }} />
       </ReacdProvider>,
     );
@@ -46,7 +47,7 @@ describe('adjacent document navigation', () => {
 
   it('renders explicit empty content and stable server markup', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ContentSurround />
       </ReacdProvider>,
     );
@@ -55,7 +56,7 @@ describe('adjacent document navigation', () => {
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
     expect(
       renderToString(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <ContentSurround emptyLabel="No nearby document." />
         </ReacdProvider>,
       ),

@@ -1,7 +1,9 @@
 import { useId } from 'react';
-import type { ChatMessageProps } from '../../../components/chat-message/index.js';
-import { CHAT_DEFAULTS } from '../../../core/chat-policy.js';
-import { useChatLoadingRole } from '../../../renderer/chat-feedback/loading-scope.js';
+import type { ChatMessageProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-message/index.js';
+import { CHAT_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/chat-policy.js';
+import { useChatLoadingRole } from
+  '@fastsprout/reacd/adapter-runtime/renderer/chat-feedback/loading-scope.js';
 import { ShadcnChatAttachment } from '../chat-attachment/chat-attachment.adapter.js';
 import { Button } from '../vendor/ui/button.js';
 import { Card } from '../vendor/ui/card.js';

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { CONTENT_POLICY } from '../../core/policy.js';
@@ -50,7 +51,7 @@ it('preserves bound Tree known-id and InputTags domain limits', () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundTree
         registry={registry}
         node={{

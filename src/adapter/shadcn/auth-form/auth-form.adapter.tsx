@@ -1,14 +1,20 @@
 import { useContext, useId } from 'react';
-import type { AuthFormProps } from '../../../components/auth-form/auth-form.props.js';
-import { AUTH_FORM_DEFAULTS } from '../../../core/auth-form-policy.js';
-import { nextHeadingLevel } from '../../../core/heading-policy.js';
-import { HeadingLevelContext } from '../../../renderer/heading/heading-context.js';
-import { PageHeading } from '../../../renderer/page-introduction/page-heading.js';
+import type { AuthFormProps } from
+  '@fastsprout/reacd/adapter-runtime/components/auth-form/auth-form.props.js';
+import { AUTH_FORM_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/auth-form-policy.js';
+import { nextHeadingLevel } from
+  '@fastsprout/reacd/adapter-runtime/core/heading-policy.js';
+import { HeadingLevelContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/heading/heading-context.js';
+import { PageHeading } from
+  '@fastsprout/reacd/adapter-runtime/renderer/page-introduction/page-heading.js';
 import {
   FieldMetadataContext,
   useFieldMetadata,
-} from '../../../renderer/form-field/field-metadata.js';
-import { FormSurface } from '../../../renderer/form/form.renderer.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
+import { FormSurface } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form/form.renderer.js';
 import { ShadcnButton } from '../button/button.adapter.js';
 import { ShadcnSubmitButton } from '../submit-button/submit-button.adapter.js';
 

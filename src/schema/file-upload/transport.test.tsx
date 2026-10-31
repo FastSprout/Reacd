@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -45,7 +46,13 @@ it('renders canonical file and color generative state routes', async () => {
   const user = userEvent.setup();
   expect(validateGenerativeDocument(documentModel).success).toBe(true);
   const registry = success(createStateRegistry(documentModel.state));
-  render(<GenerativeUI document={documentModel} registry={registry} />);
+  render(
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={documentModel}
+      registry={registry}
+    />,
+  );
   await user.click(screen.getByRole('button', { name: 'Remove saved.txt' }));
   expect(success(registry.read('files')).value).toEqual([]);
   const hex = screen.getByRole('textbox', { name: 'Color hexadecimal' });

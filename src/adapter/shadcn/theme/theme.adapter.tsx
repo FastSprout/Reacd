@@ -1,10 +1,15 @@
 import { useContext, useMemo } from 'react';
-import type { ThemeProps } from '../../../components/theme/theme.js';
-import { RenderContext } from '../../../components/shared/port.js';
-import type { RenderPort } from '../../../core/render-port.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
-import { templateVariables } from '../../../renderer/theme/template-variables.js';
-import { defaultProperties } from '../../../renderer/theme/default-properties.js';
+import type { ThemeProps } from
+  '@fastsprout/reacd/adapter-runtime/components/theme/theme.js';
+import { RenderContext } from
+  '@fastsprout/reacd/adapter-runtime/components/shared/port.js';
+import type { RenderPort } from '@fastsprout/reacd/adapter-runtime/core/render-port.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { templateVariables } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/template-variables.js';
+import { defaultProperties } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/default-properties.js';
 
 export function ShadcnTheme({ children, template, defaults }: ThemeProps) {
   const inheritedVariables = useContext(ThemeVariablesContext);

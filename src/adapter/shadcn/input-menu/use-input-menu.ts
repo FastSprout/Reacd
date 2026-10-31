@@ -1,10 +1,16 @@
 import { useContext, useRef, useState } from 'react';
-import type { InputMenuProps } from '../../../components/input-menu/index.js';
-import { FORM_MENU_DEFAULTS } from '../../../core/form-menu-policy.js';
-import { filterFormMenuItems } from '../../../core/form-menu-search.js';
-import { menuTextSchema } from '../../../schema/form-menu-shared/text.schema.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import { useEscapeLayer } from '../../../renderer/theme/use-escape-layer.js';
+import type { InputMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-menu/index.js';
+import { FORM_MENU_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/form-menu-policy.js';
+import { filterFormMenuItems } from
+  '@fastsprout/reacd/adapter-runtime/core/form-menu-search.js';
+import { menuTextSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/form-menu-shared/text.schema.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { useEscapeLayer } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/use-escape-layer.js';
 import { requestFormMenuChange } from '../form-menu-shared/request.js';
 
 export function useInputMenu(properties: InputMenuProps) {

@@ -5,9 +5,10 @@ import { useDirection } from '@radix-ui/react-direction';
 import {
   PortalActiveContext,
   PortalHostContext,
-} from '../../../renderer/theme/portal-context.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
-import { SELECT_POLICY } from '../../../core/select-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { SELECT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/select-policy.js';
 
 export function ShadcnBaseSelectContent({
   children,

@@ -1,4 +1,5 @@
-import { LISTBOX_POLICY } from '../../../core/listbox-policy.js';
+import { LISTBOX_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/listbox-policy.js';
 
 interface ListboxSemantics {
   readonly readOnly: boolean;

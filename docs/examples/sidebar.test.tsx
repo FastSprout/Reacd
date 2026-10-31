@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -18,7 +19,7 @@ it(
   async () => {
     const user = userEvent.setup();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <SidebarExample />
       </ReacdProvider>,
     );
@@ -47,7 +48,7 @@ it(
   async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <SidebarExample />
       </ReacdProvider>,
     );
@@ -67,7 +68,7 @@ it(
   async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <SidebarExample />
       </ReacdProvider>,
     );

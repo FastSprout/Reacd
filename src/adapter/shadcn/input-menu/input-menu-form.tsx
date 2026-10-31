@@ -1,5 +1,6 @@
 import type { RefObject } from 'react';
-import type { InputMenuProps } from '../../../components/input-menu/index.js';
+import type { InputMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-menu/index.js';
 
 export function InputMenuForm({
   properties,

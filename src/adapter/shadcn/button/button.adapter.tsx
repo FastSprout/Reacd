@@ -1,5 +1,6 @@
-import type { ButtonProps } from '../../../components/button/button.js';
-import { DEFAULTS } from '../../../core/policy.js';
+import type { ButtonProps } from
+  '@fastsprout/reacd/adapter-runtime/components/button/button.js';
+import { DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { Button } from '../vendor/ui/button.js';
 import { ShadcnIcon } from '../icon/icon.adapter.js';
 import { ELEMENT_BUTTON_VARIANTS } from '../element/variants.js';

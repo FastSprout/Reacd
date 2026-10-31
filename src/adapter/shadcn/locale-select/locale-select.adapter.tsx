@@ -1,6 +1,8 @@
 import { useContext, useId } from 'react';
-import type { LocaleSelectProps } from '../../../components/locale-select/index.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
+import type { LocaleSelectProps } from
+  '@fastsprout/reacd/adapter-runtime/components/locale-select/index.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { Select, SelectItem, SelectTrigger, SelectValue } from '../vendor/ui/select.js';
 import { Label } from '../vendor/ui/label.js';
 import { ShadcnSelectContent } from '../select/select-content.adapter.js';

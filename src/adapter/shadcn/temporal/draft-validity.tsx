@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { DATE_TIME_POLICY } from '../../../core/date-time-policy.js';
+import { DATE_TIME_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/date-time-policy.js';
 import { focusIncompleteSegment } from './focus-incomplete-segment.js';
 
 interface TemporalDraftValidityProps {

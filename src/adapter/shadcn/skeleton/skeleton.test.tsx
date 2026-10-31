@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { ReacdProvider, Skeleton } from '../../../index.js';
@@ -5,7 +6,7 @@ import { ReacdProvider, Skeleton } from '../../../index.js';
 describe('shadcn Skeleton', () => {
   it('is decorative by default and announces only an explicit loading label', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Skeleton />
       </ReacdProvider>,
     );
@@ -16,7 +17,7 @@ describe('shadcn Skeleton', () => {
     );
     expect(view.container.querySelectorAll('.reacd-skeleton-shape')).toHaveLength(3);
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Skeleton label="Loading records" />
       </ReacdProvider>,
     );
@@ -28,14 +29,14 @@ describe('shadcn Skeleton', () => {
   });
   it('supports every shape/size and removes a hidden status completely', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Skeleton />
       </ReacdProvider>,
     );
     for (const shape of ['text', 'avatar', 'rectangle'] as const)
       for (const size of ['small', 'medium', 'large'] as const) {
         view.rerender(
-          <ReacdProvider templateId="erp-compact">
+          <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
             <Skeleton shape={shape} size={size} animated={false} />
           </ReacdProvider>,
         );
@@ -48,13 +49,13 @@ describe('shadcn Skeleton', () => {
         );
       }
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Skeleton lines={1} />
       </ReacdProvider>,
     );
     expect(view.container.querySelector('[data-short="true"]')).toBeNull();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Skeleton show={false} label="Hidden" />
       </ReacdProvider>,
     );

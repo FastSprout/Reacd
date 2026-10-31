@@ -3,9 +3,14 @@ import type { CSSProperties } from 'react';
 import { ListBox, ListBoxItem, Text } from 'react-aria-components/ListBox';
 import { I18nProvider } from 'react-aria-components/I18nProvider';
 import { useDirection } from '@radix-ui/react-direction';
-import type { ListboxProps } from '../../../components/listbox/index.js';
-import { LISTBOX_DEFAULTS, LISTBOX_POLICY } from '../../../core/listbox-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { ListboxProps } from
+  '@fastsprout/reacd/adapter-runtime/components/listbox/index.js';
+import {
+  LISTBOX_DEFAULTS,
+  LISTBOX_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/listbox-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Button } from '../vendor/ui/button.js';
 import { ListboxFormBridge } from './form-bridge.js';
 import { useListboxRequest } from './use-listbox-request.js';

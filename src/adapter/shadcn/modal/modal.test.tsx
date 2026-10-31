@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -35,7 +36,7 @@ function Body() {
 function Example(properties: Partial<ModalProps>) {
   const [open, setOpen] = useState(false);
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Modal
         title="Edit example"
         description="Local preview"
@@ -54,7 +55,7 @@ describe('shadcn Modal', () => {
     const action = vi.fn();
     function Scene({ open }: { open: boolean }) {
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Button label="Background ready" onPress={action} />
           <Modal
             title="Parent"

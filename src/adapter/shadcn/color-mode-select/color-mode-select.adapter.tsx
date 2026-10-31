@@ -1,10 +1,14 @@
 import { useContext, useId } from 'react';
-import type {
-  ColorModeSelectProps,
-} from '../../../components/color-mode-select/index.js';
-import { COLOR_MODES, COLOR_MODE_POLICY } from '../../../core/color-mode-policy.js';
-import { colorModeValueSchema } from '../../../schema/color-mode/color-mode.schema.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
+import type { ColorModeSelectProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-select/index.js';
+import {
+  COLOR_MODES,
+  COLOR_MODE_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/color-mode-policy.js';
+import { colorModeValueSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/color-mode/color-mode.schema.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { Select, SelectItem, SelectTrigger, SelectValue } from '../vendor/ui/select.js';
 import { Label } from '../vendor/ui/label.js';
 import { ShadcnSelectContent } from '../select/select-content.adapter.js';

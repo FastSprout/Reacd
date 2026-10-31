@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -23,7 +24,7 @@ describe('shadcn Tooltip', () => {
       const [dialog, setDialog] = useState(true);
       const [hint, setHint] = useAtom(hintAtom, { store });
       return (
-        <ReacdProvider store={store}>
+        <ReacdProvider adapter={shadcnAdapter} store={store}>
           <Modal
             open={dialog}
             onOpenChange={setDialog}
@@ -53,7 +54,7 @@ describe('shadcn Tooltip', () => {
   it('opens for static keyboard focus and closes on Escape', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Tooltip text="Supplementary hint" delay="none">
           <Text>Static anchor</Text>
         </Tooltip>
@@ -75,7 +76,7 @@ describe('shadcn Tooltip', () => {
     function Example() {
       const [disabled, setDisabled] = useState(false);
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Tooltip text="Action hint" delay="none" arrow shortcuts={['Control', 'S']}>
             <Button label="Action" disabled={disabled} onPress={press} />
           </Tooltip>
@@ -98,7 +99,7 @@ describe('shadcn Tooltip', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Tooltip text="Controlled" open onOpenChange={change} shortcuts={[]}>
           <Text>Anchor</Text>
         </Tooltip>
@@ -108,7 +109,7 @@ describe('shadcn Tooltip', () => {
     await user.keyboard('{Escape}');
     expect(change).toHaveBeenCalledWith(false);
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Tooltip text="Controlled" open onOpenChange={change} disabled>
           <Text>Anchor</Text>
         </Tooltip>
@@ -117,7 +118,7 @@ describe('shadcn Tooltip', () => {
     await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull());
     expect(screen.getByRole('group')).toHaveAttribute('tabindex', '-1');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PortalActiveContext.Provider value={false}>
           <Tooltip text="Controlled" open onOpenChange={change}>
             <Text>Anchor</Text>

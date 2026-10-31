@@ -1,57 +1,85 @@
-import { renderEntry } from '../../../renderer/contracts/render-entry.js';
-import { contentSurroundSchema } from '../../../schema/content-surround/index.js';
-import { ShadcnContentSurround } from
-  '../content-surround/content-surround.adapter.js';
-import { paginationSchema } from '../../../schema/pagination/pagination.schema.js';
-import { breadcrumbSchema } from '../../../schema/breadcrumb/breadcrumb.schema.js';
+import { renderEntry } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/render-entry.js';
+import { contentSurroundSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/content-surround/index.js';
+import { ShadcnContentSurround } from '../content-surround/content-surround.adapter.js';
+import { paginationSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/pagination/pagination.schema.js';
+import { breadcrumbSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/breadcrumb/breadcrumb.schema.js';
 import { ShadcnPagination } from '../pagination/pagination.adapter.js';
 import { ShadcnBreadcrumb } from '../breadcrumb/breadcrumb.adapter.js';
-import { skeletonSchema } from '../../../schema/skeleton/skeleton.schema.js';
-import { emptySchema } from '../../../schema/empty/empty.schema.js';
+import { skeletonSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/skeleton/skeleton.schema.js';
+import { emptySchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/empty/empty.schema.js';
 import { ShadcnSkeleton } from '../skeleton/skeleton.adapter.js';
 import { ShadcnEmpty } from '../empty/empty.adapter.js';
-import { kbdSchema } from '../../../schema/kbd/kbd.schema.js';
-import { popoverSchema } from '../../../schema/popover/popover.schema.js';
+import { kbdSchema } from '@fastsprout/reacd/adapter-runtime/schema/kbd/kbd.schema.js';
+import { popoverSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/popover/popover.schema.js';
 import { ShadcnKbd } from '../kbd/kbd.adapter.js';
 import { ShadcnPopover } from '../popover/popover.adapter.js';
-import { chipSchema } from '../../../schema/chip/chip.schema.js';
-import { tooltipSchema } from '../../../schema/tooltip/tooltip.schema.js';
+import { chipSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/chip/chip.schema.js';
+import { tooltipSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/tooltip/tooltip.schema.js';
 import { ShadcnChip } from '../chip/chip.adapter.js';
 import { ShadcnTooltip } from '../tooltip/tooltip.adapter.js';
-import { avatarSchema } from '../../../schema/avatar/avatar.schema.js';
-import { avatarGroupSchema } from '../../../schema/avatar-group/index.js';
+import { avatarSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/avatar/avatar.schema.js';
+import { avatarGroupSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/avatar-group/index.js';
 import { ShadcnAvatar } from '../avatar/avatar.adapter.js';
 import { ShadcnAvatarGroup } from '../avatar-group/avatar-group.adapter.js';
-import { collapsibleSchema } from '../../../schema/collapsible/collapsible.schema.js';
+import { collapsibleSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/collapsible/collapsible.schema.js';
 import { ShadcnCollapsible } from '../collapsible/collapsible.adapter.js';
-import { modalSchema } from '../../../schema/modal/modal.schema.js';
+import { modalSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/modal/modal.schema.js';
 import { ShadcnModal } from '../modal/modal.adapter.js';
-import { accordionSchema } from '../../../schema/accordion/accordion.schema.js';
+import { accordionSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/accordion/accordion.schema.js';
 import { ShadcnAccordion } from '../accordion/accordion.adapter.js';
-import { badgeSchema } from '../../../schema/badge/badge.schema.js';
-import { alertSchema } from '../../../schema/alert/alert.schema.js';
-import { progressSchema } from '../../../schema/progress/progress.schema.js';
-import { spinnerSchema } from '../../../schema/spinner/spinner.schema.js';
-import { tabsSchema } from '../../../schema/tabs/tabs.schema.js';
-import { navigationSchema } from '../../../schema/navigation/navigation.schema.js';
-import { linkSchema } from '../../../schema/link/link.schema.js';
-import { codeBlockSchema } from '../../../schema/code-block/code-block.schema.js';
-import { tableDeclarationSchema } from '../../../schema/table/table.schema.js';
-import { dataTableComponentSchema } from '../../../schema/data-table/index.js';
+import { badgeSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/badge/badge.schema.js';
+import { alertSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/alert/alert.schema.js';
+import { progressSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/progress/progress.schema.js';
+import { spinnerSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/spinner/spinner.schema.js';
+import { tabsSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/tabs/tabs.schema.js';
+import { navigationSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/navigation/navigation.schema.js';
+import { linkSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/link/link.schema.js';
+import { codeBlockSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/code-block/code-block.schema.js';
+import { tableDeclarationSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/table/table.schema.js';
+import { dataTableComponentSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/data-table/index.js';
 import { ShadcnDataTable } from '../data-table/data-table.adapter.js';
 import { ShadcnBadge } from '../badge/badge.adapter.js';
 import { ShadcnAlert } from '../alert/alert.adapter.js';
 import { ShadcnProgress } from '../progress/progress.adapter.js';
-import { SpinnerSurface } from '../../../renderer/spinner/spinner.renderer.js';
+import { SpinnerSurface } from
+  '@fastsprout/reacd/adapter-runtime/renderer/spinner/spinner.renderer.js';
 import { ShadcnTabs } from '../tabs/tabs.adapter.js';
 import { ShadcnNavigation } from '../navigation/navigation.adapter.js';
-import { LinkSurface } from '../../../renderer/link/link.renderer.js';
-import { CodeBlockSurface } from '../../../renderer/code-block/code-block.renderer.js';
+import { LinkSurface } from
+  '@fastsprout/reacd/adapter-runtime/renderer/link/link.renderer.js';
+import { CodeBlockSurface } from
+  '@fastsprout/reacd/adapter-runtime/renderer/code-block/code-block.renderer.js';
 import { ShadcnTable } from '../table/table.adapter.js';
 
 export const contentEntries = {
   ContentSurround: renderEntry(
-    'ContentSurround', contentSurroundSchema, ShadcnContentSurround,
+    'ContentSurround',
+    contentSurroundSchema,
+    ShadcnContentSurround,
   ),
   Pagination: renderEntry('Pagination', paginationSchema, ShadcnPagination),
   Breadcrumb: renderEntry('Breadcrumb', breadcrumbSchema, ShadcnBreadcrumb),

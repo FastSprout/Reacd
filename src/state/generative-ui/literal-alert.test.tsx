@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { GenerativeUI } from './generative-ui.js';
@@ -5,6 +6,7 @@ import { GenerativeUI } from './generative-ui.js';
 it('renders a static alert without registering a visibility binding', () => {
   const view = render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: [],
@@ -20,6 +22,7 @@ it('renders a static alert without registering a visibility binding', () => {
   expect(screen.getByRole('status')).toHaveTextContent('Operational');
   view.rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: [],

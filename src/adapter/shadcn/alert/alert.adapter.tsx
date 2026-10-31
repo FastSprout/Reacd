@@ -1,10 +1,12 @@
-import type { AlertProps } from '../../../components/alert/alert.js';
+import type { AlertProps } from
+  '@fastsprout/reacd/adapter-runtime/components/alert/alert.js';
 import { Alert, AlertDescription } from '../vendor/ui/alert.js';
 import { Button } from '../vendor/ui/button.js';
 import { ShadcnIcon } from '../icon/icon.adapter.js';
-import { ELEMENT_POLICY } from '../../../core/element-policy.js';
+import { ELEMENT_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/element-policy.js';
 import { ELEMENT_BUTTON_VARIANTS } from '../element/variants.js';
-import { DEFAULTS } from '../../../core/policy.js';
+import { DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 
 export function ShadcnAlert({
   title,

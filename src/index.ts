@@ -35,7 +35,6 @@ export type {
   ThemeAdapter,
   AdapterCatalog,
 } from './renderer/contracts/theme-adapter.js';
-export { shadcnAdapter } from './adapter/shadcn/shadcn.adapter.js';
 export { useColorMode } from './state/theme/use-color-mode.js';
 export type { ColorModeState } from './state/theme/use-color-mode.js';
 export { useSystemColorMode } from './state/theme/use-system-color-mode.js';

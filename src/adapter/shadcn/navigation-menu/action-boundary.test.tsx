@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -10,7 +11,7 @@ describe('NavigationMenu action boundary', () => {
       const action = vi.fn();
       const user = userEvent.setup();
       render(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <NavigationMenu
             label="Logical actions"
             items={[

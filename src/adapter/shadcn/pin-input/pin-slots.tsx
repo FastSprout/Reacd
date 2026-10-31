@@ -1,5 +1,6 @@
 import type { SlotProps } from 'input-otp';
-import { PIN_INPUT_POLICY } from '../../../core/pin-input-policy.js';
+import { PIN_INPUT_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/pin-input-policy.js';
 
 export function PinSlots({
   slots,

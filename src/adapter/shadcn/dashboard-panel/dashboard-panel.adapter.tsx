@@ -1,12 +1,16 @@
 import { useContext } from 'react';
-import type { DashboardPanelProps } from '../../../components/dashboard-panel/index.js';
-import { DASHBOARD_DEFAULTS } from '../../../core/dashboard-policy.js';
+import type { DashboardPanelProps } from
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-panel/index.js';
+import { DASHBOARD_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
 import {
   DashboardRegionContext,
   DashboardMainContext,
-} from '../../../renderer/dashboard/dashboard-context.js';
-import { MainScopeContext } from '../../../renderer/main/main-scope.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/dashboard/dashboard-context.js';
+import { MainScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/main/main-scope.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 
 export function ShadcnDashboardPanel({
   label,

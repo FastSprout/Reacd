@@ -1,7 +1,10 @@
-import type { AdapterSurfaceProps } from '../../../renderer/contracts/theme-adapter.js';
+import type { AdapterSurfaceProps } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/theme-adapter.js';
 import { ShadcnToastProvider } from '../toast/toast-provider.js';
-import { templateVariables } from '../../../renderer/theme/template-variables.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
+import { templateVariables } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/template-variables.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
 
 export function ShadcnSurface({ children, template, templateId }: AdapterSurfaceProps) {
   const variables = templateVariables(template);

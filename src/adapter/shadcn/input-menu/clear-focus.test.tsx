@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -7,7 +8,7 @@ import { InputMenu, ReacdProvider } from '../../../index.js';
 function Example() {
   const [value, setValue] = useState('Custom place');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu
         label="Clear destination"
         items={[]}
@@ -33,7 +34,7 @@ it('preserves clear focus after an explicit host veto', async () => {
   const user = userEvent.setup();
   const change = vi.fn<(value: string) => boolean>(() => false);
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu
         label="Clear destination"
         items={[]}
@@ -56,7 +57,7 @@ it('requests clear once and retains an open popup when the host vetoes', async (
   const change = vi.fn<(value: string) => boolean>(() => false);
   const open = vi.fn<(value: boolean) => boolean>(() => false);
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu
         label="Clear destination"
         items={[]}

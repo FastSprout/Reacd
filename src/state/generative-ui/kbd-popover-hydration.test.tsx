@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -37,22 +38,27 @@ describe('Kbd and Popover SSR hydration', () => {
         },
       });
       const container = document.createElement('div');
-      container.innerHTML = renderToString(<GenerativeUI document={declaration} />);
+      container.innerHTML = renderToString(
+        <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+      );
       expect(container.querySelector('[role="dialog"]')).toBeNull();
       document.body.appendChild(container);
       const errors: unknown[] = [];
-      const view = render(<GenerativeUI document={declaration} />, {
-        container,
-        hydrate: true,
-        onRecoverableError: (error) => errors.push(error),
-      });
+      const view = render(
+        <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+        {
+          container,
+          hydrate: true,
+          onRecoverableError: (error) => errors.push(error),
+        },
+      );
       expect(screen.getByRole('img', { name: 'Command' })).toHaveTextContent('⌘');
       if (!open)
         await user.click(screen.getByRole('button', { name: 'Hydrated trigger' }));
       await user.type(await screen.findByLabelText('Hydrated draft'), 'Client draft');
-      expect(renderToString(<GenerativeUI document={declaration} />)).not.toContain(
-        'Client draft',
-      );
+      expect(
+        renderToString(<GenerativeUI adapter={shadcnAdapter} document={declaration} />),
+      ).not.toContain('Client draft');
       await user.click(screen.getByRole('button', { name: 'Close popover' }));
       await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
       expect(errors).toEqual([]);

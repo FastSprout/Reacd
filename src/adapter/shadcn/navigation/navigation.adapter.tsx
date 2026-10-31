@@ -1,4 +1,5 @@
-import type { NavigationProps } from '../../../components/navigation/navigation.js';
+import type { NavigationProps } from
+  '@fastsprout/reacd/adapter-runtime/components/navigation/navigation.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnNavigation({

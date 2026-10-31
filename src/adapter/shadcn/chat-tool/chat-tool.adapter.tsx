@@ -1,8 +1,9 @@
-import type { ChatToolProps } from '../../../components/chat-tool/index.js';
+import type { ChatToolProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-tool/index.js';
 import {
   CHAT_FEEDBACK_DEFAULTS,
   CHAT_TOOL_LABELS,
-} from '../../../core/chat-feedback-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/core/chat-feedback-policy.js';
 import { ChatDisclosure } from '../chat-disclosure/chat-disclosure.js';
 import { Button } from '../vendor/ui/button.js';
 

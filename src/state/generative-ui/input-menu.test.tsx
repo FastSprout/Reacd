@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -28,7 +29,13 @@ it('binds text/disclosure and protects read mirrors', async () => {
     root: { ...node, open: { state: 'open', mode: 'readWrite' } },
   };
   expect(validateGenerativeDocument(document).success).toBe(true);
-  const view = render(<GenerativeUI document={document} registry={registry.data} />);
+  const view = render(
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={document}
+      registry={registry.data}
+    />,
+  );
   await user.click(screen.getByRole('combobox', { name: node.label }));
   expect(registry.data.read('open')).toMatchObject({ data: { value: true } });
   await user.click(screen.getByRole('option', { name: 'Alpha' }));
@@ -36,6 +43,7 @@ it('binds text/disclosure and protects read mirrors', async () => {
   expect(registry.data.read('open')).toMatchObject({ data: { value: false } });
   view.rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...document,
         root: { ...node, value: { state: 'text', mode: 'read' } },
@@ -55,6 +63,7 @@ it('vetoes constrained text without closing or publication', async () => {
   if (!registry.success) throw new Error('Missing registry.');
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: definitions,

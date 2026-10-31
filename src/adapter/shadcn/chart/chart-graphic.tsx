@@ -1,8 +1,13 @@
 import { useId } from 'react';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { ChartProps } from '../../../components/chart/index.js';
-import { CHART_POLICY as P, CHART_DEFAULTS as D } from '../../../core/chart-policy.js';
-import { chartDonutSlices } from '../../../core/chart-geometry.js';
+import type { ChartProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chart/index.js';
+import {
+  CHART_POLICY as P,
+  CHART_DEFAULTS as D,
+} from '@fastsprout/reacd/adapter-runtime/core/chart-policy.js';
+import { chartDonutSlices } from
+  '@fastsprout/reacd/adapter-runtime/core/chart-geometry.js';
 import { ChartCartesian } from './cartesian.js';
 import { ChartPattern } from './patterns.js';
 export function ChartGraphic({ kind = D.kind, ...props }: ChartProps) {

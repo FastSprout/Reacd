@@ -1,6 +1,5 @@
-import type {
-  ColorModeSwitchProps,
-} from '../../../components/color-mode-switch/index.js';
+import type { ColorModeSwitchProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-switch/index.js';
 import { ShadcnSwitch } from '../switch/switch.adapter.js';
 
 export function ShadcnColorModeSwitch({

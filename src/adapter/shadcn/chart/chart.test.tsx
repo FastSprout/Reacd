@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -19,7 +20,7 @@ const BASE: ChartProps = {
 };
 it('renders honest graphics with original accessible values for each kind', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnChart {...BASE} />
     </ReacdProvider>,
   );
@@ -31,7 +32,7 @@ it('renders honest graphics with original accessible values for each kind', () =
   expect(graph.querySelectorAll('[data-series="first"] path')).toHaveLength(2);
   for (const kind of ['area', 'bar'] as const) {
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ShadcnChart {...BASE} kind={kind} />
       </ReacdProvider>,
     );
@@ -39,7 +40,7 @@ it('renders honest graphics with original accessible values for each kind', () =
     expect(screen.getByRole('table', { name: 'Activity data' })).toBeVisible();
   }
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction="rtl">
         <ShadcnChart
           {...BASE}

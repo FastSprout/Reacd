@@ -1,14 +1,20 @@
 import { useId, useMemo } from 'react';
 import { EditorContent } from '@tiptap/react';
-import type { EditorProps } from '../../../components/editor/index.js';
-import { EDITOR_DEFAULTS } from '../../../core/editor-policy.js';
-import { EditorScopeContext } from '../../../renderer/editor/editor-context.js';
-import { editorPlainText } from '../../../renderer/editor/plain-text.js';
+import type { EditorProps } from
+  '@fastsprout/reacd/adapter-runtime/components/editor/index.js';
+import { EDITOR_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
+import { EditorScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/editor-context.js';
+import { editorPlainText } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/plain-text.js';
 import { useEditorSession } from './use-editor-session.js';
 import { createEditorPort } from './use-editor-port.js';
-import { EditorMenuScopeContext } from '../../../renderer/editor/menu-context.js';
+import { EditorMenuScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
 import { createEditorMenuPort } from '../editor-menu/menu-port.js';
-import { EditorBoundary } from '../../../renderer/editor/editor-boundary.js';
+import { EditorBoundary } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/editor-boundary.js';
 
 function EditorSurface(properties: EditorProps) {
   const id = useId();

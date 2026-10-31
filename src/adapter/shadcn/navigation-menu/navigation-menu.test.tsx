@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -31,7 +32,7 @@ describe('shadcn NavigationMenu', () => {
   it('dismisses the submenu before an enclosing modal', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <NestedMenu />
       </ReacdProvider>,
     );
@@ -50,7 +51,7 @@ describe('shadcn NavigationMenu', () => {
     const user = userEvent.setup();
     const action = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <NavigationMenu
           label="Main resources"
           items={[
@@ -120,7 +121,7 @@ describe('shadcn NavigationMenu', () => {
     async (direction) => {
       const user = userEvent.setup();
       render(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <App direction={direction}>
             <NavigationMenu
               label="Vertical resources"

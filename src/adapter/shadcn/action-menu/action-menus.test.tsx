@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -12,7 +13,7 @@ describe('shadcn action menus', () => {
       const user = userEvent.setup();
       const action = vi.fn<() => boolean | void>(() => false);
       render(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Example
             context={context}
             items={[
@@ -68,7 +69,7 @@ describe('shadcn action menus', () => {
       );
     }
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Choices />
       </ReacdProvider>,
     );
@@ -90,7 +91,7 @@ describe('shadcn action menus', () => {
   it('retains native safe links and removes disabled link destinations', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example
           items={[
             {
@@ -127,7 +128,7 @@ describe('shadcn action menus', () => {
   it('opens a bounded submenu and closes it before the root on Escape', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example
           items={[
             {
@@ -154,7 +155,7 @@ describe('shadcn action menus', () => {
   it('does not open disabled menus', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example disabled items={[]} />
       </ReacdProvider>,
     );

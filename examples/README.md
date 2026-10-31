@@ -14,9 +14,10 @@ folder has App.tsx, a browser main.tsx entry and colocated interaction tests. Ev
 owns its ReacdProvider, so simultaneous applications keep separate stores. Reloading
 resets the local sample data; these examples do not contact a backend.
 
-The browser-only @fastsprout/reacd/bootstrap entry supplies rendering and styles. Vite
-selects a literal example entry through a shared trusted renderer HTML host. There is no
-application-owned HTML template or CSS file to copy or customize.
+The browser-only @fastsprout/reacd/bootstrap entry supplies mounting. The separate
+@fastsprout/reacd-shadcn/styles entry loads adapter styles. Vite selects a literal
+example entry through a shared trusted renderer HTML host. There is no application-owned
+HTML template or CSS file to copy or customize.
 
 Optional generative transport snapshots live in test-support/fixtures/generative. Their
 generated JSON is checked by npm run fixtures:check.

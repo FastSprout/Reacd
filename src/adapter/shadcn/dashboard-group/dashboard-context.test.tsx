@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
@@ -28,7 +29,7 @@ afterEach(() => restore());
 
 it('reports missing or incompatible context instead of inventing local state', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardSidebar />
       <DashboardSidebarCollapse />
       <DashboardSidebarToggle />
@@ -41,7 +42,7 @@ it('reports missing or incompatible context instead of inventing local state', (
 
 it('renders complete standalone presentation slots and scoped main semantics', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardPanel
         label="Standalone"
         header={
@@ -83,7 +84,7 @@ it('renders complete standalone presentation slots and scoped main semantics', (
   ])
     expect(screen.getByText(text)).toBeVisible();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Page title="Application">
         <DashboardPanel label="Nested">
           <DashboardNavbar title="Nested title" />
@@ -100,7 +101,7 @@ it('renders complete standalone presentation slots and scoped main semantics', (
 
 it('assigns only the first content panel a main landmark', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardGroup
         label="Many panes"
         open
@@ -135,7 +136,7 @@ it('supports icon collapse and honors disabled or rejected changes', async () =>
   const user = userEvent.setup();
   const change = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardScene
         properties={{ collapseMode: 'icon' }}
         sidebar={
@@ -156,7 +157,7 @@ it('supports icon collapse and honors disabled or rejected changes', async () =>
   await user.click(screen.getByRole('button', { name: 'Expand navigation' }));
   expect(screen.getByText('Header')).toBeVisible();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardScene properties={{ onOpenChange: change, onValueChange: change }} />
     </ReacdProvider>,
   );
@@ -166,7 +167,7 @@ it('supports icon collapse and honors disabled or rejected changes', async () =>
   fireEvent.keyDown(handle, { key: 'End' });
   expect(handle).toHaveAttribute('aria-valuenow', '25');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardScene properties={{ disabled: true }} />
     </ReacdProvider>,
   );
@@ -179,7 +180,7 @@ it('supports icon collapse and honors disabled or rejected changes', async () =>
 it('scopes custom controls and restores mobile focus', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <DashboardScene
         rtl
         content={<DashboardSidebarCollapse label="Custom collapse" disabled />}

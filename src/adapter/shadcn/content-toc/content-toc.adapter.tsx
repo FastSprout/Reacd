@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import type { ContentTocProps } from '../../../components/content-toc/index.js';
-import { CONTENT_OUTLINE_DEFAULTS } from '../../../core/content-outline.js';
-import { TREE_POLICY } from '../../../core/tree-policy.js';
-import { OutlineBranch } from '../../../renderer/content-outline/outline-branch.js';
+import type { ContentTocProps } from
+  '@fastsprout/reacd/adapter-runtime/components/content-toc/index.js';
+import { CONTENT_OUTLINE_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/content-outline.js';
+import { TREE_POLICY } from '@fastsprout/reacd/adapter-runtime/core/tree-policy.js';
+import { OutlineBranch } from
+  '@fastsprout/reacd/adapter-runtime/renderer/content-outline/outline-branch.js';
 
 export function ShadcnContentToc({
   label,

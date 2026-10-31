@@ -1,11 +1,22 @@
 import { useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { TreeProps } from '../../../components/tree/tree.js';
-import type { TreeRow } from '../../../core/tree.js';
-import { treeRows, treeSelection, treeExpansion } from '../../../core/tree.js';
-import { treeFocusTarget, treeTypeahead } from '../../../core/tree-navigation.js';
-import { TREE_DEFAULTS, TREE_POLICY } from '../../../core/tree-policy.js';
+import type { TreeProps } from
+  '@fastsprout/reacd/adapter-runtime/components/tree/tree.js';
+import type { TreeRow } from '@fastsprout/reacd/adapter-runtime/core/tree.js';
+import {
+  treeRows,
+  treeSelection,
+  treeExpansion,
+} from '@fastsprout/reacd/adapter-runtime/core/tree.js';
+import {
+  treeFocusTarget,
+  treeTypeahead,
+} from '@fastsprout/reacd/adapter-runtime/core/tree-navigation.js';
+import {
+  TREE_DEFAULTS,
+  TREE_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/tree-policy.js';
 import { focusTreeElement } from './focus-element.js';
 
 export function useTree({

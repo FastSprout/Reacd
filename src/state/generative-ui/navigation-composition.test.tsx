@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -75,6 +76,7 @@ describe('generative navigation composition', () => {
     const registry = createDocumentState(declaration);
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={{ run: action }}
@@ -101,7 +103,7 @@ describe('generative navigation composition', () => {
   });
 
   it('validates inactive content actions before rendering any partial UI', () => {
-    render(<GenerativeUI document={declaration} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />);
     expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered');
     expect(screen.queryByRole('navigation')).toBeNull();
     expect(
@@ -125,12 +127,16 @@ describe('generative navigation composition', () => {
       root: { ...stepNode, value: { state: 'step', mode: 'read' } },
     });
     const view = render(
-      <GenerativeUI document={readonly} actions={{ run: vi.fn() }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={readonly}
+        actions={{ run: vi.fn() }}
+      />,
     );
     expect(screen.getByRole('button', { name: /Payment/ })).toBeDisabled();
     view.unmount();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundStepper
           node={{ ...stepNode, value: { state: 'missing', mode: 'readWrite' } }}
           registry={createDocumentState(declaration)}
@@ -157,6 +163,7 @@ describe('generative navigation composition', () => {
     if (!lease.success) throw new Error('Constraint registration failed.');
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={{ run: vi.fn() }}
@@ -187,6 +194,7 @@ describe('generative navigation composition', () => {
     ).onPress?.();
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           schemaVersion: '0.2',
           state: [],
@@ -209,6 +217,7 @@ describe('generative navigation composition', () => {
       const user = userEvent.setup();
       const content = (
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={declaration}
           templateId={templateId}
           actions={{ run: vi.fn() }}

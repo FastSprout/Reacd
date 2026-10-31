@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -53,7 +54,12 @@ it('renders complete transport and dispatches every nested host action', async (
     current.update('done', true);
   });
   render(
-    <GenerativeUI document={document} registry={registry} actions={{ run: handler }} />,
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={document}
+      registry={registry}
+      actions={{ run: handler }}
+    />,
   );
   for (const label of [
     'Remove File',
@@ -68,7 +74,7 @@ it('renders complete transport and dispatches every nested host action', async (
 });
 
 it('rejects unregistered nested intents before exposing transcript controls', () => {
-  render(<GenerativeUI document={document} />);
+  render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
   expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered: run.');
   expect(screen.queryByRole('button')).toBeNull();
 });

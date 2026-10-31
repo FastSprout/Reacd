@@ -1,6 +1,8 @@
 import { useId } from 'react';
-import type { BannerProps } from '../../../components/banner/banner.js';
-import { BANNER_DEFAULTS } from '../../../core/banner-policy.js';
+import type { BannerProps } from
+  '@fastsprout/reacd/adapter-runtime/components/banner/banner.js';
+import { BANNER_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/banner-policy.js';
 import { Alert, AlertTitle, AlertDescription } from '../vendor/ui/alert.js';
 import { Button } from '../vendor/ui/button.js';
 

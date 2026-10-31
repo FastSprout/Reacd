@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { Combobox } from '@base-ui/react/combobox';
@@ -19,7 +20,7 @@ it('declines SDK disclosure without opening a private popup', async () => {
   const user = userEvent.setup();
   const open = vi.fn<(next: boolean) => boolean>(() => false);
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <SelectMenu {...base} open={false} onOpenChange={open} />
     </ReacdProvider>,
   );

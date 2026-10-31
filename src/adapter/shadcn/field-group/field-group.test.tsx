@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { atom, useAtom } from 'jotai';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -21,10 +22,10 @@ it('preserves native tab sequence, child transitions and store isolation', async
   const user = userEvent.setup();
   render(
     <>
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example />
       </ReacdProvider>
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example />
       </ReacdProvider>
     </>,
@@ -46,7 +47,7 @@ it('preserves native tab sequence, child transitions and store isolation', async
 
 it('retains logical orientation inside an explicit RTL application', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction="rtl">
         <FieldGroup label="Vertical controls" orientation="vertical" />
       </App>
@@ -61,7 +62,7 @@ it('retains logical orientation inside an explicit RTL application', () => {
 it('renders deterministic grouped content for separate SSR requests', () => {
   const renderRequest = () =>
     renderToString(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example />
       </ReacdProvider>,
     );

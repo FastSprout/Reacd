@@ -3,7 +3,7 @@ import type { Transaction } from '@tiptap/pm/state';
 import type { Node } from '@tiptap/pm/model';
 import { Transform } from '@tiptap/pm/transform';
 import { z } from 'zod';
-import { EDITOR_POLICY } from '../../../core/editor-policy.js';
+import { EDITOR_POLICY } from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
 import { boundedSdkDocument } from '../editor-conversion/budget.js';
 import { EDITOR_SDK_BLOCK_TYPES } from './block-types.js';
 

@@ -1,10 +1,11 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { Progress, ReacdProvider } from '../../../index.js';
 
 it('exposes determinate current/max values and max-aware percentages', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Progress label="Upload" value={25} />
     </ReacdProvider>,
   );
@@ -14,7 +15,7 @@ it('exposes determinate current/max values and max-aware percentages', () => {
   );
   expect(screen.getByText('25%')).toBeInTheDocument();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Progress label="Upload" value={250} max={500} description="Half complete" />
     </ReacdProvider>,
   );
@@ -29,20 +30,20 @@ it('exposes determinate current/max values and max-aware percentages', () => {
 
 it('distinguishes indeterminate data and optional status content', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Progress label="Upload" value={null} />
     </ReacdProvider>,
   );
   expect(screen.getByRole('progressbar')).not.toHaveAttribute('aria-valuenow');
   expect(screen.getByText('In progress')).toBeInTheDocument();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Progress label="Upload" />
     </ReacdProvider>,
   );
   expect(screen.getByRole('progressbar')).not.toHaveAttribute('aria-valuenow');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Progress label="Upload" value={50} showValue={false} />
     </ReacdProvider>,
   );

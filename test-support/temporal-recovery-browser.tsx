@@ -1,8 +1,9 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { InputDate, InputTime, ReacdProvider } from '../src/index.js';
 import type { TemporalRange } from '../src/core/date-time.js';
-import '../src/adapter/shadcn/styles.css';
+import '@fastsprout/reacd-shadcn/styles';
 
 function RangeExample({ kind }: { kind: 'date' | 'time' }) {
   const initial =
@@ -121,7 +122,7 @@ function RecoveryExample({ kind }: { kind: 'date' | 'time' }) {
 function Example() {
   const [templateId, setTemplateId] = useState('saas-modern-light');
   return (
-    <ReacdProvider templateId={templateId}>
+    <ReacdProvider adapter={shadcnAdapter} templateId={templateId}>
       <FixtureContent
         onTemplate={() =>
           setTemplateId(

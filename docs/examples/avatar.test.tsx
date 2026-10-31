@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -8,7 +9,7 @@ describe('documented Avatar example', () => {
   it('edits names, fallbacks, sizes, and image modes', async () => {
     const user = userEvent.setup();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AvatarExample />
       </ReacdProvider>,
     );
@@ -19,8 +20,9 @@ describe('documented Avatar example', () => {
     for (const size of ['Small', 'Large', 'Medium']) {
       await user.click(screen.getByRole('combobox', { name: 'Avatar size' }));
       await user.click(await screen.findByRole('option', { name: size }));
-      expect(screen.getByRole('combobox', { name: 'Avatar size' }))
-        .toHaveTextContent(size);
+      expect(screen.getByRole('combobox', { name: 'Avatar size' })).toHaveTextContent(
+        size,
+      );
     }
     for (const mode of [
       'Local placeholder image',
@@ -29,8 +31,9 @@ describe('documented Avatar example', () => {
     ]) {
       await user.click(screen.getByRole('combobox', { name: 'Avatar source' }));
       await user.click(await screen.findByRole('option', { name: mode }));
-      expect(screen.getByRole('combobox', { name: 'Avatar source' }))
-        .toHaveTextContent(mode);
+      expect(screen.getByRole('combobox', { name: 'Avatar source' })).toHaveTextContent(
+        mode,
+      );
       const image = view.container.querySelector('img');
       if (image !== null) fireEvent.error(image);
     }

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -36,15 +37,20 @@ it('hydrates isolated checkbox readers and host mixed state', async () => {
   const server = success(createStateRegistry(definitions));
   const client = success(createStateRegistry(definitions));
   const container = document.createElement('div');
-  const ui = <GenerativeUI document={documentModel} registry={server} />;
+  const ui = (
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={server} />
+  );
   container.innerHTML = renderToString(ui);
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentModel} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   try {
     const writer = screen.getByRole('checkbox', { name: 'Approval writer' });
     await user.click(writer);
@@ -70,6 +76,7 @@ it('hydrates isolated checkbox readers and host mixed state', async () => {
 it('rejects incompatible mixed-state kinds before rendering checkbox controls', () => {
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...documentModel,
         state: [

@@ -1,10 +1,11 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 import { ChatAttachment, ReacdProvider } from '../../../index.js';
 
 it('announces upload outside busy metadata while preserving protected removal', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatAttachment
         name="Pending reference"
         mediaType="text/plain"

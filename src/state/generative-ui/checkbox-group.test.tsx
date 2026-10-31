@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -41,7 +42,13 @@ describe('generative CheckboxGroup', () => {
       },
     };
     const registry = createDocumentState(declaration);
-    render(<GenerativeUI document={declaration} registry={registry} />);
+    render(
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        registry={registry}
+      />,
+    );
     act(() => {
       expect(registry.update('choices', ['one']).success).toBe(true);
     });
@@ -61,6 +68,7 @@ describe('generative CheckboxGroup', () => {
     const registry = createDocumentState(document);
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         registry={registry}
         document={{
           ...document,

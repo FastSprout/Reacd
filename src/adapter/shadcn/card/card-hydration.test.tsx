@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -9,7 +10,7 @@ it('hydrates slots and preserves state across templates', async () => {
   const user = userEvent.setup();
   const container = document.createElement('div');
   const tree = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <CardExample />
     </ReacdProvider>
   );
@@ -23,7 +24,7 @@ it('hydrates slots and preserves state across templates', async () => {
   });
   await user.click(screen.getByRole('button', { name: 'Review card details' }));
   view.rerender(
-    <ReacdProvider templateId="erp-compact">
+    <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
       <CardExample />
     </ReacdProvider>,
   );
@@ -35,7 +36,7 @@ it('hydrates slots and preserves state across templates', async () => {
 
 it('renders closed icon/button/progress content in all server-side card slots', () => {
   const html = renderToString(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Card
         label="Server card"
         header={<Icon name="info" label="Information" />}

@@ -1,5 +1,6 @@
-import { INPUT_POLICY } from '../../../core/input-policy.js';
-import { inputEmailSchema } from '../../../schema/input/value.schema.js';
+import { INPUT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/input-policy.js';
+import { inputEmailSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/input/value.schema.js';
 
 export function inputValidationMessage(
   value: string,

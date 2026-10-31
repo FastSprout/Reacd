@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -15,7 +16,7 @@ describe('feedback components SSR and hydration', () => {
       const press = vi.fn();
       const close = vi.fn();
       const content = (
-        <ReacdProvider templateId={templateId}>
+        <ReacdProvider adapter={shadcnAdapter} templateId={templateId}>
           <User
             name="Server identity"
             description="Research engineer"

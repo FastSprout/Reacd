@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -37,16 +38,21 @@ describe('navigation hydration', () => {
           ],
         },
       });
-      const server = renderToString(<GenerativeUI document={declaration} />);
+      const server = renderToString(
+        <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+      );
       const container = document.createElement('div');
       container.innerHTML = server;
       document.body.appendChild(container);
       const errors: unknown[] = [];
-      const view = render(<GenerativeUI document={declaration} />, {
-        container,
-        hydrate: true,
-        onRecoverableError: (error) => errors.push(error),
-      });
+      const view = render(
+        <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+        {
+          container,
+          hydrate: true,
+          onRecoverableError: (error) => errors.push(error),
+        },
+      );
       expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute(
         'aria-current',
         'page',
@@ -57,7 +63,11 @@ describe('navigation hydration', () => {
       } else {
         await user.click(pager.getByRole('button', { name: 'Next page' }));
         expect(pager.getByRole('status')).toHaveTextContent('Page 2 of 3');
-        expect(renderToString(<GenerativeUI document={declaration} />)).toBe(server);
+        expect(
+          renderToString(
+            <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+          ),
+        ).toBe(server);
       }
       expect(errors).toEqual([]);
       view.unmount();

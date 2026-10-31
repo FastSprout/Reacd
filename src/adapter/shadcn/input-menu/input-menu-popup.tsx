@@ -1,12 +1,16 @@
 import { useContext } from 'react';
 import { Autocomplete } from '@base-ui/react/autocomplete';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { InputMenuProps } from '../../../components/input-menu/index.js';
+import type { InputMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-menu/index.js';
 import {
-  FORM_MENU_DEFAULTS, FORM_MENU_POLICY,
-} from '../../../core/form-menu-policy.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
-import { PortalHostContext } from '../../../renderer/theme/portal-context.js';
+  FORM_MENU_DEFAULTS,
+  FORM_MENU_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/form-menu-policy.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { PortalHostContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 
 export function InputMenuPopup({
   label,
@@ -39,7 +43,7 @@ export function InputMenuPopup({
           dir={direction}
         >
           <Autocomplete.List
-          aria-label={`${label} ${FORM_MENU_DEFAULTS.suggestionsLabel}`}
+            aria-label={`${label} ${FORM_MENU_DEFAULTS.suggestionsLabel}`}
             className="reacd-input-menu-list"
           >
             {items.map((item) => (

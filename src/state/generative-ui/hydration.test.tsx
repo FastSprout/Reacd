@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -24,19 +25,24 @@ describe('generative state hydration', () => {
       },
     });
     const server = createDocumentState(document);
-    const html = renderToString(<GenerativeUI document={document} registry={server} />);
+    const html = renderToString(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={server} />,
+    );
     const container = globalThis.document.createElement('div');
     container.innerHTML = html;
     globalThis.document.body.appendChild(container);
     const client = createDocumentState(document);
     const errors: unknown[] = [];
-    const view = render(<GenerativeUI document={document} registry={client} />, {
-      container,
-      hydrate: true,
-      onRecoverableError: (error) => {
-        errors.push(error);
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={client} />,
+      {
+        container,
+        hydrate: true,
+        onRecoverableError: (error) => {
+          errors.push(error);
+        },
       },
-    });
+    );
     expect(screen.getByLabelText('Name')).toHaveValue('Server snapshot');
     await user.clear(screen.getByLabelText('Name'));
     await user.type(screen.getByLabelText('Name'), 'Client edit');

@@ -3,9 +3,12 @@ import type { ReactNode } from 'react';
 import { Menu } from '@base-ui/react/menu';
 import { ContextMenu } from '@base-ui/react/context-menu';
 import { useDirection } from '@radix-ui/react-direction';
-import { ACTION_MENU_POLICY } from '../../../core/action-menu-policy.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
-import { PortalHostContext } from '../../../renderer/theme/portal-context.js';
+import { ACTION_MENU_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/action-menu-policy.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { PortalHostContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 
 export function MenuSurface({
   label,

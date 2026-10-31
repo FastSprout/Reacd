@@ -1,6 +1,7 @@
 import { useId } from 'react';
-import type { UserProps } from '../../../components/user/user.js';
-import { USER_DEFAULTS } from '../../../core/user-policy.js';
+import type { UserProps } from
+  '@fastsprout/reacd/adapter-runtime/components/user/user.js';
+import { USER_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/user-policy.js';
 import { ShadcnAvatar } from '../avatar/avatar.adapter.js';
 import { Button } from '../vendor/ui/button.js';
 

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -8,7 +9,7 @@ describe('shadcn Chip', () => {
     const user = userEvent.setup();
     const press = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Chip label="Unread" text={42}>
           <Button label="Open messages" onPress={press} />
         </Chip>
@@ -21,7 +22,7 @@ describe('shadcn Chip', () => {
     await user.click(screen.getByRole('button', { name: 'Open messages' }));
     expect(press).toHaveBeenCalledOnce();
     view.rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <Chip label="Unread" show={false}>
           <Button label="Open messages" onPress={press} />
         </Chip>
@@ -33,7 +34,7 @@ describe('shadcn Chip', () => {
   });
   it('supports dots, standalone, logical corners, sizes, and intents', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Chip label="Online">
           <Text>Example</Text>
         </Chip>
@@ -46,7 +47,7 @@ describe('shadcn Chip', () => {
     for (const size of ['small', 'medium', 'large'] as const) {
       for (const intent of ['primary', 'secondary', 'danger'] as const) {
         view.rerender(
-          <ReacdProvider>
+          <ReacdProvider adapter={shadcnAdapter}>
             <Chip
               label="Count"
               text={0}

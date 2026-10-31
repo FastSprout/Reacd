@@ -1,6 +1,10 @@
 import { useId } from 'react';
-import type { ChartProps } from '../../../components/chart/index.js';
-import { CHART_POLICY as P, CHART_DEFAULTS as D } from '../../../core/chart-policy.js';
+import type { ChartProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chart/index.js';
+import {
+  CHART_POLICY as P,
+  CHART_DEFAULTS as D,
+} from '@fastsprout/reacd/adapter-runtime/core/chart-policy.js';
 import { ChartMarker, ChartPattern } from './patterns.js';
 export function chartDash(index: number): string {
   return index === P.zero

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -15,7 +16,7 @@ const definitions = [
 ];
 function Scene({ registry }: { registry: StateRegistry }) {
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInputNumber
         registry={registry}
         node={{

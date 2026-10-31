@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { atom, useAtom } from 'jotai';
@@ -19,7 +20,7 @@ describe('Popover dismissal boundaries', () => {
     function Example() {
       const [open, setOpen] = useState(true);
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Popover
             title="Handled key"
             triggerLabel="Handled trigger"
@@ -51,7 +52,7 @@ describe('Popover dismissal boundaries', () => {
       const [open, setOpen] = useState(true);
       const [hint, setHint] = useAtom(hintAtom, { store });
       return (
-        <ReacdProvider store={store}>
+        <ReacdProvider adapter={shadcnAdapter} store={store}>
           <Popover
             title="Persistent panel"
             triggerLabel="Persistent trigger"

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -54,7 +55,12 @@ it('renders recursive transport and registers inactive child constraints', async
   const run = vi.fn();
   const retry = vi.fn();
   render(
-    <GenerativeUI document={document} registry={registry} actions={{ run, retry }} />,
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={document}
+      registry={registry}
+      actions={{ run, retry }}
+    />,
   );
   expect(screen.getByText('First content')).toBeVisible();
   expect(registry.update('slide', 2).success).toBe(false);
@@ -73,11 +79,21 @@ it('renders recursive transport and registers inactive child constraints', async
 
 it('validates actions and bindings even in initially inactive slides', () => {
   const view = render(
-    <GenerativeUI document={document} actions={{ retry: vi.fn() }} />,
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={document}
+      actions={{ retry: vi.fn() }}
+    />,
   );
   expect(screen.getByRole('alert')).toHaveTextContent('not registered: run');
   expect(screen.queryByRole('button')).toBeNull();
-  view.rerender(<GenerativeUI document={document} actions={{ run: vi.fn() }} />);
+  view.rerender(
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={document}
+      actions={{ run: vi.fn() }}
+    />,
+  );
   expect(screen.getByRole('alert')).toHaveTextContent('not registered: retry');
   expect(
     validateGenerativeDocument({

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { createElement } from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -22,7 +23,7 @@ describe('closed component declarations', () => {
 
   it('renders independently declared layouts and a real shadcn Card', () => {
     const { container } = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <VStack>
           <HStack spacing="small">
             <Card spacing="large">
@@ -49,7 +50,7 @@ describe('closed component declarations', () => {
 
   it('renders a Card with default spacing', () => {
     const { container } = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Card />
       </ReacdProvider>,
     );
@@ -64,7 +65,7 @@ describe('closed component declarations', () => {
       const press = vi.fn();
       const user = userEvent.setup();
       render(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <Button label="Save" intent={intent} onPress={press} />
           <Button label="Disabled" disabled onPress={press} />
         </ReacdProvider>,
@@ -80,7 +81,7 @@ describe('closed component declarations', () => {
     const change = vi.fn();
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Input label="Name" value="" onValueChange={change} />
         <Input
           label="Email"
@@ -100,7 +101,7 @@ describe('closed component declarations', () => {
   it('preserves complete text with an accessible disclosure', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Text role="headline" lineLimit={1}>
           Headline
         </Text>
@@ -122,7 +123,7 @@ describe('closed component declarations', () => {
     jsx(Text, { children: 'Content', className: 'escape' }),
     jsx(Card, { children: createElement('div') }),
   ])('reports invalid properties before rendering the adapter', (view) => {
-    render(<ReacdProvider>{view}</ReacdProvider>);
+    render(<ReacdProvider adapter={shadcnAdapter}>{view}</ReacdProvider>);
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Unable to render this interface.',
     );

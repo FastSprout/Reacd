@@ -1,6 +1,7 @@
 import { Select } from '@base-ui/react/select';
 import { CheckIcon } from 'lucide-react';
-import type { SelectionOption } from '../../../schema/selection/index.js';
+import type { SelectionOption } from
+  '@fastsprout/reacd/adapter-runtime/schema/selection/index.js';
 
 export function SelectOption({
   option,

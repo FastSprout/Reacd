@@ -1,11 +1,15 @@
 import { useContext, useId, useRef, useState } from 'react';
 import { Select } from '@base-ui/react/select';
 import { ChevronDownIcon } from 'lucide-react';
-import type { SelectProps } from '../../../components/select/index.js';
-import { SELECT_POLICY } from '../../../core/select-policy.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { SelectProps } from
+  '@fastsprout/reacd/adapter-runtime/components/select/index.js';
+import { SELECT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/select-policy.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Label } from '../vendor/ui/label.js';
 import { Button } from '../vendor/ui/button.js';
 import { ShadcnBaseSelectContent } from './select-base-content.adapter.js';

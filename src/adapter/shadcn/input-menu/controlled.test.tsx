@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -16,7 +17,7 @@ const base = { label: 'Choice text', items, value: '' };
 function Example(properties: Partial<InputMenuProps>) {
   const [value, setValue] = useState('');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu {...base} value={value} onValueChange={setValue} {...properties} />
     </ReacdProvider>
   );
@@ -45,7 +46,7 @@ it('reports callback failures and keeps rejected activations open', async () => 
     onValueChange: () => Promise.resolve(true),
   });
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu {...properties} />
     </ReacdProvider>,
   );

@@ -6,8 +6,10 @@ import {
   type FocusEvent,
   type RefObject,
 } from 'react';
-import { EscapeScopeContext } from '../../../renderer/theme/escape-context.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
+import { EscapeScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-context.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 
 export function usePromptEscape(
   form: RefObject<HTMLFormElement | null>,

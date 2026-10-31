@@ -2,11 +2,15 @@ import { useContext, useState } from 'react';
 import type { Dialog } from '@base-ui/react/dialog';
 import type { Drawer } from '@base-ui/react/drawer';
 import { useDirection } from '@radix-ui/react-direction';
-import type { ModalProps } from '../../../components/modal/index.js';
-import { MODAL_DEFAULTS } from '../../../core/modal-policy.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import { createEscapeScope } from '../../../renderer/theme/escape-scope.js';
+import type { ModalProps } from
+  '@fastsprout/reacd/adapter-runtime/components/modal/index.js';
+import { MODAL_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/modal-policy.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { createEscapeScope } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-scope.js';
 
 type PanelChange = Dialog.Root.ChangeEventDetails | Drawer.Root.ChangeEventDetails;
 

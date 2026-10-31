@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -39,7 +40,7 @@ it('dispatches all own action intents with the correct isolated state', async ()
     },
   ];
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatNodeView
         node={attachment}
         registry={registry}
@@ -52,7 +53,7 @@ it('dispatches all own action intents with the correct isolated state', async ()
   expect(remove).not.toHaveBeenCalledWith({ state: other });
   for (const node of nodes) {
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatNodeView node={node} registry={registry} actions={{ regenerate, retry }} />
       </ReacdProvider>,
     );
@@ -88,10 +89,10 @@ it('preserves views and rejects absent or inherited actions', async () => {
     { type: 'ChatMessage', ...message, actions: [{ ...control, action: 'inherited' }] },
     { type: 'ChatMessage', ...message, actions: [{ ...control, action: 'missing' }] },
   ];
-  const view = render(<ReacdProvider />);
+  const view = render(<ReacdProvider adapter={shadcnAdapter} />);
   for (const node of nodes) {
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatNodeView node={node} registry={registry} actions={actions} />
       </ReacdProvider>,
     );

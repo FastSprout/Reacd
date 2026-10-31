@@ -1,10 +1,16 @@
 import { useId, useRef } from 'react';
 import { useDirection } from '@base-ui/react/direction-provider';
 import { DayPicker } from '@daypicker/react';
-import type { CalendarProps } from '../../../components/calendar/index.js';
-import { CALENDAR_DEFAULTS, CALENDAR_POLICY } from '../../../core/calendar-policy.js';
-import { DATE_TIME_POLICY } from '../../../core/date-time-policy.js';
-import { nextCalendarRange } from '../../../core/calendar-range.js';
+import type { CalendarProps } from
+  '@fastsprout/reacd/adapter-runtime/components/calendar/index.js';
+import {
+  CALENDAR_DEFAULTS,
+  CALENDAR_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/calendar-policy.js';
+import { DATE_TIME_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/date-time-policy.js';
+import { nextCalendarRange } from
+  '@fastsprout/reacd/adapter-runtime/core/calendar-range.js';
 import { CalendarDayButton } from './calendar-day-button.js';
 import { CalendarFormBridge } from './calendar-form-bridge.js';
 import {

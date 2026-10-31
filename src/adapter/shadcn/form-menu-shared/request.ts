@@ -1,4 +1,5 @@
-import { FORM_MENU_DEFAULTS } from '../../../core/form-menu-policy.js';
+import { FORM_MENU_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/form-menu-policy.js';
 
 export function requestFormMenuChange(request: () => unknown): {
   accepted: boolean;

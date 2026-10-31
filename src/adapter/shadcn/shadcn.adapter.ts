@@ -14,15 +14,24 @@ import { elementEntries } from './registry/element.js';
 import { chatFeedbackEntries } from './registry/chat-feedback.js';
 import { contentOutlineEntries } from './registry/content-outline.js';
 import { pageLogosEntries } from './registry/page-logos.js';
-import { vStackSchema } from '../../schema/v-stack/v-stack.schema.js';
-import { hStackSchema } from '../../schema/h-stack/h-stack.schema.js';
-import { cardSchema } from '../../schema/card/card.schema.js';
-import { gridSchema } from '../../schema/grid/grid.schema.js';
-import { textComponentSchema } from '../../schema/text/text.schema.js';
-import { buttonComponentSchema } from '../../schema/button/button.schema.js';
-import { inputComponentSchema } from '../../schema/input/input.schema.js';
-import { renderEntry } from '../../renderer/contracts/render-entry.js';
-import { defineThemeAdapter } from '../../renderer/contracts/validate-adapter.js';
+import { vStackSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/v-stack/v-stack.schema.js';
+import { hStackSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/h-stack/h-stack.schema.js';
+import { cardSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/card/card.schema.js';
+import { gridSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/grid/grid.schema.js';
+import { textComponentSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/text/text.schema.js';
+import { buttonComponentSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/button/button.schema.js';
+import { inputComponentSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/input/input.schema.js';
+import { renderEntry } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/render-entry.js';
+import { defineThemeAdapter } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/validate-adapter.js';
 import { ShadcnSurface } from './surface/surface.adapter.js';
 import { ShadcnVStack } from './v-stack/v-stack.adapter.js';
 import { ShadcnHStack } from './h-stack/h-stack.adapter.js';
@@ -49,7 +58,10 @@ import { pricingEntries } from './registry/pricing.js';
 import { edgePanelEntries } from './registry/edge-panels.js';
 import { actionMenuEntries } from './registry/action-menus.js';
 
-export const shadcnAdapter = defineThemeAdapter({
+import type { ThemeAdapter } from
+  '@fastsprout/reacd/adapter-runtime/renderer/contracts/theme-adapter.js';
+
+export const shadcnAdapter: ThemeAdapter = defineThemeAdapter({
   id: 'shadcn-ui',
   Surface: ShadcnSurface,
   components: {

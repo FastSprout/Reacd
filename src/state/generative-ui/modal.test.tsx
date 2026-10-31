@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -30,7 +31,12 @@ describe('generative Modal', () => {
     const registry = createDocumentState(document);
     const apply = vi.fn();
     const { rerender } = render(
-      <GenerativeUI document={document} registry={registry} actions={{ apply }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={document}
+        registry={registry}
+        actions={{ apply }}
+      />,
     );
     await user.click(screen.getByRole('button', { name: 'Open generated' }));
     expect(success(registry.read('visible')).value).toBe(true);
@@ -40,7 +46,9 @@ describe('generative Modal', () => {
       registry.update('visible', false);
     });
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
-    rerender(<GenerativeUI document={document} registry={registry} />);
+    rerender(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+    );
     expect(screen.getByRole('alert')).toHaveTextContent('not registered');
   });
   it('rejects incompatible state and safely handles missing live bindings', () => {
@@ -66,7 +74,7 @@ describe('generative Modal', () => {
     const user = userEvent.setup();
     if (document.root.type !== 'Modal') throw new Error('Expected Modal');
     const { footer: _footer, ...root } = document.root;
-    render(<GenerativeUI document={{ ...document, root }} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={{ ...document, root }} />);
     await user.click(screen.getByRole('button', { name: 'Open generated' }));
     await user.click(screen.getByRole('button', { name: 'Close' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());

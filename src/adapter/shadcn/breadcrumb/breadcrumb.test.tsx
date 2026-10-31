@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -5,7 +6,7 @@ import { Breadcrumb, ReacdProvider } from '../../../index.js';
 describe('shadcn Breadcrumb', () => {
   it('renders ordered links, plain current text and decorative separators', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Breadcrumb
           label="Current path"
           items={[
@@ -37,7 +38,7 @@ describe('shadcn Breadcrumb', () => {
     const user = userEvent.setup();
     const action = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Breadcrumb
           label="Actions"
           separator="slash"
@@ -62,7 +63,7 @@ describe('shadcn Breadcrumb', () => {
       'page',
     );
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Breadcrumb
           label="Single"
           items={[{ key: 'current', label: 'Current action', onPress: action }]}

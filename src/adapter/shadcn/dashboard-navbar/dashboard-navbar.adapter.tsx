@@ -1,12 +1,13 @@
 import { useContext } from 'react';
 import type { DashboardNavbarProps } from
-  '../../../components/dashboard-navbar/index.js';
-import { DASHBOARD_DEFAULTS } from '../../../core/dashboard-policy.js';
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-navbar/index.js';
+import { DASHBOARD_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
 import {
   DashboardContext,
   DashboardRegionContext,
   DashboardMainContext,
-} from '../../../renderer/dashboard/dashboard-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/dashboard/dashboard-context.js';
 import { ShadcnDashboardSidebarToggle } from
   '../dashboard-sidebar-toggle/dashboard-sidebar-toggle.adapter.js';
 

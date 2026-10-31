@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
@@ -6,7 +7,7 @@ import { userEvent } from '@testing-library/user-event';
 
 it('renders the documented Theme declaration', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ThemeExample />
     </ReacdProvider>,
   );
@@ -17,7 +18,7 @@ it('renders the documented Theme declaration', () => {
 it('preserves local actions under a scoped template', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ThemeExample />
     </ReacdProvider>,
   );

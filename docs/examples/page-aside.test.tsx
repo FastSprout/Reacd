@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
@@ -5,7 +6,7 @@ import { PageAsideExample } from './page-aside.js';
 
 it('renders the documented PageAside declaration', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <PageAsideExample />
     </ReacdProvider>,
   );

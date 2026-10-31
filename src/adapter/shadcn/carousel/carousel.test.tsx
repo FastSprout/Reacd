@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { atom, useAtom } from 'jotai';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -38,7 +39,7 @@ function Example(properties: Partial<CarouselProps>) {
 it('retains inactive editor state and leaves nested caret keys native', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example />
     </ReacdProvider>,
   );
@@ -58,7 +59,7 @@ it('repairs old-panel focus without stealing outside focus', async () => {
   const user = userEvent.setup();
   const store = createReacdStore();
   render(
-    <ReacdProvider store={store}>
+    <ReacdProvider adapter={shadcnAdapter} store={store}>
       <Example />
       <Input label="Outside note" value="Outside" onValueChange={() => undefined} />
     </ReacdProvider>,
@@ -85,7 +86,7 @@ it('requests chooser transitions and preserves rejected host values', async () =
   const user = userEvent.setup();
   const change = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel {...BASE} items={ITEMS} onValueChange={change} />
     </ReacdProvider>,
   );
@@ -99,7 +100,7 @@ it('requests chooser transitions and preserves rejected host values', async () =
 it('navigates horizontal RTL, vertical axes, boundaries and loops', async () => {
   const user = userEvent.setup();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction="rtl">
         <Example loop />
       </App>
@@ -114,7 +115,7 @@ it('navigates horizontal RTL, vertical axes, boundaries and loops', async () => 
   await user.click(screen.getByRole('button', { name: 'Next slide' }));
   expect(screen.getByRole('textbox', { name: 'Slide note' })).toBeVisible();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example orientation="vertical" />
     </ReacdProvider>,
   );
@@ -132,7 +133,7 @@ it('protects navigation and renders loading/error/empty states', async () => {
   const change = vi.fn();
   const retry = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel {...BASE} items={ITEMS} readOnly onValueChange={change} />
     </ReacdProvider>,
   );
@@ -142,13 +143,13 @@ it('protects navigation and renders loading/error/empty states', async () => {
   expect(change).not.toHaveBeenCalled();
   expect(screen.getByRole('button', { name: 'Next slide' })).toBeDisabled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel {...BASE} items={ITEMS} disabled />
     </ReacdProvider>,
   );
   expect(screen.getByRole('button', { name: 'Next slide' })).toBeDisabled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel {...BASE} items={[]} emptyMessage="Empty slides" />
     </ReacdProvider>,
   );
@@ -157,7 +158,7 @@ it('protects navigation and renders loading/error/empty states', async () => {
   region.focus();
   await user.keyboard('{ArrowRight}');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel
         {...BASE}
         items={ITEMS}
@@ -170,13 +171,13 @@ it('protects navigation and renders loading/error/empty states', async () => {
   await user.keyboard('{ArrowRight}');
   expect(screen.getByRole('status')).toHaveTextContent('Wait for slides');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel {...BASE} items={ITEMS} state="error" />
     </ReacdProvider>,
   );
   expect(screen.getByRole('alert')).toHaveTextContent('Unable to load slides.');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel
         {...BASE}
         items={ITEMS}
@@ -190,7 +191,7 @@ it('protects navigation and renders loading/error/empty states', async () => {
   await user.click(screen.getByRole('button', { name: 'Try slides' }));
   expect(retry).toHaveBeenCalledExactlyOnceWith();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel {...BASE} items={ITEMS.slice(0, 1)} />
     </ReacdProvider>,
   );

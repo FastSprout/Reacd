@@ -3,6 +3,28 @@ import { valid } from 'semver';
 export const PUBLICATION_POLICY = {
   name: '@fastsprout/reacd',
   archiveBasename: 'fastsprout-reacd',
+  output: '.cache/release/package.tgz',
+  packagePath: '.',
+  files: [
+    'dist',
+    'schema/reacd.schema.json',
+    'schema/generative.schema.json',
+    'README.md',
+    'LICENSE',
+  ],
+  exportKeys: [
+    '.',
+    './schema.json',
+    './generative-schema.json',
+    './generative',
+    './jsx-runtime',
+    './jsx-dev-runtime',
+    './bootstrap',
+    './adapter-runtime/core/*.js',
+    './adapter-runtime/schema/*.js',
+    './adapter-runtime/components/*.js',
+    './adapter-runtime/renderer/*.js',
+  ],
   repository: 'git+https://github.com/FastSprout/Reacd.git',
   githubRepository: 'FastSprout/Reacd',
   homepage: 'https://reacd.dev/',
@@ -15,7 +37,26 @@ export const PUBLICATION_POLICY = {
   peers: { react: '19.3.1', 'react-dom': '19.3.1', jotai: '3.0.1' },
 } as const;
 
+export const SHADCN_PUBLICATION_POLICY = {
+  ...PUBLICATION_POLICY,
+  name: '@fastsprout/reacd-shadcn',
+  archiveBasename: 'fastsprout-reacd-shadcn',
+  output: '.cache/release/shadcn.tgz',
+  packagePath: 'packages/shadcn',
+  files: ['dist', 'README.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md'],
+  exportKeys: ['.', './styles', './styles.css'],
+  peers: PUBLICATION_POLICY.peers,
+  corePeer: PUBLICATION_POLICY.name,
+} as const;
+
+export type PublicationPolicy =
+  typeof PUBLICATION_POLICY | typeof SHADCN_PUBLICATION_POLICY;
+
 export function isReleaseVersion(input: unknown): input is string {
-  return typeof input === 'string' && /^\d/.test(input) &&
-    input.trim() === input && valid(input) !== null;
+  return (
+    typeof input === 'string' &&
+    /^\d/.test(input) &&
+    input.trim() === input &&
+    valid(input) !== null
+  );
 }

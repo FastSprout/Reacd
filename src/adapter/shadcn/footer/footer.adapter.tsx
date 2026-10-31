@@ -1,4 +1,5 @@
-import type { FooterProps } from '../../../components/footer/footer.js';
+import type { FooterProps } from
+  '@fastsprout/reacd/adapter-runtime/components/footer/footer.js';
 
 export function ShadcnFooter({ children, start, end, top, bottom }: FooterProps) {
   return (

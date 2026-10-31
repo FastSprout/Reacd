@@ -1,7 +1,9 @@
 import { useId, useRef, useState } from 'react';
-import type { SwitchProps } from '../../../components/switch/switch.props.js';
-import { SWITCH_POLICY } from '../../../core/switch-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { SwitchProps } from
+  '@fastsprout/reacd/adapter-runtime/components/switch/switch.props.js';
+import { SWITCH_POLICY } from '@fastsprout/reacd/adapter-runtime/core/switch-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Switch } from '../vendor/ui/switch.js';
 import { Label } from '../vendor/ui/label.js';
 

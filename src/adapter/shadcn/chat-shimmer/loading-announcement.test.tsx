@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ChatReasoning, ChatShimmer, ChatTool, ReacdProvider } from '../../../index.js';
@@ -5,7 +6,7 @@ import { ChatReasoning, ChatShimmer, ChatTool, ReacdProvider } from '../../../in
 describe('chat feedback loading announcements', () => {
   it('never defers its own active Shimmer status', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatShimmer text="Reading references" />
       </ReacdProvider>,
     );
@@ -16,7 +17,7 @@ describe('chat feedback loading announcements', () => {
 
   it('keeps reasoning and tool statuses outside their busy details', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatReasoning
           label="Summary progress"
           text="Changing summary"

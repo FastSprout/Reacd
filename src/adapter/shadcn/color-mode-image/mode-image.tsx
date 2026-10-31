@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { COLOR_MODE_POLICY } from '../../../core/color-mode-policy.js';
-import type {
-  ColorModeImageProps,
-} from '../../../components/color-mode-image/index.js';
+import { COLOR_MODE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/color-mode-policy.js';
+import type { ColorModeImageProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-image/index.js';
 
 export function ModeImage({
   src,

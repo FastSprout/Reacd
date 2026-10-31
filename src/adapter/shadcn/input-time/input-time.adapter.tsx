@@ -1,13 +1,17 @@
 import { I18nProvider } from 'react-aria-components/I18nProvider';
 import { useDirection } from '@radix-ui/react-direction';
-import type { InputTimeProps } from '../../../components/input-time/index.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
-import { DATE_TIME_POLICY } from '../../../core/date-time-policy.js';
-import { INPUT_TIME_POLICY } from '../../../core/input-time-policy.js';
+import type { InputTimeProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-time/index.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
+import { DATE_TIME_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/date-time-policy.js';
+import { INPUT_TIME_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-time-policy.js';
 import {
   boundedTimeValueSchema,
   timeRangeValueSchema,
-} from '../../../schema/date-time/index.js';
+} from '@fastsprout/reacd/adapter-runtime/schema/date-time/index.js';
 import { TimeControl } from './time-control.js';
 import { useTimeChange } from './use-time-change.js';
 

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -13,7 +14,7 @@ import { createReacdStore } from '../store.js';
 it('hydrates stable message identities in both template profiles', () => {
   for (const templateId of ['saas-modern-light', 'erp-compact']) {
     const element = (
-      <ReacdProvider templateId={templateId}>
+      <ReacdProvider adapter={shadcnAdapter} templateId={templateId}>
         <ChatAttachment name="Reference.txt" mediaType="text/plain" />
         <ChatMessage
           id="answer"
@@ -47,7 +48,7 @@ it('isolates host stores and renders every catalog preview', async () => {
   const second = createReacdStore();
   const user = userEvent.setup();
   const view = render(
-    <ReacdProvider store={first}>
+    <ReacdProvider adapter={shadcnAdapter} store={first}>
       <ChatAttachmentExample />
     </ReacdProvider>,
   );
@@ -56,14 +57,14 @@ it('isolates host stores and renders every catalog preview', async () => {
   );
   expect(screen.getByText('Example attachment removed.')).toBeVisible();
   view.rerender(
-    <ReacdProvider store={second}>
+    <ReacdProvider adapter={shadcnAdapter} store={second}>
       <ChatExamples />
     </ReacdProvider>,
   );
   expect(screen.getByText('example-reference.txt')).toBeVisible();
   expect(screen.getByRole('log', { name: 'Example conversation' })).toBeVisible();
   view.rerender(
-    <ReacdProvider store={first}>
+    <ReacdProvider adapter={shadcnAdapter} store={first}>
       <ChatAttachmentExample />
     </ReacdProvider>,
   );

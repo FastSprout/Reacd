@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { userEvent } from '@testing-library/user-event';
@@ -53,8 +54,8 @@ it('hydrates isolated generative stores and routes selection requests', async ()
   const second = { ...documentSpec, root: { ...documentSpec.root, label: 'Second' } };
   const ui = (
     <>
-      <GenerativeUI document={documentSpec} />
-      <GenerativeUI document={second} />
+      <GenerativeUI adapter={shadcnAdapter} document={documentSpec} />
+      <GenerativeUI adapter={shadcnAdapter} document={second} />
     </>
   );
   const container = document.createElement('div');

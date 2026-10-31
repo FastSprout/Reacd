@@ -8,23 +8,46 @@ import {
   renameSync,
   rmSync,
 } from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 import { dirname, join, resolve } from 'node:path';
-import { RELEASE_ARCHIVE_POLICY, validateReleaseArchive } from './archive.js';
+import { validateReleaseArchive } from './archive.js';
+import {
+  createDistributionManifest,
+  parseDistributionManifest,
+  createShadcnDistributionManifest,
+  parseShadcnDistributionManifest,
+} from './distribution.js';
+import { stagePublication } from './workspace.js';
+import { PUBLICATION_POLICY, SHADCN_PUBLICATION_POLICY } from './policy.js';
+import type { PublicationPolicy } from './policy.js';
 import { parsePublicationManifest } from './metadata.js';
 
-export function packReleaseArchive(root: string): string {
-  const output = resolve(root, RELEASE_ARCHIVE_POLICY.output);
+function packArchive(root: string, profile: PublicationPolicy): string {
+  const sourceRoot = resolve(root, profile.packagePath);
+  const core = profile.name === PUBLICATION_POLICY.name;
+  const output = resolve(root, profile.output);
   const directory = dirname(output);
   mkdirSync(directory, { recursive: true });
   rmSync(output, { force: true });
   try {
     const source: unknown = JSON.parse(
-      readFileSync(join(root, 'package.json'), 'utf8'),
+      readFileSync(join(sourceRoot, 'package.json'), 'utf8'),
     );
-    const metadata = parsePublicationManifest(source);
+    const metadata = core
+      ? createDistributionManifest(source)
+      : createShadcnDistributionManifest(source);
+    if (!core) {
+      const engine: unknown = JSON.parse(
+        readFileSync(join(root, 'package.json'), 'utf8'),
+      );
+      if (parsePublicationManifest(engine).version !== metadata.version) {
+        throw new Error('Adapter and engine release versions must match.');
+      }
+    }
     const temporary = mkdtempSync(join(directory, 'pack-'));
     try {
-      const options = { cwd: root, encoding: 'utf8' } as const;
+      const workspace = stagePublication(sourceRoot, temporary, metadata);
+      const options = { cwd: workspace, encoding: 'utf8' } as const;
       const packed: unknown = JSON.parse(
         execFileSync(
           'npm',
@@ -62,12 +85,21 @@ export function packReleaseArchive(root: string): string {
       const manifest: unknown = JSON.parse(
         execFileSync('tar', ['-xOf', path, 'package/package.json'], options),
       );
-      if (parsePublicationManifest(manifest).version !== metadata.version) {
+      if (
+        !isDeepStrictEqual(
+          core
+            ? parseDistributionManifest(manifest)
+            : parseShadcnDistributionManifest(manifest),
+          metadata,
+        )
+      ) {
         throw new Error('Release archive embedded identity differs from its manifest.');
       }
-      for (const name of ['LICENSE', 'THIRD_PARTY_NOTICES.md']) {
+      for (const name of profile.files.filter((file) =>
+        ['LICENSE', 'THIRD_PARTY_NOTICES.md', 'README.md'].includes(file),
+      )) {
         const content = execFileSync('tar', ['-xOf', path, `package/${name}`], options);
-        if (content !== readFileSync(join(root, name), 'utf8')) {
+        if (!Buffer.from(content).equals(readFileSync(join(sourceRoot, name)))) {
           throw new Error(`Release archive differs from the repository ${name}.`);
         }
       }
@@ -80,4 +112,11 @@ export function packReleaseArchive(root: string): string {
     rmSync(output, { force: true });
     throw error;
   }
+}
+
+export function packReleaseArchive(root: string): string {
+  return packArchive(root, PUBLICATION_POLICY);
+}
+export function packShadcnArchive(root: string): string {
+  return packArchive(root, SHADCN_PUBLICATION_POLICY);
 }

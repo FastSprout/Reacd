@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [tailwindcss()],
   build: {
-    outDir: 'dist/adapter/shadcn',
+    outDir: 'packages/shadcn/dist',
     emptyOutDir: false,
     cssCodeSplit: true,
     rolldownOptions: {

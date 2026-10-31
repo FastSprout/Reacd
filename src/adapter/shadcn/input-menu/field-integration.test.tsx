@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -16,7 +17,7 @@ it('clears required feedback after a readonly host update', async () => {
   const change = vi.fn();
   function form(value: string) {
     return (
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Form label="Shipping" onSubmit={() => undefined}>
           <InputMenu
             label="Destination"
@@ -51,7 +52,7 @@ it('blocks open suggestions when FormField becomes disabled', async () => {
   const change = vi.fn();
   function field(disabled: boolean) {
     return (
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <FormField name="shipping" label="Shipping field" disabled={disabled}>
           <InputMenu
             label="Destination"
@@ -80,7 +81,7 @@ it('inherits identity and required with explicit overrides', async () => {
   const user = userEvent.setup();
   const save = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Form label="Inherited shipping" onSubmit={save}>
         <FormField name="shipping" required help="Choose a destination.">
           <InputMenu
@@ -100,7 +101,7 @@ it('inherits identity and required with explicit overrides', async () => {
   expect(save).not.toHaveBeenCalled();
   expect(input).toHaveFocus();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Form label="Inherited shipping" onSubmit={save}>
         <FormField name="shipping" required>
           <InputMenu
@@ -127,7 +128,7 @@ it('inherits identity and required with explicit overrides', async () => {
 
 it('associates scoped errors and guidance without duplicating feedback', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <FormField name="shipping" description="Field guidance" error="Host rejection">
         <InputMenu
           label="Destination"
@@ -155,7 +156,7 @@ it.each([
 ])('suspends obsolete required feedback after a host flag change %j', async (flags) => {
   const user = userEvent.setup();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Form label="Shipping flags" onSubmit={vi.fn()}>
         <InputMenu
           label="Destination"
@@ -171,7 +172,7 @@ it.each([
   await user.click(screen.getByRole('button', { name: 'Save shipping flags' }));
   expect(screen.getByRole('alert')).toBeVisible();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Form label="Shipping flags" onSubmit={vi.fn()}>
         <InputMenu
           label="Destination"

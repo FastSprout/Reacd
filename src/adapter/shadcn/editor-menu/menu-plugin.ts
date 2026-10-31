@@ -3,13 +3,14 @@ import { PluginKey } from '@tiptap/pm/state';
 import { z } from 'zod';
 import { Suggestion, exitSuggestion } from '@tiptap/suggestion';
 import type { SuggestionProps } from '@tiptap/suggestion';
-import { EDITOR_MENU_POLICY as P } from '../../../core/editor-menu-policy.js';
+import { EDITOR_MENU_POLICY as P } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-menu-policy.js';
 import type {
   EditorMenuItem,
   EditorMenuLease,
   EditorMenuLookupState,
   EditorMenuRequest,
-} from '../../../renderer/editor/menu-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/editor/menu-context.js';
 import { editorCommandChain } from '../editor-sdk/command-chain.js';
 import { canRunSdkCommand } from '../editor-sdk/commands.js';
 
@@ -38,18 +39,32 @@ export function mountEditorMenu(
   let revision = 0;
   function resolved(query: string): EditorMenuLookupState {
     const remote = request.lookup?.(query);
-    const items = remote?.items ?? request.items().filter((item) =>
-      item.label.toLowerCase().includes(query.toLowerCase())).slice(0, P.maxResults);
-    return { status: remote?.status ?? 'ready', error: remote?.error,
-      items: items.slice(0, P.maxResults).map((item) => item.kind === 'suggestion' &&
-        !canRunSdkCommand(editor, item.value) ? { ...item, disabled: true } : item) };
+    const items =
+      remote?.items ??
+      request
+        .items()
+        .filter((item) => item.label.toLowerCase().includes(query.toLowerCase()))
+        .slice(0, P.maxResults);
+    return {
+      status: remote?.status ?? 'ready',
+      error: remote?.error,
+      items: items
+        .slice(0, P.maxResults)
+        .map((item) =>
+          item.kind === 'suggestion' && !canRunSdkCommand(editor, item.value)
+            ? { ...item, disabled: true }
+            : item,
+        ),
+    };
   }
 
   function clear() {
     revision += 1;
     current = undefined;
-    if (!editor.isDestroyed &&
-      editor.view.dom.getAttribute('aria-controls') === request.listId) {
+    if (
+      !editor.isDestroyed &&
+      editor.view.dom.getAttribute('aria-controls') === request.listId
+    ) {
       for (const name of [
         'aria-controls',
         'aria-expanded',
@@ -78,8 +93,15 @@ export function mountEditorMenu(
     if (data.items[selected] === undefined)
       input.removeAttribute('aria-activedescendant');
     else input.setAttribute('aria-activedescendant', `${request.listId}-${selected}`);
-    request.change(Object.freeze({ query: next.query, status: data.status,
-      error: data.error, items: Object.freeze([...data.items]), selected }));
+    request.change(
+      Object.freeze({
+        query: next.query,
+        status: data.status,
+        error: data.error,
+        items: Object.freeze([...data.items]),
+        selected,
+      }),
+    );
   }
 
   function close() {

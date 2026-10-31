@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '../provider/provider.js';
@@ -21,7 +22,7 @@ it('shares readable drafts while protecting readers and maximum host writes', ()
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInput node={node} registry={registry} />
       <BoundInput
         node={{ ...node, label: 'Reader', value: { state: 'email', mode: 'read' } }}
@@ -55,7 +56,7 @@ it('reports missing or over-budget current bindings without interactive fields',
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundInput node={node} registry={registry} />
       <BoundInput
         node={{ ...node, value: { state: 'missing', mode: 'readWrite' } }}

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -79,7 +80,9 @@ describe('Page presentation generative transport', () => {
   it('renders every slot and resolves registered title and child actions', async () => {
     const user = userEvent.setup();
     const run = vi.fn();
-    render(<GenerativeUI document={document} actions={{ run }} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ run }} />,
+    );
     expect(
       screen.getByRole('heading', { name: 'Generated hero', level: 1 }),
     ).toBeVisible();
@@ -89,7 +92,9 @@ describe('Page presentation generative transport', () => {
     await user.type(field, 'Shared state');
     expect(field).toHaveValue('Shared state');
     expect(
-      renderToString(<GenerativeUI document={document} actions={{ run }} />),
+      renderToString(
+        <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ run }} />,
+      ),
     ).toContain('Generated intro query');
   });
 
@@ -108,6 +113,7 @@ describe('Page presentation generative transport', () => {
       for (const slot of [...slots, 'children']) {
         const view = render(
           <GenerativeUI
+            adapter={shadcnAdapter}
             document={{
               ...document,
               root: { type, children: [], [slot]: [actionNode()] },
@@ -144,7 +150,9 @@ describe('Page presentation generative transport', () => {
   it('handles a host action removed after accepted rendering', async () => {
     const user = userEvent.setup();
     const actions: Record<string, () => void> = { run: vi.fn() };
-    render(<GenerativeUI document={document} actions={actions} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} actions={actions} />,
+    );
     delete actions['run'];
     const inherited = vi.fn();
     Object.setPrototypeOf(actions, { run: inherited });

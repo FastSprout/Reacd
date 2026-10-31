@@ -1,14 +1,16 @@
 import { useContext } from 'react';
 import type { DashboardSidebarProps } from
-  '../../../components/dashboard-sidebar/index.js';
-import { DASHBOARD_DEFAULTS } from '../../../core/dashboard-policy.js';
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-sidebar/index.js';
+import { DASHBOARD_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
 import {
   DashboardContext,
   DashboardRegionContext,
-} from '../../../renderer/dashboard/dashboard-context.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/dashboard/dashboard-context.js';
 import { SidebarEnvironmentContext } from
-  '../../../renderer/sidebar/sidebar-environment.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+  '@fastsprout/reacd/adapter-runtime/renderer/sidebar/sidebar-environment.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 import { ShadcnSidebar } from '../sidebar/sidebar.adapter.js';
 
 export function ShadcnDashboardSidebar(properties: DashboardSidebarProps) {

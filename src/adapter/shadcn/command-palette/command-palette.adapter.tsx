@@ -1,9 +1,13 @@
 import { useId, useState } from 'react';
 import { Autocomplete } from '@base-ui/react/autocomplete';
-import type { CommandPaletteProps } from '../../../components/command-palette/index.js';
-import { COMMAND_DEFAULTS } from '../../../core/command-policy.js';
-import { filterCommandGroups } from '../../../core/command-search.js';
-import { followHref } from '../../../renderer/navigation/native-navigation.js';
+import type { CommandPaletteProps } from
+  '@fastsprout/reacd/adapter-runtime/components/command-palette/index.js';
+import { COMMAND_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/command-policy.js';
+import { filterCommandGroups } from
+  '@fastsprout/reacd/adapter-runtime/core/command-search.js';
+import { followHref } from
+  '@fastsprout/reacd/adapter-runtime/renderer/navigation/native-navigation.js';
 import { Input } from '../vendor/ui/input.js';
 
 export function ShadcnCommandPalette({

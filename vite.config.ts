@@ -24,6 +24,27 @@ export default defineConfig({
   plugins: [tailwindcss(), react()],
   resolve: {
     alias: {
+      '@fastsprout/reacd/adapter-runtime/core': fileURLToPath(
+        new NodeURL('./src/core/', import.meta.url),
+      ),
+      '@fastsprout/reacd/adapter-runtime/schema': fileURLToPath(
+        new NodeURL('./src/schema/', import.meta.url),
+      ),
+      '@fastsprout/reacd/adapter-runtime/components': fileURLToPath(
+        new NodeURL('./src/components/', import.meta.url),
+      ),
+      '@fastsprout/reacd/adapter-runtime/renderer': fileURLToPath(
+        new NodeURL('./src/renderer/', import.meta.url),
+      ),
+      '@fastsprout/reacd-shadcn/styles.css': fileURLToPath(
+        new NodeURL('./src/adapter/shadcn/styles.css', import.meta.url),
+      ),
+      '@fastsprout/reacd-shadcn/styles': fileURLToPath(
+        new NodeURL('./src/adapter/shadcn/styles.ts', import.meta.url),
+      ),
+      '@fastsprout/reacd-shadcn': fileURLToPath(
+        new NodeURL('./src/adapter/shadcn/shadcn.adapter.ts', import.meta.url),
+      ),
       '@fastsprout/reacd/jsx-runtime': fileURLToPath(
         new NodeURL('./src/jsx-runtime.ts', import.meta.url),
       ),

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -35,7 +36,9 @@ describe('generative tabs and links', () => {
   it('writes accepted selection and validates actions in every item slot', async () => {
     const user = userEvent.setup();
     const run = vi.fn();
-    render(<GenerativeUI document={declaration} actions={{ run }} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
+    );
     expect(screen.getByRole('link')).toHaveAttribute('href', '/');
     await user.click(screen.getByRole('tab', { name: 'Second' }));
     await user.click(screen.getByRole('button', { name: 'Generated action' }));
@@ -57,7 +60,13 @@ describe('generative tabs and links', () => {
       ...declaration,
       root: { ...tabs, value: { state: 'tab', mode: 'read' } },
     };
-    const view = render(<GenerativeUI document={read} actions={{ run: vi.fn() }} />);
+    const view = render(
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={read}
+        actions={{ run: vi.fn() }}
+      />,
+    );
     expect(screen.getByRole('tab', { name: 'First' })).not.toBeDisabled();
     expect(screen.getByRole('tab', { name: 'Second' })).toBeDisabled();
     view.unmount();
@@ -65,12 +74,14 @@ describe('generative tabs and links', () => {
       [],
       [{ key: 'tab', kind: 'text', initial: 'c', access: 'readWrite' }],
     ]) {
-      const invalid = render(<GenerativeUI document={{ ...declaration, state }} />);
+      const invalid = render(
+        <GenerativeUI adapter={shadcnAdapter} document={{ ...declaration, state }} />,
+      );
       expect(screen.getByRole('alert')).toBeVisible();
       expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
       invalid.unmount();
     }
-    render(<GenerativeUI document={declaration} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />);
     expect(screen.getByRole('alert')).toHaveTextContent('run');
     expect(screen.queryByRole('tablist')).not.toBeInTheDocument();
   });
@@ -79,6 +90,7 @@ describe('generative tabs and links', () => {
     const state = createDocumentState(declaration);
     const view = render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={state}
         actions={{ run: vi.fn() }}
@@ -107,15 +119,18 @@ describe('generative tabs and links', () => {
     const run = vi.fn();
     const container = document.createElement('div');
     container.innerHTML = renderToString(
-      <GenerativeUI document={declaration} actions={{ run }} />,
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
     );
     document.body.appendChild(container);
     const recover = vi.fn();
-    const view = render(<GenerativeUI document={declaration} actions={{ run }} />, {
-      container,
-      hydrate: true,
-      onRecoverableError: recover,
-    });
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
+      {
+        container,
+        hydrate: true,
+        onRecoverableError: recover,
+      },
+    );
     await act(async () => undefined);
     expect(recover).not.toHaveBeenCalled();
     const first = screen.getByRole('tab', { name: 'First' });
@@ -147,6 +162,7 @@ describe('generative tabs and links', () => {
     if (!restriction.success) throw new Error('Expected host constraint.');
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={{ run: vi.fn() }}

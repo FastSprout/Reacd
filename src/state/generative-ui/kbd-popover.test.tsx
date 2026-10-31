@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -45,7 +46,12 @@ describe('generative Kbd and Popover', () => {
     const registry = createDocumentState(declaration);
     const save = vi.fn();
     render(
-      <GenerativeUI document={declaration} registry={registry} actions={{ save }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        registry={registry}
+        actions={{ save }}
+      />,
     );
     expect(screen.getByRole('img', { name: 'Command' })).toHaveTextContent('⌘');
     act(() => {
@@ -84,7 +90,7 @@ describe('generative Kbd and Popover', () => {
       },
     ])
       expect(validateGenerativeDocument({ ...declaration, root }).success).toBe(false);
-    render(<GenerativeUI document={declaration} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />);
     expect(screen.getByRole('alert')).toHaveTextContent('save');
   });
   it('fails closed for missing live state and supports omitted footers', () => {
@@ -121,6 +127,7 @@ describe('generative Kbd and Popover', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('not registered');
     view.rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           schemaVersion: '0.2',
           state: [

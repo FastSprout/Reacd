@@ -1,5 +1,5 @@
 import type { DashboardToolbarProps } from
-  '../../../components/dashboard-toolbar/index.js';
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-toolbar/index.js';
 
 export function ShadcnDashboardToolbar({
   label,

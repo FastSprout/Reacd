@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -9,7 +10,7 @@ it('runs the editor-emoji-menu example with input and protection', async () => {
   const restore = installEditorGeometry();
   try {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <EditorEmojiMenuExample />
       </ReacdProvider>,
     );

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -9,6 +10,7 @@ it('visits Card slots and preserves their nested state and actions', async () =>
   const action = vi.fn();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: [
@@ -36,6 +38,7 @@ it('protects loading actions and supports named or decorative icons', async () =
   const action = vi.fn();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         schemaVersion: '0.2',
         state: [],
@@ -76,6 +79,7 @@ it('keeps nullable progress in range and dismisses controlled alerts', async () 
   const registry = created.data;
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       registry={registry}
       document={{
         schemaVersion: '0.2',

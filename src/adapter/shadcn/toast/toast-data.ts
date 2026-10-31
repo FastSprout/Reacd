@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
-import type { ToastProps } from '../../../components/toast/index.js';
+import type { ToastProps } from
+  '@fastsprout/reacd/adapter-runtime/components/toast/index.js';
 export type ToastFeedback = 'rejected' | 'invalid' | 'actionError';
 export interface ToastData {
   variables: CSSProperties;

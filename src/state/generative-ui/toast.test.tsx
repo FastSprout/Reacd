@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { renderToString } from 'react-dom/server';
@@ -25,7 +26,12 @@ describe('generative toast', () => {
     const registry = createDocumentState(declaration);
     const resolve = vi.fn();
     render(
-      <GenerativeUI document={declaration} registry={registry} actions={{ resolve }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        registry={registry}
+        actions={{ resolve }}
+      />,
     );
     fireEvent.click(
       await screen.findByRole('button', { name: 'Resolve notification' }),
@@ -54,7 +60,13 @@ describe('generative toast', () => {
         open: { state: 'notice', mode: 'readWrite' },
       },
     };
-    render(<GenerativeUI document={withoutAction} registry={registry} />);
+    render(
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={withoutAction}
+        registry={registry}
+      />,
+    );
     await screen.findByRole('dialog', { name: 'Held notice' });
     fireEvent.keyDown(window, { key: 'F6' });
     fireEvent.click(screen.getByRole('button', { name: 'Dismiss notification' }));
@@ -74,7 +86,12 @@ describe('generative toast', () => {
     const actions: Record<string, () => void> = { resolve: vi.fn() };
     const registry = createDocumentState(declaration);
     render(
-      <GenerativeUI document={declaration} registry={registry} actions={actions} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        registry={registry}
+        actions={actions}
+      />,
     );
     const action = await screen.findByRole('button', { name: 'Resolve notification' });
     Object.setPrototypeOf(actions, { resolve: inherited });
@@ -90,7 +107,7 @@ describe('generative toast', () => {
     expect(validateGenerativeDocument({ ...declaration, state: [] }).success).toBe(
       false,
     );
-    render(<GenerativeUI document={declaration} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />);
     expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered');
   });
   it('reports invalid bindings and renders SSR safely', () => {
@@ -98,7 +115,7 @@ describe('generative toast', () => {
     const node = declaration.root;
     if (node.type !== 'Toast') throw new Error('Invalid fixture.');
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundToast
           node={{ ...node, open: { state: 'missing', mode: 'readWrite' } }}
           registry={registry}
@@ -109,7 +126,11 @@ describe('generative toast', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(
       renderToString(
-        <GenerativeUI document={declaration} actions={{ resolve: vi.fn() }} />,
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={declaration}
+          actions={{ resolve: vi.fn() }}
+        />,
       ),
     ).not.toContain('role="dialog"');
   });

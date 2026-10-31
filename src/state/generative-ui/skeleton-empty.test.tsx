@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -42,6 +43,7 @@ describe('generative loading and empty states', () => {
     const help = vi.fn();
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={{
@@ -84,7 +86,7 @@ describe('generative loading and empty states', () => {
           [property]: [{ type: 'Button', label: 'Missing', action: 'missing' }],
         },
       };
-      const view = render(<GenerativeUI document={document} />);
+      const view = render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
       expect(screen.getByRole('alert')).toHaveTextContent('missing');
       view.unmount();
     }

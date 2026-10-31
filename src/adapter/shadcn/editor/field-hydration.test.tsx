@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, waitFor, within } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { hydrateRoot } from 'react-dom/client';
@@ -51,10 +52,10 @@ it('isolates inherited protection and Jotai values across SSR stores', async () 
   secondStore.set(valueAtom, second);
   const application = (
     <>
-      <ReacdProvider store={firstStore}>
+      <ReacdProvider adapter={shadcnAdapter} store={firstStore}>
         <View blocked label="First" />
       </ReacdProvider>
-      <ReacdProvider store={secondStore}>
+      <ReacdProvider adapter={shadcnAdapter} store={secondStore}>
         <View blocked={false} label="Second" />
       </ReacdProvider>
     </>

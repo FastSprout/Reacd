@@ -1,5 +1,6 @@
 import type { RefObject } from 'react';
-import type { CalendarProps } from '../../../components/calendar/index.js';
+import type { CalendarProps } from
+  '@fastsprout/reacd/adapter-runtime/components/calendar/index.js';
 
 export function CalendarFormBridge({
   properties,

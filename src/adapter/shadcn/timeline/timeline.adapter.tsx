@@ -1,5 +1,9 @@
-import type { TimelineProps } from '../../../components/timeline/timeline.js';
-import { TIMELINE_DEFAULTS, TIMELINE_POLICY } from '../../../core/timeline-policy.js';
+import type { TimelineProps } from
+  '@fastsprout/reacd/adapter-runtime/components/timeline/timeline.js';
+import {
+  TIMELINE_DEFAULTS,
+  TIMELINE_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/timeline-policy.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnTimeline({

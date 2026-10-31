@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -39,17 +40,20 @@ it('preserves focus and request state through aside hydration', async () => {
   const actions = { navigate: vi.fn() };
   const container = document.createElement('div');
   const markup = renderToString(
-    <GenerativeUI document={declaration} actions={actions} />,
+    <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={actions} />,
   );
   expect(markup).toContain('data-wide="false"');
   container.innerHTML = markup;
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={declaration} actions={actions} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={actions} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   const aside = screen.getByRole('complementary', { name: 'Hydrated navigation' });
   expect(aside).toHaveAttribute('data-wide', 'true');
   await user.type(screen.getByLabelText('Hydrated page query'), 'Client query');
@@ -64,7 +68,9 @@ it('preserves focus and request state through aside hydration', async () => {
   await user.click(action);
   expect(actions.navigate).toHaveBeenCalledOnce();
   expect(
-    renderToString(<GenerativeUI document={declaration} actions={actions} />),
+    renderToString(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={actions} />,
+    ),
   ).not.toContain('Client query');
   expect(errors).toEqual([]);
   view.unmount();

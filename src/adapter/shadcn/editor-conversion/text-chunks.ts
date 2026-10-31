@@ -1,4 +1,7 @@
-import { EDITOR_POLICY, EDITOR_UNICODE } from '../../../core/editor-policy.js';
+import {
+  EDITOR_POLICY,
+  EDITOR_UNICODE,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
 
 interface TextChunk {
   readonly from: number;

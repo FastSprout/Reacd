@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { atom, useAtom } from 'jotai';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -47,7 +48,7 @@ describe('shadcn Tree', () => {
   it('navigates, expands and selects without coupling focus to selection', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example />
       </ReacdProvider>,
     );
@@ -79,7 +80,7 @@ describe('shadcn Tree', () => {
   it('supports disclosure, multiple selection and readonly', async () => {
     const user = userEvent.setup();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example multiple />
       </ReacdProvider>,
     );
@@ -93,7 +94,7 @@ describe('shadcn Tree', () => {
     expect(screen.getByText('Selected: alpha')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Collapse Folder' }));
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example multiple selectionReadOnly expansionReadOnly />
       </ReacdProvider>,
     );
@@ -110,7 +111,7 @@ describe('shadcn Tree', () => {
     const user = userEvent.setup();
     const clock = vi.spyOn(Date, 'now').mockReturnValue(100);
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <App direction="rtl">
           <Example />
         </App>
@@ -141,7 +142,7 @@ describe('shadcn Tree', () => {
   it('supports disabled and empty trees with a discoverable focus target', async () => {
     const user = userEvent.setup();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example disabled />
       </ReacdProvider>,
     );
@@ -151,13 +152,13 @@ describe('shadcn Tree', () => {
     fireEvent.keyDown(row('Folder'), { key: 'Enter' });
     expect(screen.getByText('Selected:')).toBeInTheDocument();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example items={[]} />
       </ReacdProvider>,
     );
     expect(screen.getByRole('status')).toHaveTextContent('No items to display.');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example items={[]} emptyLabel="No files" />
       </ReacdProvider>,
     );
@@ -168,7 +169,7 @@ describe('shadcn Tree', () => {
     const select = vi.fn();
     const expand = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Tree
           label="Files"
           items={items}

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -62,6 +63,7 @@ describe('generative paging and paths', () => {
     const disabled = vi.fn();
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={{
@@ -111,7 +113,9 @@ describe('generative paging and paths', () => {
         : { success: false, issues: [{ path: 'page', message: 'At most page 2.' }] };
     });
     if (!lease.success) throw new Error('Constraint registration failed.');
-    render(<GenerativeUI document={document} registry={registry} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+    );
     await user.click(screen.getByRole('button', { name: 'Last page' }));
     expect(screen.getByRole('alert')).toHaveTextContent('At most page 2.');
     expect(screen.getByRole('status')).toHaveTextContent('Page 1 of 3');
@@ -121,7 +125,9 @@ describe('generative paging and paths', () => {
     lease.data();
   });
   it('rejects missing actions and incompatible paging definitions', () => {
-    const view = render(<GenerativeUI document={declaration} />);
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+    );
     expect(screen.getByRole('alert')).toHaveTextContent('jump');
     expect(screen.getByRole('alert')).toHaveTextContent('disabled');
     view.unmount();
@@ -180,13 +186,13 @@ describe('generative paging and paths', () => {
       items: [{ key: 'missing', label: 'Unavailable', action: 'missing' }],
     } as const;
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <GenerativeBreadcrumb node={node} registry={empty} actions={{}} />
       </ReacdProvider>,
     );
     await user.click(screen.getByRole('button', { name: 'Unavailable' }));
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <GenerativeBreadcrumb
           node={node}
           registry={empty}

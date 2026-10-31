@@ -1,11 +1,12 @@
 import { createContext, useContext, useState } from 'react';
 import { Menu } from '@base-ui/react/menu';
-import type { DropdownMenuProps } from '../../../components/dropdown-menu/index.js';
+import type { DropdownMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/dropdown-menu/index.js';
 import {
   ACTION_MENU_DEFAULTS,
   menuDecision,
   invokeMenuRadio,
-} from '../../../core/action-menu-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/core/action-menu-policy.js';
 import { MenuSurface } from './menu-surface.js';
 
 type Item = DropdownMenuProps['items'][number];

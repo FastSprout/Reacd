@@ -1,6 +1,6 @@
 {
   "name": "@fastsprout/reacd",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "description": "A constrained, agent-driven UI contract and React renderer.",
   "type": "module",
@@ -10,8 +10,7 @@
     "schema/reacd.schema.json",
     "schema/generative.schema.json",
     "README.md",
-    "LICENSE",
-    "THIRD_PARTY_NOTICES.md"
+    "LICENSE"
   ],
   "engines": {
     "node": ">=26.0.0"
@@ -21,7 +20,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./dist/adapter/shadcn/styles.css",
     "./schema.json": "./schema/reacd.schema.json",
     "./generative-schema.json": "./schema/generative.schema.json",
     "./generative": {
@@ -39,6 +37,22 @@
     "./bootstrap": {
       "types": "./dist/renderer/bootstrap/bootstrap.d.ts",
       "import": "./dist/bootstrap.js"
+    },
+    "./adapter-runtime/core/*.js": {
+      "types": "./dist/core/*.d.ts",
+      "import": "./dist/core/*.js"
+    },
+    "./adapter-runtime/schema/*.js": {
+      "types": "./dist/schema/*.d.ts",
+      "import": "./dist/schema/*.js"
+    },
+    "./adapter-runtime/components/*.js": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js"
+    },
+    "./adapter-runtime/renderer/*.js": {
+      "types": "./dist/renderer/*.d.ts",
+      "import": "./dist/renderer/*.js"
     }
   },
   "scripts": {
@@ -65,31 +79,6 @@
     "fixtures:check": "tsx scripts/fixtures.ts --check"
   },
   "dependencies": {
-    "@base-ui/react": "1.9.0",
-    "@daypicker/react": "10.0.2",
-    "@internationalized/date": "3.12.4",
-    "@radix-ui/react-accordion": "1.3.1",
-    "@radix-ui/react-checkbox": "1.4.1",
-    "@radix-ui/react-direction": "1.2.0",
-    "@radix-ui/react-label": "2.1.17",
-    "@radix-ui/react-progress": "1.2.1",
-    "@radix-ui/react-select": "2.4.1",
-    "@radix-ui/react-separator": "1.2.0",
-    "@radix-ui/react-slider": "1.6.1",
-    "@radix-ui/react-slot": "1.5.0",
-    "@radix-ui/react-switch": "1.4.1",
-    "@radix-ui/react-tabs": "1.2.1",
-    "@tiptap/core": "3.32.1",
-    "@tiptap/pm": "3.32.1",
-    "@tiptap/react": "3.32.1",
-    "@tiptap/starter-kit": "3.32.1",
-    "@tiptap/suggestion": "3.32.1",
-    "class-variance-authority": "0.7.1",
-    "clsx": "2.1.1",
-    "input-otp": "1.5.0",
-    "lucide-react": "1.63.0",
-    "react-aria-components": "1.22.1",
-    "tailwind-merge": "3.7.0",
     "zod": "4.6.7"
   },
   "devDependencies": {
@@ -120,7 +109,32 @@
     "typescript": "7.0.2",
     "vite": "8.3.5",
     "vitest": "5.0.5",
-    "yaml": "2.9.1"
+    "yaml": "2.9.1",
+    "@base-ui/react": "1.9.0",
+    "@daypicker/react": "10.0.2",
+    "@internationalized/date": "3.12.4",
+    "@radix-ui/react-accordion": "1.3.1",
+    "@radix-ui/react-checkbox": "1.4.1",
+    "@radix-ui/react-direction": "1.2.0",
+    "@radix-ui/react-label": "2.1.17",
+    "@radix-ui/react-progress": "1.2.1",
+    "@radix-ui/react-select": "2.4.1",
+    "@radix-ui/react-separator": "1.2.0",
+    "@radix-ui/react-slider": "1.6.1",
+    "@radix-ui/react-slot": "1.5.0",
+    "@radix-ui/react-switch": "1.4.1",
+    "@radix-ui/react-tabs": "1.2.1",
+    "@tiptap/core": "3.32.1",
+    "@tiptap/pm": "3.32.1",
+    "@tiptap/react": "3.32.1",
+    "@tiptap/starter-kit": "3.32.1",
+    "@tiptap/suggestion": "3.32.1",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "input-otp": "1.5.0",
+    "lucide-react": "1.63.0",
+    "react-aria-components": "1.22.1",
+    "tailwind-merge": "3.7.0"
   },
   "repository": {
     "type": "git",

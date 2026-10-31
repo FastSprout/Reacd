@@ -1,6 +1,8 @@
 import { useId } from 'react';
-import type { ErrorProps } from '../../../components/error/error.js';
-import { APPLICATION_DEFAULTS } from '../../../core/application-shell-policy.js';
+import type { ErrorProps } from
+  '@fastsprout/reacd/adapter-runtime/components/error/error.js';
+import { APPLICATION_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/application-shell-policy.js';
 
 export function ShadcnError({
   statusCode,

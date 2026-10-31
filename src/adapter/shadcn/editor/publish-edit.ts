@@ -1,6 +1,11 @@
-import type { EditorProps } from '../../../components/editor/index.js';
-import type { EditorDocument, EditorSelection } from '../../../core/editor-document.js';
-import { editorSelectionSchema } from '../../../schema/editor/document/index.js';
+import type { EditorProps } from
+  '@fastsprout/reacd/adapter-runtime/components/editor/index.js';
+import type {
+  EditorDocument,
+  EditorSelection,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-document.js';
+import { editorSelectionSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/editor/document/index.js';
 
 export function publishEditorDocument(
   properties: EditorProps,

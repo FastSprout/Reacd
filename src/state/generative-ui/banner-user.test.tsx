@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -22,7 +23,7 @@ describe('Banner and User host bindings', () => {
     const first = state();
     const second = state();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundBanner
           properties={{ title: 'First', dismissible: true }}
           reference={{ state: 'visible', mode: 'readWrite' }}
@@ -47,7 +48,7 @@ describe('Banner and User host bindings', () => {
   });
   it('reports invalid bindings before rendering banner content', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundBanner
           properties={{ title: 'Missing' }}
           reference={{ state: 'unknown', mode: 'readWrite' }}
@@ -63,7 +64,7 @@ describe('Banner and User host bindings', () => {
     const handler = vi.fn();
     const registry = state();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <GenerativeUser
           node={{ type: 'User', name: 'Ada' }}
           registry={registry}
@@ -73,7 +74,7 @@ describe('Banner and User host bindings', () => {
     );
     expect(screen.queryByRole('button')).toBeNull();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <GenerativeUser
           node={{ type: 'User', name: 'Ada', action: 'open' }}
           registry={registry}
@@ -86,7 +87,7 @@ describe('Banner and User host bindings', () => {
     const inherited = {};
     Object.setPrototypeOf(inherited, { open: handler });
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <GenerativeUser
           node={{ type: 'User', name: 'Ada', action: 'open' }}
           registry={registry}

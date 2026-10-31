@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -31,6 +32,7 @@ describe('generative RadioGroup', () => {
     const registry = createDocumentState(document);
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         registry={registry}
         document={{
           ...document,

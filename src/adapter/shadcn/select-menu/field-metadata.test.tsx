@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -23,7 +24,7 @@ it('disables an already portaled popup through containing field metadata', async
   const change = vi.fn();
   function Scene({ disabled }: { disabled: boolean }) {
     return (
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <FieldMetadataContext value={{ ...metadata, disabled }}>
           <SelectMenu {...base} disabled={false} onValueChange={change} />
         </FieldMetadataContext>
@@ -44,7 +45,7 @@ it('inherits form defaults, descriptions and outer error associations', () => {
   const view = render(
     <form aria-label="Scoped form">
       <span id="scope-description">Outer description.</span>
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <FieldMetadataContext value={metadata}>
           <SelectMenu {...base} description="Local description." />
         </FieldMetadataContext>
@@ -64,7 +65,7 @@ it('inherits form defaults, descriptions and outer error associations', () => {
   view.rerender(
     <form aria-label="Scoped form">
       <span id="scope-description">Outer error.</span>
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <FieldMetadataContext value={{ ...metadata, error: 'Outer error.' }}>
           <SelectMenu {...base} value="42" name="explicit" required={false} />
         </FieldMetadataContext>

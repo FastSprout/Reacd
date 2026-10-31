@@ -1,10 +1,10 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { GenerativeUI } from './generative-ui.js';
-import {
-  defineGenerativeDeclaration,
-} from '../../schema/generative-v2/define-declaration.js';
+import { defineGenerativeDeclaration } from
+  '../../schema/generative-v2/define-declaration.js';
 
 const action = () =>
   ({
@@ -34,7 +34,9 @@ describe('generative AuthForm', () => {
   it('visits every action and keeps callbacks logical', async () => {
     const user = userEvent.setup();
     const run = vi.fn();
-    render(<GenerativeUI document={declaration} actions={{ run }} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
+    );
     for (const button of screen.getAllByRole('button')) await user.click(button);
     expect(run).toHaveBeenCalledTimes(6);
     expect(run.mock.calls.every((args) => args.length === 1)).toBe(true);
@@ -44,6 +46,7 @@ describe('generative AuthForm', () => {
     for (const slot of ['children', 'leading', 'header', 'footer']) {
       const view = render(
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={{
             ...declaration,
             root: {
@@ -64,6 +67,7 @@ describe('generative AuthForm', () => {
     ]) {
       const view = render(
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={{ ...declaration, root: { ...root(), ...extra } }}
           actions={{ run: vi.fn() }}
         />,
@@ -77,6 +81,7 @@ describe('generative AuthForm', () => {
     const run = vi.fn();
     const view = render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...declaration,
           state: [{ key: 'busy', kind: 'boolean', initial: true, access: 'readWrite' }],
@@ -91,6 +96,7 @@ describe('generative AuthForm', () => {
     view.unmount();
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...declaration,
           state: [{ key: 'blocked', kind: 'boolean', initial: false, access: 'read' }],
@@ -107,6 +113,7 @@ describe('generative AuthForm', () => {
   it('renders no-provider literals and handles missing flag definitions', () => {
     const view = render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...declaration,
           root: {
@@ -126,6 +133,7 @@ describe('generative AuthForm', () => {
     view.unmount();
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...declaration,
           root: {
@@ -144,7 +152,9 @@ describe('generative AuthForm', () => {
     const run = vi.fn();
     const inherited = vi.fn();
     const actions = { run };
-    render(<GenerativeUI document={declaration} actions={actions} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={actions} />,
+    );
     Reflect.deleteProperty(actions, 'run');
     Object.setPrototypeOf(actions, { run: inherited });
     await user.click(screen.getByRole('button', { name: 'Local provider' }));
@@ -158,11 +168,17 @@ describe('generative AuthForm', () => {
       { state: 'wrong', mode: 'read' },
       { state: 'wrong', mode: 'readWrite' },
     ]) {
-      const view = render(<GenerativeUI actions={{ run: vi.fn() }} document={{
-        ...declaration,
-        state: [{ key: 'wrong', kind: 'text', access: 'read', initial: 'false' }],
-        root: { ...root(), loading },
-      }} />);
+      const view = render(
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          actions={{ run: vi.fn() }}
+          document={{
+            ...declaration,
+            state: [{ key: 'wrong', kind: 'text', access: 'read', initial: 'false' }],
+            root: { ...root(), loading },
+          }}
+        />,
+      );
       expect(screen.getByRole('alert')).toBeInTheDocument();
       expect(screen.queryByRole('form')).toBeNull();
       view.unmount();

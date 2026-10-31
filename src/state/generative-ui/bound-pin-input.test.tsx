@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -18,7 +19,7 @@ describe('bound PinInput', () => {
     );
     const complete = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundPinInput
           node={{ ...node, completeAction: 'verify' }}
           registry={registry}
@@ -52,7 +53,7 @@ describe('bound PinInput', () => {
       expect(success(registry.read('code')).value).toBe('123456');
     });
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundPinInput
           node={{ ...node, completeAction: 'complete' }}
           registry={registry}
@@ -91,7 +92,7 @@ describe('bound PinInput', () => {
         ]),
       );
       render(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <BoundPinInput
             node={{ ...node, length: 1, completeAction: action }}
             registry={registry}
@@ -113,7 +114,7 @@ describe('bound PinInput', () => {
   )('reports invalid or unavailable state', ({ definitions }) => {
     const registry = success(createStateRegistry(definitions));
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundPinInput node={node} registry={registry} actions={{}} />
       </ReacdProvider>,
     );

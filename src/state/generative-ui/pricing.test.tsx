@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -67,11 +68,19 @@ describe('generative pricing', () => {
   it('resolves plan, feature, collection and tier slot actions', async () => {
     const user = userEvent.setup();
     const run = vi.fn();
-    render(<GenerativeUI document={declaration} actions={{ run }} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
+    );
     for (const button of screen.getAllByRole('button')) await user.click(button);
     expect(run).toHaveBeenCalledTimes(screen.getAllByRole('button').length);
     expect(
-      renderToString(<GenerativeUI document={declaration} actions={{ run }} />),
+      renderToString(
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={declaration}
+          actions={{ run }}
+        />,
+      ),
     ).toContain('Generated comparison');
   });
 
@@ -95,7 +104,9 @@ describe('generative pricing', () => {
         sections: [],
       })),
     ]) {
-      const view = render(<GenerativeUI document={{ ...declaration, root }} />);
+      const view = render(
+        <GenerativeUI adapter={shadcnAdapter} document={{ ...declaration, root }} />,
+      );
       expect(screen.getByRole('alert')).toHaveTextContent('not registered');
       expect(screen.queryByRole('button')).not.toBeInTheDocument();
       view.unmount();

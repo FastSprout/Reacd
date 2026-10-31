@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { Suspense, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { atom, useAtom } from 'jotai';
@@ -26,6 +27,7 @@ function Example({ component, template, direction }: PreviewRequest): ReactNode 
   const View = previewRegistry[component].View;
   return (
     <ReacdProvider
+      adapter={shadcnAdapter}
       store={store}
       templateId={compact ? 'erp-compact' : DOCS_PREVIEW_POLICY.defaultTemplate}
     >
@@ -58,7 +60,10 @@ export function DocumentationPreview({ search }: { search: string }): ReactNode 
   const request = readPreviewRequest(search);
   if (request === null) {
     return (
-      <ReacdProvider templateId={DOCS_PREVIEW_POLICY.defaultTemplate}>
+      <ReacdProvider
+        adapter={shadcnAdapter}
+        templateId={DOCS_PREVIEW_POLICY.defaultTemplate}
+      >
         <App>
           <Alert
             intent="error"

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -28,7 +29,7 @@ it.each(['breadcrumb', 'footer', 'feature'] as const)(
       ),
       feature: <PageFeature title="Run action" onPress={action} />,
     }[kind];
-    render(<ReacdProvider>{content}</ReacdProvider>);
+    render(<ReacdProvider adapter={shadcnAdapter}>{content}</ReacdProvider>);
     await userEvent.setup().click(screen.getByRole('button', { name: 'Run action' }));
     expect(action).toHaveBeenCalledOnce();
     expect(action).toHaveBeenCalledWith();

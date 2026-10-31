@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -22,7 +23,7 @@ it('binds disclosure and readonly summary projections in isolated stores', async
     open: { state: 'expanded', mode: 'readWrite' },
   } as const;
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView node={node} registry={registry} actions={{}} />
     </ReacdProvider>,
   );
@@ -39,7 +40,7 @@ it('binds disclosure and readonly summary projections in isolated stores', async
     'Updated summary',
   );
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView
         node={{
           ...node,
@@ -56,7 +57,7 @@ it('binds disclosure and readonly summary projections in isolated stores', async
   expect(screen.getByRole('button', { name: 'Reasoning summary' })).toBeDisabled();
   expect(success(registry.read('expanded')).value).toBe(true);
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView
         node={{ ...node, text: 'Literal summary', disabled: true }}
         registry={registry}
@@ -68,7 +69,7 @@ it('binds disclosure and readonly summary projections in isolated stores', async
     'Literal summary',
   );
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView
         node={{ ...node, open: { state: 'missing', mode: 'readWrite' } }}
         registry={registry}
@@ -87,7 +88,7 @@ it('reads shimmer text and activity and enforces nonempty text constraints', () 
     active: { state: 'working', mode: 'read' },
   } as const;
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatFeedbackNodeView node={node} registry={registry} actions={{}} />
     </ReacdProvider>,
   );
@@ -99,7 +100,7 @@ it('reads shimmer text and activity and enforces nonempty text constraints', () 
   expect(registry.update('summary', '').success).toBe(false);
   for (const active of [undefined, false, true]) {
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatFeedbackNodeView
           node={{ type: 'ChatShimmer', text: 'Literal progress', active }}
           registry={registry}

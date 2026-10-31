@@ -41,7 +41,6 @@ describe('publication contract', () => {
     expect(await manifest()).toMatchObject({
       exports: {
         '.': { types: './dist/index.d.ts', import: './dist/index.js' },
-        './styles.css': './dist/adapter/shadcn/styles.css',
         './bootstrap': {
           types: './dist/renderer/bootstrap/bootstrap.d.ts',
           import: './dist/bootstrap.js',
@@ -63,7 +62,9 @@ describe('publication contract', () => {
     expect(await readFile('THIRD_PARTY_NOTICES.md', 'utf8')).toBe(
       await readFile('src/adapter/shadcn/vendor/LICENSE.md', 'utf8'),
     );
-    const { files } = z.object({ files: z.array(z.string()) }).parse(await manifest());
+    const input: unknown = JSON.parse(await readFile(
+      'packages/shadcn/package.json', 'utf8'));
+    const { files } = z.object({ files: z.array(z.string()) }).parse(input);
     expect(files).toContain('LICENSE');
     expect(files).toContain('THIRD_PARTY_NOTICES.md');
   });

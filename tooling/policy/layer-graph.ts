@@ -1,4 +1,5 @@
 import { resolve } from 'node:path';
+import { adapterRuntimeError } from './adapter-runtime.js';
 import {
   checkArchitecture,
   checkFacade,
@@ -46,7 +47,7 @@ export function checkLayerGraph(
       node.path,
       node.source,
       importVisitor(({ value, offset }) => {
-        if (value === null) return;
+        if (value === null || adapterRuntimeError(value) !== null) return;
         const target = internalPath(value, node.path, root);
         if (target === null || !isCodeReference(target)) return;
         if (isTestModule(target) || isVendorModule(target, root)) {

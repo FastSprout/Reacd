@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -44,7 +45,7 @@ function Scene({
 }) {
   const [value, setValue] = useState<SplitterProps['value']>(VALUE);
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction={rtl ? 'rtl' : 'ltr'}>
         <Splitter
           label="Document panes"

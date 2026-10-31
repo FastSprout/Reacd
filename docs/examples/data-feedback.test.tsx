@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -8,7 +9,7 @@ import { ScrollAreaExample } from './scroll-area.js';
 it('changes the documented timeline and retains controlled progress', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <TimelineExample />
     </ReacdProvider>,
   );
@@ -24,7 +25,7 @@ it('changes the documented timeline and retains controlled progress', async () =
 it('keeps scroll-area actions across orientations', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ScrollAreaExample />
     </ReacdProvider>,
   );

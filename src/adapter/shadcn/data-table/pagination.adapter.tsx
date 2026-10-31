@@ -1,5 +1,7 @@
-import type { DataTableProps } from '../../../components/data-table/data-table.js';
-import { DATA_TABLE_POLICY } from '../../../core/data-table-policy.js';
+import type { DataTableProps } from
+  '@fastsprout/reacd/adapter-runtime/components/data-table/data-table.js';
+import { DATA_TABLE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/data-table-policy.js';
 import { ShadcnButton } from '../button/button.adapter.js';
 import { ShadcnSelect } from '../select/select.adapter.js';
 

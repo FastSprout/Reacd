@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -48,7 +49,7 @@ function registry() {
 
 function Scene({ state }: { state: StateRegistry }) {
   return (
-    <ReacdProvider store={state.store}>
+    <ReacdProvider adapter={shadcnAdapter} store={state.store}>
       <BoundContentNavigation registry={state} node={navigation} />
       <BoundContentToc registry={state} node={toc} />
     </ReacdProvider>

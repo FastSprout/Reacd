@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import * as Scene from '../../../tooling/conformance/catalog/chat-composer-examples.js';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
@@ -13,7 +14,7 @@ it('hydrates labelled drafts and switches direction', async () => {
   const user = userEvent.setup();
   for (const templateId of ['saas-modern-light', 'erp-compact']) {
     const element = (
-      <ReacdProvider templateId={templateId}>
+      <ReacdProvider adapter={shadcnAdapter} templateId={templateId}>
         <Scene.ChatComposerExamples />
       </ReacdProvider>
     );
@@ -46,7 +47,7 @@ it('uses literal transport status without a status state dependency', () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ChatComposerNodeView
         node={{
           type: 'ChatPrompt',

@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import type { ChatAttachmentProps } from '../../../components/chat-attachment/index.js';
-import { CHAT_DEFAULTS } from '../../../core/chat-policy.js';
-import { useChatLoadingRole } from '../../../renderer/chat-feedback/loading-scope.js';
+import type { ChatAttachmentProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-attachment/index.js';
+import { CHAT_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/chat-policy.js';
+import { useChatLoadingRole } from
+  '@fastsprout/reacd/adapter-runtime/renderer/chat-feedback/loading-scope.js';
 import { Button } from '../vendor/ui/button.js';
 import { Card } from '../vendor/ui/card.js';
 

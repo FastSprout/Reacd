@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
-import type { PageLinksProps }
-  from '../../../components/page-links/page-links.props.js';
-import { PageLinksSurface } from '../../../renderer/page-links/page-links.renderer.js';
+import type { PageLinksProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-links/page-links.props.js';
+import { PageLinksSurface } from
+  '@fastsprout/reacd/adapter-runtime/renderer/page-links/page-links.renderer.js';
 
 export function ShadcnPageLinks(props: PageLinksProps): ReactNode {
   return <PageLinksSurface {...props} kind="links" />;

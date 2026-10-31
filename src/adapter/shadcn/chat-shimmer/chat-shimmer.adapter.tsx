@@ -1,5 +1,7 @@
-import type { ChatShimmerProps } from '../../../components/chat-shimmer/index.js';
-import { CHAT_FEEDBACK_DEFAULTS } from '../../../core/chat-feedback-policy.js';
+import type { ChatShimmerProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chat-shimmer/index.js';
+import { CHAT_FEEDBACK_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/chat-feedback-policy.js';
 
 export function ShadcnChatShimmer({
   text,

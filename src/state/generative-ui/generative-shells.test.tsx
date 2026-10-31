@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -57,7 +58,12 @@ describe('generative structural shells', () => {
     const registry = createDocumentState(declaration);
     const go = vi.fn();
     render(
-      <GenerativeUI document={declaration} registry={registry} actions={{ go }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        registry={registry}
+        actions={{ go }}
+      />,
     );
     expect(screen.getAllByRole('main')).toHaveLength(1);
     expect(screen.getByText('Footer bottom')).toBeVisible();
@@ -81,12 +87,14 @@ describe('generative structural shells', () => {
             [slot]: [{ type: 'Button', label: 'Missing', action: 'missing' }],
           },
         };
-        const view = render(<GenerativeUI document={document} />);
+        const view = render(
+          <GenerativeUI adapter={shadcnAdapter} document={document} />,
+        );
         expect(screen.getByRole('alert')).toHaveTextContent('missing');
         view.unmount();
       }
     }
-    render(<GenerativeUI document={declaration} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />);
     expect(screen.getByRole('alert')).toHaveTextContent('go');
   });
 
@@ -110,7 +118,11 @@ describe('generative structural shells', () => {
 
   it('server-renders shell content without opening a closed portal', () => {
     const output = renderToStaticMarkup(
-      <GenerativeUI document={declaration} actions={{ go: () => undefined }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        actions={{ go: () => undefined }}
+      />,
     );
     expect(output).toContain('Generated header');
     expect(output).toContain('Footer center');

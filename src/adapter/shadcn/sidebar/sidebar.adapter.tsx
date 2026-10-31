@@ -8,15 +8,22 @@ import {
 } from 'react';
 import { Dialog } from '@base-ui/react/dialog';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { SidebarProps } from '../../../components/sidebar/sidebar.props.js';
-import { SIDEBAR_DEFAULTS } from '../../../core/sidebar-policy.js';
-import { useNarrowContainer } from '../../../renderer/responsive/index.js';
+import type { SidebarProps } from
+  '@fastsprout/reacd/adapter-runtime/components/sidebar/sidebar.props.js';
+import { SIDEBAR_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/sidebar-policy.js';
+import { useNarrowContainer } from
+  '@fastsprout/reacd/adapter-runtime/renderer/responsive/index.js';
 import { SidebarEnvironmentContext } from
-  '../../../renderer/sidebar/sidebar-environment.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
-import { EscapeScopeContext } from '../../../renderer/theme/escape-context.js';
-import { createEscapeScope } from '../../../renderer/theme/escape-scope.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
+  '@fastsprout/reacd/adapter-runtime/renderer/sidebar/sidebar-environment.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { EscapeScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-context.js';
+import { createEscapeScope } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-scope.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnSidebar({

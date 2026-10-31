@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import type { TemporalRange } from '../../../core/date-time.js';
+import type { TemporalRange } from
+  '@fastsprout/reacd/adapter-runtime/core/date-time.js';
 import { captureRangeFocus } from './range-reset-focus.js';
 
 export function useRangeReset(

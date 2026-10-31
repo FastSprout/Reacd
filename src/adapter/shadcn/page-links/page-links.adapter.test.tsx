@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { expect, it } from 'vitest';
@@ -15,7 +16,7 @@ import {
 
 it('connects named navigation to semantic heading targets and page slots', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Page
         title="Page"
         anchor="page"
@@ -99,7 +100,7 @@ it('connects named navigation to semantic heading targets and page slots', () =>
   }
   expect(
     renderToString(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Page title="SSR" />
       </ReacdProvider>,
     ),

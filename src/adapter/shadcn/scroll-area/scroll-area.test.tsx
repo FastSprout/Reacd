@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -8,7 +9,7 @@ it('preserves region focus and nested actions', async () => {
   const user = userEvent.setup();
   const press = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ScrollArea label="Messages">
         <Text>Scrollable content</Text>
         <Button label="Open message" onPress={press} />
@@ -22,7 +23,7 @@ it('preserves region focus and nested actions', async () => {
   expect(press).toHaveBeenCalledOnce();
   for (const extent of ['small', 'medium', 'large'] as const) {
     view.rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <ScrollArea label="Messages" orientation="horizontal" extent={extent}>
           <Text>Scrollable content</Text>
           <Button label="Open message" onPress={press} />

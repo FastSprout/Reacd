@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -42,12 +43,22 @@ it('hydrates whole-form actions and permits summary retries', async () => {
   const actions = { save };
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentModel} registry={server} actions={actions} />,
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={documentModel}
+      registry={server}
+      actions={actions}
+    />,
   );
   document.body.appendChild(container);
   const errors: unknown[] = [];
   const view = render(
-    <GenerativeUI document={documentModel} registry={client} actions={actions} />,
+    <GenerativeUI
+      adapter={shadcnAdapter}
+      document={documentModel}
+      registry={client}
+      actions={actions}
+    />,
     { container, hydrate: true, onRecoverableError: (error) => errors.push(error) },
   );
   try {
@@ -77,11 +88,14 @@ it('hydrates whole-form actions and permits summary retries', async () => {
 });
 
 it('rejects missing actions and incompatible flag kinds', () => {
-  const { rerender } = render(<GenerativeUI document={documentModel} />);
+  const { rerender } = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} />,
+  );
   expect(screen.getByRole('alert')).toBeVisible();
   expect(screen.queryByRole('form')).toBeNull();
   rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       actions={{ save() {} }}
       document={{
         ...documentModel,

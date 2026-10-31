@@ -4,9 +4,12 @@ import { I18nProvider } from 'react-aria-components/I18nProvider';
 import { ColorArea, ColorThumb } from 'react-aria-components/ColorArea';
 import { ColorSlider, SliderTrack } from 'react-aria-components/ColorSlider';
 import { parseColor } from 'react-aria-components/ColorPicker';
-import type { ColorPickerProps } from '../../../components/color-picker/index.js';
-import { COLOR_PICKER_POLICY as P } from '../../../core/color-picker-policy.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { ColorPickerProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-picker/index.js';
+import { COLOR_PICKER_POLICY as P } from
+  '@fastsprout/reacd/adapter-runtime/core/color-picker-policy.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { Button } from '../vendor/ui/button.js';
 import { useColorModel } from './use-color-model.js';
 import { ColorHex } from './color-hex.js';

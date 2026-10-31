@@ -1,17 +1,26 @@
 import { useContext, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Popover } from '@base-ui/react/popover';
-import type { PopoverProps } from '../../../components/popover/popover.js';
-import { POPOVER_DEFAULTS, POPOVER_POLICY } from '../../../core/popover-policy.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
+import type { PopoverProps } from
+  '@fastsprout/reacd/adapter-runtime/components/popover/popover.js';
+import {
+  POPOVER_DEFAULTS,
+  POPOVER_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/popover-policy.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
 import {
   PortalActiveContext,
   PortalHostContext,
-} from '../../../renderer/theme/portal-context.js';
-import { EscapeScopeContext } from '../../../renderer/theme/escape-context.js';
-import { createEscapeScope } from '../../../renderer/theme/escape-scope.js';
-import { useEscapeLayer } from '../../../renderer/theme/use-escape-layer.js';
-import { initialLayerFocus } from '../../../renderer/theme/initial-layer-focus.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { EscapeScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-context.js';
+import { createEscapeScope } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/escape-scope.js';
+import { useEscapeLayer } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/use-escape-layer.js';
+import { initialLayerFocus } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/initial-layer-focus.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnPopover({

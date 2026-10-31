@@ -1,17 +1,18 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { Badge, ReacdProvider } from '../../../index.js';
 
 it('keeps badges noninteractive and decorates their visible text safely', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Badge label="Ready" />
     </ReacdProvider>,
   );
   expect(screen.getByText('Ready')).toBeInTheDocument();
   expect(screen.queryByRole('button')).toBeNull();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Badge label="Published" intent="primary" leadingIcon="check" size="large" />
     </ReacdProvider>,
   );
@@ -21,7 +22,7 @@ it('keeps badges noninteractive and decorates their visible text safely', () => 
   );
   expect(screen.queryByRole('img')).toBeNull();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Badge label="Rejected" intent="danger" size="medium" />
     </ReacdProvider>,
   );

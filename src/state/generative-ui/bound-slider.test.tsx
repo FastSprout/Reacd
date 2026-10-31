@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { beforeEach, expect, it, vi } from 'vitest';
@@ -29,7 +30,7 @@ it('shares bounded number and interval state while protecting readers', async ()
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundSlider
         node={{ ...base, value: { state: 'level', mode: 'readWrite' } }}
         registry={registry}
@@ -80,7 +81,7 @@ it('shares bounded number and interval state while protecting readers', async ()
 it('reports unresolved scalar and range references without controls', () => {
   const registry = success(createStateRegistry([]));
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundSlider
         node={{ ...base, value: { state: 'missing', mode: 'read' } }}
         registry={registry}

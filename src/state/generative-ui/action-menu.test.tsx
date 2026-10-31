@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -51,7 +52,12 @@ describe('generative action menus', () => {
     const registry = createDocumentState(declaration);
     const run = vi.fn();
     render(
-      <GenerativeUI document={declaration} registry={registry} actions={{ run }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        registry={registry}
+        actions={{ run }}
+      />,
     );
     await user.click(screen.getByRole('button', { name: 'Actions' }));
     await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Pin' }));
@@ -86,7 +92,7 @@ describe('generative action menus', () => {
         children: [{ type: 'Text', content: 'Context record' }],
       },
     });
-    render(<GenerativeUI document={context} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={context} />);
     fireEvent.contextMenu(screen.getByRole('group', { name: 'Context' }));
     const pin = await screen.findByRole('menuitemcheckbox', { name: 'Pin' });
     expect(pin).toHaveAttribute('aria-disabled', 'true');
@@ -110,6 +116,7 @@ describe('generative action menus', () => {
     if (!lease.success) throw new Error('Constraint registration failed.');
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         actions={{ run: vi.fn() }}
@@ -136,7 +143,7 @@ describe('generative action menus', () => {
     ).toBeNull();
   });
   it('rejects invalid actions and initial state', () => {
-    render(<GenerativeUI document={declaration} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />);
     expect(screen.getByRole('alert')).toHaveTextContent('Action');
     expect(
       validateGenerativeDocument({
@@ -157,7 +164,11 @@ describe('generative action menus', () => {
   });
   it('renders deterministic server triggers without opening portals', () => {
     const markup = renderToString(
-      <GenerativeUI document={declaration} actions={{ run: vi.fn() }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        actions={{ run: vi.fn() }}
+      />,
     );
     expect(markup).toContain('Actions');
     expect(markup).not.toContain('menuitemcheckbox');
@@ -167,7 +178,7 @@ describe('generative action menus', () => {
     const root = declaration.root;
     if (root.type !== 'DropdownMenu') throw new Error('Unexpected fixture.');
     const { rerender } = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundActionMenu
           node={{ ...root, open: { state: 'missing', mode: 'readWrite' } }}
           registry={registry}
@@ -177,7 +188,7 @@ describe('generative action menus', () => {
     );
     expect(screen.getByRole('alert')).toBeInTheDocument();
     rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundActionMenu
           node={{
             ...root,
@@ -213,6 +224,7 @@ it('retains closed state and shows rejected opening writes', async () => {
   });
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={declaration}
       registry={registry}
       actions={{ run: vi.fn() }}

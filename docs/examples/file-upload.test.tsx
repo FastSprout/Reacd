@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -6,7 +7,7 @@ import { FileUploadExample } from './file-upload.js';
 it('runs documented file payload, protection, rejection and form flows', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <FileUploadExample />
     </ReacdProvider>,
   );

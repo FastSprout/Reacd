@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { atom, useAtom } from 'jotai';
 import { atomWithLazy } from 'jotai/vanilla/utils';
 import {
@@ -79,6 +80,7 @@ export function GenerativePlayground() {
         </Card>
         <VStack>
           <GenerativeUI
+            adapter={shadcnAdapter}
             document={runtime.declaration}
             registry={runtime.registry}
             actions={{

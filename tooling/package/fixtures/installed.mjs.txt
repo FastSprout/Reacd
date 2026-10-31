@@ -1,16 +1,27 @@
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { lstatSync } from 'node:fs';
+import { lstatSync, readFileSync } from 'node:fs';
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { atom, useAtomValue } from 'jotai';
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { ReacdProvider, Text, createReacdStore } from '@fastsprout/reacd';
 
 const consumer = createRequire(import.meta.url);
 const packaged = createRequire(new URL(import.meta.resolve('@fastsprout/reacd')));
-for (const name of ['react', 'react-dom', 'jotai']) {
+const hostVersions = { react: '19.3.1', 'react-dom': '19.3.1', jotai: '3.0.1' };
+for (const [name, version] of Object.entries(hostVersions)) {
+  const adapted = createRequire(new URL(
+    import.meta.resolve('@fastsprout/reacd-shadcn')));
+  assert.equal(adapted.resolve(name), consumer.resolve(name));
   assert.equal(packaged.resolve(name), consumer.resolve(name),
     `The installed package must reuse its ${name} host instance.`);
+  /** @type {unknown} */
+  const metadata = JSON.parse(readFileSync(consumer.resolve(`${name}/package.json`),
+    'utf8'));
+  assert(metadata !== null && typeof metadata === 'object' && 'version' in metadata);
+  assert.equal(metadata.version, version);
+
 }
 assert.equal(lstatSync(new URL('./node_modules/@fastsprout/reacd', import.meta.url))
   .isSymbolicLink(), false);
@@ -25,7 +36,7 @@ function ConsumerView() {
 }
 /** @param {ReturnType<typeof createReacdStore>} store */
 function render(store) {
-  return renderToString(createElement(ReacdProvider, { store },
+  return renderToString(createElement(ReacdProvider, { store, adapter: shadcnAdapter },
     createElement(ConsumerView)));
 }
 assert.match(render(first), /first isolated host/);

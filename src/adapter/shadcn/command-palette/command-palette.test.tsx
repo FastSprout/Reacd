@@ -1,8 +1,9 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { CommandPalette, Modal, ReacdProvider, shadcnAdapter } from '../../../index.js';
+import { CommandPalette, Modal, ReacdProvider } from '../../../index.js';
 import type { CommandPaletteProps } from '../../../components/command-palette/index.js';
 import { followHref } from '../../../renderer/navigation/native-navigation.js';
 import { ShadcnCommandPalette } from './command-palette.adapter.js';
@@ -55,7 +56,7 @@ describe('shadcn CommandPalette', () => {
   it('lets the enclosing dialog own Escape dismissal', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PaletteDialog />
       </ReacdProvider>,
     );
@@ -68,7 +69,7 @@ describe('shadcn CommandPalette', () => {
     const user = userEvent.setup();
     const action = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ControlledPalette action={action} />
       </ReacdProvider>,
     );
@@ -112,7 +113,7 @@ describe('shadcn CommandPalette', () => {
       ],
     };
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <CommandPalette {...properties} />
       </ReacdProvider>,
     );
@@ -155,7 +156,7 @@ describe('shadcn CommandPalette', () => {
     const user = userEvent.setup();
     const action = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         {shadcnAdapter.components.CommandPalette.render({
           label: 'Invalid selection',
           query: '',
@@ -192,7 +193,7 @@ describe('shadcn CommandPalette', () => {
       ],
     };
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <CommandPalette {...properties} status="loading" />
       </ReacdProvider>,
     );
@@ -200,13 +201,13 @@ describe('shadcn CommandPalette', () => {
     await user.click(screen.getByRole('option', { name: 'Stale command' }));
     expect(action).not.toHaveBeenCalled();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <CommandPalette {...properties} status="error" />
       </ReacdProvider>,
     );
     expect(screen.getByRole('alert')).toHaveTextContent('could not be loaded');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <CommandPalette {...properties} disabled />
       </ReacdProvider>,
     );
@@ -219,7 +220,7 @@ describe('shadcn CommandPalette', () => {
     const user = userEvent.setup();
     const action = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ControlledPalette action={action} />
       </ReacdProvider>,
     );

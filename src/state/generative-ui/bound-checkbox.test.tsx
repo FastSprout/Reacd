@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -22,7 +23,7 @@ it('shares boolean readers and host-controlled mixed state', async () => {
     ]),
   );
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundCheckbox node={node} registry={registry} />
       <BoundCheckbox
         node={{
@@ -62,7 +63,7 @@ it('shares boolean readers and host-controlled mixed state', async () => {
 it('reports unresolved checked/mixed bindings without interactive controls', () => {
   const registry = success(createStateRegistry([]));
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <BoundCheckbox node={node} registry={registry} />
       <BoundCheckbox node={{ ...node, indeterminate: false }} registry={registry} />
     </ReacdProvider>,

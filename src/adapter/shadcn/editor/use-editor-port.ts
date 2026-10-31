@@ -1,7 +1,12 @@
 import type { Editor } from '@tiptap/core';
-import type { EditorProps } from '../../../components/editor/index.js';
-import type { EditorPort } from '../../../renderer/editor/editor-context.js';
-import { editorBlockMoves, moveEditorBlock } from '../../../core/editor-reorder.js';
+import type { EditorProps } from
+  '@fastsprout/reacd/adapter-runtime/components/editor/index.js';
+import type { EditorPort } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/editor-context.js';
+import {
+  editorBlockMoves,
+  moveEditorBlock,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-reorder.js';
 import { publishEditorDocument } from './publish-edit.js';
 import { selectedSdkBlockId } from '../editor-sdk/structural-selection.js';
 import { selectSdkBlock } from '../editor-sdk/select-block.js';
@@ -44,8 +49,7 @@ export function createEditorPort(
     moveBlock: (id, direction) => {
       if (!available) return;
       const moved = moveEditorBlock(properties.value, id, direction);
-      if (moved.success)
-        publishEditorDocument(properties, moved.data, selection);
+      if (moved.success) publishEditorDocument(properties, moved.data, selection);
     },
     beginBlockDrag: (id) => available && drag.begin(properties.value, id),
     cancelBlockDrag: () => drag.cancel(),

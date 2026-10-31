@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
@@ -28,6 +29,7 @@ it('routes color and file edits through the whole generative boundary', async ()
   const registry = success(createStateRegistry(state));
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       registry={registry}
       document={{
         schemaVersion: '0.2',

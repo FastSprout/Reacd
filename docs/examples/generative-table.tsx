@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import {
   GenerativeUI,
   defineGenerativeDeclaration,
@@ -52,5 +53,5 @@ export const TABLE_STATE_DOCUMENT = defineGenerativeDeclaration({
 });
 
 export function GenerativeTableExample() {
-  return <GenerativeUI document={TABLE_STATE_DOCUMENT} />;
+  return <GenerativeUI adapter={shadcnAdapter} document={TABLE_STATE_DOCUMENT} />;
 }

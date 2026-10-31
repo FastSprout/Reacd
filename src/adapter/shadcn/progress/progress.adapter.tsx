@@ -1,7 +1,10 @@
 import { useId } from 'react';
-import type { ProgressProps } from '../../../components/progress/progress.js';
-import { PROGRESS_POLICY } from '../../../core/element-policy.js';
-import { progressState } from '../../../core/progress-state.js';
+import type { ProgressProps } from
+  '@fastsprout/reacd/adapter-runtime/components/progress/progress.js';
+import { PROGRESS_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/element-policy.js';
+import { progressState } from
+  '@fastsprout/reacd/adapter-runtime/core/progress-state.js';
 import * as Progress from '@radix-ui/react-progress';
 
 export function ShadcnProgress({

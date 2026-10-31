@@ -1,8 +1,10 @@
 import { useId } from 'react';
 import { NumberField } from '@base-ui/react/number-field';
 import { MinusIcon, PlusIcon } from 'lucide-react';
-import type { InputNumberProps } from '../../../components/input-number/index.js';
-import { INPUT_NUMBER_POLICY } from '../../../core/input-number-policy.js';
+import type { InputNumberProps } from
+  '@fastsprout/reacd/adapter-runtime/components/input-number/index.js';
+import { INPUT_NUMBER_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/input-number-policy.js';
 import { Label } from '../vendor/ui/label.js';
 
 export function ShadcnInputNumber({

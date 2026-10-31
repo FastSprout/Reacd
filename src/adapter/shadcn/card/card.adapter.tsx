@@ -1,7 +1,8 @@
 import { Children } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import type { CardProps } from '../../../components/card/card.js';
-import { DEFAULTS } from '../../../core/policy.js';
+import type { CardProps } from
+  '@fastsprout/reacd/adapter-runtime/components/card/card.js';
+import { DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { Card, CardHeader, CardFooter } from '../vendor/ui/card.js';
 
 function hasContent(value: ReactNode): boolean {

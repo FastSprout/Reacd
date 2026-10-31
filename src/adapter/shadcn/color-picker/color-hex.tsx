@@ -2,9 +2,11 @@ import { useId, useRef, useState } from 'react';
 import {
   COLOR_HEX_PATTERNS,
   COLOR_PICKER_POLICY as P,
-} from '../../../core/color-picker-policy.js';
-import { colorValueSchema } from '../../../schema/color-picker/index.js';
-import type { ColorMode } from '../../../schema/color-picker/index.js';
+} from '@fastsprout/reacd/adapter-runtime/core/color-picker-policy.js';
+import { colorValueSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/color-picker/index.js';
+import type { ColorMode } from
+  '@fastsprout/reacd/adapter-runtime/schema/color-picker/index.js';
 import { Input } from '../vendor/ui/input.js';
 interface ColorHexProps {
   readonly label: string;

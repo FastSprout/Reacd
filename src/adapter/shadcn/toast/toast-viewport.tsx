@@ -1,9 +1,11 @@
 import { useToastQueue } from './toast-queue-context.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
 import { useContext } from 'react';
 import { Toast } from '@base-ui/react/toast';
-import { TOAST_DEFAULTS } from '../../../core/toast-policy.js';
-import { PortalHostContext } from '../../../renderer/theme/portal-context.js';
+import { TOAST_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/toast-policy.js';
+import { PortalHostContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import type { ToastData } from './toast-data.js';
 import { Button } from '../vendor/ui/button.js';
 

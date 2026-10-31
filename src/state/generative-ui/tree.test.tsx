@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -41,7 +42,9 @@ describe('generative tree state', () => {
     const user = userEvent.setup();
     const document = declaration();
     const registry = createDocumentState(document);
-    const view = render(<GenerativeUI document={document} registry={registry} />);
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+    );
     await user.click(screen.getByRole('button', { name: 'Expand Folder' }));
     await user.click(screen.getByRole('treeitem', { name: 'Alpha' }));
     expect(registry.read('selected')).toEqual({
@@ -52,7 +55,12 @@ describe('generative tree state', () => {
     expect(registry.update('selected', ['alpha', 'beta']).success).toBe(false);
     expect(registry.update('expanded', ['alpha']).success).toBe(false);
     view.rerender(
-      <GenerativeUI document={document} registry={registry} templateId="erp-compact" />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={document}
+        registry={registry}
+        templateId="erp-compact"
+      />,
     );
     expect(screen.getByRole('treeitem', { name: 'Alpha' })).toHaveAttribute(
       'aria-selected',
@@ -65,7 +73,7 @@ describe('generative tree state', () => {
   });
   it('keeps read bindings navigable while disabling their writes', async () => {
     const user = userEvent.setup();
-    render(<GenerativeUI document={declaration('read')} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={declaration('read')} />);
     expect(screen.getByRole('tree')).toHaveAttribute('aria-readonly', 'true');
     expect(screen.getByRole('button', { name: 'Expand Folder' })).toBeDisabled();
     await user.click(screen.getByRole('treeitem', { name: 'Folder' }));
@@ -86,7 +94,7 @@ describe('generative tree state', () => {
     const node = treeNodeSchema.parse(document.root);
     const registry = createDocumentState(document);
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundTree
           node={{
             ...node,
@@ -98,7 +106,7 @@ describe('generative tree state', () => {
     );
     expect(screen.getByRole('alert')).toHaveTextContent('missing');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundTree
           node={{
             ...node,
@@ -114,7 +122,13 @@ describe('generative tree state', () => {
     'hydrates tree interactions in %s with isolated request state',
     async (templateId) => {
       const user = userEvent.setup();
-      const content = <GenerativeUI document={declaration()} templateId={templateId} />;
+      const content = (
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={declaration()}
+          templateId={templateId}
+        />
+      );
       const container = document.createElement('div');
       container.innerHTML = renderToString(content);
       document.body.appendChild(container);

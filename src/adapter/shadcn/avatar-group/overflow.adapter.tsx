@@ -1,4 +1,5 @@
-import type { AvatarGroupProps } from '../../../components/avatar-group/index.js';
+import type { AvatarGroupProps } from
+  '@fastsprout/reacd/adapter-runtime/components/avatar-group/index.js';
 import { ShadcnAvatar } from '../avatar/avatar.adapter.js';
 
 export function AvatarGroupOverflow({

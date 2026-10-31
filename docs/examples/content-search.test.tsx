@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -9,7 +10,7 @@ import { ContentSearchButtonExample } from './content-search-button.js';
 it('runs the documented veto, status, query and accepted-action flow', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContentSearchExample />
     </ReacdProvider>,
   );
@@ -38,7 +39,7 @@ it('runs the documented veto, status, query and accepted-action flow', async () 
 it('documents the standalone host search request', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ContentSearchButtonExample />
     </ReacdProvider>,
   );

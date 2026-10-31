@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { Button, Popover, ReacdProvider } from '../../../index.js';
@@ -22,7 +23,7 @@ const items = [
 ];
 it('scopes slide portals and repairs their focus on host updates', async () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel
         label="Portal slides"
         items={items}
@@ -37,7 +38,7 @@ it('scopes slide portals and repairs their focus on host updates', async () => {
     screen.getByRole('button', { name: 'Slide popup action' }).focus();
   });
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel
         label="Portal slides"
         items={items}
@@ -49,7 +50,7 @@ it('scopes slide portals and repairs their focus on host updates', async () => {
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   expect(screen.getByRole('region', { name: 'Portal slides' })).toHaveFocus();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnCarousel
         label="Portal slides"
         items={items}
@@ -62,7 +63,7 @@ it('scopes slide portals and repairs their focus on host updates', async () => {
 });
 it('preserves inactive ancestor portal scopes', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <PortalActiveContext.Provider value={false}>
         <ShadcnCarousel
           label="Suppressed slide portals"

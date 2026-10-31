@@ -1,7 +1,6 @@
 import { Children } from 'react';
-import type {
-  PageColumnsProps,
-} from '../../../components/page-columns/page-columns.js';
+import type { PageColumnsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-columns/page-columns.js';
 
 export function ShadcnPageColumns({ children }: PageColumnsProps) {
   return (

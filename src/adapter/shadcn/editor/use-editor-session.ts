@@ -1,10 +1,16 @@
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import type { Editor } from '@tiptap/core';
 import { useEditor } from '@tiptap/react';
-import type { EditorProps } from '../../../components/editor/index.js';
-import { EDITOR_BEHAVIOR, EDITOR_ERRORS } from '../../../core/editor-policy.js';
-import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
-import { useFieldMetadata } from '../../../renderer/form-field/field-metadata.js';
+import type { EditorProps } from
+  '@fastsprout/reacd/adapter-runtime/components/editor/index.js';
+import {
+  EDITOR_BEHAVIOR,
+  EDITOR_ERRORS,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { useFieldMetadata } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form-field/field-metadata.js';
 import { editorDocumentToSdk } from '../editor-conversion/to-sdk.js';
 import { editorDocumentFromSdk } from '../editor-conversion/from-sdk.js';
 import { createEditorExtensions } from '../editor-sdk/extensions.js';
@@ -15,7 +21,8 @@ import {
 import { buildEditorPlainPaste } from '../editor-sdk/plain-paste.js';
 import { applyEditorPlainPaste } from '../editor-sdk/apply-paste.js';
 import { createEditorDragSession } from './drag-session.js';
-import { EDITOR_NATIVE_POLICY } from '../../../core/editor-native-policy.js';
+import { EDITOR_NATIVE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-native-policy.js';
 import { sameEditorSelection } from '../editor-sdk/controlled-selection.js';
 import {
   selectedSdkBlockId,

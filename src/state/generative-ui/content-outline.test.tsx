@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -62,7 +63,7 @@ describe('generated content outline state', () => {
     const user = userEvent.setup();
     const state = registry();
     render(
-      <ReacdProvider store={state.store}>
+      <ReacdProvider adapter={shadcnAdapter} store={state.store}>
         <BoundContentNavigation node={NAVIGATION} registry={state} />
       </ReacdProvider>,
     );
@@ -106,7 +107,7 @@ describe('generated content outline state', () => {
   it('intersects live shared-key constraints and releases them after unmount', () => {
     const state = registry();
     const view = render(
-      <ReacdProvider store={state.store}>
+      <ReacdProvider adapter={shadcnAdapter} store={state.store}>
         <BoundContentNavigation node={NAVIGATION} registry={state} />
         <BoundContentToc node={TOC} registry={state} />
       </ReacdProvider>,
@@ -125,7 +126,7 @@ describe('generated content outline state', () => {
       ),
     ).toHaveAttribute('aria-current', 'location');
     view.rerender(
-      <ReacdProvider store={state.store}>
+      <ReacdProvider adapter={shadcnAdapter} store={state.store}>
         <BoundContentNavigation node={NAVIGATION} registry={state} />
       </ReacdProvider>,
     );
@@ -142,7 +143,7 @@ describe('generated content outline state', () => {
     const user = userEvent.setup();
     const state = registry();
     render(
-      <ReacdProvider store={state.store}>
+      <ReacdProvider adapter={shadcnAdapter} store={state.store}>
         <BoundContentToc node={TOC} registry={state} />
       </ReacdProvider>,
     );
@@ -172,7 +173,7 @@ describe('generated content outline state', () => {
   it('keeps read bindings native while blocking disclosure edits', () => {
     const state = registry();
     render(
-      <ReacdProvider store={state.store}>
+      <ReacdProvider adapter={shadcnAdapter} store={state.store}>
         <BoundContentNavigation
           registry={state}
           node={{
@@ -202,7 +203,7 @@ describe('generated content outline state', () => {
   it('reports each missing direct binding before any navigation renders', () => {
     const state = registry();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundContentNavigation
           registry={state}
           node={{ ...NAVIGATION, currentKey: { state: 'missing', mode: 'readWrite' } }}
@@ -212,7 +213,7 @@ describe('generated content outline state', () => {
     expect(screen.getByRole('alert')).toBeVisible();
     expect(screen.queryByRole('navigation')).toBeNull();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundContentNavigation
           registry={state}
           node={{
@@ -225,7 +226,7 @@ describe('generated content outline state', () => {
     expect(screen.getByRole('alert')).toBeVisible();
     expect(screen.queryByRole('navigation')).toBeNull();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundContentToc
           registry={state}
           node={{ ...TOC, currentKey: { state: 'missing', mode: 'readWrite' } }}

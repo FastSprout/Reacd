@@ -1,10 +1,11 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 import { App, Input, Modal, ReacdProvider } from '../../../index.js';
 
 function Example({ direction }: { direction: 'ltr' | 'rtl' }) {
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction={direction}>
         <Modal
           title="Scoped modal"

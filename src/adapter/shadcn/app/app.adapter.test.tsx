@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { installLayout } from '../../../../test-support/layout-observer.js';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, afterEach, expect, it, vi } from 'vitest';
@@ -36,7 +37,7 @@ it('sets language and reading direction from closed application props', () => {
 it('propagates RTL to portaled Select content', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnApp direction="rtl">
         <Select
           label="Direction choice"
@@ -60,7 +61,7 @@ it('reverses RTL Slider and Tabs keyboard navigation', async () => {
   const resize = vi.fn();
   const change = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnApp direction="rtl">
         <Slider
           label="Direction amount"
@@ -91,7 +92,7 @@ it('uses the nearest nested App direction', async () => {
   const resize = vi.fn();
   const change = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnApp direction="rtl">
         <ShadcnApp direction="ltr">
           <Select

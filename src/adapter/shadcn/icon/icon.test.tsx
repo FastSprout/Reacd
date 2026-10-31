@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '../../../index.js';
@@ -8,14 +9,14 @@ it.each(ICON_NAMES)(
   'renders semantic %s icons with one explicit accessible name',
   (name) => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Icon name={name} label="Operation" />
       </ReacdProvider>,
     );
     const icon = screen.getByRole('img', { name: 'Operation' });
     expect(icon).toHaveAttribute('focusable', 'false');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Icon name={name} decorative size="small" />
       </ReacdProvider>,
     );
@@ -25,7 +26,7 @@ it.each(ICON_NAMES)(
 );
 it('supports closed named sizes without exposing SVG or CSS controls', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Icon name="check" label="Complete" size="large" decorative={false} />
     </ReacdProvider>,
   );

@@ -2,10 +2,14 @@ import { useId } from 'react';
 import { CheckboxGroup } from '@base-ui/react/checkbox-group';
 import { Checkbox } from '@base-ui/react/checkbox';
 import { CheckIcon } from 'lucide-react';
-import type { CheckboxGroupProps } from '../../../components/checkbox-group/index.js';
-import { CHOICE_DEFAULTS } from '../../../core/choice-policy.js';
-import { ChoiceHeader } from '../../../renderer/choice/choice-header.renderer.js';
-import { ChoiceText } from '../../../renderer/choice/choice-text.renderer.js';
+import type { CheckboxGroupProps } from
+  '@fastsprout/reacd/adapter-runtime/components/checkbox-group/index.js';
+import { CHOICE_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/choice-policy.js';
+import { ChoiceHeader } from
+  '@fastsprout/reacd/adapter-runtime/renderer/choice/choice-header.renderer.js';
+import { ChoiceText } from
+  '@fastsprout/reacd/adapter-runtime/renderer/choice/choice-text.renderer.js';
 
 export function ShadcnCheckboxGroup({
   label,

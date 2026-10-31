@@ -23,15 +23,25 @@ beforeEach(() => {
 describe('production build runner', () => {
   it('builds CSS and private conformance after clearing stale output', async () => {
     await import('./build.mjs');
-    expect(remove).toHaveBeenCalledExactlyOnceWith(
-      new URL('../dist/', import.meta.url),
+    expect(remove).toHaveBeenNthCalledWith(1, new URL('../dist/', import.meta.url), {
+      recursive: true,
+      force: true,
+    });
+    expect(remove).toHaveBeenNthCalledWith(
+      2,
+      new URL('../packages/shadcn/dist/', import.meta.url),
       { recursive: true, force: true },
     );
-    expect(remove.mock.invocationCallOrder[0]).toBeLessThan(
+    expect(remove.mock.invocationCallOrder[1]).toBeLessThan(
       execute.mock.invocationCallOrder[0] ?? 0,
     );
     expect(execute.mock.calls).toEqual([
       [process.execPath, [compiler, '-p', 'tsconfig.build.json'], { stdio: 'inherit' }],
+      [
+        process.execPath,
+        [compiler, '-p', 'packages/shadcn/tsconfig.build.json'],
+        { stdio: 'inherit' },
+      ],
       [
         process.execPath,
         [vite, 'build', '--config', 'vite.styles.config.ts'],
@@ -66,13 +76,16 @@ describe('production build runner', () => {
     await expect(import('./build.mjs')).rejects.toBe(failure);
     expect(execute).not.toHaveBeenCalled();
   });
-  it.each([1, 2, 3, 4, 5, 6, 7])('stops on build stage %s failure', async (stage) => {
-    const failure = new Error('Build failed.');
-    execute.mockImplementation(() => {
-      if (execute.mock.calls.length === stage) throw failure;
-      return '';
-    });
-    await expect(import('./build.mjs')).rejects.toBe(failure);
-    expect(execute).toHaveBeenCalledTimes(stage);
-  });
+  it.each([1, 2, 3, 4, 5, 6, 7, 8])(
+    'stops on build stage %s failure',
+    async (stage) => {
+      const failure = new Error('Build failed.');
+      execute.mockImplementation(() => {
+        if (execute.mock.calls.length === stage) throw failure;
+        return '';
+      });
+      await expect(import('./build.mjs')).rejects.toBe(failure);
+      expect(execute).toHaveBeenCalledTimes(stage);
+    },
+  );
 });

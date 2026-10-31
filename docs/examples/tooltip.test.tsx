@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -8,7 +9,7 @@ describe('documented Tooltip example', () => {
   it('controls hints, placements, child actions, and dialog state', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <TooltipExample />
       </ReacdProvider>,
     );
@@ -17,8 +18,9 @@ describe('documented Tooltip example', () => {
     for (const value of ['Bottom', 'Inline start', 'Inline end', 'Top']) {
       await user.click(screen.getByRole('combobox', { name: 'Tooltip placement' }));
       await user.click(await screen.findByRole('option', { name: value }));
-      expect(screen.getByRole('combobox', { name: 'Tooltip placement' }))
-        .toHaveTextContent(value);
+      expect(
+        screen.getByRole('combobox', { name: 'Tooltip placement' }),
+      ).toHaveTextContent(value);
     }
     for (const label of [
       'Controlled hint open',

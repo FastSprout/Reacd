@@ -1,9 +1,14 @@
 import type { Node } from '@tiptap/pm/model';
 import { z } from 'zod';
-import { EDITOR_MARKS, EDITOR_POLICY } from '../../../core/editor-policy.js';
-import { CONTENT_POLICY } from '../../../core/policy.js';
-import { linkSchema } from '../../../schema/link/link.schema.js';
-import { stateKeySchema } from '../../../schema/state/shared/definition.js';
+import {
+  EDITOR_MARKS,
+  EDITOR_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
+import { CONTENT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
+import { linkSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/link/link.schema.js';
+import { stateKeySchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/state/shared/definition.js';
 import { editorTextChunks } from './text-chunks.js';
 
 interface Weight {

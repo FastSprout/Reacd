@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import {
@@ -20,7 +21,7 @@ describe('ChatPrompt loading announcements', () => {
     'announces %s outside busy draft content',
     (status) => {
       render(
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <ChatPrompt
             label="Busy composer"
             value="Preserved draft"
@@ -55,7 +56,7 @@ describe('ChatPrompt loading announcements', () => {
 
   it('keeps an independent footer portal announcement outside the draft scope', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ChatPrompt
           label="Busy composer"
           value="Preserved draft"

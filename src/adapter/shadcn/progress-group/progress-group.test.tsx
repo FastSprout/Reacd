@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { ReacdProvider } from '../../../index.js';
@@ -6,7 +7,7 @@ import { ProgressGroup } from '../../../components/progress-group/progress-group
 describe('shadcn ProgressGroup', () => {
   it('shows accessible aggregate and clamped segment values with every intent', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <ProgressGroup
           label="Storage"
           items={[
@@ -26,7 +27,7 @@ describe('shadcn ProgressGroup', () => {
     );
     expect(screen.getByText('40 / 100')).toBeInTheDocument();
     view.rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <ProgressGroup
           label="Storage"
           max={128}

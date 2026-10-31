@@ -1,7 +1,8 @@
 import type { Node } from '@tiptap/pm/model';
 import { NodeSelection } from '@tiptap/pm/state';
 import type { Selection } from '@tiptap/pm/state';
-import { stateKeySchema } from '../../../schema/state/shared/definition.js';
+import { stateKeySchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/state/shared/definition.js';
 
 export function selectedSdkBlockId(selection: Selection): string | undefined {
   if (!(selection instanceof NodeSelection)) return undefined;

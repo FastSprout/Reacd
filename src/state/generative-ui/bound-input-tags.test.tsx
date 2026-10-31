@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -17,7 +18,7 @@ describe('bound InputTags', () => {
       ]),
     );
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundInputTags
           node={{ ...node, maxTags: 2, maxTagLength: 5 }}
           registry={registry}
@@ -45,7 +46,7 @@ describe('bound InputTags', () => {
       ]),
     );
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundInputTags node={{ ...node, readOnly: true }} registry={registry} />
       </ReacdProvider>,
     );
@@ -63,7 +64,7 @@ describe('bound InputTags', () => {
   )('reports invalid or unavailable state', ({ definitions }) => {
     const registry = success(createStateRegistry(definitions));
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundInputTags node={node} registry={registry} />
       </ReacdProvider>,
     );

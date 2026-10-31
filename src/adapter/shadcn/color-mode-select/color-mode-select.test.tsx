@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -15,7 +16,7 @@ it('retains host values and protects mode selection', async () => {
     onValueChange: change,
   } as const;
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnColorModeSelect {...props} />
     </ReacdProvider>,
   );
@@ -26,7 +27,7 @@ it('retains host values and protects mode selection', async () => {
   expect(change).toHaveBeenCalledExactlyOnceWith('dark');
   expect(trigger).toHaveTextContent('System');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnColorModeSelect
         {...props}
         readOnly
@@ -45,7 +46,7 @@ it('retains host values and protects mode selection', async () => {
 it('keeps inactive mode portals closed', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <PortalActiveContext.Provider value={false}>
         <ShadcnColorModeSelect
           label="Inactive appearance"
@@ -59,4 +60,3 @@ it('keeps inactive mode portals closed', async () => {
   await user.click(screen.getByRole('combobox', { name: 'Inactive appearance' }));
   expect(screen.queryByRole('option')).toBeNull();
 });
-

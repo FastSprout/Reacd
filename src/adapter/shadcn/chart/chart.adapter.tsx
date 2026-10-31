@@ -1,5 +1,9 @@
-import type { ChartProps } from '../../../components/chart/index.js';
-import { CHART_DEFAULTS as D, CHART_POLICY as P } from '../../../core/chart-policy.js';
+import type { ChartProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chart/index.js';
+import {
+  CHART_DEFAULTS as D,
+  CHART_POLICY as P,
+} from '@fastsprout/reacd/adapter-runtime/core/chart-policy.js';
 import { ChartGraphic } from './chart-graphic.js';
 import { ChartTable } from './chart-table.js';
 import { ChartLegend } from './legend.js';

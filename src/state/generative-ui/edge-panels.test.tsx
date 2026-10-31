@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -31,7 +32,12 @@ describe.each(['Drawer', 'Slideover'] as const)('generative %s', (type) => {
     const action = vi.fn();
     const registry = createDocumentState(doc);
     const view = render(
-      <GenerativeUI document={doc} registry={registry} actions={{ run: action }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={doc}
+        registry={registry}
+        actions={{ run: action }}
+      />,
     );
     await user.click(screen.getByRole('button', { name: `Open ${type} transport` }));
     expect(screen.getByRole('dialog')).toHaveTextContent('Transport body');
@@ -39,7 +45,9 @@ describe.each(['Drawer', 'Slideover'] as const)('generative %s', (type) => {
     expect(action).toHaveBeenCalledOnce();
     await user.click(screen.getByRole('button', { name: 'Close' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
-    view.rerender(<GenerativeUI document={doc} registry={registry} />);
+    view.rerender(
+      <GenerativeUI adapter={shadcnAdapter} document={doc} registry={registry} />,
+    );
     expect(screen.getByRole('alert')).toHaveTextContent('Action is not registered');
   });
 
@@ -59,7 +67,12 @@ describe.each(['Drawer', 'Slideover'] as const)('generative %s', (type) => {
     });
     if (!lease.success) throw new Error('Constraint registration failed.');
     render(
-      <GenerativeUI document={doc} registry={registry} actions={{ run: vi.fn() }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={doc}
+        registry={registry}
+        actions={{ run: vi.fn() }}
+      />,
     );
     await user.click(screen.getByRole('button', { name: `Open ${type} transport` }));
     expect(screen.getByRole('alert')).toHaveTextContent('Opening is blocked.');
@@ -88,7 +101,7 @@ describe.each(['Drawer', 'Slideover'] as const)('generative %s', (type) => {
     const doc = declaration(type);
     if (doc.root.type !== type) throw new Error('Unexpected transport root.');
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundEdgePanel
           node={{ ...doc.root, open: { state: 'missing', mode: 'readWrite' } }}
           registry={createDocumentState(doc)}
@@ -108,6 +121,7 @@ describe.each(['Drawer', 'Slideover'] as const)('generative %s', (type) => {
       const doc = declaration(type);
       const content = (
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={doc}
           templateId={templateId}
           actions={{ run: vi.fn() }}

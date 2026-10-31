@@ -1,5 +1,6 @@
 import { useId } from 'react';
-import type { ToggleProps } from '../../../components/toggle/toggle.js';
+import type { ToggleProps } from
+  '@fastsprout/reacd/adapter-runtime/components/toggle/toggle.js';
 import { Switch } from '../vendor/ui/switch.js';
 import { Label } from '../vendor/ui/label.js';
 

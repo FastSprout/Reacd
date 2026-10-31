@@ -1,12 +1,19 @@
 import { Fragment, useId, useRef } from 'react';
 import type { z } from 'zod';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { splitterSchema } from '../../../schema/splitter/splitter.schema.js';
-import { SPLITTER_DEFAULTS, SPLITTER_POLICY } from '../../../core/splitter-policy.js';
-import { pairBounds } from '../../../core/splitter.js';
-import { useSplitterReflow } from '../../../renderer/splitter/use-splitter-reflow.js';
-import { useSplitterDrag } from '../../../renderer/splitter/use-splitter-drag.js';
-import { splitterKey } from '../../../renderer/splitter/splitter-key.js';
+import type { splitterSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/splitter/splitter.schema.js';
+import {
+  SPLITTER_DEFAULTS,
+  SPLITTER_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/splitter-policy.js';
+import { pairBounds } from '@fastsprout/reacd/adapter-runtime/core/splitter.js';
+import { useSplitterReflow } from
+  '@fastsprout/reacd/adapter-runtime/renderer/splitter/use-splitter-reflow.js';
+import { useSplitterDrag } from
+  '@fastsprout/reacd/adapter-runtime/renderer/splitter/use-splitter-drag.js';
+import { splitterKey } from
+  '@fastsprout/reacd/adapter-runtime/renderer/splitter/splitter-key.js';
 
 export function ShadcnSplitter({
   label,

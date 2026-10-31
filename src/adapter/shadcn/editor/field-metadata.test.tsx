@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
@@ -26,7 +27,7 @@ afterEach(() => restore());
 it('inherits disabled safety for native editing and toolbar', async () => {
   const change = vi.fn();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <FormField name="notes" label="Blocked group" disabled>
         <Editor
           label="Notes"
@@ -51,7 +52,7 @@ it('inherits disabled safety for native editing and toolbar', async () => {
 
 it('reads inherited error/guidance without duplicating the parent alert', async () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <FormField
         name="notes"
         label="Note group"
@@ -78,7 +79,7 @@ it.each(['loading', 'disabled'] as const)(
   async (protection) => {
     const change = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AuthForm
           label="Credentials"
           submitLabel="Continue"

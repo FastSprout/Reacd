@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { expect, it, vi } from 'vitest';
@@ -9,7 +10,7 @@ it('hydrates static markup before observing motion preference', () => {
     removeEventListener: () => undefined,
   }));
   const tree = (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Marquee
         label="Notices"
         paused

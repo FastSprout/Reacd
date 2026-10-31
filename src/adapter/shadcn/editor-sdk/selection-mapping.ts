@@ -1,9 +1,14 @@
 import type { Node } from '@tiptap/pm/model';
 import type { Selection } from '@tiptap/pm/state';
-import type { EditorPosition, EditorSelection } from '../../../core/editor-document.js';
-import type { Result } from '../../../core/result.js';
-import { editorPositionSchema } from '../../../schema/editor/document/index.js';
-import { stateKeySchema } from '../../../schema/state/shared/definition.js';
+import type {
+  EditorPosition,
+  EditorSelection,
+} from '@fastsprout/reacd/adapter-runtime/core/editor-document.js';
+import type { Result } from '@fastsprout/reacd/adapter-runtime/core/result.js';
+import { editorPositionSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/editor/document/index.js';
+import { stateKeySchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/state/shared/definition.js';
 import { boundedSdkDocument } from '../editor-conversion/budget.js';
 
 interface EditableBlock {

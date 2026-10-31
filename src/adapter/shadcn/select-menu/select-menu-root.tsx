@@ -1,8 +1,11 @@
 import type { ReactNode } from 'react';
 import { Combobox } from '@base-ui/react/combobox';
-import type { SelectMenuProps } from '../../../components/select-menu/index.js';
-import { FORM_MENU_POLICY } from '../../../core/form-menu-policy.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
+import type { SelectMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/select-menu/index.js';
+import { FORM_MENU_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/form-menu-policy.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
 import type { SelectMenuModel } from './use-select-menu.js';
 
 export function SelectMenuRoot({

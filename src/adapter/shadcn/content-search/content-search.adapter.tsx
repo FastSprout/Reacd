@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import type { ContentSearchProps } from '../../../components/content-search/index.js';
-import { CommandPalette } from '../../../components/command-palette/index.js';
-import { Modal } from '../../../components/modal/modal.js';
-import { CONTENT_SEARCH_DEFAULTS } from '../../../core/content-search-policy.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+import type { ContentSearchProps } from
+  '@fastsprout/reacd/adapter-runtime/components/content-search/index.js';
+import { CommandPalette } from
+  '@fastsprout/reacd/adapter-runtime/components/command-palette/index.js';
+import { Modal } from '@fastsprout/reacd/adapter-runtime/components/modal/modal.js';
+import { CONTENT_SEARCH_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/content-search-policy.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 
 export function ShadcnContentSearch({
   title,

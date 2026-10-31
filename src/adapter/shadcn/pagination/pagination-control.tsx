@@ -1,7 +1,9 @@
 import type { MouseEvent } from 'react';
-import type { PaginationProps } from '../../../components/pagination/pagination.js';
+import type { PaginationProps } from
+  '@fastsprout/reacd/adapter-runtime/components/pagination/pagination.js';
 import { Button } from '../vendor/ui/button.js';
-import { followHref } from '../../../renderer/navigation/native-navigation.js';
+import { followHref } from
+  '@fastsprout/reacd/adapter-runtime/renderer/navigation/native-navigation.js';
 interface PaginationControlProps {
   label: string;
   pageIndex: number;

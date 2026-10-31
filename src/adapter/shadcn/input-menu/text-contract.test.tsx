@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { InputMenu, ReacdProvider } from '../../../index.js';
@@ -21,7 +22,7 @@ const node = {
 
 it('rejects CR/LF in public TSX values instead of browser normalization', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu {...properties} value={'First\nSecond'} />
     </ReacdProvider>,
   );
@@ -60,6 +61,7 @@ it('rejects multiline host/atomic writes but preserves accepted space text', () 
   if (!registry.success) throw new Error('Missing registry.');
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{ schemaVersion: '0.2', state, root: node }}
       registry={registry.data}
     />,

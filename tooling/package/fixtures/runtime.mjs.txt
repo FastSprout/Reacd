@@ -75,7 +75,7 @@ for (const [path, version] of [
   const schema = JSON.parse(readFileSync(new URL(import.meta.resolve(path)), 'utf8'));
   assert.equal(schema.$id, `https://reacd.dev/schema/${version}.json`);
 }
-const cssUrl = new URL(import.meta.resolve('@fastsprout/reacd/styles.css'));
+const cssUrl = new URL(import.meta.resolve('@fastsprout/reacd-shadcn/styles.css'));
 const css = readFileSync(cssUrl, 'utf8');
 assert.match(css, /reacd-slider/);
 await assert.rejects(import('@fastsprout/reacd/dist/schema/shared/children.js'), {

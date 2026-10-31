@@ -1,12 +1,14 @@
-import type { ChartProps } from '../../../components/chart/index.js';
-import { CHART_POLICY as P } from '../../../core/chart-policy.js';
+import type { ChartProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chart/index.js';
+import { CHART_POLICY as P } from
+  '@fastsprout/reacd/adapter-runtime/core/chart-policy.js';
 import {
   chartPoints,
   chartDomain,
   chartY,
   chartLinePath,
   chartAreaPath,
-} from '../../../core/chart-geometry.js';
+} from '@fastsprout/reacd/adapter-runtime/core/chart-geometry.js';
 import { ChartMarker, ChartPattern } from './patterns.js';
 import { chartDash } from './legend.js';
 export function ChartCartesian({

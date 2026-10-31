@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -23,7 +24,7 @@ function Example({
 }) {
   const [value, setValue] = useState('profile');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction={rtl ? 'rtl' : 'ltr'}>
         <Tabs
           label="Settings"

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -27,16 +28,19 @@ describe('tags transport and hydration', () => {
     const client = success(createStateRegistry(state));
     const container = globalThis.document.createElement('div');
     container.innerHTML = renderToString(
-      <GenerativeUI document={document} registry={server} />,
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={server} />,
     );
     globalThis.document.body.appendChild(container);
     const id = screen.getByRole('combobox', { name: 'Topics' }).id;
     const errors: unknown[] = [];
-    const view = render(<GenerativeUI document={document} registry={client} />, {
-      container,
-      hydrate: true,
-      onRecoverableError: (error) => errors.push(error),
-    });
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={client} />,
+      {
+        container,
+        hydrate: true,
+        onRecoverableError: (error) => errors.push(error),
+      },
+    );
     const input = screen.getByRole('combobox', { name: 'Topics' });
     expect(input.id).toBe(id);
     await user.type(input, 'Vue{Enter}');
@@ -49,6 +53,7 @@ describe('tags transport and hydration', () => {
   it('rejects malformed initial bound values before rendering', () => {
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...document,
           state: [

@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import type { Selection } from 'react-aria-components/ListBox';
-import type { ListboxProps } from '../../../components/listbox/index.js';
-import { LISTBOX_DEFAULTS, LISTBOX_POLICY } from '../../../core/listbox-policy.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
-import { canRequestSelection } from '../../../schema/selection/index.js';
+import type { ListboxProps } from
+  '@fastsprout/reacd/adapter-runtime/components/listbox/index.js';
+import {
+  LISTBOX_DEFAULTS,
+  LISTBOX_POLICY,
+} from '@fastsprout/reacd/adapter-runtime/core/listbox-policy.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
+import { canRequestSelection } from
+  '@fastsprout/reacd/adapter-runtime/schema/selection/index.js';
 import { listboxKeys, orderedListboxSelection } from './selection.js';
 
 export function useListboxRequest(properties: ListboxProps) {

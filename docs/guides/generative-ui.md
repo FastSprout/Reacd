@@ -54,12 +54,16 @@ expressions.
 ## Render a validated declaration
 
 ```tsx
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { GenerativeUI } from '@fastsprout/reacd/generative';
 
 export function GeneratedView({ declaration }: { declaration: unknown }) {
-  return <GenerativeUI document={declaration} />;
+  return <GenerativeUI adapter={shadcnAdapter} document={declaration} />;
 }
 ```
+
+Inside `ReacdProvider`, generative views may inherit its adapter. Standalone views
+require an explicit adapter; missing selection produces a validation diagnostic.
 
 Use `validateGenerativeDocument` for external objects or `parseGenerativeJson` for
 strings. `defineGenerativeDeclaration` provides checked authoring in TypeScript. The

@@ -20,6 +20,7 @@ describe('type checking runner', () => {
     expect(execute.mock.calls).toEqual(
       [
         'tsconfig.build.json',
+        'packages/shadcn/tsconfig.build.json',
         '.',
         'tooling/conformance',
         'docs/examples',

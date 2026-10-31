@@ -1,7 +1,7 @@
-import type {
-  ContentSearchButtonProps,
-} from '../../../components/content-search-button/index.js';
-import { CONTENT_SEARCH_DEFAULTS } from '../../../core/content-search-policy.js';
+import type { ContentSearchButtonProps } from
+  '@fastsprout/reacd/adapter-runtime/components/content-search-button/index.js';
+import { CONTENT_SEARCH_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/content-search-policy.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnContentSearchButton({

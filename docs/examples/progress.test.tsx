@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { installLayout } from '../../test-support/layout-observer.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -7,7 +8,7 @@ import { ProgressExample } from './progress.js';
 it('runs documented progress, indeterminate and status controls', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ProgressExample />
     </ReacdProvider>,
   );

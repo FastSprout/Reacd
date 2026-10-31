@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -39,7 +40,13 @@ describe('generative Timeline and ScrollArea', () => {
   it('constrains shared current event state and preserves theme changes', async () => {
     const user = userEvent.setup();
     const registry = createDocumentState(declaration);
-    const view = render(<GenerativeUI document={declaration} registry={registry} />);
+    const view = render(
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={declaration}
+        registry={registry}
+      />,
+    );
     await user.click(screen.getByRole('button', { name: 'Build' }));
     expect(registry.read('step')).toEqual({
       success: true,
@@ -48,6 +55,7 @@ describe('generative Timeline and ScrollArea', () => {
     expect(registry.update('step', 'unknown').success).toBe(false);
     view.rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={declaration}
         registry={registry}
         templateId="erp-compact"
@@ -66,7 +74,7 @@ describe('generative Timeline and ScrollArea', () => {
   it('fails safely for an unavailable live binding', () => {
     const registry = createDocumentState(declaration);
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <BoundTimeline
           properties={{ label: 'Missing', items }}
           reference={{ state: 'unknown', mode: 'readWrite' }}
@@ -80,7 +88,13 @@ describe('generative Timeline and ScrollArea', () => {
     'hydrates controlled timelines in %s without leaking into a fresh request',
     async (templateId) => {
       const user = userEvent.setup();
-      const content = <GenerativeUI document={declaration} templateId={templateId} />;
+      const content = (
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={declaration}
+          templateId={templateId}
+        />
+      );
       const container = document.createElement('div');
       container.innerHTML = renderToString(content);
       document.body.appendChild(container);

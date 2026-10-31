@@ -10,9 +10,20 @@ const vite = fileURLToPath(
 );
 
 rmSync(new URL('../dist/', import.meta.url), { recursive: true, force: true });
+rmSync(new URL('../packages/shadcn/dist/', import.meta.url), {
+  recursive: true,
+  force: true,
+});
 execFileSync(process.execPath, [compiler, '-p', 'tsconfig.build.json'], {
   stdio: 'inherit',
 });
+execFileSync(
+  process.execPath,
+  [compiler, '-p', 'packages/shadcn/tsconfig.build.json'],
+  {
+    stdio: 'inherit',
+  },
+);
 execFileSync(process.execPath, [vite, 'build', '--config', 'vite.styles.config.ts'], {
   stdio: 'inherit',
 });

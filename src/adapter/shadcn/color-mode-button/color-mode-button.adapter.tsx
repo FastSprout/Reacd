@@ -1,8 +1,8 @@
 import { useId } from 'react';
-import type {
-  ColorModeButtonProps,
-} from '../../../components/color-mode-button/index.js';
-import { oppositeColorMode } from '../../../core/color-mode.js';
+import type { ColorModeButtonProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-button/index.js';
+import { oppositeColorMode } from
+  '@fastsprout/reacd/adapter-runtime/core/color-mode.js';
 import { Button } from '../vendor/ui/button.js';
 
 export function ShadcnColorModeButton({

@@ -1,10 +1,22 @@
-import { isReleaseVersion, PUBLICATION_POLICY } from './policy.js';
+import {
+  isReleaseVersion,
+  PUBLICATION_POLICY,
+  SHADCN_PUBLICATION_POLICY,
+} from './policy.js';
+import type { PublicationPolicy } from './policy.js';
 
 export interface PublicationMetadata {
   readonly name: '@fastsprout/reacd';
   readonly version: string;
   readonly peerDependencies: typeof PUBLICATION_POLICY.peers;
 }
+export interface ShadcnPublicationMetadata {
+  readonly name: '@fastsprout/reacd-shadcn';
+  readonly version: string;
+  readonly peerDependencies: typeof PUBLICATION_POLICY.peers &
+    Readonly<Record<'@fastsprout/reacd', string>>;
+}
+export type PackageMetadata = PublicationMetadata | ShadcnPublicationMetadata;
 
 function record(input: unknown): Record<string, unknown> {
   if (input === null || typeof input !== 'object' || Array.isArray(input)) {
@@ -12,19 +24,17 @@ function record(input: unknown): Record<string, unknown> {
   }
   return Object.fromEntries(Object.entries(input));
 }
-
 function matches(input: unknown, expected: unknown): void {
   if (input !== expected) {
     throw new Error('Publication manifest does not match release policy.');
   }
 }
-
-export function parsePublicationManifest(input: unknown): PublicationMetadata {
+function validate(input: unknown, policy: PublicationPolicy): string {
   const manifest = record(input);
-  const policy = PUBLICATION_POLICY;
   matches(manifest['name'], policy.name);
   matches(manifest['private'], false);
-  if (!isReleaseVersion(manifest['version'])) {
+  const version = manifest['version'];
+  if (!isReleaseVersion(version)) {
     throw new Error('Publication manifest requires a valid SemVer version.');
   }
   const repository = record(manifest['repository']);
@@ -41,14 +51,36 @@ export function parsePublicationManifest(input: unknown): PublicationMetadata {
   const dependencies = record(
     manifest['dependencies'] === undefined ? {} : manifest['dependencies'],
   );
-  for (const [name, version] of Object.entries(policy.peers)) {
-    matches(peers[name], version);
-    matches(dev[name], version);
+  if (policy.name === SHADCN_PUBLICATION_POLICY.name) {
+    matches(peers[PUBLICATION_POLICY.name], version);
+  }
+  if (policy.name === SHADCN_PUBLICATION_POLICY.name) {
+    matches(dependencies[PUBLICATION_POLICY.name], undefined);
+    matches(dev[PUBLICATION_POLICY.name], undefined);
+  }
+  for (const [name, expected] of Object.entries(policy.peers)) {
+    matches(peers[name], expected);
+  }
+  for (const [name, expected] of Object.entries(PUBLICATION_POLICY.peers)) {
+    matches(dev[name], expected);
     matches(dependencies[name], undefined);
   }
+  return version;
+}
+export function parsePublicationManifest(input: unknown): PublicationMetadata {
   return {
-    name: policy.name,
-    version: manifest['version'],
-    peerDependencies: policy.peers,
+    name: PUBLICATION_POLICY.name,
+    version: validate(input, PUBLICATION_POLICY),
+    peerDependencies: PUBLICATION_POLICY.peers,
+  };
+}
+export function parseShadcnPublicationManifest(
+  input: unknown,
+): ShadcnPublicationMetadata {
+  const version = validate(input, SHADCN_PUBLICATION_POLICY);
+  return {
+    name: SHADCN_PUBLICATION_POLICY.name,
+    version,
+    peerDependencies: { ...PUBLICATION_POLICY.peers, '@fastsprout/reacd': version },
   };
 }

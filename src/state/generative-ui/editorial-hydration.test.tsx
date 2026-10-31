@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { expect, it } from 'vitest';
@@ -17,9 +18,11 @@ const declaration = {
 it('hydrates stable calendar strings without ambient locale or clock output', () => {
   const container = document.createElement('div');
   document.body.append(container);
-  container.innerHTML = renderToString(<GenerativeUI document={declaration} />);
+  container.innerHTML = renderToString(
+    <GenerativeUI adapter={shadcnAdapter} document={declaration} />,
+  );
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={declaration} />, {
+  const view = render(<GenerativeUI adapter={shadcnAdapter} document={declaration} />, {
     container,
     hydrate: true,
     onRecoverableError: (error) => errors.push(error),

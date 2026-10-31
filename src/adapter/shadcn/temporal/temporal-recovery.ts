@@ -1,4 +1,7 @@
-import type { TemporalLimits, TemporalRange } from '../../../core/date-time.js';
+import type {
+  TemporalLimits,
+  TemporalRange,
+} from '@fastsprout/reacd/adapter-runtime/core/date-time.js';
 
 export interface TemporalRecovery<Value> {
   readonly key: string;

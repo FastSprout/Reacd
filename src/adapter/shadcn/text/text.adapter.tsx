@@ -1,1 +1,2 @@
-export { TextSurface as ShadcnText } from '../../../renderer/text/text.renderer.js';
+export { TextSurface as ShadcnText } from
+  '@fastsprout/reacd/adapter-runtime/renderer/text/text.renderer.js';

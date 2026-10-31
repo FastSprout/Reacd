@@ -3,22 +3,24 @@ import { Toolbar } from '@base-ui/react/toolbar';
 import type {
   EditorToolbarProps,
   EditorToolbarItem,
-} from '../../../components/editor-toolbar/index.js';
+} from '@fastsprout/reacd/adapter-runtime/components/editor-toolbar/index.js';
 import type {
   EditorCommand,
   EditorCommandType,
-} from '../../../core/editor-commands.js';
+} from '@fastsprout/reacd/adapter-runtime/core/editor-commands.js';
 import {
   EDITOR_COMMAND_LABELS,
   EDITOR_DEFAULT_COMMANDS,
-} from '../../../core/editor-commands.js';
+} from '@fastsprout/reacd/adapter-runtime/core/editor-commands.js';
 import {
   EDITOR_BEHAVIOR,
   EDITOR_DEFAULTS,
   EDITOR_ERRORS,
-} from '../../../core/editor-policy.js';
-import { EditorScopeContext } from '../../../renderer/editor/editor-context.js';
-import { Issues } from '../../../renderer/issues/issues.renderer.js';
+} from '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
+import { EditorScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editor/editor-context.js';
+import { Issues } from
+  '@fastsprout/reacd/adapter-runtime/renderer/issues/issues.renderer.js';
 import { Button } from '../vendor/ui/button.js';
 
 const DEFAULT_ITEMS: readonly EditorToolbarItem[] = EDITOR_DEFAULT_COMMANDS.map(

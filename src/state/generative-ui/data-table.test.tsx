@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../../test-support/select-choice.js';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -58,7 +59,9 @@ describe('generative DataTable bindings', () => {
     const user = userEvent.setup();
     const document = success(validateGenerativeDocument(declaration));
     const registry = createDocumentState(document);
-    render(<GenerativeUI document={document} registry={registry} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+    );
     await user.click(screen.getByRole('checkbox', { name: 'Select row a' }));
     await user.click(screen.getByRole('button', { name: 'Next page' }));
     expect(screen.getByRole('checkbox', { name: 'Select row b' })).toBeInTheDocument();
@@ -129,25 +132,31 @@ describe('generative DataTable bindings', () => {
       },
     } as const;
     const { rerender } = render(
-      <GenerativeUI document={{ ...declaration, root: readNode }} />,
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={{ ...declaration, root: readNode }}
+      />,
     );
     expect(screen.getByRole('checkbox')).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Sort Name' })).toBeDisabled();
     expect(screen.getByLabelText('Filter Name')).toBeDisabled();
     rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{ ...declaration, root: { ...readNode, state: 'loading' } }}
       />,
     );
     expect(screen.getByRole('status')).toHaveTextContent('Loading data');
     rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{ ...declaration, root: { ...readNode, state: 'error' } }}
       />,
     );
     expect(screen.getByRole('alert')).toHaveTextContent('Unable to load data.');
     rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...declaration,
           root: { ...readNode, state: 'error', errorMessage: 'Service offline' },
@@ -166,6 +175,7 @@ describe('generative DataTable bindings', () => {
   it('supports a custom empty message for an empty dataset', () => {
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...declaration,
           state: tableDefinitions({ ...TABLE_MODEL, rows: [] }),
@@ -179,6 +189,7 @@ describe('generative DataTable bindings', () => {
   it('renders null cells without exposing an undefined value', () => {
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...declaration,
           state: tableDefinitions({
@@ -217,7 +228,9 @@ describe('generative DataTable bindings', () => {
             };
       }),
     );
-    render(<GenerativeUI document={document} registry={registry} />);
+    render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
+    );
     fireEvent.change(screen.getByLabelText('Filter Name'), { target: { value: 'A' } });
     expect(screen.getByRole('alert')).toHaveTextContent('Filters locked.');
     expect(success(registry.read('orders.filters')).value).toEqual([]);
@@ -233,7 +246,13 @@ describe('generative DataTable bindings', () => {
         return registry.constrain(...args);
       },
     };
-    render(<GenerativeUI document={document} registry={concurrent} />);
+    render(
+      <GenerativeUI
+        adapter={shadcnAdapter}
+        document={document}
+        registry={concurrent}
+      />,
+    );
     expect(screen.getByRole('alert')).toHaveTextContent('Table state violates');
   });
 });

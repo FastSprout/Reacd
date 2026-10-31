@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { parseColor } from 'react-aria-components/ColorPicker';
 import type { Color } from 'react-aria-components/ColorPicker';
-import type { ColorMode } from '../../../schema/color-picker/index.js';
+import type { ColorMode } from
+  '@fastsprout/reacd/adapter-runtime/schema/color-picker/index.js';
 export function useColorModel(
   value: string,
   mode: ColorMode,

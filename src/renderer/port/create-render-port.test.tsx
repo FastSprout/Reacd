@@ -1,8 +1,9 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { forwardRef, memo } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { createRenderPort } from './create-render-port.js';
-import { shadcnAdapter } from '../../adapter/shadcn/shadcn.adapter.js';
+
 import { defineThemeAdapter, isThemeAdapter } from '../contracts/validate-adapter.js';
 
 describe('adapter rendering port', () => {

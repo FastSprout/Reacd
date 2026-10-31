@@ -45,3 +45,19 @@ not bypass checks or lower their thresholds.
 Use English Conventional Commits. Release notes are maintained in
 [the changelog](docs/changelog.md); publication setup is described in
 [the release guide](docs/guides/releases.md).
+
+## Repository examples and documentation
+
+Run a [small TSX application](examples/README.md) with `npm run example` and the
+selected mode. These commands are for a source checkout; package consumers follow
+[Get started](docs/getting-started.md) in their existing React application.
+
+`npm run docs:check` compiles live examples and builds the strict MkDocs site. Serve
+that generated output with the same static host used by browser conformance:
+
+```sh
+npm run preview -- --config vite.site.config.ts --port 8000 --strictPort
+```
+
+Build documentation before invoking `npm run test:browser` independently. The complete
+`npm run check` command performs those steps in order and never deploys the site.

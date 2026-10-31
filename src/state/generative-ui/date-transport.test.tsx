@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -53,15 +54,18 @@ it('hydrates dates with isolated state and shared constraints', async () => {
   const client = success(createStateRegistry(definitions));
   const container = document.createElement('div');
   container.innerHTML = renderToString(
-    <GenerativeUI document={documentModel} registry={server} />,
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={server} />,
   );
   document.body.appendChild(container);
   const errors: unknown[] = [];
-  const view = render(<GenerativeUI document={documentModel} registry={client} />, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
-  });
+  const view = render(
+    <GenerativeUI adapter={shadcnAdapter} document={documentModel} registry={client} />,
+    {
+      container,
+      hydrate: true,
+      onRecoverableError: (error) => errors.push(error),
+    },
+  );
   screen.getByRole('spinbutton', { name: /day, Event$/i }).focus();
   await user.keyboard('{ArrowUp}');
   expect(success(client.read('event')).value).toBe('2024-02-29');
@@ -90,6 +94,7 @@ it('hydrates dates with isolated state and shared constraints', async () => {
 it('rejects malformed references and incompatible state before rendering', () => {
   const { unmount } = render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...documentModel,
         root: {
@@ -106,6 +111,7 @@ it('rejects malformed references and incompatible state before rendering', () =>
   unmount();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...documentModel,
         state: [

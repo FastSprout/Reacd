@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { ReacdRenderer } from '../../../index.js';
@@ -8,6 +9,7 @@ describe('Generative rendering: data', () => {
   it('contains wide data inside a named, focusable table region', () => {
     render(
       <ReacdRenderer
+        adapter={shadcnAdapter}
         document={documentWith({
           type: 'Table',
           caption: 'Inventory',
@@ -57,7 +59,13 @@ describe('Generative rendering: data', () => {
   ] satisfies { node: TableNode; role: string; message: string }[])(
     'provides a perceivable data state: $message',
     ({ node, role, message }) => {
-      render(<ReacdRenderer document={documentWith(node)} actions={{}} />);
+      render(
+        <ReacdRenderer
+          adapter={shadcnAdapter}
+          document={documentWith(node)}
+          actions={{}}
+        />,
+      );
       expect(screen.getByRole(role)).toHaveTextContent(message);
       expect(screen.queryByRole('table')).not.toBeInTheDocument();
     },

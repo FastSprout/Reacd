@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -6,7 +7,7 @@ import { Link, ReacdProvider } from '../../index.js';
 describe('native navigation boundary', () => {
   it('retains native hrefs, current-page and safe new-window state', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Link label="Reference" href="/" active newWindow />
       </ReacdProvider>,
     );
@@ -15,7 +16,7 @@ describe('native navigation boundary', () => {
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Link label="Reference" href="/" />
       </ReacdProvider>,
     );
@@ -26,7 +27,7 @@ describe('native navigation boundary', () => {
   it('removes disabled navigation for pointer and keyboard users', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Link label="Unavailable reference" href="/" disabled newWindow />
       </ReacdProvider>,
     );

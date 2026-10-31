@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -11,7 +12,6 @@ import type {
   GenerativeNode,
 } from '../../schema/generative-v2/document.schema.js';
 import { ReacdProvider } from '../provider/provider.js';
-import { shadcnAdapter } from '../../adapter/shadcn/shadcn.adapter.js';
 
 function declaration(root: GenerativeNode): GenerativeDeclaration {
   return {
@@ -76,7 +76,7 @@ describe('reactive generative UI', () => {
       () => new DOMRect(0, 0, controlWidth, controlHeight),
     );
     const user = userEvent.setup();
-    render(<GenerativeUI document={declaration(fields)} />);
+    render(<GenerativeUI adapter={shadcnAdapter} document={declaration(fields)} />);
     await user.clear(screen.getByLabelText('First writer'));
     await user.type(screen.getByLabelText('First writer'), 'Shared');
     expect(screen.getByLabelText('Second writer')).toHaveValue('Shared');
@@ -97,14 +97,14 @@ describe('reactive generative UI', () => {
     const user = userEvent.setup();
     const document = declaration(fields);
     const { rerender } = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <GenerativeUI document={document} />
       </ReacdProvider>,
     );
     await user.clear(screen.getByLabelText('First writer'));
     await user.type(screen.getByLabelText('First writer'), 'Retained');
     rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <GenerativeUI document={structuredClone(document)} />
       </ReacdProvider>,
     );
@@ -153,12 +153,15 @@ describe('reactive generative UI', () => {
 
   it('requires explicit state-shape migration to a new registry', () => {
     const document = declaration({ type: 'Text', content: 'Visible' });
-    const { rerender } = render(<GenerativeUI document={document} />);
+    const { rerender } = render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} />,
+    );
     const replacement = parsed({ ...document, state: [] });
-    rerender(<GenerativeUI document={replacement} />);
+    rerender(<GenerativeUI adapter={shadcnAdapter} document={replacement} />);
     expect(screen.getByRole('alert')).toHaveTextContent('explicitly migrated');
     rerender(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={replacement}
         registry={createDocumentState(replacement)}
       />,
@@ -175,16 +178,23 @@ describe('reactive generative UI', () => {
       registry.update('name', 'Server value');
     });
     expect(
-      renderToString(<GenerativeUI document={document} registry={registry} />),
+      renderToString(
+        <GenerativeUI
+          adapter={shadcnAdapter}
+          document={document}
+          registry={registry}
+        />,
+      ),
     ).toContain('Server value');
   });
 
   it('rejects invalid declarations and missing or inherited actions', () => {
-    const { rerender } = render(<GenerativeUI document={{}} />);
+    const { rerender } = render(<GenerativeUI adapter={shadcnAdapter} document={{}} />);
     expect(screen.getByRole('alert')).toBeInTheDocument();
     for (const action of ['missing', 'toString']) {
       rerender(
         <GenerativeUI
+          adapter={shadcnAdapter}
           document={declaration({ type: 'Button', label: 'Run', action })}
         />,
       );

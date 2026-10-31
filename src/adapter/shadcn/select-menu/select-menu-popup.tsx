@@ -2,12 +2,17 @@ import { useContext } from 'react';
 import type { RefObject } from 'react';
 import { Combobox } from '@base-ui/react/combobox';
 import { useDirection } from '@base-ui/react/direction-provider';
-import type { SelectMenuProps } from '../../../components/select-menu/index.js';
-import { CONTENT_POLICY } from '../../../core/policy.js';
-import { FORM_MENU_POLICY } from '../../../core/form-menu-policy.js';
-import { SELECT_MENU_DEFAULTS } from '../../../core/select-menu-policy.js';
-import { ThemeVariablesContext } from '../../../renderer/theme/theme-context.js';
-import { PortalHostContext } from '../../../renderer/theme/portal-context.js';
+import type { SelectMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/select-menu/index.js';
+import { CONTENT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
+import { FORM_MENU_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/form-menu-policy.js';
+import { SELECT_MENU_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/select-menu-policy.js';
+import { ThemeVariablesContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/theme-context.js';
+import { PortalHostContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
 import { Input } from '../vendor/ui/input.js';
 import type { SelectMenuModel } from './use-select-menu.js';
 

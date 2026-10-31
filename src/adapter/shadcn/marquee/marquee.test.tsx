@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -21,7 +22,7 @@ it('requests controlled motion without accessible copies', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnMarquee {...BASE} onPausedChange={change} />
     </ReacdProvider>,
   );
@@ -37,7 +38,7 @@ it('requests controlled motion without accessible copies', async () => {
   const list = screen.getByRole('list', { name: 'Notices' });
   expect(within(list).getAllByRole('listitem')).toHaveLength(1);
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnMarquee {...BASE} paused={false} onPausedChange={change} />
     </ReacdProvider>,
   );
@@ -48,7 +49,7 @@ it('requests controlled motion without accessible copies', async () => {
 it('uses static text for reduced motion, readonly or unknown preference', () => {
   motion(true);
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnMarquee {...BASE} />
     </ReacdProvider>,
   );
@@ -57,14 +58,14 @@ it('uses static text for reduced motion, readonly or unknown preference', () => 
   expect(screen.queryByRole('button')).toBeNull();
   motion(false);
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnMarquee {...BASE} readOnly />
     </ReacdProvider>,
   );
   expect(screen.getByRole('status')).toHaveTextContent('Read-only notices');
   expect(screen.queryByRole('button')).toBeNull();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnMarquee {...BASE} items={[]} emptyMessage="No text" />
     </ReacdProvider>,
   );
@@ -72,7 +73,7 @@ it('uses static text for reduced motion, readonly or unknown preference', () => 
   expect(screen.queryByRole('button')).toBeNull();
   vi.stubGlobal('matchMedia', undefined);
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnMarquee {...BASE} />
     </ReacdProvider>,
   );
@@ -82,7 +83,7 @@ it('uses static text for reduced motion, readonly or unknown preference', () => 
 it('maps logical direction and semantic pace without public CSS escapes', () => {
   motion(false);
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <App direction="rtl">
         <ShadcnMarquee {...BASE} pace="slow" />
       </App>
@@ -93,7 +94,7 @@ it('maps logical direction and semantic pace without public CSS escapes', () => 
     'true',
   );
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <ShadcnMarquee {...BASE} direction="backward" pace="fast" />
     </ReacdProvider>,
   );

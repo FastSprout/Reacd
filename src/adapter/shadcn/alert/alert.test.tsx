@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -8,7 +9,7 @@ it('exposes severity and requests controlled actions and dismissal', async () =>
   const close = vi.fn();
   const action = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Alert
         title="Review required"
         message="Check the form."
@@ -36,7 +37,7 @@ it('exposes severity and requests controlled actions and dismissal', async () =>
   expect(close).toHaveBeenLastCalledWith(false);
   expect(screen.getByRole('alert')).toBeInTheDocument();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Alert title="Closed" message="Hidden" intent="error" open={false} />
     </ReacdProvider>,
   );
@@ -45,21 +46,21 @@ it('exposes severity and requests controlled actions and dismissal', async () =>
 
 it('supports readonly visibility and explicit close labels', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Alert title="Saved" message="Changes recorded." intent="success" open />
     </ReacdProvider>,
   );
   expect(screen.getByRole('status')).toHaveTextContent('Saved');
   expect(screen.queryByRole('button')).toBeNull();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Alert title="Information" message="Read the guide." intent="info" actions={[]} />
     </ReacdProvider>,
   );
   expect(screen.getByRole('status')).toHaveTextContent('Read the guide.');
   expect(view.container.querySelector('.reacd-alert-actions')).toBeNull();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Alert
         title="Error"
         message="Try again."

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { userEvent } from '@testing-library/user-event';
@@ -6,7 +7,7 @@ import { PageCompositionExamples } from './page-composition-examples.js';
 
 it('composes the page primitives through their public TSX declarations', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <PageCompositionExamples />
     </ReacdProvider>,
   );
@@ -20,7 +21,7 @@ it('composes the page primitives through their public TSX declarations', () => {
 it('scopes actual RTL direction without losing the page state', async () => {
   const user = userEvent.setup();
   const { container } = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <PageCompositionExamples />
     </ReacdProvider>,
   );

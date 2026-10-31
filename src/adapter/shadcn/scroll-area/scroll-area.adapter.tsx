@@ -1,9 +1,10 @@
 import { ScrollArea as Primitive } from '@base-ui/react/scroll-area';
-import type { ScrollAreaProps } from '../../../components/scroll-area/index.js';
+import type { ScrollAreaProps } from
+  '@fastsprout/reacd/adapter-runtime/components/scroll-area/index.js';
 import {
   SCROLL_AREA_DEFAULTS,
   SCROLL_AREA_POLICY,
-} from '../../../core/scroll-area-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/core/scroll-area-policy.js';
 
 export function ShadcnScrollArea({
   label,

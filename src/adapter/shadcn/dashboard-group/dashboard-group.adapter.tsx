@@ -2,20 +2,24 @@ import { Fragment, useCallback, useContext, useId, useRef } from 'react';
 import type { z } from 'zod';
 import { useDirection } from '@base-ui/react/direction-provider';
 import type { dashboardGroupSchema } from
-  '../../../schema/dashboard-group/dashboard-group.schema.js';
+  '@fastsprout/reacd/adapter-runtime/schema/dashboard-group/dashboard-group.schema.js';
 import {
   DASHBOARD_DEFAULTS,
   DASHBOARD_POLICY,
-} from '../../../core/dashboard-policy.js';
-import { dashboardDisplayLayout } from '../../../core/dashboard-layout.js';
-import { useSplitterReflow } from '../../../renderer/splitter/use-splitter-reflow.js';
-import { useSplitterDrag } from '../../../renderer/splitter/use-splitter-drag.js';
+} from '@fastsprout/reacd/adapter-runtime/core/dashboard-policy.js';
+import { dashboardDisplayLayout } from
+  '@fastsprout/reacd/adapter-runtime/core/dashboard-layout.js';
+import { useSplitterReflow } from
+  '@fastsprout/reacd/adapter-runtime/renderer/splitter/use-splitter-reflow.js';
+import { useSplitterDrag } from
+  '@fastsprout/reacd/adapter-runtime/renderer/splitter/use-splitter-drag.js';
 import {
   DashboardContext,
   DashboardRegionContext,
   DashboardMainContext,
-} from '../../../renderer/dashboard/dashboard-context.js';
-import { MainScopeContext } from '../../../renderer/main/main-scope.js';
+} from '@fastsprout/reacd/adapter-runtime/renderer/dashboard/dashboard-context.js';
+import { MainScopeContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/main/main-scope.js';
 import { ShadcnDashboardResizeHandle } from
   '../dashboard-resize-handle/dashboard-resize-handle.adapter.js';
 

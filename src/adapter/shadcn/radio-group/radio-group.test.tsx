@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { useState } from 'react';
@@ -16,7 +17,7 @@ describe('shadcn RadioGroup', () => {
     function Scene() {
       const [value, setValue] = useState('');
       return (
-        <ReacdProvider>
+        <ReacdProvider adapter={shadcnAdapter}>
           <RadioGroup
             label="Delivery"
             description="Choose one"
@@ -54,7 +55,7 @@ describe('shadcn RadioGroup', () => {
     const user = userEvent.setup();
     const change = vi.fn();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <RadioGroup
           label="Choice"
           items={items}
@@ -73,7 +74,7 @@ describe('shadcn RadioGroup', () => {
       'false',
     );
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <RadioGroup
           label="Choice"
           items={items}

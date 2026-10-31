@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
@@ -12,7 +13,7 @@ describe('shadcn AvatarGroup', () => {
   it('reveals every hidden identity through a native disclosure', async () => {
     const user = userEvent.setup();
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AvatarGroup label="Reviewers" items={items} max={1} />
       </ReacdProvider>,
     );
@@ -23,7 +24,7 @@ describe('shadcn AvatarGroup', () => {
     expect(screen.getByRole('img', { name: 'Example Editor' })).toBeVisible();
     expect(screen.getByText('Example Reviewer', { exact: true })).toBeVisible();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AvatarGroup label="Reviewers" items={items} max={2} size="small" />
       </ReacdProvider>,
     );
@@ -31,19 +32,19 @@ describe('shadcn AvatarGroup', () => {
   });
   it('handles empty, complete, custom empty-message, and replaced groups', () => {
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AvatarGroup label="Reviewers" items={[]} />
       </ReacdProvider>,
     );
     expect(screen.getByText('No people to display.')).toBeInTheDocument();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AvatarGroup label="Reviewers" items={[]} emptyMessage="Nobody assigned." />
       </ReacdProvider>,
     );
     expect(screen.getByText('Nobody assigned.')).toBeInTheDocument();
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <AvatarGroup label="Reviewers" items={items} />
       </ReacdProvider>,
     );

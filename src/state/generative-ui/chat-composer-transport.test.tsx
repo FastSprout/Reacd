@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -27,11 +28,12 @@ const root = {
 
 it('validates all recursive action and binding slots before rendering controls', () => {
   const document = { schemaVersion: '0.2', state, root };
-  const view = render(<GenerativeUI document={document} />);
+  const view = render(<GenerativeUI adapter={shadcnAdapter} document={document} />);
   expect(screen.getByRole('alert')).toHaveTextContent('send');
   expect(screen.queryByRole('textbox')).toBeNull();
   view.rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...document,
         root: {
@@ -50,6 +52,7 @@ it('validates all recursive action and binding slots before rendering controls',
   expect(screen.getByRole('alert')).toHaveTextContent('missingRetry');
   view.rerender(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{
         ...document,
         root: {
@@ -81,6 +84,7 @@ it('projects draft state and validates status transitions', async () => {
   const send = vi.fn();
   render(
     <GenerativeUI
+      adapter={shadcnAdapter}
       document={{ schemaVersion: '0.2', state, root }}
       registry={registry}
       actions={{ send }}

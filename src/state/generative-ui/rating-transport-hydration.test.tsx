@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
@@ -25,16 +26,19 @@ describe('rating transport and hydration', () => {
     const client = success(createStateRegistry(state));
     const container = globalThis.document.createElement('div');
     container.innerHTML = renderToString(
-      <GenerativeUI document={document} registry={server} />,
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={server} />,
     );
     globalThis.document.body.appendChild(container);
     const label = screen.getByText('Rating', { exact: true }).id;
     const errors: unknown[] = [];
-    const view = render(<GenerativeUI document={document} registry={client} />, {
-      container,
-      hydrate: true,
-      onRecoverableError: (error) => errors.push(error),
-    });
+    const view = render(
+      <GenerativeUI adapter={shadcnAdapter} document={document} registry={client} />,
+      {
+        container,
+        hydrate: true,
+        onRecoverableError: (error) => errors.push(error),
+      },
+    );
     const slider = screen.getByRole('slider', { name: 'Rating' });
     expect(slider).toHaveAttribute('aria-labelledby', label);
     slider.focus();
@@ -48,6 +52,7 @@ describe('rating transport and hydration', () => {
   it('rejects out-of-range transport state before showing the slider', () => {
     render(
       <GenerativeUI
+        adapter={shadcnAdapter}
         document={{
           ...document,
           state: [{ key: 'rating', kind: 'number', initial: 6, access: 'readWrite' }],

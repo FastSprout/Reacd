@@ -1,4 +1,5 @@
-import { FILE_UPLOAD_ERRORS as E } from '../../../core/file-upload-policy.js';
+import { FILE_UPLOAD_ERRORS as E } from
+  '@fastsprout/reacd/adapter-runtime/core/file-upload-policy.js';
 export interface ReadTask {
   readonly promise: Promise<string>;
   readonly cancel: () => void;

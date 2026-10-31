@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
-import type { BlogPostProps } from '../../../components/blog-post/blog-post.props.js';
-import { EditorialEntrySurface } from '../../../renderer/editorial/editorial-entry.js';
+import type { BlogPostProps } from
+  '@fastsprout/reacd/adapter-runtime/components/blog-post/blog-post.props.js';
+import { EditorialEntrySurface } from
+  '@fastsprout/reacd/adapter-runtime/renderer/editorial/editorial-entry.js';
 
 export function ShadcnBlogPost(props: BlogPostProps): ReactNode {
   return <EditorialEntrySurface {...props} kind="blog" />;

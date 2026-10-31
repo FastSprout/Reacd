@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -9,7 +10,7 @@ describe('documented Empty example', () => {
   it('retains the query across every size and surface variant', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <EmptyExample />
       </ReacdProvider>,
     );
@@ -29,7 +30,7 @@ describe('documented Empty example', () => {
   it('retains the query across busy, media, footer and recovery actions', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <EmptyExample />
       </ReacdProvider>,
     );
@@ -54,7 +55,7 @@ describe('documented Empty example', () => {
   it('uses a named fallback after clearing title and description', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <EmptyExample />
       </ReacdProvider>,
     );

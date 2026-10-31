@@ -1,5 +1,6 @@
-import type { ChartProps } from '../../../components/chart/index.js';
-import { CHART_DEFAULTS } from '../../../core/chart-policy.js';
+import type { ChartProps } from
+  '@fastsprout/reacd/adapter-runtime/components/chart/index.js';
+import { CHART_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/chart-policy.js';
 export function ChartTable({ label, categories, series }: ChartProps) {
   const caption = `${label} data`;
   return (

@@ -1,4 +1,5 @@
-import { CHART_POLICY as P } from '../../../core/chart-policy.js';
+import { CHART_POLICY as P } from
+  '@fastsprout/reacd/adapter-runtime/core/chart-policy.js';
 export function ChartPattern({ id, index }: { id: string; index: number }) {
   return (
     <pattern

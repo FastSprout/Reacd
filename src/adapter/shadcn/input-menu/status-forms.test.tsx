@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -17,7 +18,7 @@ it('announces all result states without allowing stale choice activation', async
   const user = userEvent.setup();
   const change = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu
         {...base}
         onValueChange={change}
@@ -31,19 +32,19 @@ it('announces all result states without allowing stale choice activation', async
   await user.click(screen.getByRole('option', { name: 'Alpha' }));
   expect(change).not.toHaveBeenCalled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu {...base} onValueChange={change} status="error" />
     </ReacdProvider>,
   );
   expect(screen.getByRole('alert')).toHaveTextContent('could not be loaded');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu {...base} onValueChange={change} status="loading" />
     </ReacdProvider>,
   );
   expect(screen.getByRole('status')).toHaveTextContent('Loading suggestions');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu
         {...base}
         onValueChange={change}
@@ -54,7 +55,7 @@ it('announces all result states without allowing stale choice activation', async
   );
   expect(screen.getByRole('alert')).toHaveTextContent('Search offline');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu
         {...base}
         onValueChange={change}
@@ -69,7 +70,7 @@ it('announces all result states without allowing stale choice activation', async
 it('submits only accepted text and exempts disabled controls', () => {
   const view = render(
     <form aria-label="Named form">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <InputMenu
           {...base}
           value="Custom place"
@@ -88,7 +89,7 @@ it('submits only accepted text and exempts disabled controls', () => {
   expect(Array.from(new FormData(form))).toEqual([['place', 'Custom place']]);
   view.rerender(
     <form aria-label="Named form">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <InputMenu
           {...base}
           name="place"
@@ -112,7 +113,7 @@ it('rejects invalid preflight and disclosure returns', async () => {
     onSuggestionSelect: () => 'invalid',
   });
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu {...props} />
     </ReacdProvider>,
   );
@@ -122,7 +123,7 @@ it('rejects invalid preflight and disclosure returns', async () => {
   expect(screen.getByRole('alert')).toHaveTextContent('boolean or no value');
   expect(change).not.toHaveBeenCalled();
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <InputMenu
         {...inputMenuSchema.parse({
           ...base,

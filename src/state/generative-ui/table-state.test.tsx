@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -7,7 +8,7 @@ import {
   interactiveTableNodeSchema,
 } from '../../schema/table/generative.schema.js';
 import { tableDeclarationSchema } from '../../schema/table/table.schema.js';
-import { shadcnAdapter } from '../../adapter/shadcn/shadcn.adapter.js';
+
 import { ShadcnTable } from '../../adapter/shadcn/table/table.adapter.js';
 import { renderEntry } from '../../renderer/contracts/render-entry.js';
 import { createStateRegistry } from '../registry/state-registry.js';

@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -8,7 +9,7 @@ describe('documented Popover example', () => {
   it('changes logical popup options', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PopoverExample />
       </ReacdProvider>,
     );
@@ -35,7 +36,7 @@ describe('documented Popover example', () => {
   it('edits, saves, and closes interactive content', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PopoverExample />
       </ReacdProvider>,
     );
@@ -53,7 +54,7 @@ describe('documented Popover example', () => {
   it('nests and closes independent popover content', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PopoverExample />
       </ReacdProvider>,
     );
@@ -74,7 +75,7 @@ describe('documented Popover example', () => {
   it('restores a controlled child when its retained parent reopens', async () => {
     const user = userEvent.setup();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PopoverExample />
       </ReacdProvider>,
     );

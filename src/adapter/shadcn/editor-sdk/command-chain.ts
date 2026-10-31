@@ -2,8 +2,9 @@ import type { ChainedCommands } from '@tiptap/core';
 import type {
   EditorCommand,
   EditorStandardCommand,
-} from '../../../core/editor-commands.js';
-import { EDITOR_HEADING_LEVELS } from '../../../core/editor-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/core/editor-commands.js';
+import { EDITOR_HEADING_LEVELS } from
+  '@fastsprout/reacd/adapter-runtime/core/editor-policy.js';
 
 const operations: Readonly<
   Record<EditorStandardCommand, (chain: ChainedCommands) => ChainedCommands>

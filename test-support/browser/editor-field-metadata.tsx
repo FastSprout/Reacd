@@ -1,15 +1,17 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createStore } from 'jotai';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { EditorFieldView } from './editor-field-view.js';
-import '../../src/adapter/shadcn/styles.css';
+import '@fastsprout/reacd-shadcn/styles';
 
 function Root() {
   const [store] = useState(createStore);
   const [compact, setCompact] = useState(false);
   return (
     <ReacdProvider
+      adapter={shadcnAdapter}
       store={store}
       templateId={compact ? 'erp-compact' : 'saas-modern-light'}
     >

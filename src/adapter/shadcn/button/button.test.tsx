@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -7,7 +8,7 @@ it('activates with pointer/keyboard and protects busy controls', async () => {
   const user = userEvent.setup();
   const action = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Button label="Save" onPress={action} />
     </ReacdProvider>,
   );
@@ -19,14 +20,14 @@ it('activates with pointer/keyboard and protects busy controls', async () => {
   expect(action.mock.calls).toEqual([[], [], []]);
   expect(button).toHaveAttribute('type', 'button');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Button label="Save" onPress={action} disabled />
     </ReacdProvider>,
   );
   await user.click(button);
   expect(action).toHaveBeenCalledTimes(3);
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Button label="Save" onPress={action} loading loadingLabel="Saving" />
     </ReacdProvider>,
   );
@@ -39,7 +40,7 @@ it('activates with pointer/keyboard and protects busy controls', async () => {
 
 it('keeps icon decoration separate from the supplied visible label', () => {
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Button
         label="Download"
         onPress={() => undefined}
@@ -55,7 +56,7 @@ it('keeps icon decoration separate from the supplied visible label', () => {
       .querySelectorAll('[aria-hidden="true"]'),
   ).toHaveLength(2);
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Button label="Delete" onPress={() => undefined} loading intent="danger" />
     </ReacdProvider>,
   );

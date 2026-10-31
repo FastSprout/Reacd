@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import {
   act,
   fireEvent,
@@ -27,7 +28,7 @@ function Example(props: Partial<Omit<PopoverProps, 'open' | 'onOpenChange'>>) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   return (
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Popover
         title="Editor"
         triggerLabel="Open editor"
@@ -90,7 +91,7 @@ describe('shadcn Popover', () => {
       return <Button label={`Count ${count}`} onPress={() => setCount(count + 1)} />;
     }
     const view = render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PortalActiveContext.Provider value={true}>
           <Popover
             title="Retained"
@@ -106,7 +107,7 @@ describe('shadcn Popover', () => {
     );
     await user.click(await screen.findByRole('button', { name: 'Count 0' }));
     view.rerender(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <PortalActiveContext.Provider value={false}>
           <Popover
             title="Retained"
@@ -122,7 +123,7 @@ describe('shadcn Popover', () => {
     );
     expect(screen.queryByRole('dialog')).toBeNull();
     view.rerender(
-      <ReacdProvider templateId="erp-compact">
+      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
         <PortalActiveContext.Provider value={true}>
           <Popover
             title="Retained"
@@ -148,7 +149,7 @@ describe('shadcn Popover', () => {
       const [open, setOpen] = useAtom(popoverAtom, { store });
       const [dialog, setDialog] = useState(true);
       return (
-        <ReacdProvider store={store}>
+        <ReacdProvider adapter={shadcnAdapter} store={store}>
           <Modal
             title="Layer parent"
             description="Independent dismissal"

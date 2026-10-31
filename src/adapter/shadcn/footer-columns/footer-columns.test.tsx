@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -8,7 +9,7 @@ describe('shadcn FooterColumns', () => {
     const user = userEvent.setup();
     const action = vi.fn();
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <FooterColumns
           label="Site resources"
           left={<Text>Left slot</Text>}
@@ -72,7 +73,7 @@ describe('shadcn FooterColumns', () => {
   });
   it('supports an empty footer without phantom headings or slots', () => {
     render(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <FooterColumns label="Empty footer" columns={[]} />
       </ReacdProvider>,
     );

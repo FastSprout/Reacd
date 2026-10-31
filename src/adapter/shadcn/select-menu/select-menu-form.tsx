@@ -1,7 +1,10 @@
 import type { RefObject } from 'react';
-import type { SelectMenuProps } from '../../../components/select-menu/index.js';
-import { SELECTION_POLICY } from '../../../core/selection-policy.js';
-import { SELECT_MENU_DEFAULTS } from '../../../core/select-menu-policy.js';
+import type { SelectMenuProps } from
+  '@fastsprout/reacd/adapter-runtime/components/select-menu/index.js';
+import { SELECTION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/selection-policy.js';
+import { SELECT_MENU_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/select-menu-policy.js';
 
 export function SelectMenuForm({
   properties,

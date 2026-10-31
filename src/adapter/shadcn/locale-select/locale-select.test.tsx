@@ -1,3 +1,4 @@
+import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { atom, useAtom } from 'jotai';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -33,7 +34,7 @@ it('selects canonical values by keyboard and submits native form data', async ()
   const user = userEvent.setup();
   const view = render(
     <form aria-label="Settings">
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example required />
       </ReacdProvider>
     </form>,
@@ -57,7 +58,7 @@ it('retains rejected changes and protects readonly values', async () => {
   const user = userEvent.setup();
   const change = vi.fn();
   const view = render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example onValueChange={change} />
     </ReacdProvider>,
   );
@@ -67,7 +68,7 @@ it('retains rejected changes and protects readonly values', async () => {
   expect(change).toHaveBeenCalledExactlyOnceWith('pl-PL');
   expect(trigger).toHaveTextContent('English');
   view.rerender(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example readOnly onValueChange={change} />
     </ReacdProvider>,
   );
@@ -81,7 +82,7 @@ it('retains rejected changes and protects readonly values', async () => {
 it('omits disabled controls and allows missing optional descriptions', () => {
   const view = render(
     <form>
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example disabled description={undefined} />
       </ReacdProvider>
     </form>,
@@ -95,7 +96,7 @@ it('omits disabled controls and allows missing optional descriptions', () => {
 it('renders consistent selected text across server requests', () => {
   const request = () =>
     renderToString(
-      <ReacdProvider>
+      <ReacdProvider adapter={shadcnAdapter}>
         <Example />
       </ReacdProvider>,
     );
@@ -105,7 +106,7 @@ it('renders consistent selected text across server requests', () => {
 
 it('retains a literal code at the private defensive boundary', () => {
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <Example value="fr" />
     </ReacdProvider>,
   );
@@ -115,7 +116,7 @@ it('retains a literal code at the private defensive boundary', () => {
 it('keeps inactive portal controls closed', async () => {
   const user = userEvent.setup();
   render(
-    <ReacdProvider>
+    <ReacdProvider adapter={shadcnAdapter}>
       <PortalActiveContext.Provider value={false}>
         <Example />
       </PortalActiveContext.Provider>

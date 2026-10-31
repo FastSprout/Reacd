@@ -3,14 +3,15 @@ import { useToastQueue } from './toast-queue-context.js';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { Toast } from '@base-ui/react/toast';
-import type { ToastProps } from '../../../components/toast/index.js';
+import type { ToastProps } from
+  '@fastsprout/reacd/adapter-runtime/components/toast/index.js';
 import {
   TOAST_DEFAULTS,
   TOAST_POLICY,
   TOAST_DURATIONS,
   toastDecision,
   toastTimeout,
-} from '../../../core/toast-policy.js';
+} from '@fastsprout/reacd/adapter-runtime/core/toast-policy.js';
 import type { ToastData, ToastFeedback } from './toast-data.js';
 
 export function ToastRegistration({

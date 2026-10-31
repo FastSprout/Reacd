@@ -1,6 +1,9 @@
-import type { TableProps } from '../../../components/table/index.js';
-import { TABLE_DEFAULTS as D } from '../../../core/table-policy.js';
-import { TableSurface } from '../../../renderer/table/table.renderer.js';
+import type { TableProps } from
+  '@fastsprout/reacd/adapter-runtime/components/table/index.js';
+import { TABLE_DEFAULTS as D } from
+  '@fastsprout/reacd/adapter-runtime/core/table-policy.js';
+import { TableSurface } from
+  '@fastsprout/reacd/adapter-runtime/renderer/table/table.renderer.js';
 import { ShadcnInteractiveTable } from './interactive-table.js';
 import { Button } from '../vendor/ui/button.js';
 export function ShadcnTable(props: TableProps) {
