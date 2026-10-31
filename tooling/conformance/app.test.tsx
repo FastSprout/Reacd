@@ -114,7 +114,10 @@ describe('component workbench', () => {
   it('renders every data state and restores ready data', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: 'Content and data' }));
+    await act(async () => {
+      await user.click(screen.getByRole('button', { name: 'Content and data' }));
+      await import('./catalog/data-examples.js');
+    });
     expect(
       await screen.findByRole('table', { name: 'Example inventory' }),
     ).toBeInTheDocument();

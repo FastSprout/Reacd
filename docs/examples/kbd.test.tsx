@@ -5,25 +5,31 @@ import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { KbdExample } from './kbd.js';
+
+function renderExample() {
+  const user = userEvent.setup();
+  render(
+    <ReacdProvider adapter={shadcnAdapter}>
+      <KbdExample />
+    </ReacdProvider>,
+  );
+  return user;
+}
+
 describe('documented Kbd example', () => {
-  it('changes values, labels, platform, size, intent, and variant', async () => {
-    const user = userEvent.setup();
-    render(
-      <ReacdProvider adapter={shadcnAdapter}>
-        <KbdExample />
-      </ReacdProvider>,
-    );
+  it.each([
+    ['Key platform', ['Apple', 'Other platforms']],
+    ['Key size', ['Small', 'Large', 'Medium']],
+    ['Key variant', ['Soft', 'Subtle', 'Solid', 'Outline']],
+    ['Key intent', ['Primary', 'Danger', 'Secondary']],
+  ] as const)('changes %s options', async (control, options) => {
+    const user = renderExample();
+    for (const option of options) await chooseOption(user, control, option);
+  });
+  it('edits the key value and accessible label', async () => {
+    const user = renderExample();
     const current = within(screen.getByRole('region', { name: 'Current key' }));
     expect(current.getByRole('img', { name: 'Control' })).toHaveTextContent('Ctrl');
-    for (const [control, options] of [
-      ['Key platform', ['Apple', 'Other platforms']],
-      ['Key size', ['Small', 'Large', 'Medium']],
-      ['Key variant', ['Soft', 'Subtle', 'Solid', 'Outline']],
-      ['Key intent', ['Primary', 'Danger', 'Secondary']],
-    ] as const)
-      for (const option of options) {
-        await chooseOption(user, control, option);
-      }
     await user.clear(screen.getByLabelText('Key value'));
     expect(current.getByRole('img', { name: 'K' })).toBeInTheDocument();
     await user.type(screen.getByLabelText('Key value'), 'F12');
