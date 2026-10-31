@@ -17,6 +17,8 @@
 
 ### Fixed
 
+- Resolve adapter styles declarations during clean-checkout type checks.
+
 - Propagate nested templates and application direction into Material UI themes.
 - Preserve isolated Jotai state across adapter changes.
 
