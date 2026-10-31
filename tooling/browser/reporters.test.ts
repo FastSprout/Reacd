@@ -15,7 +15,7 @@ it.each([undefined, '', 'false', 'TRUE', '1', ' true', 'true '])(
     vi.resetModules();
     const configuration = (await import('../../playwright.config.js')).default;
     expect(configuration.reporter).toEqual(LOCAL_REPORTERS);
-    expect(configuration.workers).toBe(2);
+    expect(configuration.workers).toBe(4);
     expect(configuration.retries).toBe(0);
   },
 );
@@ -26,6 +26,6 @@ it('adds GitHub annotations only for the literal hosted runner flag', async () =
   vi.resetModules();
   const configuration = (await import('../../playwright.config.js')).default;
   expect(configuration.reporter).toEqual([...LOCAL_REPORTERS, ['github']]);
-  expect(configuration.workers).toBe(2);
+  expect(configuration.workers).toBe(4);
   expect(configuration.retries).toBe(0);
 });

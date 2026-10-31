@@ -28,13 +28,13 @@ it.each([
       `${entry.relative}packages/mui/dist/mui/mui.adapter.d.ts`,
     ],
     '@fastsprout/reacd-mui/styles': [
-      `${entry.relative}packages/mui/dist/styles-contract.d.ts`,
+      `${entry.relative}packages/mui/dist/mui/styles-contract.d.ts`,
     ],
     '@fastsprout/reacd-shadcn': [
       `${entry.relative}packages/shadcn/dist/shadcn/shadcn.adapter.d.ts`,
     ],
     '@fastsprout/reacd-shadcn/styles': [
-      `${entry.relative}packages/shadcn/dist/styles-contract.d.ts`,
+      `${entry.relative}packages/shadcn/dist/shadcn/styles-contract.d.ts`,
     ],
     ...Object.fromEntries(
       ['core', 'schema', 'components', 'renderer'].map((layer) => [
