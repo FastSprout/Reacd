@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/FastSprout/Reacd/compare/v0.2.1...v0.3.0) (2026-10-31)
+
+
+### Features
+
+* add complete Material UI adapter and Node.js 22 support ([909dfed](https://github.com/FastSprout/Reacd/commit/909dfedfac13f4278adbc3d8080fd11c49e67896))
+
 ## [0.3.0] - Unreleased
 
 ### Added
