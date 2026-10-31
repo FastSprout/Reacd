@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'node:url';
 
 const TEST_EXECUTION_POLICY = {
-  maxWorkers: 4,
+  maxWorkers: 2,
   moduleCachePath: fileURLToPath(new URL('./.cache/vitest-root', import.meta.url)),
 } as const;
 
