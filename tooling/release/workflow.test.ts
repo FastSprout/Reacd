@@ -1,11 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import {
-  mkdtempSync,
-  readFileSync,
-  readdirSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -18,6 +12,8 @@ const stepSchema = z.object({
   id: z.string().optional(),
   env: stringMap.optional(),
   run: z.string().optional(),
+  if: z.string().optional(),
+  'continue-on-error': z.boolean().optional(),
 });
 const workflowSchema = z.object({
   jobs: z.object({
@@ -73,6 +69,37 @@ const CASES = [
 ] as const;
 
 describe('publication workflow capability boundary', () => {
+  it('updates the adapter version and engine peer with the shared release', () => {
+    const config: unknown = JSON.parse(
+      readFileSync('release-please-config.json', 'utf8'),
+    );
+    const parsed = z
+      .object({
+        packages: z.object({
+          '.': z.object({ 'extra-files': z.array(z.unknown()) }),
+        }),
+      })
+      .parse(config);
+    for (const jsonpath of ['$.version', "$.peerDependencies['@fastsprout/reacd']"]) {
+      expect(parsed.packages['.']['extra-files']).toContainEqual({
+        type: 'json',
+        path: 'packages/shadcn/package.json',
+        jsonpath,
+      });
+    }
+  });
+  it('uses verified retryable publication before confirming both packages', () => {
+    const steps = readWorkflow().jobs.publish.steps;
+    const upload = steps.findIndex(
+      (step) => step.run === 'npm run release:publish',
+    );
+    expect(upload).toBeGreaterThanOrEqual(0);
+    expect(steps[upload + 1]).toMatchObject({ run: 'npm run release:registry' });
+    expect(steps[upload + 1]?.if).toBeUndefined();
+    expect(steps[upload + 1]?.['continue-on-error']).toBeUndefined();
+    expect(steps.some((step) => step.run?.startsWith('npm publish '))).toBe(false);
+    expect(steps.at(-1)?.run).toBe('npm run release:registry');
+  });
   it('normalizes raw enablement only in the non-OIDC job', () => {
     const { release, publish } = readWorkflow().jobs;
     const step = publicationStep();
@@ -95,9 +122,7 @@ describe('publication workflow capability boundary', () => {
         'needs.release.outputs.sha == github.sha && ' +
         "needs.release.outputs.publish_enabled == 'true'",
     );
-    const verify = publish.steps.find(
-      (step) => step.run === 'npm run release:verify',
-    );
+    const verify = publish.steps.find((step) => step.run === 'npm run release:verify');
     expect(verify?.env?.['NPM_PUBLISH_ENABLED']).toBe(
       '${{ vars.NPM_PUBLISH_ENABLED }}',
     );

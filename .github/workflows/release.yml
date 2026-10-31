@@ -103,4 +103,6 @@ jobs:
           NPM_PUBLISH_ENABLED: ${{ vars.NPM_PUBLISH_ENABLED }}
         run: npm run release:verify
       - run: npm run release:pack
-      - run: npm publish .cache/release/package.tgz --access public
+      - run: npm run release:publish
+      - name: Verify the public registry publication
+        run: npm run release:registry
