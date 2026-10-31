@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.1](https://github.com/FastSprout/Reacd/compare/v0.2.0...v0.2.1) (2026-10-31)
+
+
+### Bug Fixes
+
+* install Chromium before packed-consumer publication checks ([9477714](https://github.com/FastSprout/Reacd/commit/94777141d521d5a220c0372a261b1cac8a969718))
+* publish npm packages before completing GitHub releases ([a8e44de](https://github.com/FastSprout/Reacd/commit/a8e44de1ea1af5455f8da213767db78ca18c0bde))
+* serialize normal and recovery release publication ([b7afb3f](https://github.com/FastSprout/Reacd/commit/b7afb3f08f44c0a6352ae373e92102283cfd3f92))
+
 ## [0.2.0] - 2026-10-31
 
 ### Changed
