@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.0](https://github.com/FastSprout/Reacd/compare/v0.2.0...v0.3.0) (2026-10-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* separate the engine and complete shadcn adapter packages
+
+### Features
+
+* enforce layer direction and dependency cycles ([dfec20b](https://github.com/FastSprout/Reacd/commit/dfec20bcae0cf3db7d4b3131aa95162418354de0))
+* implement closed TSX UI framework and complete shadcn catalog ([5a2ff6b](https://github.com/FastSprout/Reacd/commit/5a2ff6b6e752e84f5ccd80010e90e88584b0671c))
+* separate the engine and complete shadcn adapter packages ([e432e28](https://github.com/FastSprout/Reacd/commit/e432e284b8a1c9d0c9a1c65f47cf7aa0c57c1af6))
+
+
+### Bug Fixes
+
+* publish the scoped package with closed browser bootstrap ([5889060](https://github.com/FastSprout/Reacd/commit/58890605c35c9308891905d3e262e0fa77af9c65))
+* recover editor queries and publish native edits before hydration ([3154156](https://github.com/FastSprout/Reacd/commit/3154156d8c0b3ea6ee5aa1733ccc4ba99b4093d7))
+
 ## [0.2.0] - 2026-10-31
 
 ### Changed
