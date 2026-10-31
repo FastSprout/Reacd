@@ -142,6 +142,18 @@ export function mountEditorMenu(
       editor.isEditable &&
       range.to - range.from <= P.maxQuery + P.triggers[request.kind].length &&
       state.selection.$from.parent.type.name !== 'codeBlock',
+    shouldResetDismissed: ({ transaction, match, range }) => {
+      const reverse = transaction.mapping.invert();
+      if (reverse.mapResult(match.range.from).deleted) return true;
+      // DOM diffing can keep the colon while replacing the entire escaped query.
+      const from = reverse.map(range.from, -1) + P.triggers[request.kind].length;
+      const to = reverse.map(range.to);
+      return (
+        to > from &&
+        transaction.mapping.mapResult(from).deleted &&
+        transaction.mapping.mapResult(to, -1).deleted
+      );
+    },
     items: ({ query }) => [...resolved(query).items],
     command: ({ editor: active, range, props }) => {
       insert(active, range, props);

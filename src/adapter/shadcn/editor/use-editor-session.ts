@@ -1,4 +1,5 @@
-import { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { Node } from '@tiptap/pm/model';
 import type { Editor } from '@tiptap/core';
 import { useEditor } from '@tiptap/react';
 import type { EditorProps } from
@@ -44,6 +45,17 @@ export function useEditorSession(input: EditorProps, id: string) {
   useEffect(() => () => resources.dispose(), [resources]);
   const [ready, setReady] = useState(false);
   const [issue, setIssue] = useState<string>();
+  const [revision, setRevision] = useState(0);
+  const hydrated = useRef<
+    | {
+        document: Node;
+        selection: EditorProps['selection'];
+        protectedView: boolean;
+        revision: number;
+      }
+    | undefined
+  >(undefined);
+  const refresh = () => setRevision((previous) => previous + 1);
   const [extensions] = useState(() =>
     createEditorExtensions({
       onRejected: () => setIssue(EDITOR_ERRORS.rejected),
@@ -54,54 +66,69 @@ export function useEditorSession(input: EditorProps, id: string) {
   const editor: Editor | null = useEditor({
     extensions,
     immediatelyRender: false,
-    shouldRerenderOnTransaction: true,
+    shouldRerenderOnTransaction: false,
     injectCSS: false,
     enableInputRules: EDITOR_BEHAVIOR.automaticInputRules,
     content: editorDocumentToSdk(properties.value),
     editable: !protectedView,
     onBeforeCreate: ({ editor: current }) => resources.capture(current),
     onCreate: () => setReady(true),
-    onUpdate: ({ editor: current, transaction }) => {
-      if (protectedView || transaction.getMeta(CONTROLLED_TRANSACTION)) return;
-      const projected = editorDocumentFromSdk(current.state.doc);
-      if (!projected.success) {
-        setIssue(EDITOR_ERRORS.projection);
-        return;
-      }
-      setIssue(undefined);
+    onTransaction: ({ transaction }) => {
       if (
-        !publishEditorDocument(
-          properties,
-          projected.data,
-          sdkSelectionToDomain(current.state.doc, current.state.selection),
-        )
+        transaction.getMeta(CONTROLLED_TRANSACTION) ||
+        (!transaction.docChanged && transaction.storedMarksSet)
       )
-        setIssue(EDITOR_NATIVE_POLICY.selectionError);
+        refresh();
+    },
+    onUpdate: ({ editor: current, transaction }) => {
+      try {
+        if (protectedView || transaction.getMeta(CONTROLLED_TRANSACTION)) return;
+        const projected = editorDocumentFromSdk(current.state.doc);
+        if (!projected.success) {
+          setIssue(EDITOR_ERRORS.projection);
+          return;
+        }
+        setIssue(undefined);
+        if (
+          !publishEditorDocument(
+            properties,
+            projected.data,
+            sdkSelectionToDomain(current.state.doc, current.state.selection),
+          )
+        )
+          setIssue(EDITOR_NATIVE_POLICY.selectionError);
+      } finally {
+        refresh();
+      }
     },
     onSelectionUpdate: ({ editor: current, transaction }) => {
-      if (
-        !active ||
-        properties.disabled === true ||
-        transaction.docChanged ||
-        transaction.getMeta(CONTROLLED_TRANSACTION)
-      )
-        return;
-      if (
-        properties.onEditChange === undefined ||
-        !current.state.doc.eq(
-          current.schema.nodeFromJSON(editorDocumentToSdk(properties.value)),
+      if (transaction.docChanged) return;
+      try {
+        if (
+          !active ||
+          properties.disabled === true ||
+          transaction.getMeta(CONTROLLED_TRANSACTION)
         )
-      )
-        return;
-      const selection = sdkSelectionToDomain(
-        current.state.doc,
-        current.state.selection,
-      );
-      if (
-        selection !== undefined &&
-        !sameEditorSelection(selection, properties.selection)
-      )
-        publishEditorDocument(properties, properties.value, selection);
+          return;
+        if (
+          properties.onEditChange === undefined ||
+          !current.state.doc.eq(
+            current.schema.nodeFromJSON(editorDocumentToSdk(properties.value)),
+          )
+        )
+          return;
+        const selection = sdkSelectionToDomain(
+          current.state.doc,
+          current.state.selection,
+        );
+        if (
+          selection !== undefined &&
+          !sameEditorSelection(selection, properties.selection)
+        )
+          publishEditorDocument(properties, properties.value, selection);
+      } finally {
+        refresh();
+      }
     },
     editorProps: {
       attributes: {
@@ -152,9 +179,24 @@ export function useEditorSession(input: EditorProps, id: string) {
   useEffect(() => () => drag.cancel(), [drag]);
   useLayoutEffect(() => {
     if (editor === null || !ready) return;
-    editor.setEditable(!protectedView, false);
-    if (protectedView) drag.cancel();
     const value = editor.schema.nodeFromJSON(editorDocumentToSdk(properties.value));
+    const previous = hydrated.current;
+    if (
+      previous !== undefined &&
+      previous.document.eq(value) &&
+      sameEditorSelection(previous.selection, properties.selection) &&
+      previous.protectedView === protectedView &&
+      previous.revision === revision
+    )
+      return;
+    hydrated.current = {
+      document: value,
+      selection: properties.selection,
+      protectedView,
+      revision,
+    };
+    if (editor.isEditable !== !protectedView) editor.setEditable(!protectedView, false);
+    if (protectedView) drag.cancel();
     const changed = !editor.state.doc.eq(value);
     const selectedBlock = selectedSdkBlockId(editor.state.selection);
     const logical = sdkSelectionToDomain(editor.state.doc, editor.state.selection);
@@ -196,6 +238,14 @@ export function useEditorSession(input: EditorProps, id: string) {
           .setTextSelection({ from: mapped.data.anchor, to: mapped.data.head })
           .run();
     }
-  });
+  }, [
+    editor,
+    ready,
+    protectedView,
+    properties.value,
+    properties.selection,
+    drag,
+    revision,
+  ]);
   return { editor, ready, issue, protectedView, drag, properties };
 }
