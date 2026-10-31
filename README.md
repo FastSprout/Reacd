@@ -6,7 +6,7 @@
 [![Apache-2.0 license][license-badge]][license]
 
 Compose application views in TSX. The renderer and theme adapter handle HTML, styles and
-responsive layout; Jotai connects application state. The first adapter uses shadcn/ui.
+responsive layout; Jotai connects application state. Choose shadcn/ui or Material UI.
 Templates change appearance without changing the view declaration.
 
 [Documentation][docs] · [Get started][start] · [Components][components] · [Theme
@@ -15,17 +15,14 @@ adapters][adapters] · [State][state] · [Changelog][changelog] ·
 
 ## Install
 
-This setup targets the [0.2.0 package split][changelog]. Its npm publication is pending;
-currently published npm version 0.1.0 bundles its adapter.
-
 Install `@fastsprout/reacd` into an existing React application:
 
 ```sh
 npm install @fastsprout/reacd @fastsprout/reacd-shadcn
 ```
 
-Use Node.js 26 or newer for the toolchain. The [getting started guide][start] covers
-TypeScript's JSX configuration, the provider and browser adapter styles.
+The [getting started guide][start] covers TypeScript's JSX configuration, the provider
+and browser adapter styles.
 
 ## Declare a view
 
@@ -46,9 +43,10 @@ export function ToggleExample() {
 }
 ```
 
-Select `shadcnAdapter` from `@fastsprout/reacd-shadcn` at your `ReacdProvider` root.
-This is the [runnable Toggle example][example]. Optional [generative UI][generative]
-binds components to typed state with explicit read or read/write access.
+Select `shadcnAdapter` from `@fastsprout/reacd-shadcn` at your `ReacdProvider` root. For
+Material UI, install `@fastsprout/reacd-mui` and select its `muiAdapter`. This is the
+[runnable Toggle example][example]. Optional [generative UI][generative] binds
+components to typed state with explicit read or read/write access.
 
 ## License
 

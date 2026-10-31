@@ -22,7 +22,8 @@ export function Application() {
 
 The main adapter export supports Node SSR without importing styles. Load the browser
 styles entry in your client application. Token templates customize this adapter's
-appearance; they are not different adapters. MUI is planned.
+appearance; they are not different adapters. The separate @fastsprout/reacd-mui package
+provides Material UI.
 
 Requires the matching reacd version and its declared React/Jotai peers. Licensed under
 Apache-2.0; upstream shadcn attribution is in THIRD_PARTY_NOTICES.md. GitHub release

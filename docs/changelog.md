@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.3.0] - Unreleased
+
+### Added
+
+- Separate `@fastsprout/reacd-mui` adapter for the complete component catalog.
+- Material UI controls and surfaces with independent browser styles and SSR.
+- Live documentation switches for adapters, compact templates and RTL.
+- Shared behavior acceptance for both adapters and three-package release checks.
+
+### Changed
+
+- Use Node.js 22 for development and CI, with a minimum version of 22.12.0.
+- Give design-independent adapter behavior one source owner and colocated tests.
+- Wait for npm processing within a bounded window while checking exact archive bytes.
+
+### Fixed
+
+- Propagate nested templates and application direction into Material UI themes.
+- Preserve isolated Jotai state across adapter changes.
+
 ## [0.2.0] - 2026-10-31
 
 ### Changed

@@ -1,15 +1,12 @@
 # Get started
 
-This guide targets the [0.2.0 package split](changelog.md). Its npm publication is
-pending; currently published npm version 0.1.0 bundles its adapter.
-
 Install `@fastsprout/reacd` into an existing browser React and TypeScript application.
 Your React host owns mounting. Declare views with reacd components; the renderer and
 selected adapter own native rendering, styles and responsive layout. Jotai owns state.
 
 ## Install
 
-Use Node.js 26 or newer for the toolchain:
+Use Node.js 22.12 or newer for the toolchain:
 
 ```sh
 npm install @fastsprout/reacd @fastsprout/reacd-shadcn

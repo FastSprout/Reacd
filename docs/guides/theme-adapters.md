@@ -1,8 +1,8 @@
 # Theme adapters
 
 The engine and the design-system implementation are separate packages. An adapter maps
-all reacd components to concrete controls and surfaces. Only the shadcn adapter is
-implemented; a complete MUI adapter is planned.
+all reacd components to concrete controls and surfaces. Both shadcn/ui and Material UI
+implement the full 150-component catalog.
 
 ## Install and select an adapter
 
@@ -49,8 +49,9 @@ application store.
 
 An adapter chooses a design-system implementation. A template supplies appearance values
 such as color, typography, spacing and shape within that implementation.
-`saas-modern-light` and `erp-compact` are two token templates for the shadcn adapter;
-they are not two adapters. A new color palette does not create a new component mapping.
+`saas-modern-light` and `erp-compact` are two token templates supported by both
+adapters; they are not two adapters. A new color palette does not create a new component
+mapping.
 
 Use `templateId` or the application's template state to switch tokens. Keep token
 configuration at the composition boundary rather than editing individual views.
@@ -62,3 +63,28 @@ contracts and shared contexts. This namespace is for trusted adapter integration
 application imports. It does not expose state or vendor subpaths. Application views
 continue using the closed engine components and select a complete adapter at their
 composition root.
+
+## Material UI
+
+```sh
+npm install @fastsprout/reacd @fastsprout/reacd-mui
+```
+
+```tsx
+--8<-- "examples/installation-mui.tsx"
+```
+
+Material UI and Emotion provide controls, typography and surfaces. Shared headless
+interaction code implements reacd's controlled selection, focus, portals and composites.
+This is not a wrapper around the shadcn adapter. Neither adapter imports the other.
+Material dependencies remain outside the engine package.
+
+Templates map to Material palettes, density, typography and shape. Nested `Theme`
+boundaries update the Material theme alongside reacd tokens. `App` synchronizes
+right-to-left layout. Component previews let you switch adapters, density and text
+direction while retaining Jotai state.
+
+Changing adapters preserves the provider's Jotai store. React-local state inside
+replaced rendering subtrees follows normal React remount semantics; application state
+belongs in Jotai. Schema validation checks declarations, while browser conformance
+checks actual rendering and interactions.

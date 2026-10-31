@@ -1,6 +1,6 @@
 # Contributing
 
-Use Node.js 26+, TypeScript 7 and two-space indentation. Keep maintained files within
+Use Node.js 22.12+, TypeScript 7 and two-space indentation. Keep maintained files within
 300 lines and 88 columns. Tests belong beside their modules.
 
 ## Architecture
@@ -61,3 +61,17 @@ npm run preview -- --config vite.site.config.ts --port 8000 --strictPort
 
 Build documentation before invoking `npm run test:browser` independently. The complete
 `npm run check` command performs those steps in order and never deploys the site.
+
+## Pinned Material UI declarations
+
+The source checkout applies a hash-guarded declaration correction during `npm ci`. MUI
+9.5.0's transition easing declaration conflicts with its own derived types under exact
+optional-property checking. The patch changes only that declaration in the two pinned
+type files; unexpected versions or hashes fail installation. See [the upstream strict
+optional typing issue][mui-types].
+
+Keep strict checks and `skipLibCheck: false`. Published packages have no install script
+and keep adapter declarations vendor-opaque. Clean consumer acceptance checks the
+unpatched dependency installation.
+
+[mui-types]: https://github.com/mui/material-ui/issues/28745

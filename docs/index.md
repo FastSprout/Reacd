@@ -27,6 +27,9 @@ Keep the same component declarations when changing design systems. Adapters tran
 reacd controls into their concrete appearance; templates configure the visual tokens
 used by the selected adapter.
 
+Choose [shadcn/ui or Material UI](guides/theme-adapters.md). Every component reference
+includes an adapter switch in its live preview.
+
 [Learn about adapters](guides/theme-adapters.md)
 
 ## State stays explicit
