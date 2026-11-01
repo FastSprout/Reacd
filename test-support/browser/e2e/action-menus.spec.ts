@@ -75,27 +75,44 @@ for (const profile of PROFILES)
       });
     }
   }
-test('opens a context menu from a native long press', async ({ browser, baseURL }) => {
-  const context = await browser.newContext({
-    hasTouch: true,
-    viewport: { width: 375, height: HEIGHT },
-  });
-  const page = await context.newPage();
-  if (baseURL === undefined) throw new Error('Missing browser test base URL.');
-  await page.goto(baseURL);
-  await page.getByRole('button', { name: 'Navigation', exact: true }).click();
-  const trigger = page.getByRole('group', { name: 'Sample record context' });
-  await trigger.scrollIntoViewIfNeeded();
-  const bounds = await trigger.boundingBox();
-  if (bounds === null) throw new Error('Missing context trigger geometry.');
-  const client = await context.newCDPSession(page);
-  await client.send('Input.dispatchTouchEvent', {
-    type: 'touchStart',
-    touchPoints: [{ x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2 }],
-  });
-  await expect(page.getByRole('menu', { name: 'Sample record context' })).toBeVisible();
-  await client.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-  await page.getByRole('menuitem', { name: 'Archive sample record' }).tap();
-  await expect(page.getByText('Sample record archived locally.')).toBeVisible();
-  await context.close();
+const TOUCH_HOLD_DURATIONS_MS = [700, 2000];
+
+test.describe('native touch context menus', () => {
+  test.use({ hasTouch: true, viewport: { width: 375, height: HEIGHT } });
+  for (const hold of TOUCH_HOLD_DURATIONS_MS) {
+    test(`keeps the menu open after a ${hold}ms native hold`, async ({
+      page,
+      context,
+    }, info) => {
+      await page.clock.install();
+      await page.goto('/');
+      const adapter = info.project.name === 'mui' ? 'material-ui' : 'shadcn-ui';
+      await expect(page.locator('[data-adapter]').first()).toHaveAttribute(
+        'data-adapter', adapter,
+      );
+      await page.getByRole('button', { name: 'Navigation', exact: true }).click();
+      const trigger = page.getByRole('group', { name: 'Sample record context' });
+      await trigger.scrollIntoViewIfNeeded();
+      const bounds = await trigger.boundingBox();
+      if (bounds === null) throw new Error('Missing context trigger geometry.');
+      const client = await context.newCDPSession(page);
+      await client.send('Input.dispatchTouchEvent', {
+        type: 'touchStart',
+        touchPoints: [{
+          x: bounds.x + bounds.width / 2,
+          y: bounds.y + bounds.height / 2,
+        }],
+      });
+      await page.clock.runFor(hold);
+      const menu = page.getByRole('menu', { name: 'Sample record context' });
+      await expect(menu).toBeVisible();
+      await client.send('Input.dispatchTouchEvent', {
+        type: 'touchEnd', touchPoints: [],
+      });
+      await expect(menu).toBeVisible();
+      await expect(page.getByText('Sample record is active.')).toBeVisible();
+      await page.getByRole('menuitem', { name: 'Archive sample record' }).tap();
+      await expect(page.getByText('Sample record archived locally.')).toBeVisible();
+    });
+  }
 });

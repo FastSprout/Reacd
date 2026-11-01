@@ -17,6 +17,10 @@ export function SharedContextMenu(properties: ContextMenuProps) {
       <ContextMenu.Trigger
         tabIndex={disabled ? undefined : 0}
         onKeyDown={disabled ? undefined : openKeyboardContextMenu}
+        onTouchEnd={(event) => {
+          // Suppress the opening gesture's compatibility click.
+          if (active) event.preventDefault();
+        }}
         role="group"
         aria-label={label}
         aria-disabled={disabled}

@@ -17,6 +17,8 @@
 
 ### Fixed
 
+- Keep long-pressed context menus open after releasing the opening touch.
+
 - Resolve adapter styles declarations during clean-checkout type checks.
 
 - Propagate nested templates and application direction into Material UI themes.
