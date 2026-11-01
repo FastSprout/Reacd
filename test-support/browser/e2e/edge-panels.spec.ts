@@ -116,9 +116,11 @@ test('drawer swipe dismissal retains a keyboard close alternative', async ({
 test('drawer accepts a native touch swipe from its grip', async ({
   browser,
   baseURL,
-}) => {
+  storageState,
+}, info) => {
   if (baseURL === undefined) throw new Error('Missing browser base URL.');
   const context = await browser.newContext({
+    ...(storageState === undefined ? {} : { storageState }),
     baseURL,
     viewport: { width: 375, height: HEIGHT },
     hasTouch: true,
@@ -126,6 +128,10 @@ test('drawer accepts a native touch swipe from its grip', async ({
   const page = await context.newPage();
   try {
     await page.goto('/');
+    const adapter = info.project.name === 'mui' ? 'material-ui' : 'shadcn-ui';
+    await expect(page.locator('[data-adapter]').first()).toHaveAttribute(
+      'data-adapter', adapter,
+    );
     await page.getByRole('button', { name: 'Navigation', exact: true }).click();
     await page.getByRole('button', { name: 'Open sample drawer' }).click();
     const dialog = page.getByRole('dialog', { name: 'Sample drawer' });

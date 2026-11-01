@@ -128,14 +128,20 @@ test('honors urgent notification vetoes', async ({ page }) => {
 test('dismisses from the grip with native touch input', async ({
   browser,
   baseURL,
-}) => {
+  storageState,
+}, info) => {
   const context = await browser.newContext({
+    ...(storageState === undefined ? {} : { storageState }),
     hasTouch: true,
     viewport: { width: 375, height: HEIGHT },
   });
   const page = await context.newPage();
   if (baseURL === undefined) throw new Error('Missing browser test base URL.');
   await page.goto(baseURL);
+  const adapter = info.project.name === 'mui' ? 'material-ui' : 'shadcn-ui';
+  await expect(page.locator('[data-adapter]').first()).toHaveAttribute(
+    'data-adapter', adapter,
+  );
   await page.getByRole('button', { name: 'Navigation', exact: true }).click();
   await page.evaluate(() => {
     document.documentElement.style.fontSize = '200%';
