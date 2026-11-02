@@ -27,7 +27,6 @@ export function MuiSwitch(props: MuiSwitchProps) {
           <Switch
             checked={props.checked}
             disabled={disabled}
-            readOnly={Boolean(props.readOnly || props.loading)}
             name={field.name}
             value={props.value}
             required={field.required}

@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import type { DateValidationError } from '@mui/x-date-pickers/models';
+import type { DateValidationError, FieldRef } from '@mui/x-date-pickers/models';
 import { INPUT_DATE_POLICY } from
   '@fastsprout/reacd/adapter-runtime/core/input-date-policy.js';
 import { inputSubmissionMessage } from
@@ -7,7 +7,6 @@ import { inputSubmissionMessage } from
 import { useFormConstraint } from
   '@fastsprout/reacd/adapter-runtime/renderer/form-validation/use-form-constraint.js';
 import { MuiFormFocusContext } from '../form/focus-context.js';
-import { focusMaterialField } from '../native-focus.js';
 
 interface DateValidationOptions {
   readonly id: string;
@@ -24,25 +23,34 @@ export function useDateValidation(options: DateValidationOptions) {
     readonly error: DateValidationError;
   }>({ value, error: null });
   const nativeError = draft.value === value ? draft.error : null;
-  const onError = useCallback((error: DateValidationError) => {
-    setDraft({ value, error });
-  }, [value]);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const onError = useCallback(
+    (error: DateValidationError) => {
+      setDraft({ value, error });
+    },
+    [value],
+  );
+  const fieldRef = useRef<FieldRef<Date | null>>(null);
   const registerFocus = useContext(MuiFormFocusContext)?.register;
   const getMessage = useCallback(
-    () => nativeError ? INPUT_DATE_POLICY.invalidValue :
-      inputSubmissionMessage({ value, required }),
+    () =>
+      nativeError
+        ? INPUT_DATE_POLICY.invalidValue
+        : inputSubmissionMessage({ value, required }),
     [nativeError, value, required],
   );
   const constraint = useMemo(
-    () => ({ id, label, getMessage }), [id, label, getMessage],
+    () => ({ id, label, getMessage }),
+    [id, label, getMessage],
   );
-  const focus = useCallback(() => focusMaterialField(inputRef.current), []);
+  const focus = useCallback(() => fieldRef.current?.focusField(), []);
   useEffect(() => {
     if (!disabled) return registerFocus?.(id, focus);
     return undefined;
   }, [disabled, registerFocus, id, focus]);
   const validationError = useFormConstraint(constraint, disabled);
-  return { inputRef, onError, error: nativeError
-    ? INPUT_DATE_POLICY.invalidValue : validationError ?? '' };
+  return {
+    fieldRef,
+    onError,
+    error: nativeError ? INPUT_DATE_POLICY.invalidValue : (validationError ?? ''),
+  };
 }

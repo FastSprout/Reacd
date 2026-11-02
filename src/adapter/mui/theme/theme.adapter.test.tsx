@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import { expect, it } from 'vitest';
+import { MuiInput } from '../input/input.adapter.js';
+import { darkTemplateVariants } from '../../../schema/color-mode/default-templates.js';
 import { templates } from '../../../schema/design/templates.schema.js';
 import { MuiTheme } from './theme.adapter.js';
 import { MuiApp } from '../app/app.adapter.js';
@@ -43,4 +45,21 @@ it('isolates nested Material themes and inherits the application direction', () 
     `${outer.colors.primary} ltr`,
   );
   expect(screen.getByRole('button').className).toContain('MuiButton-sizeSmall');
+});
+
+it('paints the actual scoped native canvas for nested dark themes', () => {
+  const dark = darkTemplateVariants['saas-modern-light'];
+  render(
+    <ThemeProvider theme={createMaterialTheme(templates['saas-modern-light'])}>
+      <MuiTheme template={dark}>
+        <MuiInput label="Scoped draft" value="Retained"
+          onValueChange={() => undefined} />
+      </MuiTheme>
+    </ThemeProvider>,
+  );
+  const scope = screen.getByRole('textbox', { name: 'Scoped draft' })
+    .closest('.MuiScopedCssBaseline-root');
+  expect(scope).not.toBeNull();
+  expect(scope).toHaveStyle({ backgroundColor: dark.colors.canvas,
+    color: dark.colors.text });
 });

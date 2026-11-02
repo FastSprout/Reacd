@@ -30,6 +30,7 @@ export function ShadcnColorModeButton({
         className={WRAPPING_BUTTON_CLASSES}
         style={{ minBlockSize: LAYOUT_POLICY.controlTargetPx }}
         aria-label={label}
+        aria-pressed={resolvedMode === 'dark'}
         aria-describedby={metadata.descriptionIds.join(' ') || undefined}
         disabled={metadata.blocked || readOnly}
         onClick={() => onValueChange(oppositeColorMode(resolvedMode))}

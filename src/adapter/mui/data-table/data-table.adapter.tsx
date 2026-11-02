@@ -1,3 +1,4 @@
+import { LAYOUT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { useId } from 'react';
 import Alert from '@mui/material/Alert';
 import Checkbox from '@mui/material/Checkbox';
@@ -46,7 +47,9 @@ export function MuiDataTable(props: MuiDataTableProps) {
       />
       <TableContainer role="region" aria-labelledby={captionId} tabIndex={0}>
         <Table>
-          <Typography component="caption" id={captionId}>{props.caption}</Typography>
+          <Typography component="caption" id={captionId}>
+            {props.caption}
+          </Typography>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -97,6 +100,10 @@ export function MuiDataTable(props: MuiDataTableProps) {
                     }
                   >
                     <TableSortLabel
+                      sx={{
+                        minHeight: LAYOUT_POLICY.controlTargetPx,
+                        minWidth: LAYOUT_POLICY.controlTargetPx,
+                      }}
                       active={Boolean(current)}
                       disabled={!sort}
                       direction={current?.direction === 'descending' ? 'desc' : 'asc'}

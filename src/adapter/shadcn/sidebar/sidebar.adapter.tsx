@@ -123,6 +123,7 @@ export function ShadcnSidebar({
           <Activity mode={visible ? 'visible' : 'hidden'}>
             <SheetContent
               ref={setHost}
+              dir={direction}
               container={parentHost}
               forceMount
               showCloseButton={false}

@@ -24,6 +24,7 @@ it('delegates portals, Escape and focus restoration to the SDK', async () => {
   await userEvent.click(screen.getByRole('button', { name: 'Edit' }));
   const dialog = screen.getByRole('dialog', { name: 'Edit project' });
   expect(dialog).toHaveAttribute('data-slot', 'dialog-content');
+  expect(dialog).toHaveAttribute('aria-modal', 'true');
   expect(dialog.className).toContain('motion-reduce:animate-none');
   expect(document.querySelector('[data-slot=dialog-overlay]')?.className).toContain(
     'motion-reduce:animate-none',
@@ -88,6 +89,7 @@ it('lets the SDK dismiss a nonmodal dialog through an outside pointer', async ()
       Content
     </ShadcnModal>,
   );
+  expect(screen.getByRole('dialog')).toHaveAttribute('aria-modal', 'false');
   await userEvent.click(document.body);
   expect(change).toHaveBeenCalledWith(false);
 });

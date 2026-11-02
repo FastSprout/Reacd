@@ -6,6 +6,12 @@ it('uses Material Table and named caption for static rows', () => {
   const view = render(
     <MuiStaticTable caption="Orders" columns={['Customer']} rows={[['Ada']]} />,
   );
+  const region = screen.getByRole('region', { name: 'Orders' });
+  expect(region.className).toContain('MuiTableContainer-root');
+  expect(region).toHaveAttribute('tabindex', '0');
+  region.focus();
+  expect(region).toHaveFocus();
+  expect(region.contains(screen.getByRole('table', { name: 'Orders' }))).toBe(true);
   expect(screen.getByRole('table', { name: 'Orders' }).className).toContain(
     'MuiTable-root',
   );

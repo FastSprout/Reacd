@@ -10,5 +10,6 @@ export const MODAL_POLICY = {
   layer: 100,
   popupLayer: 1,
   widthRem: 40,
+  contentPaddingViewportPercent: 5,
   backdropPercent: 40,
 } as const;

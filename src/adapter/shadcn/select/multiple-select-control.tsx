@@ -78,6 +78,9 @@ export function MultipleSelectControl({
             <SelectItem
               key={item.value}
               value={item.value}
+              label={item.label}
+              aria-label={item.label}
+              aria-description={item.description}
               disabled={item.disabled}
               className="whitespace-normal [overflow-wrap:anywhere]"
             >

@@ -1,4 +1,5 @@
 import { useMaterialTextConstraint } from '../form/use-text-constraint.js';
+import { LAYOUT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { materialDescriptionIds } from '../description-ids.js';
 import { emitNativeValue } from '../native-value.js';
 import { useId } from 'react';
@@ -48,7 +49,12 @@ export function MuiTextarea(props: MuiTextareaProps) {
           }
         : { rows: props.rows ?? TEXTAREA_POLICY.defaultRows })}
       slotProps={{
-        input: { readOnly: Boolean(props.readOnly) },
+        input: {
+          readOnly: Boolean(props.readOnly),
+          sx: { '& textarea:not([aria-hidden])': {
+            minBlockSize: LAYOUT_POLICY.controlTargetPx,
+          } },
+        },
         htmlInput: {
           minLength: props.minLength,
           maxLength: props.maxLength ?? TEXTAREA_POLICY.maximumLength,

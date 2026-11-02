@@ -51,3 +51,9 @@ Retained inactive panels keep their local state while their child portals become
 inactive. Controlled open intent remains unchanged; returning to the panel restores
 its retained content. Shared fallback content follows the same rule, and enclosing
 inactivity cannot be overridden by selecting a tab.
+
+For a retained Material UI Dialog inside externally controlled Tabs, use
+`activationMode="manual"`. The native Dialog restores its opener on close;
+automatic activation can select that restored tab again. Manual activation keeps
+Arrow keys for focus and Enter/Space for selection without changing host open
+intent or retained content. This combination delegates focus to the SDK.

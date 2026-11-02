@@ -1,3 +1,4 @@
+import { LAYOUT_POLICY } from '../../../core/policy.js';
 import { PortalActiveContext } from '../../../renderer/theme/portal-context.js';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -34,13 +35,16 @@ it('uses native table sorting, selection and filters', async () => {
   expect(region.className).toContain('MuiTableContainer-root');
   region.focus();
   expect(region).toHaveFocus();
-  expect(region.contains(screen.getByRole('table', { name: 'Customers' })))
-    .toBe(true);
+  expect(region.contains(screen.getByRole('table', { name: 'Customers' }))).toBe(true);
   expect(screen.getByRole('table', { name: 'Customers' }).className).toContain(
     'MuiTable-root',
   );
   await userEvent.click(screen.getByRole('checkbox', { name: 'Select row ada' }));
   expect(select).toHaveBeenCalledWith(['ada']);
+  expect(screen.getByRole('button', { name: 'Sort Name' })).toHaveStyle({
+    minHeight: `${LAYOUT_POLICY.controlTargetPx}px`,
+    minWidth: `${LAYOUT_POLICY.controlTargetPx}px`,
+  });
   await userEvent.click(screen.getByRole('button', { name: 'Sort Name' }));
   expect(sort).toHaveBeenCalledWith([{ column: 'name', direction: 'ascending' }]);
   await userEvent.type(screen.getByRole('textbox', { name: 'Filter Name' }), 'A');

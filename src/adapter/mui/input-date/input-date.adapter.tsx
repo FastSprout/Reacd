@@ -12,8 +12,11 @@ import { UnsupportedAdapterComponentError } from
   '@fastsprout/reacd/adapter-runtime/core/unsupported-adapter-component-error.js';
 import { useNativeField } from '../native-field.js';
 import { useDateValidation } from './use-date-validation.js';
-import { emitNativeDate, nativeDate, nativeDateLocale } from
-  '../calendar/date-values.js';
+import {
+  emitNativeDate,
+  nativeDate,
+  nativeDateLocale,
+} from '../calendar/date-values.js';
 import { ReferenceDateContext, ReferenceDay } from '../calendar/reference-day.js';
 
 type SingleInputDateProps = Exclude<InputDateProps, { mode: 'range' }>;
@@ -29,48 +32,64 @@ function SingleInputDate(props: SingleInputDateProps) {
   const field = useNativeField(props);
   const [open, setOpen] = useState(false);
   const value = useMemo(() => nativeDate(props.value), [props.value]);
-  const { inputRef, ...validation } = useDateValidation({
-    id, label: props.label, value: props.value ?? '',
-    required: field.required, disabled: field.disabled,
+  const { fieldRef, ...validation } = useDateValidation({
+    id,
+    label: props.label,
+    value: props.value ?? '',
+    required: field.required,
+    disabled: field.disabled,
   });
   const error = field.error || validation.error;
   const help = field.helperError || validation.error || props.description;
   const blocked = field.blocked || Boolean(props.readOnly);
   if (blocked && open) setOpen(false);
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}
-      adapterLocale={nativeDateLocale('InputDate', props.locale)}>
+    <LocalizationProvider
+      dateAdapter={AdapterDateFns}
+      adapterLocale={nativeDateLocale('InputDate', props.locale)}
+    >
       <ReferenceDateContext value={props.referenceDate}>
-      <DatePicker
-        label={props.label} value={value}
-        referenceDate={nativeDate(props.referenceDate)}
-        minDate={nativeDate(props.min ?? DATE_TIME_POLICY.minimumDate)}
-        maxDate={nativeDate(props.max ?? DATE_TIME_POLICY.maximumDate)}
-        inputRef={inputRef} {...(field.name ? { name: field.name } : {})}
-        disabled={field.disabled} readOnly={Boolean(props.readOnly)}
-        open={open && !blocked}
-        onOpen={() => { if (!blocked) setOpen(true); }}
-        onClose={() => setOpen(false)}
-        onError={validation.onError}
-        onChange={(nextValue, context) => {
-          if (blocked) return;
-          validation.onError(context.validationError);
-          emitNativeDate(props.onValueChange, nextValue,
-            context.validationError !== null);
-        }}
-        slots={{ day: ReferenceDay }}
-        slotProps={{
-          field: { clearable: true },
-          clearButton: {
-            'aria-label': `${INPUT_DATE_POLICY.clearLabel} ${props.label}`,
-          },
-          textField: {
-            id, fullWidth: true, required: field.required, inert: field.blocked,
-            ...(error ? { error: true } : {}), helperText: help,
-            slotProps: { htmlInput: { value: props.value ?? '' } },
-          },
-        }}
-      />
+        <DatePicker
+          label={props.label}
+          value={value}
+          referenceDate={nativeDate(props.referenceDate)}
+          minDate={nativeDate(props.min ?? DATE_TIME_POLICY.minimumDate)}
+          maxDate={nativeDate(props.max ?? DATE_TIME_POLICY.maximumDate)}
+          {...(field.name ? { name: field.name } : {})}
+          disabled={field.disabled}
+          readOnly={Boolean(props.readOnly)}
+          open={open && !blocked}
+          onOpen={() => {
+            if (!blocked) setOpen(true);
+          }}
+          onClose={() => setOpen(false)}
+          onError={validation.onError}
+          onChange={(nextValue, context) => {
+            if (blocked) return;
+            validation.onError(context.validationError);
+            emitNativeDate(
+              props.onValueChange,
+              nextValue,
+              context.validationError !== null,
+            );
+          }}
+          slots={{ day: ReferenceDay }}
+          slotProps={{
+            field: { clearable: true, fieldRef },
+            clearButton: {
+              'aria-label': `${INPUT_DATE_POLICY.clearLabel} ${props.label}`,
+            },
+            textField: {
+              id,
+              fullWidth: true,
+              required: field.required,
+              inert: field.blocked,
+              ...(error ? { error: true } : {}),
+              helperText: help,
+              slotProps: { htmlInput: { value: props.value ?? '' } },
+            },
+          }}
+        />
       </ReferenceDateContext>
     </LocalizationProvider>
   );

@@ -61,6 +61,9 @@ and optional `footer` are arrays of generative declarations. References and acti
 in those arrays are validated even when the dialog is closed. The same component and
 adapter render TSX and generative declarations.
 
-Ordinary close restores focus to its active trigger. When an ancestor becomes
-inactive, closing the retained modal does not restore focus into that stale scope
-or reactivate an automatic tab. Host-controlled open intent stays intact.
+Ordinary close delegates focus restoration to the selected SDK. The Material UI
+Dialog captures its restoration policy when opened. For retained dialogs inside
+externally controlled Tabs, use `activationMode="manual"`; automatic activation
+can reselect a tab when the native Dialog restores focus. Dynamic suppression of
+that automatic combination is not guaranteed. Host-controlled open intent and
+retained content stay intact.

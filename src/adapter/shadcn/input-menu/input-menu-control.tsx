@@ -2,6 +2,7 @@ import { useMemo, type Ref } from 'react';
 import { Combobox as NativeCombobox } from '@base-ui/react/combobox';
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { useDirection } from '@radix-ui/react-direction';
+import { DismissableLayer } from '@radix-ui/react-dismissable-layer';
 import { XIcon } from 'lucide-react';
 import type { InputMenuProps } from
   '@fastsprout/reacd/adapter-runtime/components/input-menu/input-menu.props.js';
@@ -136,6 +137,7 @@ export function InputMenuControl({ inputRef, ...props }: InputMenuControlProps) 
             {!open && clear}
           </ComboboxInput>
           <ComboboxContent
+            render={<DismissableLayer />}
             className="min-w-0"
             container={popup.host ?? undefined}
             style={theme}

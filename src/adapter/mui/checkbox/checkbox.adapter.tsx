@@ -29,7 +29,6 @@ export function MuiCheckbox(props: MuiCheckboxProps) {
             checked={props.checked && !props.indeterminate}
             indeterminate={Boolean(props.indeterminate)}
             disabled={field.disabled}
-            readOnly={Boolean(props.readOnly)}
             required={field.required}
             name={field.name}
             value={props.value}

@@ -1,3 +1,4 @@
+import ScopedCssBaseline from '@mui/material/ScopedCssBaseline';
 import { useMemo } from 'react';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import type { ThemeProps } from
@@ -19,9 +20,11 @@ export function MuiTheme(props: MuiThemeProps) {
   );
   return (
     <ThemeProvider theme={theme}>
-      <DeclarationDefaults defaults={props.defaults}>
-        {props.children}
-      </DeclarationDefaults>
+      <ScopedCssBaseline enableColorScheme>
+        <DeclarationDefaults defaults={props.defaults}>
+          {props.children}
+        </DeclarationDefaults>
+      </ScopedCssBaseline>
     </ThemeProvider>
   );
 }

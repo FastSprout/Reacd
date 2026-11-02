@@ -1,3 +1,4 @@
+import { LAYOUT_POLICY } from '../../../core/policy.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
@@ -18,6 +19,9 @@ it('uses Material TextField and keeps the callback value-only', async () => {
   );
   const field = screen.getByRole('textbox', { name: 'Email' });
   expect(field.closest('.MuiTextField-root')).not.toBeNull();
+  expect(field.closest('.MuiInputBase-root')).toHaveStyle({
+    minHeight: `${LAYOUT_POLICY.controlTargetPx}px`,
+  });
   expect(field).toHaveAttribute('type', 'email');
   expect(field).toHaveAttribute('required');
   expect(field).toHaveAttribute('maxlength', '80');

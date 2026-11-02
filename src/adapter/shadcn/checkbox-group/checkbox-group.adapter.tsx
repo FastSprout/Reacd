@@ -1,3 +1,4 @@
+import { LAYOUT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { requestNativeChange } from '../form-field/request-native-change.js';
 import { useId } from 'react';
 import type { CheckboxGroupProps } from
@@ -5,6 +6,12 @@ import type { CheckboxGroupProps } from
 import { useNativeField } from '../form-field/use-native-field.js';
 import { Checkbox } from '../vendor/ui/checkbox.js';
 import { Label } from '../vendor/ui/label.js';
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+} from '../vendor/ui/field.js';
 
 export type ShadcnCheckboxGroupProps = CheckboxGroupProps;
 export function ShadcnCheckboxGroup({
@@ -34,7 +41,7 @@ export function ShadcnCheckboxGroup({
           const checked = value.includes(item.value);
           const limited = max !== undefined && value.length >= max && !checked;
           return (
-            <div key={item.value} className="flex items-center gap-2">
+            <Field key={item.value} orientation="horizontal" className="min-w-0 w-auto">
               <Checkbox
                 id={`${id}-${item.value}`}
                 checked={checked}
@@ -55,11 +62,24 @@ export function ShadcnCheckboxGroup({
                   );
                 }}
               />
-              <Label htmlFor={`${id}-${item.value}`}>{item.label}</Label>
-              {item.description && (
-                <p id={`${id}-${item.value}-help`}>{item.description}</p>
-              )}
-            </div>
+              <FieldContent className="min-w-0">
+                <FieldLabel
+                  htmlFor={`${id}-${item.value}`}
+                  className="min-w-0 max-w-full items-center [overflow-wrap:anywhere]"
+                  style={{
+                    minBlockSize: LAYOUT_POLICY.controlTargetPx,
+                    minInlineSize: LAYOUT_POLICY.controlTargetPx,
+                  }}
+                >
+                  {item.label}
+                </FieldLabel>
+                {item.description && (
+                  <FieldDescription id={`${id}-${item.value}-help`}>
+                    {item.description}
+                  </FieldDescription>
+                )}
+              </FieldContent>
+            </Field>
           );
         })}
       </div>

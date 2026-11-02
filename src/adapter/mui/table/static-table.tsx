@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -10,11 +11,13 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import type { StaticTableProps } from
   '@fastsprout/reacd/adapter-runtime/components/table/table.props.js';
-import { TABLE_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/table-policy.js';
+import { TABLE_DEFAULTS, TABLE_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/table-policy.js';
 
 import { useNativeField } from '../native-field.js';
 
 export function MuiStaticTable(props: StaticTableProps) {
+  const captionId = useId();
   const field = useNativeField({});
   const retry = props.onRetry;
   if (props.state === 'loading')
@@ -35,9 +38,10 @@ export function MuiStaticTable(props: StaticTableProps) {
       </Alert>
     );
   return (
-    <TableContainer>
+    <TableContainer role="region" aria-labelledby={captionId}
+      tabIndex={TABLE_POLICY.scrollTabIndex}>
       <Table>
-        <Typography component="caption">{props.caption}</Typography>
+        <Typography component="caption" id={captionId}>{props.caption}</Typography>
         <TableHead>
           <TableRow>
             {props.columns.map((column, index) => (

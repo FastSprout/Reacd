@@ -81,6 +81,14 @@ export function createMaterialTheme(
           elevation: MUI_THEME_POLICY.elevation[template.shadow],
         },
       },
+      MuiOutlinedInput: {
+        styleOverrides: { root: { minHeight: LAYOUT_POLICY.controlTargetPx } },
+      },
+      MuiFormControlLabel: {
+        styleOverrides: {
+          root: { marginInline: 0, minHeight: LAYOUT_POLICY.controlTargetPx },
+        },
+      },
       MuiFormControl: {
         styleOverrides: { root: { overflowX: 'clip', overflowY: 'visible' } },
       },

@@ -67,6 +67,9 @@ function MuiFormContent(props: MuiFormProps) {
         component="form"
         aria-label={props.label}
         aria-busy={pending}
+        onInvalid={(event) => {
+          if (blocked || !validation.submit()) event.preventDefault();
+        }}
         onSubmit={(event) => {
           event.preventDefault();
           event.stopPropagation();

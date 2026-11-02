@@ -1,3 +1,4 @@
+import { LAYOUT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import { useMaterialTextConstraint } from '../form/use-text-constraint.js';
 import { materialDescriptionIds } from '../description-ids.js';
 import { emitNativeValue } from '../native-value.js';
@@ -47,6 +48,7 @@ export function MuiInput(props: MuiInputProps) {
       error={Boolean(error)}
       slotProps={{
         input: {
+          sx: { minHeight: LAYOUT_POLICY.controlTargetPx },
           readOnly: Boolean(props.readOnly || props.loading),
           endAdornment: props.loading && (
             <InputAdornment position="end">

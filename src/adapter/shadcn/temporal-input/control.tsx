@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, useMemo } from 'react';
 import { parseDate, parseTime } from '@internationalized/date';
 import { DateField, TimeField, I18nProvider } from 'react-aria-components';
 import { DATE_TIME_POLICY } from
@@ -14,6 +14,16 @@ import type { TemporalFieldProps } from './field.props.js';
 
 export function TemporalControl(props: TemporalFieldProps) {
   const id = useId();
+  const dateValue = useMemo(
+    () => props.kind === 'date' && props.value !== null
+      ? parseDate(props.value) : null,
+    [props.kind, props.value],
+  );
+  const timeValue = useMemo(
+    () => props.kind === 'time' && props.value !== null
+      ? parseTime(props.value) : null,
+    [props.kind, props.value],
+  );
   const field = useNativeField(props);
   const blocked = Boolean(field.blocked || props.readOnly);
   const policy = props.kind === 'date' ? INPUT_DATE_POLICY : INPUT_TIME_POLICY;
@@ -49,7 +59,7 @@ export function TemporalControl(props: TemporalFieldProps) {
         <DateField
           {...common}
           granularity="day"
-          value={props.value === null ? null : parseDate(props.value)}
+          value={dateValue}
           placeholderValue={parseDate(props.referenceDate)}
           minValue={props.min === undefined ? null : parseDate(props.min)}
           maxValue={props.max === undefined ? null : parseDate(props.max)}
@@ -63,7 +73,7 @@ export function TemporalControl(props: TemporalFieldProps) {
           {...common}
           granularity={INPUT_TIME_POLICY.granularity}
           hourCycle={INPUT_TIME_POLICY.hourCycle}
-          value={props.value === null ? null : parseTime(props.value)}
+          value={timeValue}
           placeholderValue={parseTime(DATE_TIME_POLICY.placeholderTime)}
           minValue={props.min === undefined ? null : parseTime(props.min)}
           maxValue={props.max === undefined ? null : parseTime(props.max)}

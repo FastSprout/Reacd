@@ -14,6 +14,7 @@ it('uses an SDK button for controlled appearance', async () => {
       description="Choose a mode"
     />,
   );
+  expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'false');
   expect(screen.getByRole('button').className).toContain('border-input');
   expect(screen.getByRole('button')).toHaveAccessibleDescription('Choose a mode');
   await userEvent.click(screen.getByRole('button', { name: 'Appearance' }));
@@ -38,4 +39,5 @@ it('uses an SDK button for controlled appearance', async () => {
     />,
   );
   expect(screen.getByRole('button')).toBeDisabled();
+  expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true');
 });

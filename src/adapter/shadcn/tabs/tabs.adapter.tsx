@@ -6,6 +6,7 @@ import type { TabsProps } from
   '@fastsprout/reacd/adapter-runtime/components/tabs/tabs.props.js';
 import { TABS_POLICY } from '@fastsprout/reacd/adapter-runtime/core/tabs-policy.js';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../vendor/ui/tabs.js';
+import { CardContent } from '../vendor/ui/card.js';
 
 export type ShadcnTabsProps = TabsProps;
 export function ShadcnTabs({
@@ -18,6 +19,8 @@ export function ShadcnTabs({
   children,
 }: TabsProps) {
   const { active, interactive } = useInteractionState();
+  const selected = items.find((item) => item.value === value);
+  const sharedActive = active && selected !== undefined && selected.content == null;
   return (
     <Tabs
       value={value}
@@ -44,13 +47,18 @@ export function ShadcnTabs({
         ))}
       </TabsList>
       {items.map((item) => (
-        <TabsContent key={item.value} value={item.value}>
+        <TabsContent key={item.value} value={item.value}
+          forceMount hidden={item.value !== value}>
           <PortalActiveContext value={active && item.value === value}>
             {item.content}
           </PortalActiveContext>
         </TabsContent>
       ))}
-      {children}
+      <CardContent hidden={!sharedActive} className="p-0">
+        <PortalActiveContext value={sharedActive}>
+          {children}
+        </PortalActiveContext>
+      </CardContent>
     </Tabs>
   );
 }

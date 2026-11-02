@@ -1,3 +1,4 @@
+import { LAYOUT_POLICY } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
 import type { Ref } from 'react';
 import type { RadioGroupProps } from
   '@fastsprout/reacd/adapter-runtime/components/radio-group/radio-group.props.js';
@@ -64,8 +65,15 @@ export function ShadcnRadioControl({ inputRef, ...props }: RadioControlProps) {
                 item.description ? `${props.id}-${item.value}-help` : undefined
               }
             />
-            <FieldContent>
-              <FieldLabel htmlFor={`${props.id}-${item.value}`}>
+            <FieldContent className="min-w-0">
+              <FieldLabel
+                htmlFor={`${props.id}-${item.value}`}
+                className="min-w-0 max-w-full items-center [overflow-wrap:anywhere]"
+                style={{
+                  minBlockSize: LAYOUT_POLICY.controlTargetPx,
+                  minInlineSize: LAYOUT_POLICY.controlTargetPx,
+                }}
+              >
                 {item.label}
               </FieldLabel>
               {item.description && (

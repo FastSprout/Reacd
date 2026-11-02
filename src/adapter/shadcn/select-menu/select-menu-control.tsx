@@ -2,6 +2,7 @@ import { useMemo, useRef, useState, type RefCallback } from 'react';
 import { Combobox as NativeCombobox } from '@base-ui/react/combobox';
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { useDirection } from '@radix-ui/react-direction';
+import { DismissableLayer } from '@radix-ui/react-dismissable-layer';
 import type { SelectMenuProps } from
   '@fastsprout/reacd/adapter-runtime/components/select-menu/select-menu.props.js';
 import type { SelectionOption } from
@@ -149,6 +150,7 @@ export function SelectMenuControl({ inputRef, ...props }: SelectMenuControlProps
             </InputGroupText>
           </ComboboxTrigger>
           <ComboboxContent
+            render={<DismissableLayer />}
             dir={direction}
             container={popup.host ?? undefined}
             style={theme}

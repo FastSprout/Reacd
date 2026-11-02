@@ -10,7 +10,8 @@ import { FormScopeContext } from
   '@fastsprout/reacd/adapter-runtime/renderer/form/form-scope.js';
 import type { ModalProps } from
   '@fastsprout/reacd/adapter-runtime/components/modal/index.js';
-import { MODAL_DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/modal-policy.js';
+import { MODAL_DEFAULTS, MODAL_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/modal-policy.js';
 import {
   Dialog,
   DialogClose,
@@ -76,8 +77,11 @@ export function ShadcnModal({
           ref={setHost}
           container={parentHost}
           dir={direction}
+          aria-modal={modal}
           style={{
             ...theme,
+            padding: `min(var(--space-large), ` +
+              `${MODAL_POLICY.contentPaddingViewportPercent}vi)`,
             overflowY: 'auto',
             overflowWrap: 'anywhere',
             maxBlockSize: fullscreen
@@ -111,9 +115,10 @@ export function ShadcnModal({
             fullscreen && 'h-dvh w-dvw max-w-none rounded-none sm:max-w-none',
           )}
           onEscapeKeyDown={(event) => {
+            event.stopPropagation();
             if (!dismissible) event.preventDefault();
           }}
-          onPointerDownOutside={(event) => {
+          onInteractOutside={(event) => {
             if (!dismissible) event.preventDefault();
           }}
         >

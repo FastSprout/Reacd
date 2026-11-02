@@ -113,6 +113,7 @@ it('uses its SDK opener and never changes disabled mobile intent', async () => {
   await userEvent.keyboard('{Escape}');
   expect(change).toHaveBeenCalledTimes(1);
   expect(screen.getByRole('dialog')).toHaveAttribute('data-side', 'left');
+  expect(screen.getByRole('dialog')).toHaveAttribute('dir', 'rtl');
 });
 it('uses container measurement and does not steal focus when docking', async () => {
   const view = render(<ShadcnSidebar {...props}>Content</ShadcnSidebar>);

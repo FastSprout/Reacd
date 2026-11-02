@@ -20,6 +20,8 @@ it('uses the real Material Switch and honors read-only changes', async () => {
   view.rerender(
     <MuiSwitch label="Alerts" checked={false} onCheckedChange={change} readOnly />,
   );
+  expect(field).not.toHaveAttribute('readonly');
+  expect(field).toHaveAttribute('aria-readonly', 'true');
   await userEvent.click(field);
   expect(change).toHaveBeenCalledTimes(1);
 });
@@ -42,4 +44,6 @@ it('announces pending activity while retaining the named canonical value', () =>
   const form = screen.getByRole('form', { name: 'Settings' });
   if (!(form instanceof HTMLFormElement)) throw new Error('Expected form.');
   expect(new FormData(form).get('alerts')).toBe('on');
+  expect(screen.getByRole('switch', { name: 'Alerts' }))
+    .not.toHaveAttribute('readonly');
 });
