@@ -36,6 +36,8 @@ for (const width of [375, 1920]) {
       }
       await dialog.getByRole('button', { name: 'Close', exact: true }).click();
       await expect(opener).toBeFocused();
+      // The dismissed sheet can expose Increment beneath the pointer.
+      await page.mouse.move(0, 0);
       await expect(page.getByText('Count: 1', { exact: true })).toBeVisible();
       const canvas = page.locator('[data-adapter="shadcn-ui"]')
         .filter({ has: opener }).last();
@@ -56,6 +58,7 @@ for (const width of [375, 1920]) {
       }
       await dialog.getByRole('button', { name: 'Reset theme' }).click();
       await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+      await page.mouse.move(0, 0);
       await expect(canvas).toHaveCSS('background-color', 'rgb(10, 10, 10)');
       await expect(increment).toHaveCSS('background-color', 'rgb(250, 250, 250)');
       await expectContained(page);
