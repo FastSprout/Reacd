@@ -45,11 +45,15 @@ jobs:
           if-no-files-found: error
           include-hidden-files: true
           retention-days: 14
-      - name: Preserve private runtime provenance
+      - name: Preserve compiled documentation runtime
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: docs-runtime-${{ github.sha }}
-          path: .cache/site-runtime-dist/runtime-modules.json
+          path: |
+            dist/
+            packages/shadcn/dist/
+            packages/mui/dist/
+            .cache/site-runtime-dist/runtime-modules.json
           if-no-files-found: error
           include-hidden-files: true
           retention-days: 14
@@ -96,7 +100,11 @@ jobs:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: docs-runtime-${{ github.sha }}
-          path: .cache/site-runtime-dist
+          path: .
+      - name: Verify restored documentation runtime
+        run: >-
+          node --import tsx --input-type=module -e
+          "await import('./tooling/site/content/model.schema.ts')"
       - run: npx playwright install --with-deps "$PLAYWRIGHT_BROWSER"
         env:
           PLAYWRIGHT_BROWSER: ${{ matrix.browser }}

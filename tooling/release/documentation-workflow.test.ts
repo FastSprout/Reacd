@@ -138,6 +138,8 @@ it('runs every exact project with isolated native engines and bounded workers', 
   expect(job.steps.flatMap((entry) => (entry.run ? [entry.run] : []))).toEqual([
     'npm install --global npm@11.19.0',
     'npm ci',
+    'node --import tsx --input-type=module -e ' +
+      '"await import(\'./tooling/site/content/model.schema.ts\')"',
     'npx playwright install --with-deps "$PLAYWRIGHT_BROWSER"',
     'npm run test:docs -- --project="$DOCS_PROJECT" --workers="$DOCS_WORKERS" ' +
       '--reporter=list,html,github',
@@ -156,14 +158,16 @@ it('runs every exact project with isolated native engines and bounded workers', 
   expect(install?.env).toEqual({ PLAYWRIGHT_BROWSER: '${{ matrix.browser }}' });
 });
 
-it('restores immutable site and private provenance without rebuilding', () => {
+it('restores immutable site and compiled runtime hierarchy without rebuilding', () => {
   const { check, browsers } = documentation().jobs;
   const metadata = check.steps.find(
     (entry) => entry.with?.['name'] === 'docs-runtime-${{ github.sha }}',
   );
   expect(metadata?.with).toEqual({
     name: 'docs-runtime-${{ github.sha }}',
-    path: '.cache/site-runtime-dist/runtime-modules.json',
+    path:
+      'dist/\npackages/shadcn/dist/\npackages/mui/dist/\n' +
+      '.cache/site-runtime-dist/runtime-modules.json\n',
     'if-no-files-found': 'error',
     'include-hidden-files': true,
     'retention-days': 14,
@@ -173,7 +177,7 @@ it('restores immutable site and private provenance without rebuilding', () => {
   );
   expect(downloads.map((entry) => entry.with)).toEqual([
     { name: 'docs-${{ github.sha }}', path: 'site' },
-    { name: 'docs-runtime-${{ github.sha }}', path: '.cache/site-runtime-dist' },
+    { name: 'docs-runtime-${{ github.sha }}', path: '.' },
   ]);
 });
 
