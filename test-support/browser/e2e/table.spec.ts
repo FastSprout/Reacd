@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { TABLE_DEFAULTS } from '../../../src/core/table-policy.js';
 import type { Page } from '@playwright/test';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 const WIDTHS = [240, 360, 768, 1440];
@@ -51,18 +52,43 @@ for (const profile of ['Spacious', 'Compact']) {
     await content(page, profile);
     const region = page.getByRole('region', { name: 'Reference orders', exact: true });
     const group = region.locator('..');
+    const material = test.info().project.name === 'mui';
+    const status = material
+      ? group.locator('.MuiTablePagination-displayedRows')
+      : group.getByRole('status');
     await region.getByRole('checkbox', { name: 'Select row alpha' }).check();
     await expect(
       region.getByRole('checkbox', { name: 'Select row alpha' }),
     ).toBeChecked();
     await group.getByRole('button', { name: 'Next page' }).click();
-    await expect(group.getByRole('status')).toContainText('Page 2 of 3');
+    await expect(status).toContainText(material ? '2–2 of 3' : 'Page 2 of 3');
+    await expect(region.getByRole('cell', { name: 'Beta', exact: true })).toBeVisible();
     const sort = region.getByRole('button', { name: 'Sort Amount' });
+    const amountHeader = region.getByRole('columnheader', {
+      name: 'Sort Amount',
+      exact: true,
+    });
     await sort.focus();
     await page.keyboard.press('Enter');
-    await expect(group.getByRole('status')).toContainText('Page 1 of 3');
-    await expect(region.getByRole('cell', { name: 'Beta', exact: true })).toBeVisible();
-    const filter = region.getByRole('searchbox', { name: 'Filter Name' });
+    await expect(status).toContainText(material ? '1–1 of 3' : 'Page 1 of 3');
+    await expect(amountHeader).toHaveAttribute(
+      'aria-sort',
+      material ? 'ascending' : 'descending',
+    );
+    await expect(
+      region.getByRole('cell', { name: material ? 'Beta' : 'Alpha', exact: true }),
+    ).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(amountHeader).toHaveAttribute(
+      'aria-sort',
+      material ? 'descending' : 'ascending',
+    );
+    await expect(
+      region.getByRole('cell', { name: material ? 'Alpha' : 'Beta', exact: true }),
+    ).toBeVisible();
+    const filter = group.getByRole('textbox', {
+      name: 'Filter Name',
+    });
     await filter.fill('Gamma');
     await expect(
       region.getByRole('cell', { name: 'Gamma', exact: true }),
@@ -77,12 +103,18 @@ for (const profile of ['Spacious', 'Compact']) {
     await expect(filter).toBeDisabled();
     await page.getByRole('switch', { name: 'Readonly table' }).uncheck();
     await page.getByRole('button', { name: 'Preview loading table' }).click();
-    await expect(page.getByText('Loading data…', { exact: true })).toBeVisible();
+    await expect(
+      material
+        ? page.getByRole('progressbar', { name: 'Loading data…', exact: true })
+        : page.getByText('Loading data…', { exact: true }),
+    ).toBeVisible();
     await page.getByRole('button', { name: 'Preview failed table' }).click();
     await page.getByRole('button', { name: 'Retry table' }).click();
     await expect(region.getByRole('table', { name: 'Reference orders' })).toBeVisible();
     await page.getByRole('switch', { name: 'Empty table preview' }).check();
-    await expect(group.getByText('No matching rows.', { exact: true })).toBeVisible();
+    await expect(
+      group.getByText(TABLE_DEFAULTS.emptyMessage, { exact: true }),
+    ).toBeVisible();
     await contained(page);
     expect(errors).toEqual([]);
   });

@@ -178,11 +178,13 @@ for (const profile of ['Spacious', 'Compact']) {
       const draft = preview.getByRole('textbox', { name: 'Example message' });
       await draft.fill('Composition draft');
       await draft.dispatchEvent('compositionstart');
-      await draft.press('Enter');
+      await draft.dispatchEvent('keydown', { key: 'Enter', isComposing: true });
       await expect(preview.getByRole('button', { name: 'Send message' })).toBeVisible();
+      await expect(preview.getByText('No request yet.', { exact: true })).toBeVisible();
       await draft.dispatchEvent('compositionend');
       await draft.dispatchEvent('keydown', { key: 'Enter', keyCode: 229 });
       await expect(preview.getByRole('button', { name: 'Send message' })).toBeVisible();
+      await expect(preview.getByText('No request yet.', { exact: true })).toBeVisible();
       await draft.press('Enter');
       await expect(
         preview.getByRole('button', { name: 'Stop response' }),

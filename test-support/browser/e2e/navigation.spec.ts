@@ -136,8 +136,19 @@ for (const profile of ['Spacious', 'Compact']) {
     await select(page, 'Pagination page size', '25 per page');
     await expect(status).toContainText('Page 1 of 1');
     await select(page, 'Pagination dataset', 'Empty dataset');
+    await expect(
+      page.getByRole('combobox', {
+        name: 'Pagination dataset',
+        exact: true,
+      }),
+    ).toContainText('Empty dataset');
+    await expect(
+      page.getByText('Selected page: 1. Page size: 25.', {
+        exact: true,
+      }),
+    ).toBeVisible();
     await expect(status).toContainText(
-      test.info().project.name === 'mui' ? 'Page 1 of 0' : '0 items',
+      test.info().project.name === 'mui' ? 'Page 1 of 1' : '0 items',
     );
     await expect(next).toBeDisabled();
     const path = page.getByRole('navigation', { name: 'Sample navigation path' });
@@ -154,7 +165,7 @@ for (const profile of ['Spacious', 'Compact']) {
     await expect(popup).toHaveURL(/\/$/);
     await popup.close();
     await expect(status).toContainText(
-      test.info().project.name === 'mui' ? 'Page 1 of 0' : '0 items',
+      test.info().project.name === 'mui' ? 'Page 1 of 1' : '0 items',
     );
     expect(errors).toEqual([]);
   });

@@ -30,6 +30,39 @@ for (const profile of PROFILES) {
         if (direction === 'rtl') {
           await region.getByRole('switch', { name: 'Page presentation RTL' }).check();
         }
+        const material = test.info().project.name === 'mui';
+        const heading = region.getByRole('heading', {
+          name: HERO_TITLE,
+          exact: true,
+        });
+        const copy = heading.locator(material ? '../..' : '..');
+        const columns = copy.locator('..');
+        const content = columns.locator(':scope > *').filter({
+          has: page.getByLabel('Page hero draft'),
+        });
+        const heroSurface = columns.locator('..');
+        await expect(copy).toHaveCount(1);
+        await expect(content).toHaveCount(1);
+        if (width === 1440) {
+          const initialCopy = await copy.boundingBox();
+          const initialContent = await content.boundingBox();
+          if (initialCopy === null || initialContent === null)
+            throw new Error('Missing initial horizontal hero geometry.');
+          expect(initialCopy.x > initialContent.x).toBe(direction === 'rtl');
+          expect(
+            Math.abs(
+              initialCopy.y +
+                initialCopy.height / 2 -
+                initialContent.y -
+                initialContent.height / 2,
+            ),
+          ).toBeLessThanOrEqual(TOLERANCE);
+          expect(
+            direction === 'rtl'
+              ? initialContent.x + initialContent.width <= initialCopy.x + TOLERANCE
+              : initialCopy.x + initialCopy.width <= initialContent.x + TOLERANCE,
+          ).toBe(true);
+        }
         await page.evaluate(() => {
           document.documentElement.style.fontSize = '200%';
         });
@@ -45,26 +78,20 @@ for (const profile of PROFILES) {
         const hero = region.getByLabel('Page hero draft');
         await card.fill('Retained card');
         await hero.fill('Retained hero');
-        const material = test.info().project.name === 'mui';
-        const heading = region.getByRole('heading', {
-          name: HERO_TITLE,
-          exact: true,
-        });
-        const copy = heading.locator(material ? '../..' : '..');
-        const columns = copy.locator('..');
-        const content = columns.locator(':scope > *').filter({
-          has: page.getByLabel('Page hero draft'),
-        });
-        const heroSurface = columns.locator('..');
-        await expect(copy).toHaveCount(1);
-        await expect(content).toHaveCount(1);
         const copyBox = await copy.boundingBox();
         const contentBox = await content.boundingBox();
         if (copyBox === null || contentBox === null) {
           throw new Error('Hero regions must have measurable geometry.');
         }
-        if (width === 1440) {
-          expect(Math.abs(copyBox.y - contentBox.y)).toBeLessThanOrEqual(TOLERANCE);
+        const horizontal =
+          copyBox.x + copyBox.width <= contentBox.x + TOLERANCE ||
+          contentBox.x + contentBox.width <= copyBox.x + TOLERANCE;
+        if (horizontal) {
+          expect(
+            Math.abs(
+              copyBox.y + copyBox.height / 2 - contentBox.y - contentBox.height / 2,
+            ),
+          ).toBeLessThanOrEqual(TOLERANCE);
           expect(Math.abs(copyBox.x - contentBox.x)).toBeGreaterThan(TOLERANCE);
           expect(copyBox.x > contentBox.x).toBe(direction === 'rtl');
         } else {

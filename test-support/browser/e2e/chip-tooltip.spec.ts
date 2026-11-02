@@ -34,6 +34,13 @@ async function contained(page: Page) {
     await page.evaluate(() => document.documentElement.scrollWidth),
   ).toBeLessThanOrEqual((await page.evaluate(() => innerWidth)) + TOLERANCE);
 }
+function hintBody(page: Page, name: string | RegExp) {
+  const tooltip = page.getByRole('tooltip', { name });
+  return test.info().project.name === 'mui'
+    ? tooltip.locator('.MuiTooltip-tooltip')
+    : tooltip.and(page.locator('[data-slot="tooltip-content"]'));
+}
+
 async function hintClosed(page: Page) {
   const content =
     test.info().project.name === 'mui'
@@ -46,11 +53,8 @@ async function openHint(page: Page, interaction: 'focus' | 'hover' = 'focus') {
   await action.scrollIntoViewIfNeeded();
   if (interaction === 'hover') await action.hover();
   else await action.focus();
-  await expect(page.getByRole('tooltip')).toBeVisible();
-  const visual =
-    test.info().project.name === 'mui'
-      ? page.locator('.MuiTooltip-tooltip')
-      : page.locator('[data-slot="tooltip-content"]');
+  const visual = hintBody(page, /^Runs a local sample action/);
+  await expect(visual).toBeVisible();
   await expect(visual).toHaveCount(1);
   if (test.info().project.name === 'shadcn') {
     await expect(visual).toHaveAttribute('data-state', /^(instant|delayed)-open$/);
@@ -125,28 +129,29 @@ for (const profile of PROFILES) {
     const action = page.getByRole('button', { name: 'Run annotated action' });
     const wrapper = action.locator('..');
     await action.hover();
-    await expect(page.getByRole('tooltip')).toBeVisible();
-    await (
-      test.info().project.name === 'mui'
-        ? page.locator('.MuiTooltip-tooltip')
-        : page.locator('[data-slot="tooltip-content"]')
-    ).hover();
-    await expect(page.getByRole('tooltip')).toBeVisible();
+    const mainHint = hintBody(page, /^Runs a local sample action/);
+    await expect(mainHint).toBeVisible();
+    await mainHint.hover();
+    await expect(mainHint).toBeVisible();
     await page.getByRole('heading', { name: 'Tooltip preview', exact: true }).hover();
     await hintClosed(page);
     await openHint(page);
     await action.click();
     await expect(page.getByText('Annotated action count: 1')).toBeVisible();
-    await page.getByRole('img', { name: 'Example Reader', exact: true }).hover();
-    await expect(page.getByRole('tooltip')).toContainText(
-      'Example placeholder identity',
-    );
+    await page
+      .getByRole('region', { name: 'Tooltip preview', exact: true })
+      .getByRole('img', { name: 'Example Reader', exact: true })
+      .hover();
+    const identityHint = hintBody(page, 'Example placeholder identity');
+    await expect(identityHint).toHaveText('Example placeholder identity');
+    await expect(identityHint).toHaveCSS('opacity', '1');
     await page.keyboard.press('Escape');
     await page.getByRole('switch', { name: 'Disable tooltip child' }).check();
     await expect(action).toBeDisabled();
     if (test.info().project.name === 'shadcn') await wrapper.focus();
     else await wrapper.hover();
-    await expect(page.getByRole('tooltip')).toBeVisible();
+    await expect(mainHint).toBeVisible();
+    await expect(mainHint).toHaveCSS('opacity', '1');
     await page.keyboard.press('Escape');
     await page.getByRole('switch', { name: 'Disable tooltip', exact: true }).check();
     await wrapper.hover();
@@ -168,7 +173,15 @@ for (const profile of PROFILES) {
       )
       .toBe(true);
     await dialogAction.focus();
-    await expect(page.getByRole('tooltip')).toContainText('Hint inside the dialog');
+    await page.keyboard.press('Tab');
+    await expect(
+      dialog.getByRole('button', { name: 'Close tooltip dialog' }),
+    ).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(dialogAction).toBeFocused();
+    const dialogHint = hintBody(page, 'Hint inside the dialog');
+    await expect(dialogHint).toHaveText('Hint inside the dialog');
+    await expect(dialogHint).toHaveCSS('opacity', '1');
     await page.keyboard.press('Escape');
     await expect(dialog).toBeVisible();
     await hintClosed(page);

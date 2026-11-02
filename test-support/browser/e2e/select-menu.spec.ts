@@ -136,13 +136,27 @@ for (const profile of ['Spacious', 'Compact']) {
     await expect(trigger).toHaveText('Choose an option.');
     await expect(page.getByRole('listbox')).toBeVisible();
     await page.keyboard.press('Escape');
+    await expect(trigger).toBeFocused();
+    await expect(page.getByRole('listbox')).toBeHidden();
     await page.getByRole('button', { name: 'Open nested selection' }).click();
     const dialog = page.getByRole('dialog', { name: 'Nested selection', exact: true });
-    await dialog.getByRole('combobox', { name: 'Dialog records', exact: true }).click();
+    const nestedTrigger = dialog.getByRole('combobox', {
+      name: 'Dialog records',
+      exact: true,
+    });
+    await nestedTrigger.click();
+    await expect(
+      dialog.getByRole('combobox', {
+        name: 'Search Dialog records',
+        exact: true,
+      }),
+    ).toBeFocused();
     await expect(dialog.getByRole('listbox')).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(dialog.getByRole('listbox')).toBeHidden();
+    await expect(dialog).toHaveAttribute('data-state', 'open');
     await expect(dialog).toBeVisible();
+    await expect(nestedTrigger).toBeFocused();
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
   });
@@ -215,13 +229,17 @@ test('IME Enter and process keys do not commit options', async ({ page }) => {
     input.dispatchEvent(
       new KeyboardEvent('keydown', {
         key: 'Enter',
-        keyCode: 13,
+        keyCode: 229,
         isComposing: true,
         bubbles: true,
       }),
     );
     input.dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'Enter', keyCode: 229, bubbles: true }),
+      new KeyboardEvent('keydown', {
+        key: 'Enter',
+        keyCode: 229,
+        bubbles: true,
+      }),
     );
     input.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }));
   });
@@ -243,6 +261,12 @@ test('Space edits query and Tab leaves without selecting or trapping focus', asy
   await expect(query).toHaveValue('two ');
   await query.press('Tab');
   await expect(query).toBeHidden();
+  await expect(
+    page.getByRole('button', {
+      name: 'Clear selection Primary record',
+    }),
+  ).toBeFocused();
+  await page.keyboard.press('Tab');
   await expect(page.getByRole('button', { name: 'Save primary record' })).toBeFocused();
   await expect(trigger).toHaveText('Choose an option.');
 });

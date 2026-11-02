@@ -32,7 +32,6 @@ export function ChatPaletteExample() {
               value={draft}
               onValueChange={setDraft}
               onSubmit={setSent}
-              onClose={() => setOpen(false)}
             />
           }
         >

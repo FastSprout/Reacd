@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { watchPreviewFailures } from '../preview-failures.js';
+import { watchPageErrors } from '../docs-site.js';
 
 const WIDTHS = [240, 320, 375, 600, 768, 1024, 1440, 1920];
 const HEIGHT = 1000;
@@ -68,11 +70,8 @@ for (const profile of PROFILES) {
   test(`${profile} modal focus, nesting, dismissal, themes, and retention`, async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on('pageerror', (error) => errors.push(error.message));
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
+    const errors = watchPageErrors(page);
+    const failures = watchPreviewFailures(page);
     await actions(page, profile);
     const external = page.getByRole('button', { name: 'Open programmatically' });
     await external.click();
@@ -97,8 +96,18 @@ for (const profile of PROFILES) {
       dialog.getByRole('button', { name: 'Close', exact: true }),
     ).toBeFocused();
     await dialog.getByRole('button', { name: 'Open nested modal' }).click();
-    await expect(page.getByRole('dialog', { name: 'Nested modal' })).toBeVisible();
+    const nested = page.getByRole('dialog', { name: 'Nested modal', exact: true });
+    await expect(nested).toBeVisible();
+    if (test.info().project.name === 'shadcn') {
+      const close = nested.getByRole('button', { name: 'Close', exact: true });
+      await expect(close).toBeFocused();
+      await close.click({ trial: true });
+    }
     await page.keyboard.press('Escape');
+    await expect(nested).toBeHidden();
+    if (test.info().project.name === 'shadcn') {
+      await expect(dialog).toHaveAttribute('data-state', 'open');
+    }
     await expect(
       dialog.getByRole('button', { name: 'Open nested modal' }),
     ).toBeFocused();
@@ -118,13 +127,30 @@ for (const profile of PROFILES) {
     await expect(dialog).toBeVisible();
     await dialog.getByRole('button', { name: 'Close', exact: true }).click();
     await page.getByRole('switch', { name: 'Non-modal example' }).click();
+    if (test.info().project.name === 'mui') {
+      const message = 'Adapter "material-ui" does not support component "Modal".';
+      await expect.poll(failures).toContainEqual({
+        name: 'UnsupportedAdapterComponentError',
+        adapterId: 'material-ui',
+        componentName: 'Modal',
+        message,
+      });
+      const alert = page
+        .getByRole('alert')
+        .filter({ hasText: 'Cannot load Modal variant' });
+      await expect(alert).toContainText(message);
+      await expect(alert.getByRole('button')).toHaveCount(0);
+      await expect(trigger).toHaveCount(0);
+      expect(errors).toEqual([]);
+      return;
+    }
     await trigger.click();
-    const before = await dialog.evaluate((element) =>
-      getComputedStyle(element).getPropertyValue('--reacd-medium'),
+    const before = await dialog.evaluate(
+      (element) => getComputedStyle(element).maxBlockSize,
     );
     await appearance(page, profile === 'Spacious' ? 'Compact' : 'Spacious');
-    const after = await dialog.evaluate((element) =>
-      getComputedStyle(element).getPropertyValue('--reacd-medium'),
+    const after = await dialog.evaluate(
+      (element) => getComputedStyle(element).maxBlockSize,
     );
     expect(after).not.toBe(before);
     await expect(dialog.getByLabel('Modal note')).toHaveValue('Retained example');

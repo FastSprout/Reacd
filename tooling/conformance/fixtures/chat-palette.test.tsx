@@ -24,4 +24,6 @@ it('composes a modal conversation and scoped dismissal', async () => {
   ).toBeVisible();
   await user.keyboard('{Escape}');
   expect(screen.queryByRole('dialog', { name: 'Example conversation' })).toBeNull();
+  expect(screen.getByRole('button', { name: 'Open example conversation' }))
+    .toHaveFocus();
 });

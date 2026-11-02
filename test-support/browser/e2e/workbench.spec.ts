@@ -148,10 +148,12 @@ for (const template of TEMPLATES) {
     await expect(page.getByRole('button', { name: 'Disabled section' })).toBeDisabled();
     await page.getByRole('button', { name: 'Fields', exact: true }).click();
     await page.getByRole('button', { name: 'Save example' }).click();
-    await expect(page.getByLabel('Name', { exact: true })).toHaveValue('');
-    await page.getByLabel('Name', { exact: true }).fill('Example');
-    await page.getByLabel('Email', { exact: true }).fill('example@example.com');
-    await page.getByLabel('Notes', { exact: true }).fill('Example notes');
+    await expect(page.getByRole('textbox', { name: /^Name(?: \*)?$/ }))
+      .toHaveValue('');
+    await page.getByRole('textbox', { name: /^Name(?: \*)?$/ }).fill('Example');
+    await page.getByRole('textbox', { name: /^Email(?: \*)?$/ })
+      .fill('example@example.com');
+    await page.getByRole('textbox', { name: /^Notes(?: \*)?$/ }).fill('Example notes');
     await select(page, 'Role', 'Editor');
     await page.getByRole('checkbox', { name: 'Receive updates' }).check();
     await page.getByRole('slider', { name: 'Volume', exact: true }).focus();
@@ -164,7 +166,8 @@ for (const template of TEMPLATES) {
       page.getByText('Saved locally: Example, example@example.com,' + ' editor.'),
     ).toBeVisible();
     await select(page, 'Appearance', template === 'Spacious' ? 'Compact' : 'Spacious');
-    await expect(page.getByLabel('Name', { exact: true })).toHaveValue('Example');
+    await expect(page.getByRole('textbox', { name: /^Name(?: \*)?$/ }))
+      .toHaveValue('Example');
     await page.getByRole('button', { name: 'Actions and feedback' }).click();
     await page.getByRole('button', { name: 'Activate example' }).click();
     await expect(page.getByText('1 activations', { exact: true })).toBeVisible();
@@ -173,13 +176,21 @@ for (const template of TEMPLATES) {
     await expect(page.getByText('0 activations')).toBeVisible();
     await page.getByRole('button', { name: 'Content and data' }).click();
     await select(page, 'Data state', 'Empty');
+    const inventory = page.getByRole('table', {
+      name: 'Example inventory',
+      exact: true,
+    });
     await expect(
-      page.getByRole('status').filter({ hasText: 'No data available.' }),
+      test.info().project.name === 'mui'
+        ? inventory.getByRole('cell', { name: 'No data available.', exact: true })
+        : inventory.getByRole('status'),
     ).toHaveText('No data available.');
     await select(page, 'Data state', 'Loading');
-    await expect(
-      page.getByRole('status').filter({ hasText: 'Loading data' }),
-    ).toHaveText('Loading data…');
+    if (test.info().project.name === 'mui')
+      await expect(page.getByRole('progressbar', { name: 'Loading data…' }))
+        .toBeVisible();
+    else await expect(page.getByRole('status').filter({ hasText: 'Loading data' }))
+      .toHaveText('Loading data…');
     await select(page, 'Data state', 'Error');
     await expect(
       page.getByRole('alert').filter({ hasText: 'Example failure.' }),

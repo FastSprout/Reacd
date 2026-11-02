@@ -119,7 +119,7 @@ test('auth containment detects unclipped hidden and visible escaped controls', a
   await region.evaluate((element) => {
     const PROBE_POSITION = {
       position: 'fixed',
-      left: '0px',
+      left: `${element.getBoundingClientRect().right + element.clientWidth}px`,
       top: '0px',
       width: '1px',
       height: '1px',

@@ -5,7 +5,9 @@ import {
 import { watchPreviewFailures } from '../preview-failures.js';
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { LAYOUT_POLICY } from '../../../src/core/policy.js';
+import { DESIGN_POLICY, LAYOUT_POLICY } from '../../../src/core/policy.js';
+import { contrastRatio } from '../../../src/schema/design/templates.schema.js';
+import { paintedColors } from '../painted-colors.js';
 import { CHAT_FEEDBACK_POLICY } from '../../../src/core/chat-feedback-policy.js';
 import { CHAT_CONTRAST_TEMPLATE } from '../../chat-contrast.js';
 
@@ -268,7 +270,12 @@ test(
           if (typeof duration === 'number') animation.currentTime = duration * progress;
         }
       }, fraction);
-      await expect(shimmer).toHaveCSS('color', 'rgb(0, 0, 0)');
+      const paint = await paintedColors(shimmer);
+      expect(paint.foreground).toBe(CHAT_CONTRAST_TEMPLATE.colors.muted);
+      expect(paint.background).toBe(CHAT_CONTRAST_TEMPLATE.colors.surface);
+      expect(contrastRatio(paint.foreground, paint.background)).toBeGreaterThanOrEqual(
+        DESIGN_POLICY.minTextContrast,
+      );
       await expect(shimmer).toHaveCSS('opacity', '1');
     }
   },

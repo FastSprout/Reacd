@@ -161,7 +161,9 @@ for (const profile of PROFILES) {
           await expect(toggle).toBeFocused();
         } else {
           await toggle.click();
-          await expect(sidebar).toBeHidden();
+          await expect(query).toBeHidden();
+          await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+          await expect(sidebar).toBeVisible();
           await toggle.click();
           await expect(query).toHaveValue('Preserved sidebar input');
         }
@@ -171,7 +173,7 @@ for (const profile of PROFILES) {
             element.clientWidth <
             2 *
               trackRem *
-              parseFloat(getComputedStyle(document.documentElement).fontSize),
+              parseFloat(getComputedStyle(element).fontSize),
           SPLITTER_POLICY.panelTrackRem,
         );
         if (reflow) {

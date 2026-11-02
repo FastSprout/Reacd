@@ -124,6 +124,7 @@ function CompositionSafety() {
               onCheckedChange={setDialog}
             />
             <Tabs
+              activationMode="manual"
               label="Retained panels"
               value={selected}
               onValueChange={setSelected}

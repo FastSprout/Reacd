@@ -1,0 +1,1 @@
+export const NATIVE_MODULE_IMPORT_TIMEOUT_MS = 30_000;

@@ -1,8 +1,15 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { expect, it, vi } from 'vitest';
+import { beforeAll, expect, it, vi } from 'vitest';
+import { NATIVE_MODULE_IMPORT_TIMEOUT_MS } from
+  '../../../test-support/native-module-policy.js';
+import { recipeRegistry } from '../previews/recipes.js';
 import { SiteApplication } from './site.js';
 import { sitePayload } from '../../../test-support/site-payload.js';
+
+beforeAll(async () => {
+  await recipeRegistry.Showcase.load();
+}, NATIVE_MODULE_IMPORT_TIMEOUT_MS);
 
 const actions = {
   copyText: vi.fn(async () => undefined),

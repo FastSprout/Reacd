@@ -138,7 +138,17 @@ for (const profile of PROFILES) {
         form.getByRole('img', { name: '0.5 Stars', exact: true }),
       ).toBeVisible();
       await expect(form.getByRole('radio')).toHaveCount(0);
-      await form.getByRole('img', { name: '0.5 Stars', exact: true }).click();
+      const readonlyRating = form.getByRole('img', {
+        name: '0.5 Stars',
+        exact: true,
+      });
+      await readonlyRating.scrollIntoViewIfNeeded();
+      const readonlyBox = await readonlyRating.boundingBox();
+      if (readonlyBox === null) throw new Error('Missing native readonly rating.');
+      await page.mouse.click(
+        readonlyBox.x + readonlyBox.width / 2,
+        readonlyBox.y + readonlyBox.height / 2,
+      );
     } else {
       await expect(keyboard).toHaveAttribute('aria-readonly', 'true');
       await keyboard.focus();

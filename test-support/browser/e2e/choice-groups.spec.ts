@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
+import { watchPageErrors } from '../docs-site.js';
 
 const WIDTHS = [240, 320, 375, 600, 768, 1024, 1440, 1920];
 const PROFILES = ['Spacious', 'Compact'];
@@ -16,52 +17,112 @@ async function fields(page: Page, profile: string) {
   await page.getByRole('button', { name: 'Fields', exact: true }).click();
 }
 async function contained(page: Page) {
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth),
-  ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
-  const failures = await page
-    .locator('.reacd-choice-group, .reacd-choice-item, .reacd-choice-text')
-    .evaluateAll(
-      (elements, tolerance): string[] =>
-        elements.flatMap<string>((element) => {
-          const box = element.getBoundingClientRect();
-          const parent = element.parentElement?.getBoundingClientRect();
-          return parent &&
-            (box.left < parent.left - tolerance || box.right > parent.right + tolerance)
-            ? [element.getAttribute('class') ?? element.tagName]
-            : [];
-        }),
-      TOLERANCE,
-    );
-  expect(failures).toEqual([]);
-  const targets = await page.locator('.reacd-choice-control').evaluateAll(
-    (elements, minimum) =>
-      elements.every((element) => {
-        const box = element.getBoundingClientRect();
-        return box.width >= minimum && box.height >= minimum;
-      }),
-    LAYOUT_POLICY.controlTargetPx,
-  );
-  expect(targets).toBe(true);
-  expect(
-    await page.locator('.reacd-radio-dot, .reacd-choice-check').evaluateAll(
-      (elements, tolerance) =>
-        elements.every((element) => {
-          const box = element.getBoundingClientRect();
-          const parent = element
-            .closest('.reacd-choice-control')
-            ?.getBoundingClientRect();
-          return (
-            parent !== undefined &&
-            box.left >= parent.left - tolerance &&
-            box.right <= parent.right + tolerance &&
-            box.top >= parent.top - tolerance &&
-            box.bottom <= parent.bottom + tolerance
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
+  const choices = [
+    { form: 'Delivery example', role: 'radio', count: 3 },
+    { form: 'Channels example', role: 'checkbox', count: 4 },
+  ] as const;
+  for (const choice of choices) {
+    const controls = page
+      .getByRole('form', { name: choice.form, exact: true })
+      .getByRole(choice.role);
+    await expect(controls).toHaveCount(choice.count);
+    for (const control of await controls.all()) {
+      const geometry = await control.evaluate((element, minimum) => {
+        if (!(
+          element instanceof HTMLInputElement || element instanceof HTMLButtonElement
+        )) {
+          throw new Error('Expected a native SDK labelable choice control.');
+        }
+        const label = [...(element.labels ?? [])].find(
+          (candidate) => candidate.control === element,
+        );
+        if (!label) throw new Error('Expected an associated native choice label.');
+        const scope = element.closest('fieldset, [role=group], [role=radiogroup]');
+        if (!scope) throw new Error('Expected the actual native choice group.');
+        const native = element.getBoundingClientRect();
+        const target =
+          native.width >= minimum && native.height >= minimum
+            ? native
+            : label.getBoundingClientRect();
+        const outer = scope.getBoundingClientRect();
+        const labelBox = label.getBoundingClientRect();
+        const range = document.createRange();
+        const walker = document.createTreeWalker(label, NodeFilter.SHOW_TEXT);
+        const text = [];
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+          if (!node.textContent?.trim()) continue;
+          range.selectNodeContents(node);
+          text.push(
+            ...[...range.getClientRects()].map((rect) => ({
+              left: rect.left,
+              right: rect.right,
+              top: rect.top,
+              bottom: rect.bottom,
+            })),
           );
-        }),
-      TOLERANCE,
-    ),
-  ).toBe(true);
+        }
+        const visual = element.closest('.MuiRadio-root, .MuiCheckbox-root') ?? element;
+        const visualBox = visual.getBoundingClientRect();
+        const glyphs = [...visual.querySelectorAll('svg')].map((glyph) => {
+          const box = glyph.getBoundingClientRect();
+          return { left: box.left, right: box.right, top: box.top, bottom: box.bottom };
+        });
+        return {
+          target: {
+            left: target.left,
+            right: target.right,
+            width: target.width,
+            height: target.height,
+          },
+          outer: { left: outer.left, right: outer.right },
+          label: {
+            left: labelBox.left,
+            right: labelBox.right,
+            top: labelBox.top,
+            bottom: labelBox.bottom,
+          },
+          visual: {
+            left: visualBox.left,
+            right: visualBox.right,
+            top: visualBox.top,
+            bottom: visualBox.bottom,
+          },
+          text,
+          glyphs,
+        };
+      }, LAYOUT_POLICY.controlTargetPx);
+      expect(geometry.target.width).toBeGreaterThanOrEqual(
+        LAYOUT_POLICY.controlTargetPx,
+      );
+      expect(geometry.target.height).toBeGreaterThanOrEqual(
+        LAYOUT_POLICY.controlTargetPx,
+      );
+      expect(geometry.target.left).toBeGreaterThanOrEqual(
+        geometry.outer.left - TOLERANCE,
+      );
+      expect(geometry.target.right).toBeLessThanOrEqual(
+        geometry.outer.right + TOLERANCE,
+      );
+      expect(geometry.text.length).toBeGreaterThan(0);
+      for (const fragment of geometry.text) {
+        expect(fragment.left).toBeGreaterThanOrEqual(geometry.outer.left - TOLERANCE);
+        expect(fragment.right).toBeLessThanOrEqual(geometry.outer.right + TOLERANCE);
+        expect(fragment.left).toBeGreaterThanOrEqual(geometry.label.left - TOLERANCE);
+        expect(fragment.right).toBeLessThanOrEqual(geometry.label.right + TOLERANCE);
+        expect(fragment.top).toBeGreaterThanOrEqual(geometry.label.top - TOLERANCE);
+        expect(fragment.bottom).toBeLessThanOrEqual(geometry.label.bottom + TOLERANCE);
+      }
+      for (const glyph of geometry.glyphs) {
+        expect(glyph.left).toBeGreaterThanOrEqual(geometry.visual.left - TOLERANCE);
+        expect(glyph.right).toBeLessThanOrEqual(geometry.visual.right + TOLERANCE);
+        expect(glyph.top).toBeGreaterThanOrEqual(geometry.visual.top - TOLERANCE);
+        expect(glyph.bottom).toBeLessThanOrEqual(geometry.visual.bottom + TOLERANCE);
+      }
+    }
+  }
 }
 
 for (const profile of PROFILES) {
@@ -69,9 +130,14 @@ for (const profile of PROFILES) {
     test(`${profile} choice groups wrap at ${width}px and 200%`, async ({ page }) => {
       await page.setViewportSize({ width, height: HEIGHT });
       await fields(page, profile);
-      await page.getByRole('radio', { name: 'Standard delivery' }).click();
-      await page.getByRole('checkbox', { name: 'Email notifications' }).check();
-      await page.getByRole('checkbox', { name: 'SMS notifications' }).check();
+      await page.getByText('Standard delivery', { exact: true }).click();
+      await expect(
+        page.getByRole('radio', { name: 'Standard delivery' }),
+      ).toBeChecked();
+      for (const label of ['Email notifications', 'SMS notifications']) {
+        await page.getByText(label, { exact: true }).click();
+        await expect(page.getByRole('checkbox', { name: label })).toBeChecked();
+      }
       await contained(page);
       await page.getByRole('switch', { name: 'Arrange delivery horizontally' }).click();
       await page.getByRole('switch', { name: 'Arrange channels horizontally' }).click();
@@ -97,11 +163,7 @@ for (const profile of PROFILES) {
   test(`${profile} choice groups validate forms, keyboard, limits, and themes`, async ({
     page,
   }) => {
-    const errors: string[] = [];
-    page.on('pageerror', (error) => errors.push(error.message));
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
+    const errors = watchPageErrors(page);
     await fields(page, profile);
     await page.getByRole('button', { name: 'Save delivery' }).click();
     await expect(page.getByText('No delivery saved.')).toBeVisible();
@@ -109,8 +171,11 @@ for (const profile of PROFILES) {
     await standard.focus();
     await page.keyboard.press('Space');
     await expect(standard).toBeChecked();
-    await page.keyboard.press('ArrowDown');
-    await expect(page.getByRole('radio', { name: 'Express delivery' })).toBeFocused();
+    await page.keyboard.down('ArrowDown');
+    const express = page.getByRole('radio', { name: 'Express delivery' });
+    await expect(express).toBeFocused();
+    await expect(express).toBeChecked();
+    await page.keyboard.up('ArrowDown');
     await page.getByRole('button', { name: 'Save delivery' }).click();
     await expect(page.getByText('Saved delivery: express')).toBeVisible();
     await page.getByRole('button', { name: 'Save channels' }).click();
@@ -120,10 +185,10 @@ for (const profile of PROFILES) {
     const inApp = page.getByRole('checkbox', { name: 'In-app notifications' });
     await email.check();
     await sms.check();
-    await expect(inApp).toHaveAttribute('aria-disabled', 'true');
+    await expect(inApp).toBeDisabled();
     await sms.focus();
     await page.keyboard.press('Tab');
-    await expect(inApp).toBeFocused();
+    await expect(inApp).not.toBeFocused();
     await page.keyboard.press('Space');
     await expect(inApp).not.toBeChecked();
     await email.uncheck();

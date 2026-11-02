@@ -1,6 +1,10 @@
 import { atom, useAtom } from 'jotai';
+import { ViewBoundary } from '../loading/view-boundary.js';
 import { Button, Input, Modal, Select, Text, Toggle, VStack } from '@fastsprout/reacd';
 
+const LONG_CONTENT_REPETITIONS = 300;
+const LONG_CONTENT = 'Long dialog content without spaces: ' +
+  'retained_content_'.repeat(LONG_CONTENT_REPETITIONS);
 const openAtom = atom(false);
 const nestedAtom = atom(false);
 const lockedAtom = atom(false);
@@ -38,45 +42,47 @@ export function ModalExample() {
         onCheckedChange={setFullscreen}
       />
       <Toggle label="Long dialog content" checked={long} onCheckedChange={setLong} />
-      <Modal
-        title="Edit modal example"
-        description="Changes stay in this local preview."
-        triggerLabel="Open modal example"
-        open={open}
-        onOpenChange={setOpen}
-        retainContent
-        dismissible={!locked}
-        modal={!nonModal}
-        fullscreen={fullscreen}
-        footer={<Button label="Apply example" onPress={() => setOpen(false)} />}
-      >
-        <VStack>
-          <Input label="Modal note" value={note} onValueChange={setNote} />
-          <Select
-            label="Modal role"
-            value={role}
-            onValueChange={setRole}
-            items={[
-              { value: 'reader', label: 'Reader' },
-              { value: 'editor', label: 'Editor' },
-            ]}
-          />
-          <Modal
-            title="Nested modal"
-            description="A second independent dialog."
-            triggerLabel="Open nested modal"
-            open={nested}
-            onOpenChange={setNested}
-          >
-            <Text>Closing this dialog restores focus inside its parent.</Text>
-          </Modal>
-          <Text>
-            {long
-              ? 'Long dialog content without spaces: ' + 'retained_content_'.repeat(300)
-              : 'Edit the note, then apply or close.'}
-          </Text>
-        </VStack>
-      </Modal>
+      <ViewBoundary label="Modal variant" key={String(nonModal)}>
+        <Modal
+          title="Edit modal example"
+          description="Changes stay in this local preview."
+          triggerLabel="Open modal example"
+          open={open}
+          onOpenChange={setOpen}
+          retainContent
+          dismissible={!locked}
+          modal={!nonModal}
+          fullscreen={fullscreen}
+          footer={<Button label="Apply example" onPress={() => setOpen(false)} />}
+        >
+          <VStack>
+            <Input label="Modal note" value={note} onValueChange={setNote} />
+            <Select
+              label="Modal role"
+              value={role}
+              onValueChange={setRole}
+              items={[
+                { value: 'reader', label: 'Reader' },
+                { value: 'editor', label: 'Editor' },
+              ]}
+            />
+            <Modal
+              title="Nested modal"
+              description="A second independent dialog."
+              triggerLabel="Open nested modal"
+              open={nested}
+              onOpenChange={setNested}
+            >
+              <Text>Closing this dialog restores focus inside its parent.</Text>
+            </Modal>
+            <Text>
+              {long
+                ? LONG_CONTENT
+                : 'Edit the note, then apply or close.'}
+            </Text>
+          </VStack>
+        </Modal>
+      </ViewBoundary>
     </VStack>
   );
 }

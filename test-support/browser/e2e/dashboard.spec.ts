@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test';
+import type { Locator } from '@playwright/test';
+import { SPLITTER_POLICY } from '../../../src/core/splitter-policy.js';
 import { openUnsupportedExample } from '../native-capabilities.js';
 
 const WIDTHS = [240, 320, 768, 1440];
@@ -7,6 +9,30 @@ const HEIGHT = 1000;
 const TOLERANCE = 1;
 const WIDE_WIDTH = 1440;
 const SIDEBAR_NARROW_LIMIT = 768;
+
+async function expectDashboardMode(group: Locator, panels: number) {
+  const narrow = await group.evaluate(
+    (element, policy) => {
+      const measured = element.parentElement?.parentElement;
+      if (!measured) throw new Error('Expected the measured Dashboard container.');
+      const font = Number.parseFloat(getComputedStyle(measured).fontSize);
+      if (!Number.isFinite(font) || font <= 0) throw new Error('Missing font metric.');
+      return (
+        measured.getBoundingClientRect().width / font < policy.track * policy.panels
+      );
+    },
+    { track: SPLITTER_POLICY.panelTrackRem, panels },
+  );
+  const opener = group.getByRole('button', { name: 'Open navigation', exact: true });
+  if (narrow) {
+    await expect(opener).toHaveCount(panels - 1);
+    for (const control of await opener.all()) await expect(control).toBeVisible();
+  } else await expect(opener).toHaveCount(0);
+  await expect(
+    group.locator(narrow ? ':scope > [role="region"]' : ':scope > [data-panel]'),
+  ).toHaveCount(panels);
+  return narrow;
+}
 
 for (const profile of PROFILES) {
   test(`${profile} dashboard icon collapse and declined search`, async ({ page }) => {
@@ -131,15 +157,8 @@ for (const profile of PROFILES)
         await page.evaluate(() => {
           document.documentElement.style.fontSize = '200%';
         });
-        const opener = group.getByRole('button', {
-          name: 'Open navigation',
-          exact: true,
-        });
-        if (width === WIDE_WIDTH) await expect(opener).toHaveCount(0);
-        else await expect(opener).toBeVisible();
-        const narrow = await opener.isVisible();
-        if (width === WIDE_WIDTH) {
-          expect(narrow).toBe(false);
+        const narrow = await expectDashboardMode(group, 2);
+        if (!narrow) {
           const aside = page.getByRole('complementary', {
             name: 'Dashboard navigation',
           });
@@ -183,8 +202,24 @@ for (const profile of PROFILES)
             exact: true,
           });
           await handle.focus();
+          const previous = Number(await handle.getAttribute('aria-valuenow'));
           await page.keyboard.press('ArrowRight');
-          await expect(handle).toHaveAttribute('aria-valuenow', '30');
+          await expect
+            .poll(async () => Number(await handle.getAttribute('aria-valuenow')))
+            .not.toBe(previous);
+          const share = await handle.getAttribute('aria-valuenow');
+          const controlled = await handle.getAttribute('aria-controls');
+          const panel = controlled?.endsWith('-navigation')
+            ? 'navigation'
+            : controlled?.endsWith('-inbox')
+              ? 'inbox'
+              : undefined;
+          if (panel === undefined) throw new Error('Missing native panel owner.');
+          await expect(
+            section.getByText(`${panel} expanded share: ${share}`, {
+              exact: true,
+            }),
+          ).toBeVisible();
           await handle.scrollIntoViewIfNeeded();
           const box = await handle.boundingBox();
           if (!box) throw new Error('Missing resize handle geometry.');
@@ -192,7 +227,9 @@ for (const profile of PROFILES)
           await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
           await page.mouse.down();
           await page.mouse.move(box.x + box.width / 2 + 30, box.y + box.height / 2);
-          expect(Number(await handle.getAttribute('aria-valuenow'))).not.toBe(start);
+          await expect
+            .poll(async () => Number(await handle.getAttribute('aria-valuenow')))
+            .not.toBe(start);
           const accepted = await handle.getAttribute('aria-valuenow');
           await handle.dispatchEvent('pointercancel', { pointerId: 1 });
           await page.mouse.up();
@@ -214,9 +251,7 @@ for (const profile of PROFILES)
         await section
           .getByRole('switch', { name: 'Additional dashboard panel' })
           .check();
-        await expect(
-          group.locator(narrow ? ':scope > [role="region"]' : ':scope > [data-panel]'),
-        ).toHaveCount(3);
+        await expectDashboardMode(group, 3);
         await expect(
           group.getByRole('heading', { name: 'Workspace notes' }),
         ).toBeVisible();

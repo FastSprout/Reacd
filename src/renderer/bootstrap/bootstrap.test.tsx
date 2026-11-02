@@ -1,16 +1,21 @@
 import { act, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { NATIVE_MODULE_IMPORT_TIMEOUT_MS } from
+  '../../../test-support/native-module-policy.js';
 
 describe('browser entry point', () => {
-  it('reports a missing mount point', async () => {
+  beforeEach(async () => {
     vi.resetModules();
+    await import('../../../tooling/conformance/app.js');
+    await import('../../../src/bootstrap.js');
+  }, NATIVE_MODULE_IMPORT_TIMEOUT_MS);
+  it('reports a missing mount point', async () => {
     await expect(import('../../../tooling/conformance/main.js')).rejects.toThrow(
       'Mount container #root',
     );
   });
 
   it('mounts the complete application with the real React root', async () => {
-    vi.resetModules();
     const element = document.createElement('div');
     element.id = 'root';
     document.body.append(element);

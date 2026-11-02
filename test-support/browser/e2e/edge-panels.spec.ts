@@ -173,6 +173,7 @@ test(
     await trigger.click();
     const dialog = page.getByRole('dialog', { name: 'Sample drawer' });
     const handle = dialog.locator('[data-slot="drawer-swipe-handle"]');
+    await handle.click({ trial: true });
     const box = await handle.boundingBox();
     if (box === null) throw new Error('Missing drawer swipe affordance.');
     const x = box.x + box.width / 2;
@@ -223,9 +224,9 @@ test(
         .click();
       await page.getByRole('button', { name: 'Open sample drawer' }).click();
       const dialog = page.getByRole('dialog', { name: 'Sample drawer' });
-      const box = await dialog
-        .locator('[data-slot="drawer-swipe-handle"]')
-        .boundingBox();
+      const handle = dialog.locator('[data-slot="drawer-swipe-handle"]');
+      await handle.click({ trial: true });
+      const box = await handle.boundingBox();
       if (box === null) throw new Error('Missing drawer touch grip.');
       const client = await context.newCDPSession(page);
       const x = box.x + box.width / 2;

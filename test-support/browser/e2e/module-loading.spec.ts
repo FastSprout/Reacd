@@ -110,12 +110,13 @@ for (const profile of ['Spacious', 'Compact']) {
     await page.goto('/');
     await select(page, 'Appearance', profile);
     await page.getByRole('button', { name: 'Fields', exact: true }).click();
-    await page.getByLabel('Name', { exact: true }).fill('Unsaved before reload');
+    await page.getByRole('textbox', { name: 'Name', exact: true })
+      .fill('Unsaved before reload');
     await page.getByRole('button', { name: 'Content and data', exact: true }).click();
     await expect(page.getByRole('alert')).toContainText('Cannot load Content and data');
     await expect(page.getByRole('alert')).toContainText('unsaved local changes');
     await page.getByRole('button', { name: 'Fields', exact: true }).click();
-    await expect(page.getByLabel('Name', { exact: true })).toHaveValue(
+    await expect(page.getByRole('textbox', { name: 'Name', exact: true })).toHaveValue(
       'Unsaved before reload',
     );
     await page.getByRole('button', { name: 'Content and data', exact: true }).click();
@@ -124,9 +125,10 @@ for (const profile of ['Spacious', 'Compact']) {
     await Promise.all([page.waitForEvent('load'), reload.click()]);
     await page.getByRole('button', { name: 'Content and data', exact: true }).click();
     await expect(
-      page.getByRole('heading', { name: 'Empty state preview', exact: true }),
+      page.getByRole('table', { name: 'Example inventory', exact: true }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Fields', exact: true }).click();
-    await expect(page.getByLabel('Name', { exact: true })).toHaveValue('');
+    await expect(page.getByRole('textbox', { name: 'Name', exact: true }))
+      .toHaveValue('');
   });
 }

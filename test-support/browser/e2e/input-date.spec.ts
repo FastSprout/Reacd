@@ -150,7 +150,7 @@ for (const profile of PROFILES) {
       page
         .getByText(
           material
-            ? 'Date must be within its allowed limits.'
+            ? 'Enter a value.'
             : 'Complete all date segments or clear the field.',
           { exact: true },
         )

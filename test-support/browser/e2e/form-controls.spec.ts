@@ -108,6 +108,13 @@ for (const profile of PROFILES) {
     ).toEqual({ publish: 'on' });
     const release = page.getByRole('textbox', { name: 'Release notes' });
     const initialHeight = await release.evaluate((element) => element.clientHeight);
+    const minimum = await release.evaluate((element, rows) => {
+      const style = getComputedStyle(element);
+      return rows * parseFloat(style.lineHeight) +
+        parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+    }, BASE_ROWS);
+    expect(await release.evaluate((element) => element.getBoundingClientRect().height))
+      .toBeGreaterThanOrEqual(minimum - GEOMETRY_TOLERANCE);
     await page.getByRole('button', { name: 'Fill long release notes' }).click();
     await expect
       .poll(() => release.evaluate((element) => element.clientHeight))
@@ -127,10 +134,12 @@ for (const profile of PROFILES) {
       await release.evaluate((field) => field.scrollHeight > field.clientHeight),
     ).toBe(true);
     await page.getByRole('button', { name: 'Clear release notes' }).click();
-    await expect(release).toHaveAttribute('rows', String(BASE_ROWS));
+    await expect(release).toHaveValue('');
     await expect
       .poll(() => release.evaluate((element) => element.clientHeight))
       .toBeLessThanOrEqual(initialHeight + GEOMETRY_TOLERANCE);
+    expect(await release.evaluate((element) => element.getBoundingClientRect().height))
+      .toBeGreaterThanOrEqual(minimum - GEOMETRY_TOLERANCE);
     const notes = page.getByRole('textbox', { name: 'Account notes' });
     await page.getByRole('switch', { name: 'Approve account' }).check();
     await notes.fill('Reviewed by owner');

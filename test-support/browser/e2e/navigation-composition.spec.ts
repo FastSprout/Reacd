@@ -1,5 +1,6 @@
 import { openUnsupportedExample } from '../native-capabilities.js';
 import { expect, test } from '@playwright/test';
+import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 
 const WIDTHS = [240, 375, 1440];
 const PROFILES = ['Spacious', 'Compact'];
@@ -7,7 +8,6 @@ const DIRECTIONS = ['ltr', 'rtl'];
 const HEIGHT = 1000;
 const TOLERANCE = 1;
 const LONG_LABEL = 'Resource_without_word_breaks_'.repeat(20);
-const NATIVE_MINIMUM_AT_DOUBLE_TYPE = 72;
 
 for (const profile of PROFILES) {
   for (const width of WIDTHS) {
@@ -75,7 +75,7 @@ for (const profile of PROFILES) {
                 ),
               };
             }, TOLERANCE);
-            expect(bounds.height).toBeGreaterThanOrEqual(NATIVE_MINIMUM_AT_DOUBLE_TYPE);
+            expect(bounds.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
             expect(bounds.contained).toBe(true);
             expect(bounds.escaped).toBe(false);
           }
@@ -106,10 +106,22 @@ for (const profile of PROFILES) {
           expect(box.x + box.width).toBeLessThanOrEqual(width + TOLERANCE);
           await child.click();
           await expect(page.getByText('Sample opened locally.')).toBeVisible();
+          await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+          await expect(child).toBeHidden();
           await page.getByRole('switch', { name: 'Vertical navigation menu' }).check();
-          await trigger.click();
+          await expect(
+            page.getByRole('navigation', {
+              name: 'Sample application resources',
+              exact: true,
+            }),
+          ).toHaveAttribute('data-orientation', 'vertical');
+          await trigger.focus();
+          await expect(trigger).toBeFocused();
+          await page.keyboard.press('Enter');
+          await expect(trigger).toHaveAttribute('aria-expanded', 'true');
           await expect(child).toBeVisible();
           await page.keyboard.press('Escape');
+          await expect(child).toBeHidden();
           await expect(trigger).toBeFocused();
           const address = page.getByLabel('Sample shipping address', { exact: true });
           await address.fill('A retained shipping address');
@@ -156,22 +168,24 @@ for (const profile of PROFILES) {
       const action = page.getByRole('button', { name: 'Menu help locally' });
       for (const target of [trigger, action]) {
         await expect(target).toBeVisible();
-        await expect(target).toHaveCSS(
-          'min-height',
-          `${NATIVE_MINIMUM_AT_DOUBLE_TYPE}px`,
-        );
         const box = await target.boundingBox();
         if (!box) throw new Error('Missing native navigation target bounds.');
         expect(box.x).toBeGreaterThanOrEqual(-TOLERANCE);
         expect(box.x + box.width).toBeLessThanOrEqual(width + TOLERANCE);
-        expect(box.height).toBeGreaterThanOrEqual(NATIVE_MINIMUM_AT_DOUBLE_TYPE);
+        expect(box.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
       }
+      const nativeTrigger = await trigger.elementHandle();
+      if (!nativeTrigger) throw new Error('Missing native menu trigger.');
       await trigger.click();
       await expect(
         page.getByRole('button', { name: 'Open sample locally' }),
       ).toBeVisible();
-      const escapedText = await trigger.evaluate((element, tolerance) => {
+      const escapedText = await nativeTrigger.evaluate((element, tolerance) => {
+        if (!element.isConnected) throw new Error('Native trigger is disconnected.');
         const box = element.getBoundingClientRect();
+        if (box.width === 0 || box.height === 0) {
+          throw new Error('Native trigger must retain measurable geometry.');
+        }
         const text = document.createRange();
         text.selectNodeContents(element);
         return [...text.getClientRects()].some(

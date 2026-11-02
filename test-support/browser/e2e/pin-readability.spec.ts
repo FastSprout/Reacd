@@ -118,12 +118,24 @@ for (const profile of ['Spacious', 'Compact']) {
       process.platform === 'darwin' && browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
     await page.setViewportSize({ width: 360, height: 1000 });
     const code = await openPinFields(page);
-    await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
-    await page.getByRole('option', { name: profile, exact: true }).click();
-    await code.fill('001234');
+    const appearance = page.getByRole('combobox', { name: 'Appearance', exact: true });
+    await appearance.click();
+    const option = page.getByRole('option', { name: profile, exact: true });
+    await option.click();
+    await expect(option).toBeHidden();
+    await expect(appearance).toBeFocused();
+    await code.focus();
+    await expect(code).toBeFocused();
+    await code.pressSequentially('001234');
+    await expect(code).toHaveValue('001234');
+    await expect(page.getByText('Code is complete.', { exact: true })).toBeVisible();
+    const codeForm = page.getByRole('form', { name: 'Code verification' });
+    await expect.poll(() => codeForm.evaluate((element) => {
+      if (!(element instanceof HTMLFormElement)) throw new Error('Expected form.');
+      return new FormData(element).get('code');
+    })).toBe('001234');
     const codePending = page.getByRole('switch', { name: 'Submitting code' });
     await codePending.check();
-    const codeForm = page.getByRole('form', { name: 'Code verification' });
     await expect(codeForm.locator('fieldset')).toHaveAttribute('inert', '');
     await expect(code).toHaveJSProperty('disabled', false);
     expect(

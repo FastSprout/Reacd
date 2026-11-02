@@ -140,14 +140,24 @@ for (const template of ['saas-modern-light', 'erp-compact']) {
         });
       await segment.focus();
       await page.keyboard.press('ArrowUp');
+      if (!material) {
+        await expect(segment).toHaveAttribute('aria-valuenow',
+          kind === 'date' ? '2' : '10');
+        await expect(region.getByRole('status', { name: 'Recovery writes' }))
+          .toHaveText('0');
+        expect(await region.getByRole('form').evaluate((form) => {
+          if (!(form instanceof HTMLFormElement)) throw new Error('Expected form.');
+          return [...new FormData(form)];
+        })).toEqual([['value', kind === 'date' ? '2024-02-29' : '10:00:00']]);
+      }
       await region.getByRole('button', { name: 'Save', exact: true }).click();
       await expect(region.getByRole('status', { name: 'Recovery saved' })).toHaveText(
-        '0',
+        material ? '0' : '1',
       );
       await region.getByRole('button', { name: 'Replace', exact: true }).click();
       await region.getByRole('button', { name: 'Save', exact: true }).click();
       await expect(region.getByRole('status', { name: 'Recovery saved' })).toHaveText(
-        '1',
+        material ? '1' : '2',
       );
       await expect(region.getByRole('status', { name: 'Recovery writes' })).toHaveText(
         '0',
@@ -162,7 +172,7 @@ for (const template of ['saas-modern-light', 'erp-compact']) {
       await expect(segment).not.toHaveAttribute('aria-valuenow');
       await region.getByRole('button', { name: 'Save', exact: true }).click();
       await expect(region.getByRole('status', { name: 'Recovery saved' })).toHaveText(
-        '1',
+        material ? '1' : '2',
       );
       await expect(segment).toBeFocused();
     });

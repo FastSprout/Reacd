@@ -71,6 +71,8 @@ for (const profile of ['Spacious', 'Compact']) {
     page,
   }) => {
     const errors: string[] = [];
+    const closeLabel = test.info().project.name === 'mui' ? 'Close' :
+      'Dismiss Review delivery details';
     page.on('pageerror', (error) => errors.push(error.message));
     const section = await elements(page, profile);
     const button = section.getByRole('button', { name: 'Request export', exact: true });
@@ -98,13 +100,14 @@ for (const profile of ['Spacious', 'Compact']) {
     await expect(
       section.getByText('Delivery review requests: 1', { exact: true }),
     ).toBeVisible();
-    await section
-      .getByRole('button', { name: 'Dismiss Review delivery details' })
-      .click();
+    const dismiss = section.getByRole('alert')
+      .filter({ hasText: 'Review delivery details' })
+      .getByRole('button', { name: closeLabel, exact: true });
+    await dismiss.click();
     await section.getByRole('button', { name: 'Show delivery alert' }).click();
     await section.getByRole('switch', { name: 'Readonly alert visibility' }).check();
     await expect(
-      section.getByRole('button', { name: 'Dismiss Review delivery details' }),
+      dismiss,
     ).toHaveCount(0);
     await section.getByRole('switch', { name: 'Indeterminate upload' }).check();
     await expect(

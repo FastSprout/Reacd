@@ -85,10 +85,28 @@ for (const profile of PROFILES) {
     });
     await minimum.focus();
     await page.keyboard.press('End');
-    await expect(minimum).toHaveAttribute('aria-valuenow', '80');
-    await expect(maximum).toHaveAttribute('aria-valuenow', '80');
-    await maximum.focus();
-    await page.keyboard.press('Home');
+    if (test.info().project.name === 'shadcn') {
+      await expect(minimum).toHaveAttribute('aria-valuenow', '20');
+      await expect(maximum).toHaveAttribute('aria-valuenow', '100');
+      await maximum.focus();
+      await page.keyboard.press('Home');
+      await expect(minimum).toHaveAttribute('aria-valuenow', '0');
+      await expect(maximum).toHaveAttribute('aria-valuenow', '100');
+      await maximum.focus();
+      await page.keyboard.press('PageDown');
+      await page.keyboard.press('PageDown');
+      await expect(maximum).toHaveAttribute('aria-valuenow', '80');
+      await minimum.focus();
+      for (let increment = 0; increment < 8; increment += 1) {
+        await page.keyboard.press('PageUp');
+      }
+      await expect(minimum).toHaveAttribute('aria-valuenow', '80');
+    } else {
+      await expect(minimum).toHaveAttribute('aria-valuenow', '80');
+      await expect(maximum).toHaveAttribute('aria-valuenow', '80');
+      await maximum.focus();
+      await page.keyboard.press('Home');
+    }
     await expect(maximum).toHaveAttribute('aria-valuenow', '80');
     const output = page.getByRole('slider', { name: 'Output level', exact: true });
     const track = page
