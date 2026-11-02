@@ -1,10 +1,14 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/locale-select/locale-select.adapter.js';
-import { SharedLocaleSelect } from
-  '../../shared/locale-select/locale-select.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { LocaleSelectProps } from
+  '@fastsprout/reacd/adapter-runtime/components/locale-select/locale-select.props.js';
+import { ShadcnSelect } from '../select/select.adapter.js';
 
-export type ShadcnLocaleSelectProps = ComponentProps<typeof SharedLocaleSelect>;
-export const ShadcnLocaleSelect: ComponentType<ShadcnLocaleSelectProps> =
-  bindPrimitives(SharedLocaleSelect, shadcnPrimitives, 'ShadcnLocaleSelect');
+export type ShadcnLocaleSelectProps = LocaleSelectProps;
+
+export function ShadcnLocaleSelect({ locales, ...props }: ShadcnLocaleSelectProps) {
+  return (
+    <ShadcnSelect
+      {...props}
+      items={locales.map(({ code, label }) => ({ value: code, label }))}
+    />
+  );
+}

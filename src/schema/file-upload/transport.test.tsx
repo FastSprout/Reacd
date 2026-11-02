@@ -1,6 +1,4 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { act, render } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import {
   GenerativeUI,
@@ -8,6 +6,12 @@ import {
   validateGenerativeDocument,
 } from '@fastsprout/reacd/generative';
 import { success } from '../../../test-support/data-table.js';
+import { exampleDeclarationProbe, expectUnsupportedExample } from
+  '../../../test-support/example-declaration-probe.js';
+import { RenderContext } from '../../components/shared/port.js';
+import { GenerativeNodeView } from '../../state/generative-ui/node-view.js';
+import { fileUploadSchema } from './index.js';
+import { colorPickerSchema } from '../color-picker/index.js';
 const FILE = {
   id: 'saved',
   name: 'saved.txt',
@@ -42,22 +46,31 @@ const documentModel = {
     ],
   },
 };
-it('renders canonical file and color generative state routes', async () => {
-  const user = userEvent.setup();
-  expect(validateGenerativeDocument(documentModel).success).toBe(true);
+it.each(['FileUpload', 'ColorPicker'] as const)(
+  'reports the exact %s SDK exception after transport validation', (component) => {
+    const root = documentModel.root.children.find(node => node.type === component);
+    const input = { ...documentModel, root };
+    expect(validateGenerativeDocument(input).success).toBe(true);
+    expectUnsupportedExample(<GenerativeUI document={input} />, component);
+  },
+);
+
+it('projects canonical payload routes without inventing native controls', () => {
+  const parsed = success(validateGenerativeDocument(documentModel));
   const registry = success(createStateRegistry(documentModel.state));
-  render(
-    <GenerativeUI
-      adapter={shadcnAdapter}
-      document={documentModel}
-      registry={registry}
-    />,
-  );
-  await user.click(screen.getByRole('button', { name: 'Remove saved.txt' }));
+  const probe = exampleDeclarationProbe();
+  render(<RenderContext.Provider value={probe.port}>
+    <GenerativeNodeView node={parsed.root} registry={registry} actions={{}} />
+  </RenderContext.Provider>);
+  expect(probe.read('FileUpload', fileUploadSchema).value).toEqual([FILE]);
+  act(() => { probe.read('FileUpload', fileUploadSchema).onValueChange([]); });
   expect(success(registry.read('files')).value).toEqual([]);
-  const hex = screen.getByRole('textbox', { name: 'Color hexadecimal' });
-  await user.clear(hex);
-  await user.type(hex, '#ABCDEF{Enter}');
+  expect(probe.read('FileUpload', fileUploadSchema).value).toEqual([]);
+  act(() => { probe.read('ColorPicker', colorPickerSchema)
+    .onValueChange('#abcdef'); });
+  expect(success(registry.read('color')).value).toBe('#abcdef');
+  act(() => { probe.read('ColorPicker', colorPickerSchema)
+    .onValueChange('#ABCDEF'); });
   expect(success(registry.read('color')).value).toBe('#abcdef');
 });
 it('rejects wrong state kinds, mode violations and oversized initial documents', () => {

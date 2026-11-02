@@ -68,6 +68,7 @@ export function DocumentView({
             label={node.label}
             intent={node.intent}
             disabled={node.disabled}
+            pressed={node.pressed}
             onPress={() => {
               const handler = Object.hasOwn(actions, node.action)
                 ? actions[node.action]

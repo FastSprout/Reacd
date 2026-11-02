@@ -1,0 +1,5 @@
+@supports (-webkit-touch-callout: none) {
+  body:has(.reacd-native-drawer-portal) {
+    position: relative;
+  }
+}

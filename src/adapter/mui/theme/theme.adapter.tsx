@@ -1,26 +1,27 @@
 import { useMemo } from 'react';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import type { ThemeProps } from
-  '@fastsprout/reacd/adapter-runtime/components/theme/theme.js';
-import { SharedTheme } from '../../shared/theme/theme.adapter.js';
-import { PrimitiveScope } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+  '@fastsprout/reacd/adapter-runtime/components/theme/theme.props.js';
+import { DeclarationDefaults } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/declaration-defaults.js';
 import { createMaterialTheme } from '../surface/theme.js';
 
-export function MuiTheme(properties: ThemeProps) {
+export type MuiThemeProps = ThemeProps;
+
+export function MuiTheme(props: MuiThemeProps) {
   const inherited = useTheme();
   const theme = useMemo(
     () =>
-      properties.template === undefined
+      props.template === undefined
         ? inherited
-        : createMaterialTheme(properties.template, inherited.direction),
-    [properties.template, inherited],
+        : createMaterialTheme(props.template, inherited.direction),
+    [props.template, inherited],
   );
   return (
     <ThemeProvider theme={theme}>
-      <PrimitiveScope primitives={muiPrimitives}>
-        <SharedTheme {...properties} />
-      </PrimitiveScope>
+      <DeclarationDefaults defaults={props.defaults}>
+        {props.children}
+      </DeclarationDefaults>
     </ThemeProvider>
   );
 }

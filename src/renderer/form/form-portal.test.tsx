@@ -1,5 +1,5 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createPortal } from 'react-dom';
 import type { ReactNode } from 'react';
 import { expect, it, vi } from 'vitest';
@@ -27,7 +27,7 @@ it('submits only a physically separate portal form', async () => {
   expect(screen.getByRole('form', { name: 'Outer form' }).contains(portal)).toBe(false);
   expect(screen.queryByRole('alert')).toBeNull();
   fireEvent.submit(portal);
-  expect(inner).toHaveBeenCalledExactlyOnceWith();
+  await waitFor(() => expect(inner).toHaveBeenCalledExactlyOnceWith());
   expect(outer).not.toHaveBeenCalled();
   view.unmount();
   host.remove();

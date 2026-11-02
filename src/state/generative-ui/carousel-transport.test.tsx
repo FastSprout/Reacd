@@ -1,6 +1,5 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { act, render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
 import {
   defineGenerativeDeclaration,
@@ -8,6 +7,12 @@ import {
 } from '../../schema/generative-v2/index.js';
 import { GenerativeUI } from './generative-ui.js';
 import { createDocumentState } from './create-document-state.js';
+import { GenerativeNodeView } from './node-view.js';
+import { carouselSchema } from '../../schema/carousel/index.js';
+import { marqueeSchema } from '../../schema/marquee/index.js';
+import { buttonComponentSchema } from '../../schema/button/button.schema.js';
+import { exampleDeclarationProbe, expectUnsupportedExample } from
+  '../../../test-support/example-declaration-probe.js';
 import { success } from '../../../test-support/data-table.js';
 
 const document = defineGenerativeDeclaration({
@@ -44,37 +49,33 @@ const document = defineGenerativeDeclaration({
   },
 });
 
-it('renders recursive transport and registers inactive child constraints', async () => {
-  vi.stubGlobal('matchMedia', () => ({
-    matches: false,
-    addEventListener: () => undefined,
-    removeEventListener: () => undefined,
-  }));
+it('reports the exact unsupported native Carousel transport boundary', () => {
+  expectUnsupportedExample(<GenerativeUI adapter={shadcnAdapter}
+    document={document} actions={{ run: vi.fn(), retry: vi.fn() }} />, 'Carousel');
+});
+
+it('walks recursive declarations and retains inactive child state contracts', () => {
   const registry = createDocumentState(document);
-  const user = userEvent.setup();
+  const probe = exampleDeclarationProbe();
   const run = vi.fn();
   const retry = vi.fn();
-  render(
-    <GenerativeUI
-      adapter={shadcnAdapter}
-      document={document}
-      registry={registry}
-      actions={{ run, retry }}
-    />,
-  );
-  expect(screen.getByText('First content')).toBeVisible();
+  render(<probe.Surface>
+    <GenerativeNodeView node={document.root} registry={registry}
+      actions={{ run, retry }} />
+  </probe.Surface>);
+  expect(probe.texts()).toContain('First content');
   expect(registry.update('slide', 2).success).toBe(false);
-  await user.click(screen.getByRole('button', { name: 'Next slide' }));
+  act(() => { probe.read('Carousel', carouselSchema).onValueChange(1); });
   expect(success(registry.read('slide')).value).toBe(1);
-  await user.click(screen.getByRole('button', { name: 'Nested action' }));
-  expect(run).toHaveBeenCalledWith({ state: registry });
-  await user.click(screen.getByRole('button', { name: 'Resume movement' }));
-  expect(success(registry.read('paused')).value).toBe(false);
   act(() => {
-    registry.update('slide', 0);
+    probe.read('Button', buttonComponentSchema, 'Nested action').onPress();
   });
-  expect(screen.getByText('First content')).toBeVisible();
-  vi.unstubAllGlobals();
+  expect(run).toHaveBeenCalledWith({ state: registry });
+  act(() => { probe.read('Marquee', marqueeSchema).onPausedChange(false); });
+  expect(success(registry.read('paused')).value).toBe(false);
+  act(() => { registry.update('slide', 0); });
+  expect(probe.read('Carousel', carouselSchema).value).toBe(0);
+  expect(probe.texts()).toContain('First content');
 });
 
 it('validates actions and bindings even in initially inactive slides', () => {

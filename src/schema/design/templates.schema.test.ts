@@ -1,6 +1,22 @@
 import { describe, expect, it } from 'vitest';
 import { templateSchema, templates } from '../../index.js';
 import { contrastRatio } from '../../templates.js';
+import { darkTemplateVariants } from '../color-mode/default-templates.js';
+
+it('uses monochrome default appearance in both light and dark modes', () => {
+  for (const template of [
+    templates['saas-modern-light'],
+    darkTemplateVariants['saas-modern-light'],
+  ]) {
+    for (const [name, color] of Object.entries(template.colors)) {
+      if (name === 'danger' || name === 'onDanger') continue;
+      expect(color.slice(1, 3)).toBe(color.slice(3, 5));
+      expect(color.slice(3, 5)).toBe(color.slice(5, 7));
+    }
+    expect(templateSchema.safeParse(template).success).toBe(true);
+  }
+  expect(templates['saas-modern-light'].colors.canvas).toBe('#ffffff');
+});
 
 describe('design tokens', () => {
   it.each(Object.entries(templates))(

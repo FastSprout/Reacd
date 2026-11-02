@@ -7,17 +7,20 @@
     "declaration": true,
     "declarationMap": false,
     "sourceMap": false,
-    "types": [
-      "react"
-    ]
+    "types": ["react"],
+    "paths": {
+      "@fastsprout/reacd-shadcn": ["./packages/shadcn/dist/shadcn/shadcn.adapter.d.ts"],
+      "@fastsprout/reacd-shadcn/styles": [
+        "./packages/shadcn/dist/shadcn/styles-contract.d.ts"
+      ],
+      "@fastsprout/reacd/adapter-runtime/core/*": ["./src/core/*"],
+      "@fastsprout/reacd/adapter-runtime/schema/*": ["./src/schema/*"],
+      "@fastsprout/reacd/adapter-runtime/components/*": ["./src/components/*"],
+      "@fastsprout/reacd/adapter-runtime/renderer/*": ["./src/renderer/*"],
+      "@fastsprout/reacd-mui": ["./packages/mui/dist/mui/mui.adapter.d.ts"],
+      "@fastsprout/reacd-mui/styles": ["./packages/mui/dist/mui/styles-contract.d.ts"]
+    }
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "test-support",
-    "src/**/*.test.*",
-    "src/**/__tests__/**",
-    "src/adapter"
-  ]
+  "include": ["src"],
+  "exclude": ["test-support", "src/**/*.test.*", "src/**/__tests__/**", "src/adapter"]
 }

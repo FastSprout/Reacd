@@ -54,3 +54,27 @@ describe('shell slot safety', () => {
     }
   });
 });
+
+it('accepts explicit compact navigation replacement only as a boolean', () => {
+  const menu = { open: false, onOpenChange: () => undefined };
+  for (const replacesNavigation of [true, false]) {
+    expect(
+      headerSchema.safeParse({
+        title: 'Site',
+        menu: {
+          ...menu,
+          replacesNavigation,
+        },
+      }).success,
+    ).toBe(true);
+  }
+  expect(
+    headerSchema.safeParse({
+      title: 'Site',
+      menu: {
+        ...menu,
+        replacesNavigation: 'yes',
+      },
+    }).success,
+  ).toBe(false);
+});

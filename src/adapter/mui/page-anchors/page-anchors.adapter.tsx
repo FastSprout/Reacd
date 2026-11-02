@@ -1,11 +1,9 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedPageAnchors } from '../../shared/page-anchors/page-anchors.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import type { PageAnchorsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-anchors/page-anchors.props.js';
+import { MuiPageNativeLinks } from '../page-links/native-links.js';
 
-export type MuiPageAnchorsProps = ComponentProps<typeof SharedPageAnchors>;
-export const MuiPageAnchors: ComponentType<MuiPageAnchorsProps> = bindPrimitives(
-  SharedPageAnchors,
-  muiPrimitives,
-  'MuiPageAnchors',
-);
+export type MuiPageAnchorsProps = PageAnchorsProps;
+
+export function MuiPageAnchors(props: MuiPageAnchorsProps) {
+  return <MuiPageNativeLinks {...props} />;
+}

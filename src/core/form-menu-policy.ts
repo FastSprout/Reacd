@@ -6,6 +6,7 @@ export const FORM_MENU_POLICY = {
   collisionPaddingPx: 8,
   compositionEnterCode: 13,
   compositionProcessCode: 229,
+  controlTabIndex: 0,
   locale: 'en-US',
 } as const;
 

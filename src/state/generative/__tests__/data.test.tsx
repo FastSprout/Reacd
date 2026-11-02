@@ -24,8 +24,8 @@ describe('Generative rendering: data', () => {
     );
     const region = screen.getByRole('region', { name: 'Inventory' });
     expect(region).toHaveAttribute('tabindex', '0');
-    expect(within(region).getByRole('table', { name: 'Inventory' })).toHaveStyle(
-      '--reacd-table-columns: 2',
+    expect(within(region).getByRole('table', { name: 'Inventory' })).toHaveAttribute(
+      'data-slot', 'table',
     );
     expect(within(region).getAllByRole('columnheader')).toHaveLength(2);
     expect(within(region).getAllByRole('cell')).toHaveLength(4);
@@ -67,7 +67,9 @@ describe('Generative rendering: data', () => {
         />,
       );
       expect(screen.getByRole(role)).toHaveTextContent(message);
-      expect(screen.queryByRole('table')).not.toBeInTheDocument();
+      expect(screen.getByRole('table', { name: 'Data' })).toBeVisible();
+      expect(screen.getByRole('columnheader', { name: 'Value' })).toBeVisible();
+      expect(screen.getAllByRole('cell')).toHaveLength(1);
     },
   );
 });

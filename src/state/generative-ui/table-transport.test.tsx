@@ -36,7 +36,7 @@ it('registers typed transport and independent compound constraints', async () =>
     pageSize: 1,
   });
   expect(success(registry.read('orders.sorting')).value).toEqual([
-    { column: 'amount', direction: 'ascending' },
+    { column: 'amount', direction: 'descending' },
   ]);
   expect(registry.update('orders.selection', ['missing']).success).toBe(false);
   view.unmount();

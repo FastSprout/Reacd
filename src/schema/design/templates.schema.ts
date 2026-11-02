@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { templates as presets } from './templates.data.js';
 
 const color = z.string().regex(/^#[0-9a-fA-F]{6}$/);
 const rem = z.number().min(0).max(4);
@@ -74,45 +75,4 @@ export const templateSchema = z
 export type DesignTemplate = z.infer<typeof templateSchema>;
 export type TemplateRegistry = Readonly<Record<string, DesignTemplate>>;
 
-export const templates = {
-  'saas-modern-light': {
-    name: 'SaaS · Spacious',
-    colors: {
-      canvas: '#f3f5f3',
-      surface: '#ffffff',
-      text: '#172a24',
-      muted: '#4f625b',
-      border: '#718078',
-      primary: '#245b43',
-      onPrimary: '#ffffff',
-      danger: '#a12a28',
-      onDanger: '#ffffff',
-      focus: '#174cbd',
-    },
-    spacing: { small: 0.5, medium: 1, large: 1.75 },
-    radius: 0.75,
-    fontSize: 1,
-    font: 'humanist',
-    shadow: 'soft',
-  },
-  'erp-compact': {
-    name: 'ERP · Compact',
-    colors: {
-      canvas: '#e9edf2',
-      surface: '#ffffff',
-      text: '#172b42',
-      muted: '#4b5d72',
-      border: '#6d7e92',
-      primary: '#234f82',
-      onPrimary: '#ffffff',
-      danger: '#9f2424',
-      onDanger: '#ffffff',
-      focus: '#173f94',
-    },
-    spacing: { small: 0.25, medium: 0.625, large: 1 },
-    radius: 0.125,
-    fontSize: 0.875,
-    font: 'system',
-    shadow: 'none',
-  },
-} as const satisfies TemplateRegistry;
+export const templates = presets satisfies TemplateRegistry;

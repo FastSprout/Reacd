@@ -56,13 +56,13 @@ describe('generative loading and empty states', () => {
     );
     expect(screen.getByRole('status', { name: 'Loading query' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'No query matches' })).toHaveAttribute(
-      'data-loading',
+      'aria-busy',
       'true',
     );
     await user.click(screen.getByRole('button', { name: 'Refresh query' }));
     expect(screen.queryByRole('status')).toBeNull();
     expect(screen.getByRole('region', { name: 'No query matches' })).toHaveAttribute(
-      'data-loading',
+      'aria-busy',
       'false',
     );
     await user.click(screen.getByRole('button', { name: 'Query help' }));

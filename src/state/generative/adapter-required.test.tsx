@@ -2,20 +2,19 @@ import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdRenderer } from './renderer.js';
 
-it('reports an explicit missing adapter for a standalone legacy document', () => {
+it('uses shadcn by default for a standalone legacy document', () => {
   render(
     <ReacdRenderer
       document={{
         schemaVersion: '0.1',
         templateId: 'saas-modern-light',
-        root: { type: 'Text', content: 'Hidden' },
+        root: { type: 'Text', content: 'Default legacy view' },
       }}
       actions={{}}
     />,
   );
-  expect(screen.getByRole('alert')).toHaveTextContent('ReacdRenderer.adapter');
-  expect(screen.getByRole('alert')).toHaveTextContent(
-    'Select a complete theme adapter.',
-  );
-  expect(screen.queryByText('Hidden')).toBeNull();
+  expect(
+    screen.getByText('Default legacy view').closest('[data-adapter]'),
+  ).toHaveAttribute('data-adapter', 'shadcn-ui');
+  expect(screen.queryByRole('alert')).toBeNull();
 });

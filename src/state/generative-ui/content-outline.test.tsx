@@ -1,7 +1,7 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { act, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { ReacdProvider } from '../../index.js';
 import type { Result } from '../../core/result.js';
 import { contentNavigationNodeSchema } from
@@ -10,11 +10,6 @@ import { contentTocNodeSchema } from '../../schema/content-toc/generative.schema
 import { createStateRegistry } from '../registry/state-registry.js';
 import { BoundContentNavigation } from './bound-content-navigation.js';
 import { BoundContentToc } from './bound-content-toc.js';
-import { followHref } from '../../renderer/navigation/native-navigation.js';
-
-vi.mock('../../renderer/navigation/native-navigation.js', () => ({
-  followHref: vi.fn(),
-}));
 
 const ITEMS = [
   {
@@ -75,12 +70,12 @@ describe('generated content outline state', () => {
           : { success: true, data: undefined };
       }),
     );
-    await user.click(screen.getByRole('button', { name: 'Expand Guide' }));
+    await user.click(screen.getByRole('button', { name: 'Guide' }));
     expect(screen.getByRole('alert')).toHaveTextContent('Keep closed.');
     expect(state.read('expanded')).toMatchObject({ data: { value: [] } });
     expect(screen.queryByRole('link', { name: 'Introduction' })).toBeNull();
     releaseExpansion();
-    await user.click(screen.getByRole('button', { name: 'Expand Guide' }));
+    await user.click(screen.getByRole('button', { name: 'Guide' }));
     expect(screen.queryByRole('alert')).toBeNull();
     expect(state.read('expanded')).toMatchObject({ data: { value: ['guide'] } });
     const releaseCurrent = success(
@@ -90,18 +85,15 @@ describe('generated content outline state', () => {
           : { success: true, data: undefined },
       ),
     );
-    const before = vi.mocked(followHref).mock.calls.length;
-    await user.click(screen.getByRole('link', { name: 'Introduction' }));
+    const link = screen.getByRole('link', { name: 'Introduction' });
+    expect(fireEvent.click(link)).toBe(false);
     expect(screen.getByRole('alert')).toHaveTextContent('Keep current.');
     expect(state.read('current')).toMatchObject({ data: { value: '' } });
-    expect(vi.mocked(followHref).mock.calls.length).toBe(before);
     releaseCurrent();
-    await user.click(screen.getByRole('link', { name: 'Introduction' }));
+    expect(fireEvent.click(link)).toBe(true);
     expect(screen.queryByRole('alert')).toBeNull();
     expect(state.read('current')).toMatchObject({ data: { value: 'intro' } });
-    expect(followHref).toHaveBeenLastCalledWith(
-      new URL('/guide/intro', window.location.href).href,
-    );
+    expect(link).toHaveAttribute('href', '/guide/intro');
   });
 
   it('intersects live shared-key constraints and releases them after unmount', () => {
@@ -139,8 +131,7 @@ describe('generated content outline state', () => {
     );
   });
 
-  it('vetoes and recovers TOC writes before fragment navigation', async () => {
-    const user = userEvent.setup();
+  it('vetoes and recovers TOC writes before fragment navigation', () => {
     const state = registry();
     render(
       <ReacdProvider adapter={shadcnAdapter} store={state.store}>
@@ -157,17 +148,14 @@ describe('generated content outline state', () => {
           : { success: true, data: undefined },
       ),
     );
-    const before = vi.mocked(followHref).mock.calls.length;
-    await user.click(screen.getByRole('link', { name: 'Introduction' }));
+    const link = screen.getByRole('link', { name: 'Introduction' });
+    expect(fireEvent.click(link)).toBe(false);
     expect(screen.getByRole('alert')).toHaveTextContent('Heading locked.');
-    expect(vi.mocked(followHref).mock.calls.length).toBe(before);
     release();
-    await user.click(screen.getByRole('link', { name: 'Introduction' }));
+    expect(fireEvent.click(link)).toBe(true);
     expect(screen.queryByRole('alert')).toBeNull();
     expect(state.read('current')).toMatchObject({ data: { value: 'intro' } });
-    expect(followHref).toHaveBeenLastCalledWith(
-      new URL('#intro', window.location.href).href,
-    );
+    expect(link).toHaveAttribute('href', '#intro');
   });
 
   it('keeps read bindings native while blocking disclosure edits', () => {
@@ -188,7 +176,7 @@ describe('generated content outline state', () => {
         />
       </ReacdProvider>,
     );
-    expect(screen.getByRole('button', { name: 'Expand Guide' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Guide' })).toBeDisabled();
     act(() => {
       success(state.update('expanded', ['guide']));
       success(state.update('current', 'intro'));

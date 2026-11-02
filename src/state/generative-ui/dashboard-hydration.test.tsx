@@ -11,7 +11,7 @@ import { success } from '../../../test-support/data-table.js';
 import { dashboardDocument } from '../../../test-support/dashboard-document.js';
 import { installLayout } from '../../../test-support/layout-observer.js';
 
-it('hydrates stable IDs, isolated state and closed mobile navigation', () => {
+it('hydrates without errors and isolates closed mobile navigation', () => {
   const restore = installLayout(320);
   const documentValue = success(validateGenerativeDocument(dashboardDocument()));
   const server = createDocumentState(documentValue);
@@ -27,7 +27,10 @@ it('hydrates stable IDs, isolated state and closed mobile navigation', () => {
     />,
   );
   document.body.appendChild(container);
-  const controls = screen.getByRole('separator').getAttribute('aria-controls');
+  const panelIds = [...container.querySelectorAll('[data-panel]')]
+    .map((panel) => panel.id);
+  expect(panelIds).toHaveLength(2);
+  expect(panelIds.every(Boolean)).toBe(true);
   const errors: unknown[] = [];
   const view = render(
     <GenerativeUI
@@ -40,9 +43,8 @@ it('hydrates stable IDs, isolated state and closed mobile navigation', () => {
   );
   expect(screen.queryByRole('dialog')).toBeNull();
   expect(screen.getByRole('main', { name: 'Inbox' })).toBeVisible();
-  if (!controls) throw new Error('Missing region ID relationship.');
-  for (const id of controls.split(' '))
-    expect(document.getElementById(id)).not.toBeNull();
+  expect(container.querySelectorAll('[data-panel]')).toHaveLength(0);
+  expect(screen.queryByRole('separator')).toBeNull();
   expect(errors).toEqual([]);
   fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
   expect(success(client.read('mobile')).value).toBe(true);

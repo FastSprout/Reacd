@@ -71,7 +71,7 @@ it('hydrates canonical time transport with isolated server/client stores', async
     screen.getByRole('spinbutton', { name: /hour, Arrival reader/i }),
   ).toHaveAttribute('aria-valuenow', '13');
   expect(screen.getByRole('button', { name: 'Clear Arrival reader' })).toBeDisabled();
-  await user.click(screen.getByRole('button', { name: 'Clear End Shift' }));
+  await user.click(screen.getByRole('button', { name: 'Clear Shift End' }));
   expect(success(client.read('shift')).value).toEqual({ start: '09:00:00', end: null });
   expect(success(server.read('shift')).value).toEqual({
     start: '09:00:00',

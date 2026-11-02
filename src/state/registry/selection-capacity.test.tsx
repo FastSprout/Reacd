@@ -9,6 +9,9 @@ import { BoundTree } from '../generative-ui/bound-tree.js';
 import { BoundInputTags } from '../generative-ui/bound-input-tags.js';
 import { success, tableFixture } from '../../../test-support/data-table.js';
 import { createStateRegistry } from './state-registry.js';
+import { RenderContext } from '../../components/shared/port.js';
+import { treeSchema } from '../../schema/tree/index.js';
+import { declarationProbe } from '../../../test-support/declaration-probe.js';
 
 const LONG_KEY = 'k'.repeat(CONTENT_POLICY.maxLabelLength);
 
@@ -42,7 +45,8 @@ it('preserves DataTable row-id and connected known-selection constraints', () =>
   }
 });
 
-it('preserves bound Tree known-id and InputTags domain limits', () => {
+it('preserves headless Tree known-id and native InputTags domain limits', () => {
+  const tree = declarationProbe(treeSchema);
   const registry = success(
     createStateRegistry([
       { key: 'tree', kind: 'selection', initial: ['leaf'], access: 'readWrite' },
@@ -52,6 +56,7 @@ it('preserves bound Tree known-id and InputTags domain limits', () => {
   );
   render(
     <ReacdProvider adapter={shadcnAdapter}>
+      <RenderContext value={tree.port}>
       <BoundTree
         registry={registry}
         node={{
@@ -62,6 +67,7 @@ it('preserves bound Tree known-id and InputTags domain limits', () => {
           expanded: { state: 'expanded', mode: 'readWrite' },
         }}
       />
+      </RenderContext>
       <BoundInputTags
         registry={registry}
         node={{

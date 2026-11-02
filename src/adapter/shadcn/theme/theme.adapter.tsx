@@ -1,12 +1,20 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/theme/theme.adapter.js';
-import { SharedTheme } from '../../shared/theme/theme.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { ThemeProps } from
+  '@fastsprout/reacd/adapter-runtime/components/theme/theme.props.js';
+import { DeclarationDefaults } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/declaration-defaults.js';
+import { ShadcnSurface } from '../surface/surface.adapter.js';
 
-export type ShadcnThemeProps = ComponentProps<typeof SharedTheme>;
-export const ShadcnTheme: ComponentType<ShadcnThemeProps> = bindPrimitives(
-  SharedTheme,
-  shadcnPrimitives,
-  'ShadcnTheme',
-);
+export type ShadcnThemeProps = ThemeProps;
+export function ShadcnTheme({ template, defaults, children }: ThemeProps) {
+  return (
+    <DeclarationDefaults defaults={defaults}>
+      {template ? (
+        <ShadcnSurface template={template} templateId={template.name}>
+          {children}
+        </ShadcnSurface>
+      ) : (
+        children
+      )}
+    </DeclarationDefaults>
+  );
+}

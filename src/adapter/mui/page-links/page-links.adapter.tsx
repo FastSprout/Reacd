@@ -1,11 +1,20 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedPageLinks } from '../../shared/page-links/page-links.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import type { PageLinksProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-links/page-links.props.js';
+import { MuiPageNativeLinks } from './native-links.js';
 
-export type MuiPageLinksProps = ComponentProps<typeof SharedPageLinks>;
-export const MuiPageLinks: ComponentType<MuiPageLinksProps> = bindPrimitives(
-  SharedPageLinks,
-  muiPrimitives,
-  'MuiPageLinks',
-);
+export type MuiPageLinksProps = PageLinksProps;
+
+export function MuiPageLinks(props: MuiPageLinksProps) {
+  return (
+    <Stack>
+      {props.title && (
+        <Typography variant="h6" component="h2">
+          {props.title}
+        </Typography>
+      )}
+      <MuiPageNativeLinks {...props} />
+    </Stack>
+  );
+}

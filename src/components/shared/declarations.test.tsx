@@ -26,7 +26,7 @@ describe('closed component declarations', () => {
       <ReacdProvider adapter={shadcnAdapter}>
         <VStack>
           <HStack spacing="small">
-            <Card spacing="large">
+            <Card label="Layout card" spacing="large">
               <Grid columns={2}>
                 <Text weight="bold">Content</Text>
               </Grid>
@@ -36,27 +36,24 @@ describe('closed component declarations', () => {
       </ReacdProvider>,
     );
     expect(screen.getByText('Content')).toBeInTheDocument();
-    expect(container.querySelector('.reacd-hstack')).toHaveStyle({
-      '--reacd-gap': 'var(--reacd-small)',
-    });
-    expect(container.querySelector('.reacd-card')).toHaveStyle({
-      '--reacd-gap': 'var(--reacd-large)',
-    });
-    expect(container.querySelector('.reacd-grid')).toHaveStyle({
-      '--reacd-columns': '2',
-    });
+    const card = screen.getByLabelText('Layout card');
+    const grid = screen.getByText('Content').parentElement;
+    expect(card.parentElement).toHaveStyle('gap: var(--space-small)');
+    expect(grid?.parentElement?.className).toContain('gap-6');
+    expect(grid?.style.gridTemplateColumns).toContain('/ 2');
+    expect(card.className).toContain('bg-card');
     expect(container.querySelector('[data-adapter="shadcn-ui"]')).toBeInTheDocument();
   });
 
   it('renders a Card with default spacing', () => {
-    const { container } = render(
+    render(
       <ReacdProvider adapter={shadcnAdapter}>
-        <Card />
+        <Card label="Default card" />
       </ReacdProvider>,
     );
-    expect(container.querySelector('.reacd-card')).toHaveStyle({
-      '--reacd-gap': 'var(--reacd-medium)',
-    });
+    expect(
+      screen.getByLabelText('Default card').firstElementChild?.className,
+    ).toContain('gap-4');
   });
 
   it.each(['primary', 'secondary', 'danger'] as const)(
@@ -113,7 +110,10 @@ describe('closed component declarations', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Headline');
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Subheading');
     await user.click(screen.getByText('Full text'));
-    expect(screen.getByText('Full text').closest('details')).toHaveAttribute('open');
+    expect(screen.getByRole('button', { name: 'Full text' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
   });
 
   it.each([

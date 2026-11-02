@@ -82,7 +82,7 @@ it('hydrates recursive fields with isolated server/client stores', async () => {
     expect(client.update('error', '').success).toBe(true);
   });
   expect(screen.getByRole('textbox', { name: 'Notes' })).toBe(notes);
-  expect(notes).not.toHaveAttribute('aria-invalid');
+  expect(notes).toHaveAttribute('aria-invalid', 'false');
   fireEvent.change(notes, { target: { value: 'x' } });
   expect(success(client.read('notes')).value).toBe('x');
   expect(success(server.read('notes')).value).toBe('Draft');

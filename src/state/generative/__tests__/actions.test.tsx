@@ -44,12 +44,12 @@ describe('Generative rendering: actions', () => {
       />,
     );
     expect(screen.getByLabelText('Name')).toHaveValue('Edited');
-    expect(container.querySelector('.reacd-root')).toHaveAttribute(
+    expect(container.querySelector('[data-adapter="shadcn-ui"]')).toHaveAttribute(
       'data-template',
       'erp-compact',
     );
-    expect(container.querySelector('.reacd-root')).toHaveStyle(
-      '--reacd-font-size: 0.875rem; --reacd-shadow: none',
+    expect(container.querySelector('[data-adapter="shadcn-ui"]')).toHaveStyle(
+      '--text-base: 0.875rem; --sdk-shadow: 0 0 #0000',
     );
     await user.click(screen.getByRole('button', { name: 'Save' }));
     expect(save).toHaveBeenLastCalledWith({

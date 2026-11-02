@@ -1,5 +1,5 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -109,7 +109,12 @@ describe('generative Timeline and ScrollArea', () => {
         'aria-current',
         'step',
       );
-      expect(renderToString(content)).toContain('data-state="current"');
+      const fresh = document.createElement('div');
+      fresh.innerHTML = renderToString(content);
+      expect(within(fresh).getByRole('button', { name: 'Design' }))
+        .toHaveAttribute('aria-current', 'step');
+      expect(within(fresh).getByRole('button', { name: 'Build' }))
+        .not.toHaveAttribute('aria-current');
       expect(errors).toEqual([]);
       view.unmount();
       container.remove();

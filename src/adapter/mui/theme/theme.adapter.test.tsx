@@ -4,7 +4,7 @@ import { expect, it } from 'vitest';
 import { templates } from '../../../schema/design/templates.schema.js';
 import { MuiTheme } from './theme.adapter.js';
 import { MuiApp } from '../app/app.adapter.js';
-import { MuiButtonPrimitive } from '../primitives/button/button.js';
+import { MuiButton } from '../button/button.adapter.js';
 import { createMaterialTheme } from '../surface/theme.js';
 
 function Palette({ label }: { readonly label: string }) {
@@ -27,7 +27,7 @@ it('isolates nested Material themes and inherits the application direction', () 
         </MuiTheme>
         <MuiTheme template={inner}>
           <Palette label="Nested" />
-          <MuiButtonPrimitive>Compact action</MuiButtonPrimitive>
+          <MuiButton label="Compact action" onPress={() => undefined} />
         </MuiTheme>
       </MuiApp>
       <Palette label="Outer" />

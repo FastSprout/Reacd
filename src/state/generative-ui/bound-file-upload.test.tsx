@@ -1,12 +1,11 @@
-import { act, render, screen, within } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { act, render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { expect, it } from 'vitest';
 import { BoundFileUpload } from './bound-file-upload.js';
 import { createStateRegistry } from '../registry/state-registry.js';
 import { RenderContext } from '../../components/shared/port.js';
-import { fileUploadEntries } from '../../adapter/shadcn/registry/file-upload.js';
-import { Issues } from '../../renderer/issues/issues.renderer.js';
+import { fileUploadSchema } from '../../schema/file-upload/index.js';
+import { declarationProbe } from '../../../test-support/declaration-probe.js';
 import { fileUploadNodeSchema } from '../../schema/file-upload/generative.schema.js';
 import { success } from '../../../test-support/data-table.js';
 const FILE = {
@@ -19,20 +18,11 @@ const FILE = {
 };
 const reference = { state: 'files', mode: 'readWrite' } as const;
 const node = { type: 'FileUpload', label: 'Writer', value: reference } as const;
+const probe = declarationProbe(fileUploadSchema);
 function Surface({ children }: { children: ReactNode }) {
-  return (
-    <RenderContext.Provider
-      value={{
-        render: (_name, props) => fileUploadEntries.FileUpload.render(props),
-        report: (issues) => <Issues issues={issues} />,
-      }}
-    >
-      {children}
-    </RenderContext.Provider>
-  );
+  return <RenderContext.Provider value={probe.port}>{children}</RenderContext.Provider>;
 }
-it('shares real payloads and leases cardinality constraints', async () => {
-  const user = userEvent.setup();
+it('shares real payloads and leases cardinality constraints', () => {
   const registry = success(
     createStateRegistry([
       { key: 'files', kind: 'fileList', initial: [FILE], access: 'readWrite' },
@@ -54,12 +44,10 @@ it('shares real payloads and leases cardinality constraints', async () => {
       />
     </Surface>,
   );
-  expect(
-    within(screen.getByRole('group', { name: 'Reader' })).queryByRole('button'),
-  ).toBeNull();
-  await user.click(screen.getByRole('button', { name: 'Remove saved.txt' }));
+  expect(probe.read('Reader').readOnly).toBe(true);
+  act(() => probe.read('Writer').onValueChange([]));
   expect(success(registry.read('files')).value).toEqual([]);
-  expect(screen.queryByText('saved.txt')).toBeNull();
+  expect(probe.read('Reader').value).toEqual([]);
   act(() => {
     expect(registry.update('files', [FILE, { ...FILE, id: 'second' }]).success).toBe(
       false,

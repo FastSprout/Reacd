@@ -1,5 +1,5 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { AuthForm, Form, ReacdProvider } from '../../index.js';
@@ -14,7 +14,7 @@ function HiddenInnerForm({ onSubmit }: { onSubmit: () => void }) {
 }
 
 describe('native form nesting protection', () => {
-  it('rejects nested forms even through a composed safe child', () => {
+  it('rejects nested forms even through a composed safe child', async () => {
     const outer = vi.fn();
     const inner = vi.fn();
     render(
@@ -27,11 +27,11 @@ describe('native form nesting protection', () => {
     expect(screen.getAllByRole('form')).toHaveLength(1);
     expect(screen.getByRole('alert')).toHaveTextContent('Forms cannot be nested.');
     fireEvent.submit(screen.getByRole('form'));
-    expect(outer).toHaveBeenCalledExactlyOnceWith();
+    await waitFor(() => expect(outer).toHaveBeenCalledExactlyOnceWith());
     expect(inner).not.toHaveBeenCalled();
   });
 
-  it('rejects generated nested AuthForms in DOM and SSR', () => {
+  it('rejects generated nested AuthForms in DOM and SSR', async () => {
     const run = vi.fn();
     const document = {
       schemaVersion: '0.2',
@@ -61,6 +61,6 @@ describe('native form nesting protection', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Forms cannot be nested.');
     expect(renderToString(tree).match(/<form\b/g)).toHaveLength(1);
     fireEvent.submit(screen.getByRole('form'));
-    expect(run).toHaveBeenCalledOnce();
+    await waitFor(() => expect(run).toHaveBeenCalledOnce());
   });
 });

@@ -1,21 +1,36 @@
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
+import rtlPlugin from '@mui/stylis-plugin-rtl';
+import { prefixer } from 'stylis';
 import { useMemo } from 'react';
+import Box from '@mui/material/Box';
 import { ThemeProvider, useTheme } from '@mui/material/styles';
-import type { AppProps } from '@fastsprout/reacd/adapter-runtime/components/app/app.js';
+import type { AppProps } from
+  '@fastsprout/reacd/adapter-runtime/components/app/app.props.js';
 import { APPLICATION_DEFAULTS } from
   '@fastsprout/reacd/adapter-runtime/core/application-shell-policy.js';
-import { SharedApp } from '../../shared/app/app.adapter.js';
-import { PrimitiveScope } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
 
-export function MuiApp(properties: AppProps) {
+export type MuiAppProps = AppProps;
+
+export function MuiApp(props: MuiAppProps) {
   const inherited = useTheme();
-  const direction = properties.direction ?? APPLICATION_DEFAULTS.direction;
+  const direction = props.direction ?? APPLICATION_DEFAULTS.direction;
+  const cache = useMemo(
+    () =>
+      createCache({
+        key: direction === 'rtl' ? 'muirtl' : 'mui',
+        stylisPlugins: direction === 'rtl' ? [prefixer, rtlPlugin] : [prefixer],
+      }),
+    [direction],
+  );
   const theme = useMemo(() => ({ ...inherited, direction }), [inherited, direction]);
   return (
-    <ThemeProvider theme={theme}>
-      <PrimitiveScope primitives={muiPrimitives}>
-        <SharedApp {...properties} />
-      </PrimitiveScope>
-    </ThemeProvider>
+    <CacheProvider value={cache}>
+      <ThemeProvider theme={theme}>
+        <Box dir={direction} lang={props.language ?? APPLICATION_DEFAULTS.language}>
+          {props.children}
+        </Box>
+      </ThemeProvider>
+    </CacheProvider>
   );
 }

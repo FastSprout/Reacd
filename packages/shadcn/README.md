@@ -1,6 +1,9 @@
 # reacd shadcn adapter
 
-The complete shadcn theme adapter for the headless reacd engine.
+The native shadcn/ui adapter for supported reacd components. Current catalog
+coverage is partial. A missing mapping or unsupported SDK variant throws
+`UnsupportedAdapterComponentError` with the adapter and component names. See
+[adapter availability](https://reacd.dev/components/#adapter-availability).
 
 ```sh
 npm install @fastsprout/reacd @fastsprout/reacd-shadcn

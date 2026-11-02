@@ -1,16 +1,16 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { expect, it, vi } from 'vitest';
+import { afterEach, expect, it, vi } from 'vitest';
 import { defineGenerativeDeclaration } from '../../schema/generative-v2/index.js';
-import { followHref } from '../../renderer/navigation/native-navigation.js';
 import { createDocumentState } from './create-document-state.js';
 import { GenerativeUI } from './generative-ui.js';
 
-vi.mock('../../renderer/navigation/native-navigation.js', () => ({
-  followHref: vi.fn(),
-}));
+afterEach(() => vi.unstubAllGlobals());
+
 it('keeps rejected shared-state pages on the current route', async () => {
+  const navigate = vi.fn();
+  vi.stubGlobal('location', { assign: navigate });
   const user = userEvent.setup();
   const document = defineGenerativeDeclaration({
     schemaVersion: '0.2',
@@ -43,11 +43,11 @@ it('keeps rejected shared-state pages on the current route', async () => {
     <GenerativeUI adapter={shadcnAdapter} document={document} registry={registry} />,
   );
   await user.click(screen.getByRole('link', { name: 'Last page' }));
-  expect(followHref).not.toHaveBeenCalled();
+  expect(navigate).not.toHaveBeenCalled();
   expect(screen.getByRole('alert')).toHaveTextContent('At most page 2.');
   expect(screen.getByRole('status')).toHaveTextContent('Page 1 of 3');
   await user.click(screen.getByRole('link', { name: 'Next page' }));
-  expect(followHref).toHaveBeenCalledExactlyOnceWith(
+  expect(navigate).toHaveBeenCalledExactlyOnceWith(
     expect.stringContaining('/orders?page=2&pageSize=10'),
   );
   expect(screen.getByRole('status')).toHaveTextContent('Page 2 of 3');

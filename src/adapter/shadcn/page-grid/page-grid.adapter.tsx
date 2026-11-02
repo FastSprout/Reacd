@@ -1,12 +1,12 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/page-grid/page-grid.adapter.js';
-import { SharedPageGrid } from '../../shared/page-grid/page-grid.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { PageGridProps } from
+  '@fastsprout/reacd/adapter-runtime/components/page-grid/page-grid.props.js';
+import { PAGE_COMPOSITION_POLICY } from
+  '@fastsprout/reacd/adapter-runtime/core/page-composition-policy.js';
+import { ShadcnGrid } from '../grid/grid.adapter.js';
 
-export type ShadcnPageGridProps = ComponentProps<typeof SharedPageGrid>;
-export const ShadcnPageGrid: ComponentType<ShadcnPageGridProps> = bindPrimitives(
-  SharedPageGrid,
-  shadcnPrimitives,
-  'ShadcnPageGrid',
-);
+export type ShadcnPageGridProps = PageGridProps;
+export function ShadcnPageGrid({ children }: PageGridProps) {
+  return (
+    <ShadcnGrid columns={PAGE_COMPOSITION_POLICY.maximumColumns}>{children}</ShadcnGrid>
+  );
+}

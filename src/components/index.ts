@@ -190,3 +190,6 @@ export {
   EditorEmojiMenu,
   type EditorEmojiMenuProps,
 } from './editor-emoji-menu/index.js';
+export { Prose, type ProseProps } from './prose/index.js';
+export { COMPONENT_NAMES } from './component-names.js';
+export type { ComponentCatalog } from './catalog.js';

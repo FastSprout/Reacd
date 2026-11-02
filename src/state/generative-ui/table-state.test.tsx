@@ -50,6 +50,10 @@ it('shares validated table models and atomically resets pagination', async () =>
     pageIndex: 0,
     pageSize: 1,
   });
+  expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveAttribute(
+    'aria-sort', 'descending',
+  );
+  await user.click(screen.getByRole('button', { name: 'Sort Amount' }));
   expect(screen.getByRole('cell', { name: 'Beta' })).toBeVisible();
   await user.click(screen.getByRole('checkbox', { name: 'Select row b' }));
   expect(success(registry.read('orders.selection')).value).toEqual(['b']);

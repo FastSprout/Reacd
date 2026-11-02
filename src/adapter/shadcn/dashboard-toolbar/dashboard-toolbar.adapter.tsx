@@ -1,10 +1,23 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/dashboard-toolbar/dashboard-toolbar.adapter.js';
-import { SharedDashboardToolbar } from
-  '../../shared/dashboard-toolbar/dashboard-toolbar.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { DashboardToolbarProps } from
+  '@fastsprout/reacd/adapter-runtime/components/dashboard-toolbar/index.js';
+import { CardContent } from '../vendor/ui/card.js';
 
-export type ShadcnDashboardToolbarProps = ComponentProps<typeof SharedDashboardToolbar>;
-export const ShadcnDashboardToolbar: ComponentType<ShadcnDashboardToolbarProps> =
-  bindPrimitives(SharedDashboardToolbar, shadcnPrimitives, 'ShadcnDashboardToolbar');
+export type ShadcnDashboardToolbarProps = DashboardToolbarProps;
+export function ShadcnDashboardToolbar({
+  label,
+  start,
+  children,
+  end,
+}: DashboardToolbarProps) {
+  return (
+    <CardContent
+      role="group"
+      aria-label={label}
+      className="flex min-w-0 flex-wrap items-center gap-4 p-0"
+    >
+      {start}
+      {children}
+      {end}
+    </CardContent>
+  );
+}

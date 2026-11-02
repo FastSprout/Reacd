@@ -20,35 +20,42 @@ describe('Generative rendering: layout', () => {
         type: 'Grid',
         columns: 3,
         spacing: 'large',
-        children: [{ type: 'Card', children: [] }],
+        children: [
+          { type: 'Card', children: [{ type: 'Text', content: 'Grid card' }] },
+        ],
       },
-      { type: 'HStack', spacing: 'small', children: [] },
+      {
+        type: 'HStack',
+        spacing: 'small',
+        children: [{ type: 'Text', content: 'Horizontal item' }],
+      },
     ];
-    const { container } = render(
+    render(
       <ReacdRenderer
         adapter={shadcnAdapter}
         document={documentWith({ type: 'VStack', children: nodes })}
         actions={{}}
       />,
     );
-    expect(screen.getByRole('heading', { level: 1, name: 'Headline' })).toHaveAttribute(
-      'data-weight',
-      'bold',
-    );
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Subheadline' }),
-    ).toHaveAttribute('data-weight', 'medium');
-    expect(screen.getByText('Default body')).toHaveAttribute('data-role', 'body');
-    expect(screen.getByText('Caption')).toHaveAttribute('data-role', 'caption');
-    expect(screen.getByText('123')).toHaveAttribute('data-role', 'display');
-    expect(container.querySelector('.reacd-grid')).toHaveStyle(
-      '--reacd-columns: 3; --reacd-gap: var(--reacd-large)',
+      screen.getByRole('heading', { level: 1, name: 'Headline' }).className,
+    ).toContain('font-bold');
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Subheadline' }).className,
+    ).toContain('font-medium');
+    expect(screen.getByText('Default body').className).toContain('font-normal');
+    expect(screen.getByText('Caption').className).toContain('text-sm');
+    expect(screen.getByText('123').className).toContain('text-4xl');
+    const card = screen.getByText('Grid card').closest('.bg-card');
+    expect(card?.className).toContain('bg-card');
+    expect(card?.parentElement).toHaveStyle('gap: var(--space-large)');
+    expect(card?.parentElement?.style.gridTemplateColumns).toContain('/ 3');
+    expect(screen.getByText('Default body').parentElement).toHaveStyle(
+      'gap: var(--space-medium)',
     );
-    expect(container.querySelector('.reacd-vstack')).toHaveStyle(
-      '--reacd-gap: var(--reacd-medium)',
+    expect(screen.getByText('Horizontal item').parentElement).toHaveStyle(
+      'gap: var(--space-small)',
     );
-    expect(container.querySelector('.reacd-card')).toBeInTheDocument();
-    expect(container.querySelector('.reacd-hstack')).toBeInTheDocument();
   });
 
   it('makes clamped text accessible through a native disclosure', async () => {
@@ -60,13 +67,15 @@ describe('Generative rendering: layout', () => {
         actions={{}}
       />,
     );
-    const summary = screen.getByText('Full text');
-    expect(screen.getAllByText('Long heading')).toHaveLength(2);
+    const summary = screen.getByRole('button', { name: 'Full text' });
+    expect(screen.getAllByText('Long heading')).toHaveLength(1);
     expect(screen.getAllByText('Long heading')[0]).toHaveStyle('-webkit-line-clamp: 1');
     await user.click(summary);
-    expect(summary.closest('details')).toHaveAttribute('open');
+    expect(summary).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getAllByText('Long heading')).toHaveLength(2);
     await user.click(summary);
-    expect(summary.closest('details')).not.toHaveAttribute('open');
+    expect(summary).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getAllByText('Long heading')).toHaveLength(1);
   });
 
   it('escapes markup and never executes document content', () => {
@@ -117,9 +126,11 @@ describe('Generative rendering: layout', () => {
     );
     expect(screen.getByLabelText('Password')).toHaveAttribute('type', 'password');
     expect(screen.getByLabelText('Password')).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Disabled' })).toHaveAttribute(
-      'data-intent',
-      'secondary',
+    expect(screen.getByRole('button', { name: 'Disabled' }).className).toContain(
+      'bg-secondary',
+    );
+    expect(screen.getByRole('button', { name: 'Delete' }).className).toContain(
+      'bg-destructive',
     );
     await user.click(screen.getByRole('button', { name: 'Disabled' }));
     expect(save).not.toHaveBeenCalled();
@@ -181,8 +192,8 @@ describe('Generative rendering: layout', () => {
       />,
     );
     expect(screen.getByText('Custom')).toBeInTheDocument();
-    expect(container.querySelector('.reacd-root')).toHaveStyle(
-      '--reacd-radius: 0.4rem',
+    expect(container.querySelector('[data-adapter="shadcn-ui"]')).toHaveStyle(
+      '--radius: 0.4rem',
     );
     expect(JSON.stringify(document)).toBe(original);
   });

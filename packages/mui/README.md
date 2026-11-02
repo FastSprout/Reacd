@@ -1,6 +1,9 @@
 # reacd Material UI adapter
 
-A complete Material UI adapter for the reacd component catalog.
+The native Material UI adapter for supported reacd components. Current catalog
+coverage is partial. A missing mapping or unsupported SDK variant throws
+`UnsupportedAdapterComponentError` with the adapter and component names. See
+[adapter availability](https://reacd.dev/components/#adapter-availability).
 
 ```sh
 npm install @fastsprout/reacd @fastsprout/reacd-mui
@@ -20,10 +23,11 @@ export function Application() {
 }
 ```
 
-The JavaScript entry supports synchronous SSR without importing browser styles. Material
-UI and Emotion own presentation; shared headless behavior implements reacd's controlled
-forms, portals and composite interactions. Application code uses reacd components and
-semantic properties, with no HTML or styling escapes.
+The JavaScript entry supports synchronous SSR without importing browser styles.
+Material UI owns controls, accessibility, interactions, animations and portals;
+Emotion supplies styling. Adapter-owned SDK compositions implement supported reacd
+declarations. Application code uses reacd components and semantic properties, with
+no HTML or styling escapes.
 
 Requires Node.js 22.12 or newer and the matching reacd release. React and Jotai peers
 are declared in package metadata. Licensed under Apache-2.0.

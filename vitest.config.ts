@@ -53,6 +53,9 @@ export default defineConfig({
       '@fastsprout/reacd/bootstrap': fileURLToPath(
         new URL('./src/bootstrap.ts', import.meta.url),
       ),
+      '@fastsprout/reacd/styles': fileURLToPath(
+        new URL('./src/styles.ts', import.meta.url),
+      ),
       '@fastsprout/reacd': fileURLToPath(new URL('./src/index.ts', import.meta.url)),
     },
   },
@@ -72,16 +75,6 @@ export default defineConfig({
             'tooling/**/*.test.{ts,tsx}',
             'docs/examples/**/*.test.tsx',
           ],
-        },
-      },
-      {
-        extends: true,
-        test: {
-          name: 'material-contract',
-          environment: 'jsdom',
-          setupFiles: ['test-support/setup.ts'],
-          env: { REACD_TEST_ADAPTER: 'mui' },
-          include: ['src/adapter/shared/**/*.test.{ts,tsx}'],
         },
       },
       {

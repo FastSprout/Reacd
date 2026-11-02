@@ -49,7 +49,7 @@ it('composes dashboard nodes with live constraints and atomic selection', async 
   await user.click(screen.getByRole('button', { name: 'Expand navigation' }));
   const handle = screen.getByRole('separator');
   fireEvent.keyDown(handle, { key: 'ArrowRight' });
-  expect(handle).toHaveAttribute('aria-valuenow', '26');
+  expect(handle).toHaveAttribute('aria-valuenow', '30');
   expect(
     registry.update('layout', [
       { id: 'navigation', share: 5 },
@@ -254,7 +254,7 @@ it('surfaces declined query and dismissal writes', async () => {
           };
     }),
   );
-  await user.click(screen.getByRole('button', { name: 'Close' }));
+  await user.click(screen.getByRole('button', { name: 'Close search' }));
   expect(success(registry.read('searchOpen')).value).toBe(true);
   expect(screen.getByRole('dialog')).toBeVisible();
   expect(screen.getByRole('alert')).toHaveTextContent(

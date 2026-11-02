@@ -4,6 +4,7 @@ import { STATE_POLICY } from './state-policy.js';
 export const TAG_DELIMITERS = ['comma', 'semicolon', 'newline'] as const;
 export type TagDelimiter = (typeof TAG_DELIMITERS)[number];
 export const INPUT_TAGS_POLICY = {
+  imeProcessKeyCode: 229,
   maxTags: CONTENT_POLICY.maxOptions,
   maxTagLength: STATE_POLICY.maxKeyLength,
   minTagsLimit: 1,
@@ -16,6 +17,8 @@ export const TAG_DELIMITER_CHARACTERS = {
   newline: '\n',
 } as const;
 export const INPUT_TAGS_MESSAGES = {
+  required: 'Add at least one tag before submitting.',
+  removePrefix: 'Remove',
   empty: 'Enter a tag before adding it.',
   duplicate: 'Tags must be unique.',
   untrimmed: 'Tags cannot start or end with whitespace.',

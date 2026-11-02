@@ -1,13 +1,14 @@
 import { act, render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { expect, it } from 'vitest';
 import { BoundColorPicker } from './bound-color-picker.js';
 import { createStateRegistry } from '../registry/state-registry.js';
 import { RenderContext } from '../../components/shared/port.js';
-import { colorPickerEntries } from '../../adapter/shadcn/registry/color-picker.js';
-import { Issues } from '../../renderer/issues/issues.renderer.js';
-import { colorPickerNodeSchema } from '../../schema/color-picker/index.js';
+import {
+  colorPickerNodeSchema,
+  colorPickerSchema,
+} from '../../schema/color-picker/index.js';
+import { declarationProbe } from '../../../test-support/declaration-probe.js';
 import { success } from '../../../test-support/data-table.js';
 const reference = { state: 'color', mode: 'readWrite' } as const;
 const node = {
@@ -16,20 +17,11 @@ const node = {
   label: 'Writer',
   value: reference,
 } as const;
+const probe = declarationProbe(colorPickerSchema);
 function Surface({ children }: { children: ReactNode }) {
-  return (
-    <RenderContext.Provider
-      value={{
-        render: (_name, props) => colorPickerEntries.ColorPicker.render(props),
-        report: (issues) => <Issues issues={issues} />,
-      }}
-    >
-      {children}
-    </RenderContext.Provider>
-  );
+  return <RenderContext.Provider value={probe.port}>{children}</RenderContext.Provider>;
 }
-it('shares canonical writes and constrains external updates', async () => {
-  const user = userEvent.setup();
+it('shares canonical writes and constrains external updates', () => {
   const registry = success(
     createStateRegistry([
       { key: 'color', kind: 'text', initial: '#ff0000', access: 'readWrite' },
@@ -51,16 +43,10 @@ it('shares canonical writes and constrains external updates', async () => {
       />
     </Surface>,
   );
-  expect(screen.getByRole('textbox', { name: 'Reader hexadecimal' })).toHaveAttribute(
-    'readonly',
-  );
-  const hex = screen.getByRole('textbox', { name: 'Writer hexadecimal' });
-  await user.clear(hex);
-  await user.type(hex, '#ABCDEF{Enter}');
+  expect(probe.read('Reader').readOnly).toBe(true);
+  act(() => probe.read('Writer').onValueChange('#abcdef'));
   expect(success(registry.read('color')).value).toBe('#abcdef');
-  expect(screen.getByRole('textbox', { name: 'Reader hexadecimal' })).toHaveValue(
-    '#abcdef',
-  );
+  expect(probe.read('Reader').value).toBe('#abcdef');
   act(() => {
     expect(registry.update('color', '#abcdef80').success).toBe(false);
   });

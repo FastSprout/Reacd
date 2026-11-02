@@ -1,11 +1,9 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedContainer } from '../../shared/container/container.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import Container from '@mui/material/Container';
+import type { ContainerProps } from
+  '@fastsprout/reacd/adapter-runtime/components/container/container.props.js';
 
-export type MuiContainerProps = ComponentProps<typeof SharedContainer>;
-export const MuiContainer: ComponentType<MuiContainerProps> = bindPrimitives(
-  SharedContainer,
-  muiPrimitives,
-  'MuiContainer',
-);
+export type MuiContainerProps = ContainerProps;
+
+export function MuiContainer({ children }: MuiContainerProps) {
+  return <Container maxWidth="xl">{children}</Container>;
+}

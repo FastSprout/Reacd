@@ -1,6 +1,7 @@
 import type { ComponentCatalog } from './catalog.js';
 
 export const COMPONENT_NAMES = [
+  'Prose',
   'Editor',
   'EditorToolbar',
   'EditorDragHandle',

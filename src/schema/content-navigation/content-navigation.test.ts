@@ -86,7 +86,7 @@ it('keeps ToC fragments semantic and current state explicit', () => {
     { currentKey: 'missing' },
     { style: {} },
     { items: [{ key: 'details', label: 'Details', href: '/' }] },
-    { items: [{ key: '1bad', label: 'Invalid anchor' }] },
+    { items: [{ key: 'bad anchor', label: 'Invalid anchor' }] },
     { items: [{ key: 'x', label: 'One', children: [{ key: 'x', label: 'Two' }] }] },
   ])
     expect(contentTocSchema.safeParse({ ...toc, ...overrides }).success).toBe(false);

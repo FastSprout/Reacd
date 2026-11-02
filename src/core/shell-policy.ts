@@ -1,5 +1,6 @@
 export const SHELL_DEFAULTS = {
   menuMode: 'modal',
+  replacesNavigation: false,
   toggleLabel: 'Open navigation',
   closeLabel: 'Close navigation',
   menuDescription: 'Application navigation',

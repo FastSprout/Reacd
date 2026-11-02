@@ -1,10 +1,19 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen, within } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
-import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
 import { GenerativeUI } from './generative-ui.js';
 import { validateGenerativeDocument } from '../../schema/generative-v2/index.js';
+import { createDocumentState } from './create-document-state.js';
+import { BoundListbox } from './bound-listbox.js';
+import { listboxSchema, listboxNodeSchema } from '../../schema/listbox/index.js';
+import type { StateRegistry } from '../registry/registry.types.js';
+import type { ListboxNode } from '../../schema/listbox/index.js';
+import { ReacdProvider } from '../provider/provider.js';
+import { RenderContext } from '../../components/shared/port.js';
+import { success } from '../../../test-support/data-table.js';
+import { exampleDeclarationProbe, expectUnsupportedExample } from
+  '../../../test-support/example-declaration-probe.js';
 
 const documentSpec = {
   schemaVersion: '0.2',
@@ -49,39 +58,55 @@ it('validates transport kinds, closed props and required empty values', () => {
   ).toBe(false);
 });
 
-it('hydrates isolated generative stores and routes selection requests', async () => {
-  const user = userEvent.setup();
-  const second = { ...documentSpec, root: { ...documentSpec.root, label: 'Second' } };
-  const ui = (
-    <>
-      <GenerativeUI adapter={shadcnAdapter} document={documentSpec} />
-      <GenerativeUI adapter={shadcnAdapter} document={second} />
-    </>
-  );
+it('reports the exact unsupported native Listbox transport boundary', () => {
+  expectUnsupportedExample(<GenerativeUI adapter={shadcnAdapter}
+    document={documentSpec} />, 'Listbox');
+});
+
+function state() {
+  const parsed = validateGenerativeDocument(documentSpec);
+  if (!parsed.success) throw new Error('Invalid Listbox fixture');
+  return createDocumentState(parsed.data);
+}
+function bound(registry: StateRegistry, node: ListboxNode,
+  probe: ReturnType<typeof exampleDeclarationProbe>) {
+  return <ReacdProvider adapter={shadcnAdapter} store={registry.store}>
+    <RenderContext value={probe.port}>
+      <BoundListbox node={node} registry={registry} />
+    </RenderContext>
+  </ReacdProvider>;
+}
+it('hydrates headless declarations with isolated client and SSR registries', () => {
+  const first = listboxNodeSchema.parse(documentSpec.root);
+  const second = { ...first, label: 'Second' };
+  const serverFirst = state();
+  const serverSecond = state();
+  const serverProbe = exampleDeclarationProbe();
   const container = document.createElement('div');
-  container.innerHTML = renderToString(ui);
+  container.innerHTML = renderToString(<>
+    {bound(serverFirst, first, serverProbe)}
+    {bound(serverSecond, second, serverProbe)}
+  </>);
   document.body.append(container);
+  const clientFirst = state();
+  const clientSecond = state();
+  const probe = exampleDeclarationProbe();
   const errors: unknown[] = [];
-  const view = render(ui, {
-    container,
-    hydrate: true,
-    onRecoverableError: (error) => errors.push(error),
+  const view = render(<>
+    {bound(clientFirst, first, probe)}
+    {bound(clientSecond, second, probe)}
+  </>, { container, hydrate: true,
+    onRecoverableError: (error) => errors.push(error) });
+  act(() => {
+    expect(probe.read('Listbox', listboxSchema.options[0], 'First')
+      .onValueChange('b')).toBe(true);
   });
-  await user.click(
-    within(screen.getByRole('listbox', { name: 'First' })).getByRole('option', {
-      name: 'Beta',
-    }),
-  );
-  expect(
-    within(screen.getByRole('listbox', { name: 'First' })).getByRole('option', {
-      name: 'Beta',
-    }),
-  ).toHaveAttribute('aria-selected', 'true');
-  expect(
-    within(screen.getByRole('listbox', { name: 'Second' })).getByRole('option', {
-      name: 'Answer',
-    }),
-  ).toHaveAttribute('aria-selected', 'true');
+  expect(probe.read('Listbox', listboxSchema.options[0], 'First').value).toBe('b');
+  expect(probe.read('Listbox', listboxSchema.options[0], 'Second').value).toBe('42');
+  expect(success(clientFirst.read('choice')).value).toBe('b');
+  for (const registry of [clientSecond, serverFirst, serverSecond])
+    expect(success(registry.read('choice')).value).toBe('42');
+  expect(screen.queryByRole('listbox')).toBeNull();
   expect(errors).toEqual([]);
   view.unmount();
   container.remove();

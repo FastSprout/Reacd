@@ -23,19 +23,19 @@ describe('Jotai composition root', () => {
   it('isolates app stores and preserves state when designs change', async () => {
     const user = userEvent.setup();
     const first = render(
-      <ReacdProvider adapter={shadcnAdapter}>
+      <ReacdProvider>
         <Editor />
       </ReacdProvider>,
     );
     const second = render(
-      <ReacdProvider adapter={shadcnAdapter}>
+      <ReacdProvider>
         <Editor />
       </ReacdProvider>,
     );
     await user.type(within(first.container).getByLabelText('Name'), 'Illia');
     expect(within(second.container).getByLabelText('Name')).toHaveValue('');
     first.rerender(
-      <ReacdProvider adapter={shadcnAdapter} templateId="erp-compact">
+      <ReacdProvider templateId="erp-compact">
         <Editor />
       </ReacdProvider>,
     );
@@ -66,14 +66,14 @@ describe('Jotai composition root', () => {
     second.set(nameAtom, 'Request B');
     expect(
       renderToStaticMarkup(
-        <ReacdProvider adapter={shadcnAdapter} store={first}>
+        <ReacdProvider store={first}>
           <Editor />
         </ReacdProvider>,
       ),
     ).toContain('Request A');
     expect(
       renderToStaticMarkup(
-        <ReacdProvider adapter={shadcnAdapter} store={second}>
+        <ReacdProvider store={second}>
           <Editor />
         </ReacdProvider>,
       ),

@@ -76,14 +76,14 @@ it('binds independent range endpoints and protects read-only views', async () =>
       />
     </ReacdProvider>,
   );
-  await user.click(screen.getByRole('button', { name: 'Clear End Shift' }));
+  await user.click(screen.getByRole('button', { name: 'Clear Shift End' }));
   expect(success(registry.read('shift')).value).toEqual({
     start: '09:00:00',
     end: null,
   });
-  await user.click(screen.getByRole('button', { name: 'Clear Start Shift' }));
+  await user.click(screen.getByRole('button', { name: 'Clear Shift Start' }));
   expect(success(registry.read('shift')).value).toEqual({ start: null, end: null });
-  expect(screen.getByRole('button', { name: 'Clear Start Protected' })).toBeDisabled();
+  expect(screen.getByRole('button', { name: 'Clear Protected Start' })).toBeDisabled();
   act(() => {
     expect(
       registry.update('shift', { start: '17:00:00', end: '09:00:00' }).success,

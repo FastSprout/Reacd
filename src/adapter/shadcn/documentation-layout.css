@@ -1,0 +1,133 @@
+.reacd-shell {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--shell-layer);
+  container-type: inline-size;
+  background: var(--background);
+  border-block-end: var(--shell-border) solid var(--border);
+}
+.reacd-shell-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-block-size: calc(var(--shell-height) - var(--shell-border));
+  gap: var(--space-small);
+  padding: var(--space-small) var(--page-compact-gutter);
+}
+.reacd-shell-branding { gap: var(--space-small); }
+.reacd-shell-navigation { display: block; min-inline-size: 0; flex: 1; }
+.reacd-shell-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  margin-inline-start: auto;
+  gap: var(--space-small);
+}
+.reacd-shell-secondary {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+  min-block-size: var(--shell-secondary-height);
+  padding-inline: var(--page-compact-gutter);
+}
+.reacd-hero { container-type: inline-size; overflow-wrap: anywhere; }
+.reacd-hero-frame {
+  display: grid;
+  min-inline-size: 0;
+  min-block-size: var(--hero-minimum);
+  gap: var(--hero-gap);
+  padding: var(--page-gap) var(--page-compact-gutter);
+}
+.reacd-hero-columns { display: grid; align-items: center; gap: var(--hero-gap); }
+.reacd-hero h1 {
+  font-size: clamp(
+    var(--hero-compact-title), var(--hero-fluid-title), var(--hero-title)
+  );
+}
+.reacd-scroll-track-horizontal > * { flex: 0 0 var(--scroll-track); }
+.reacd-shell[data-navigation-replacement] .reacd-shell-navigation,
+.reacd-shell[data-navigation-replacement] .reacd-shell-secondary { display: none; }
+@container (min-width: 64rem) {
+  .reacd-shell-row, .reacd-shell-secondary { padding-inline: var(--page-gutter); }
+  .reacd-shell[data-navigation-replacement] .reacd-shell-navigation { display: block; }
+  .reacd-shell[data-navigation-replacement] .reacd-shell-secondary { display: flex; }
+  .reacd-shell[data-navigation-replacement] .reacd-shell-menu-trigger { display: none; }
+}
+.reacd-page { container-type: inline-size; overflow-wrap: anywhere; }
+.reacd-page-frame {
+  display: grid;
+  align-items: start;
+  min-inline-size: 0;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'body';
+  column-gap: var(--page-gap);
+  row-gap: var(--space-medium);
+  padding: var(--page-compact-gutter);
+}
+.reacd-page-frame[data-left] { grid-template-areas: 'left' 'body'; }
+.reacd-page-frame[data-right] { grid-template-areas: 'toc' 'body'; }
+.reacd-page-frame[data-left][data-right] { grid-template-areas: 'left' 'toc' 'body'; }
+.reacd-page-article {
+  display: grid;
+  grid-area: body;
+  grid-template-columns: minmax(0, 1fr);
+  min-inline-size: 0;
+  align-self: start;
+  align-content: start;
+  gap: var(--space-large);
+}
+.reacd-page-rail-left { grid-area: left; }
+.reacd-page-rail-right { grid-area: toc; }
+@container (min-width: 64rem) {
+  .reacd-page-frame { padding: var(--page-gutter); }
+  .reacd-page-frame[data-left] {
+    grid-template-columns: var(--page-left-track) minmax(0, 1fr);
+    grid-template-areas: 'left body';
+  }
+  .reacd-page-frame[data-left][data-right] {
+    grid-template-areas: 'left toc' 'left body';
+  }
+  .reacd-page-rail-left {
+    position: sticky;
+    inset-block-start: calc(var(--shell-block-size) + var(--page-gutter));
+    align-self: start;
+  }
+  .reacd-page-rail-left .reacd-page-rail-toggle { display: none; }
+}
+@container (min-width: 80rem) {
+  .reacd-page-frame[data-right] {
+    grid-template-columns: minmax(0, 1fr) var(--page-right-track);
+    grid-template-areas: 'body toc';
+  }
+  .reacd-page-frame[data-left][data-right] {
+    grid-template-columns:
+      var(--page-left-track) minmax(0, 1fr) var(--page-right-track);
+    grid-template-areas: 'left body toc';
+  }
+  .reacd-page-rail-right {
+    position: sticky;
+    inset-block-start: calc(var(--shell-block-size) + var(--page-gutter));
+    align-self: start;
+  }
+  .reacd-page-rail-right .reacd-page-rail-toggle { display: none; }
+}
+.reacd-page-section { container-type: inline-size; overflow-wrap: anywhere; }
+.reacd-page-section-frame {
+  display: grid;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  gap: var(--hero-gap);
+  padding: var(--page-gap) var(--page-compact-gutter);
+}
+@container (min-width: 64rem) {
+  .reacd-page-section-frame, .reacd-hero-frame {
+    padding-inline: var(--page-gutter);
+  }
+}
+
+.reacd-page :is(h1, h2, h3, h4, h5, h6, [tabindex], a[href],
+  button, input, textarea, select) {
+  scroll-margin-block-start: calc(var(--shell-block-size) + var(--page-gutter));
+}

@@ -3,7 +3,7 @@ import { Issues } from '../../renderer/issues/issues.renderer.js';
 import { ActiveProvider } from './provider-content.js';
 import { providerSchema } from './provider.schema.js';
 
-export type ReacdProviderProps = z.infer<typeof providerSchema>;
+export type ReacdProviderProps = z.input<typeof providerSchema>;
 
 export function ReacdProvider(properties: ReacdProviderProps) {
   const result = providerSchema.safeParse(properties);

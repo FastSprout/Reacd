@@ -1,11 +1,25 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedBadge } from '../../shared/badge/badge.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import Chip from '@mui/material/Chip';
+import type { BadgeProps } from
+  '@fastsprout/reacd/adapter-runtime/components/badge/badge.props.js';
+import { MuiIcon } from '../icon/icon.adapter.js';
 
-export type MuiBadgeProps = ComponentProps<typeof SharedBadge>;
-export const MuiBadge: ComponentType<MuiBadgeProps> = bindPrimitives(
-  SharedBadge,
-  muiPrimitives,
-  'MuiBadge',
-);
+export type MuiBadgeProps = BadgeProps;
+
+export function MuiBadge(props: MuiBadgeProps) {
+  return (
+    <Chip
+      label={props.label}
+      color={
+        props.intent === 'danger'
+          ? 'error'
+          : props.intent === 'primary'
+            ? 'primary'
+            : 'default'
+      }
+      size={props.size === 'small' ? 'small' : 'medium'}
+      icon={
+        props.leadingIcon ? <MuiIcon name={props.leadingIcon} decorative /> : undefined
+      }
+    />
+  );
+}

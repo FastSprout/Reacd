@@ -42,10 +42,9 @@ describe('generative application context', () => {
       <GenerativeUI adapter={shadcnAdapter} document={document} actions={{ retry }} />,
     );
     expect(view.container.querySelector('[lang="ar"]')).toHaveAttribute('dir', 'rtl');
-    expect(screen.getByText('Please try again.')).toHaveAttribute(
-      'data-role',
-      'caption',
-    );
+    const caption = screen.getByText('Please try again.');
+    expect(caption.classList.contains('text-sm')).toBe(true);
+    expect(caption.classList.contains('text-muted-foreground')).toBe(true);
     await user.click(screen.getByRole('button', { name: 'Retry safely' }));
     expect(retry).toHaveBeenCalledOnce();
     expect(

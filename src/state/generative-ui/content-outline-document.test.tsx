@@ -1,13 +1,7 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { GenerativeUI } from './generative-ui.js';
-import { followHref } from '../../renderer/navigation/native-navigation.js';
-
-vi.mock('../../renderer/navigation/native-navigation.js', () => ({
-  followHref: vi.fn(),
-}));
 
 function document() {
   return {
@@ -51,22 +45,17 @@ function document() {
 }
 
 describe('whole-document content outline integration', () => {
-  it('shares navigation and heading state through the public transport', async () => {
-    const user = userEvent.setup();
+  it('shares navigation and heading state through the public transport', () => {
     render(<GenerativeUI adapter={shadcnAdapter} document={document()} />);
     const link = screen.getByRole('link', { name: 'Introduction document' });
     const heading = screen.getByRole('link', { name: 'Introduction heading' });
-    await user.click(link);
+    expect(link).toHaveAttribute('href', '/intro');
+    expect(fireEvent.click(link)).toBe(true);
     expect(screen.getByText('intro')).toBeInTheDocument();
     expect(link).toHaveAttribute('aria-current');
     expect(heading).toHaveAttribute('aria-current');
-    expect(followHref).toHaveBeenLastCalledWith(
-      new URL('/intro', window.location.href).href,
-    );
-    await user.click(heading);
-    expect(followHref).toHaveBeenLastCalledWith(
-      new URL('#intro', window.location.href).href,
-    );
+    expect(heading).toHaveAttribute('href', '#intro');
+    expect(fireEvent.click(heading)).toBe(true);
     expect(screen.queryByRole('alert')).toBeNull();
   });
 

@@ -73,12 +73,13 @@ describe('Page navigation transport', () => {
       <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={{ run }} />,
     );
     expect(screen.getAllByRole('main')).toHaveLength(1);
-    expect(screen.getByRole('heading', { name: 'Generated section' })).toHaveAttribute(
+    expect(screen.getByRole('region', { name: 'Generated section' })).toHaveAttribute(
       'id',
       'generated-section',
     );
-    for (const button of screen.getAllByRole('button')) await user.click(button);
-    expect(run).toHaveBeenCalledTimes(screen.getAllByRole('button').length);
+    const actions = screen.getAllByRole('button', { name: 'Generated slot action' });
+    for (const button of actions) await user.click(button);
+    expect(run).toHaveBeenCalledTimes(actions.length);
     expect(
       renderToString(
         <GenerativeUI
@@ -121,7 +122,7 @@ describe('Page navigation transport', () => {
 
   it('rejects invalid anchors, keys and rendering overrides in transport', () => {
     for (const root of [
-      { type: 'Page', title: 'Page', anchor: '1-invalid', children: [] },
+      { type: 'Page', title: 'Page', anchor: 'invalid anchor', children: [] },
       { type: 'PageHeader', anchor: 'unnamed', children: [] },
       { type: 'PageSection', anchor: 'unnamed', children: [] },
       { type: 'PageAnchors', label: 'Links', activeKey: 'missing' },

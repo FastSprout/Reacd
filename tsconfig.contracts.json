@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.build.json",
+  "include": ["src/core", "src/schema", "src/components", "src/renderer"],
+  "exclude": ["src/**/*.test.*", "src/**/__tests__/**"]
+}

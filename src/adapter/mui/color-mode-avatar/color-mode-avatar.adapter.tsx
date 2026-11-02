@@ -1,9 +1,16 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedColorModeAvatar } from
-  '../../shared/color-mode-avatar/color-mode-avatar.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import type { ColorModeAvatarProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-avatar/index.js';
+import { MuiAvatar } from '../avatar/avatar.adapter.js';
 
-export type MuiColorModeAvatarProps = ComponentProps<typeof SharedColorModeAvatar>;
-export const MuiColorModeAvatar: ComponentType<MuiColorModeAvatarProps> =
-  bindPrimitives(SharedColorModeAvatar, muiPrimitives, 'MuiColorModeAvatar');
+export type MuiColorModeAvatarProps = ColorModeAvatarProps;
+
+export function MuiColorModeAvatar(props: MuiColorModeAvatarProps) {
+  return (
+    <MuiAvatar
+      name={props.name}
+      fallback={props.fallback}
+      size={props.size}
+      src={props.mode === 'dark' ? props.dark : props.light}
+    />
+  );
+}

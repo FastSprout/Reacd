@@ -1,4 +1,5 @@
 import type { EditorProps } from './editor/index.js';
+import type { ProseProps } from './prose/index.js';
 import type { EditorToolbarProps } from './editor-toolbar/index.js';
 import type { EditorDragHandleProps } from './editor-drag-handle/index.js';
 import type { EditorSuggestionMenuProps } from './editor-suggestion-menu/index.js';
@@ -102,6 +103,7 @@ import type { PageCTAProps } from './page-cta/index.js';
 import type { CommandPaletteProps } from './command-palette/index.js';
 
 export interface ComponentCatalog extends CompositionCatalog, FormCatalog, ChatCatalog {
+  Prose: ProseProps;
   Editor: EditorProps;
   EditorToolbar: EditorToolbarProps;
   EditorDragHandle: EditorDragHandleProps;

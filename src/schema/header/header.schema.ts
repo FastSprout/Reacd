@@ -12,6 +12,7 @@ export const headerMenuSchema = z.strictObject({
   mode: z.enum(HEADER_MENU_MODES).optional(),
   toggleLabel: labelSchema.optional(),
   closeLabel: labelSchema.optional(),
+  replacesNavigation: z.boolean().optional(),
 });
 
 export const headerSchema = z.strictObject({

@@ -92,7 +92,8 @@ it('projects draft state and validates status transitions', async () => {
   );
   const draft = screen.getByRole('textbox', { name: 'Generated draft' });
   await user.type(draft, '!');
-  expect(screen.getByText('Draft!', { selector: 'p' })).toBeVisible();
+  expect(screen.getAllByText('Draft!').find((element) => element !== draft))
+    .toBeVisible();
   await user.keyboard('{Enter}');
   expect(send).toHaveBeenCalledExactlyOnceWith({ state: registry });
   expect(registry.update('status', 'invalid').success).toBe(false);

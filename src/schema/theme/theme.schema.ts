@@ -8,7 +8,7 @@ import { gridSchema } from '../grid/grid.schema.js';
 import { separatorSchema } from '../separator/separator.schema.js';
 
 export const themeDefaultsSchema = z.strictObject({
-  Button: buttonComponentSchema.pick({ intent: true }).optional(),
+  Button: z.strictObject({ intent: buttonComponentSchema.shape.intent }).optional(),
   Text: textComponentSchema
     .pick({ role: true, weight: true, lineLimit: true })
     .optional(),

@@ -108,9 +108,7 @@ it('reads shimmer text and activity and enforces nonempty text constraints', () 
         />
       </ReacdProvider>,
     );
-    expect(screen.getByText('Literal progress')).toHaveAttribute(
-      'data-active',
-      String(active ?? true),
-    );
+    if (active === false) expect(screen.queryByRole('status')).toBeNull();
+    else expect(screen.getByRole('status')).toHaveTextContent('Literal progress');
   }
 });

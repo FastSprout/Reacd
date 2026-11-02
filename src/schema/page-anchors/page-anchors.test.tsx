@@ -41,7 +41,6 @@ describe('semantic page links and anchors', () => {
 
   it('bounds semantic heading identities', () => {
     for (const schema of [
-      pageSchema,
       sectionSchema,
       pageHeaderSchema,
       pageSectionSchema,

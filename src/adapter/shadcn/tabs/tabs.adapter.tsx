@@ -1,12 +1,56 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/tabs/tabs.adapter.js';
-import { SharedTabs } from '../../shared/tabs/tabs.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import { PortalActiveContext } from
+  '@fastsprout/reacd/adapter-runtime/renderer/theme/portal-context.js';
+import { useInteractionState } from
+  '@fastsprout/reacd/adapter-runtime/renderer/form/interaction-context.js';
+import type { TabsProps } from
+  '@fastsprout/reacd/adapter-runtime/components/tabs/tabs.props.js';
+import { TABS_POLICY } from '@fastsprout/reacd/adapter-runtime/core/tabs-policy.js';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../vendor/ui/tabs.js';
 
-export type ShadcnTabsProps = ComponentProps<typeof SharedTabs>;
-export const ShadcnTabs: ComponentType<ShadcnTabsProps> = bindPrimitives(
-  SharedTabs,
-  shadcnPrimitives,
-  'ShadcnTabs',
-);
+export type ShadcnTabsProps = TabsProps;
+export function ShadcnTabs({
+  label,
+  items,
+  value,
+  onValueChange,
+  orientation = TABS_POLICY.orientation,
+  activationMode = TABS_POLICY.activationMode,
+  children,
+}: TabsProps) {
+  const { active, interactive } = useInteractionState();
+  return (
+    <Tabs
+      value={value}
+      {...(interactive ? { onValueChange } : {})}
+      orientation={orientation}
+      activationMode={activationMode}
+      className="min-w-0 max-w-full"
+    >
+      <TabsList
+        aria-label={label}
+        className={orientation === 'vertical'
+          ? 'flex h-auto w-full min-w-0 flex-col items-stretch'
+          : 'flex h-auto w-full min-w-0 flex-wrap'}
+      >
+        {items.map((item) => (
+          <TabsTrigger
+            key={item.value}
+            value={item.value}
+            disabled={!interactive || item.disabled}
+            className="min-w-0 flex-1 whitespace-normal [overflow-wrap:anywhere]"
+          >
+            {item.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {items.map((item) => (
+        <TabsContent key={item.value} value={item.value}>
+          <PortalActiveContext value={active && item.value === value}>
+            {item.content}
+          </PortalActiveContext>
+        </TabsContent>
+      ))}
+      {children}
+    </Tabs>
+  );
+}

@@ -1,12 +1,30 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/card/card.adapter.js';
-import { SharedCard } from '../../shared/card/card.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { CardProps } from
+  '@fastsprout/reacd/adapter-runtime/components/card/card.props.js';
+import { DEFAULTS } from '@fastsprout/reacd/adapter-runtime/core/policy.js';
+import { Card, CardContent, CardFooter, CardHeader } from '../vendor/ui/card.js';
 
-export type ShadcnCardProps = ComponentProps<typeof SharedCard>;
-export const ShadcnCard: ComponentType<ShadcnCardProps> = bindPrimitives(
-  SharedCard,
-  shadcnPrimitives,
-  'ShadcnCard',
-);
+export type ShadcnCardProps = CardProps;
+const spacingClasses = { small: 'gap-2', medium: 'gap-4', large: 'gap-6' } as const;
+export function ShadcnCard({
+  label,
+  header,
+  footer,
+  children,
+  spacing = DEFAULTS.spacing,
+}: CardProps) {
+  return (
+    <Card
+      role={label ? 'region' : undefined}
+      aria-label={label}
+      className="min-w-0"
+    >
+      {header && <CardHeader>{header}</CardHeader>}
+      <CardContent
+        className={`grid min-w-0 grid-cols-1 pt-6 ${spacingClasses[spacing]}`}
+      >
+        {children}
+      </CardContent>
+      {footer && <CardFooter>{footer}</CardFooter>}
+    </Card>
+  );
+}

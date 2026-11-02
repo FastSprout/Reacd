@@ -19,7 +19,7 @@ const node = {
   errors: [{ label: 'Network', message: 'Previous request failed.' }],
 } as const;
 
-it('honors capability revocation and replacement at submission time', () => {
+it('honors capability revocation and replacement at submission time', async () => {
   const registry = success(createStateRegistry([]));
   const original = vi.fn();
   const replacement = vi.fn();
@@ -37,16 +37,18 @@ it('honors capability revocation and replacement at submission time', () => {
     </ReacdProvider>,
   );
   const form = screen.getByRole('form', { name: 'Capabilities' });
-  fireEvent.submit(form);
+  await act(async () => { fireEvent.submit(form); });
   expect(original.mock.calls).toEqual([[{ state: registry }]]);
-  delete actions['save'];
-  fireEvent.submit(form);
+  await act(async () => {
+    fireEvent.submit(form);
+    delete actions['save'];
+  });
   expect(original).toHaveBeenCalledOnce();
   Object.setPrototypeOf(actions, { save: inherited });
-  fireEvent.submit(form);
+  await act(async () => { fireEvent.submit(form); });
   expect(inherited).not.toHaveBeenCalled();
   actions['save'] = replacement;
-  fireEvent.submit(form);
+  await act(async () => { fireEvent.submit(form); });
   expect(original).toHaveBeenCalledOnce();
   expect(replacement.mock.calls).toEqual([[{ state: registry }]]);
 });

@@ -1,4 +1,4 @@
-import { templates } from '../design/templates.schema.js';
+import { templates } from '../design/templates.data.js';
 import type { TemplateRegistry } from '../design/templates.schema.js';
 
 export const darkTemplateVariants = {
@@ -6,16 +6,16 @@ export const darkTemplateVariants = {
     ...templates['saas-modern-light'],
     name: 'SaaS · Spacious · Dark',
     colors: {
-      canvas: '#101512',
-      surface: '#18211c',
-      text: '#f2f6f3',
-      muted: '#bdc9c0',
-      border: '#8fa397',
-      primary: '#9cddb1',
-      onPrimary: '#102016',
+      canvas: '#0a0a0a',
+      surface: '#171717',
+      text: '#fafafa',
+      muted: '#a3a3a3',
+      border: '#737373',
+      primary: '#fafafa',
+      onPrimary: '#171717',
       danger: '#ffb4ab',
       onDanger: '#3a0503',
-      focus: '#8bb5ff',
+      focus: '#d4d4d4',
     },
   },
   'erp-compact': {

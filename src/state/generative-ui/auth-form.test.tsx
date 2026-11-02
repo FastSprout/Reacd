@@ -1,5 +1,5 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { GenerativeUI } from './generative-ui.js';
@@ -77,7 +77,7 @@ describe('generative AuthForm', () => {
     }
   });
 
-  it('reads independent boolean flags and blocks submit', () => {
+  it('reads independent boolean flags and blocks submit', async () => {
     const run = vi.fn();
     const view = render(
       <GenerativeUI
@@ -107,7 +107,7 @@ describe('generative AuthForm', () => {
     );
     expect(screen.getByRole('button', { name: 'Submit local' })).not.toBeDisabled();
     fireEvent.submit(screen.getByRole('form'));
-    expect(run).toHaveBeenCalledOnce();
+    await waitFor(() => expect(run).toHaveBeenCalledOnce());
   });
 
   it('renders no-provider literals and handles missing flag definitions', () => {

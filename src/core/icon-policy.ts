@@ -9,6 +9,8 @@ export const ICON_NAMES = [
   'error',
   'success',
   'settings',
+  'appearance',
+  'layout',
   'download',
   'upload',
   'external',

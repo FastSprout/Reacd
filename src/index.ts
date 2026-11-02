@@ -29,6 +29,8 @@ export { ReacdProvider } from './state/provider/provider.js';
 export type { ReacdProviderProps } from './state/provider/provider.js';
 export { createReacdStore } from './state/store.js';
 export type { ReacdStore } from './state/store.js';
+export { UnsupportedAdapterComponentError } from
+  './core/unsupported-adapter-component-error.js';
 export { useDesignTemplate } from './state/theme/use-design-template.js';
 export { defineThemeAdapter } from './renderer/contracts/validate-adapter.js';
 export type {
@@ -41,3 +43,9 @@ export { useSystemColorMode } from './state/theme/use-system-color-mode.js';
 export { darkTemplateVariants } from './schema/color-mode/default-templates.js';
 export type { NumberRange } from './core/number-range.js';
 export { readUploadBytes } from './schema/file-upload/read-bytes.js';
+export type {
+  ProseDocument,
+  ProseBlock,
+  ProseInline,
+  ProseToken,
+} from './core/prose.js';

@@ -10,7 +10,7 @@ export interface AdapterSurfaceProps {
 }
 
 export type AdapterCatalog = {
-  readonly [Name in keyof ComponentCatalog]: RenderEntry<Name>;
+  readonly [Name in keyof ComponentCatalog]?: RenderEntry<Name>;
 };
 
 export interface ThemeAdapter {

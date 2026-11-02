@@ -77,15 +77,20 @@ describe('generative DataTable bindings', () => {
       pageIndex: 0,
       pageSize: 1,
     });
-    expect(screen.getByRole('columnheader', { name: /Sort Amount/ })).toHaveAttribute(
+    expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveAttribute(
       'aria-sort',
-      'ascending',
+      'descending',
     );
-    await user.click(screen.getByRole('button', { name: 'Sort Amount' }));
     expect(screen.getByRole('checkbox', { name: 'Select row a' })).toHaveAttribute(
       'aria-checked',
       'true',
     );
+    await user.click(screen.getByRole('button', { name: 'Sort Amount' }));
+    expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveAttribute(
+      'aria-sort',
+      'ascending',
+    );
+    expect(screen.getByRole('checkbox', { name: 'Select row b' })).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Sort Amount' }));
     fireEvent.change(screen.getByLabelText('Filter Name'), {
       target: { value: 'all' },
@@ -93,7 +98,7 @@ describe('generative DataTable bindings', () => {
     expect(success(registry.read('orders.filters')).value).toEqual([
       { column: 'name', operator: 'contains', value: 'all' },
     ]);
-    expect(screen.getByText('No matching rows.')).toBeInTheDocument();
+    expect(screen.getByText('No data available.')).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText('Filter Name'), {
       target: { value: 'GAM' },
     });
@@ -111,13 +116,15 @@ describe('generative DataTable bindings', () => {
     expect(screen.getByRole('checkbox', { name: 'Select row b' })).toBeInTheDocument();
     await chooseOption(user, 'Filter Active', 'All');
     await chooseOption(user, 'Rows per page', '10');
-    expect(screen.getAllByRole('checkbox')).toHaveLength(3);
+    expect(screen.getAllByRole('checkbox')).toHaveLength(4);
+    expect(screen.getByRole('checkbox', { name: 'Select all visible rows' }))
+      .toHaveAttribute('aria-checked', 'mixed');
     await user.click(screen.getByRole('checkbox', { name: 'Select row a' }));
     expect(success(registry.read('orders.selection')).value).toEqual([]);
     act(() => {
       expect(registry.update('orders.rows', []).success).toBe(true);
     });
-    expect(screen.getByText('No matching rows.')).toBeInTheDocument();
+    expect(screen.getByText('No data available.')).toBeInTheDocument();
   });
 
   it('disables read-only controls and displays loading and errors', () => {
@@ -137,7 +144,9 @@ describe('generative DataTable bindings', () => {
         document={{ ...declaration, root: readNode }}
       />,
     );
-    expect(screen.getByRole('checkbox')).toBeDisabled();
+    for (const checkbox of screen.getAllByRole('checkbox')) {
+      expect(checkbox).toBeDisabled();
+    }
     expect(screen.getByRole('button', { name: 'Sort Name' })).toBeDisabled();
     expect(screen.getByLabelText('Filter Name')).toBeDisabled();
     rerender(

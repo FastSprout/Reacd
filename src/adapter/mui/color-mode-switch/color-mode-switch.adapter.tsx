@@ -1,9 +1,18 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedColorModeSwitch } from
-  '../../shared/color-mode-switch/color-mode-switch.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import type { ColorModeSwitchProps } from
+  '@fastsprout/reacd/adapter-runtime/components/color-mode-switch/index.js';
+import { MuiSwitch } from '../switch/switch.adapter.js';
 
-export type MuiColorModeSwitchProps = ComponentProps<typeof SharedColorModeSwitch>;
-export const MuiColorModeSwitch: ComponentType<MuiColorModeSwitchProps> =
-  bindPrimitives(SharedColorModeSwitch, muiPrimitives, 'MuiColorModeSwitch');
+export type MuiColorModeSwitchProps = ColorModeSwitchProps;
+
+export function MuiColorModeSwitch(props: MuiColorModeSwitchProps) {
+  return (
+    <MuiSwitch
+      label={props.label}
+      description={props.description}
+      disabled={props.disabled}
+      readOnly={props.readOnly}
+      checked={props.resolvedMode === 'dark'}
+      onCheckedChange={(checked) => props.onValueChange(checked ? 'dark' : 'light')}
+    />
+  );
+}

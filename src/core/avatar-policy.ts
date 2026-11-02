@@ -17,4 +17,9 @@ export const AVATAR_DEFAULTS = {
   max: 5,
   fallback: '?',
   emptyMessage: 'No people to display.',
+  overflowTitle: 'Additional people',
+  overflowClose: 'Close people',
+  overflowPrefix: 'Show',
+  overflowSingular: 'more person',
+  overflowPlural: 'more people',
 } as const;

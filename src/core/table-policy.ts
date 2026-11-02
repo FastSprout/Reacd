@@ -4,6 +4,9 @@ export const TABLE_EDITABLE = {
   filters: true,
   pagination: true,
 } as const;
+export const TABLE_POLICY = {
+  scrollTabIndex: 0,
+} as const;
 export const TABLE_VIEW_FIELDS = [
   'selection',
   'sorting',

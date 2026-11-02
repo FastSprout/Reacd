@@ -1,10 +1,10 @@
-import { identifierSchema } from '../shared/identifier.js';
+import { proseIdSchema } from '../prose/values.js';
 import { z } from 'zod';
 import { childrenSchema } from '../shared/children.js';
 import { labelSchema, textSchema } from '../shared/values.js';
 
 export const pageSchema = z.strictObject({
-  anchor: identifierSchema.optional(),
+  anchor: proseIdSchema.optional(),
   children: childrenSchema,
   left: childrenSchema,
   right: childrenSchema,

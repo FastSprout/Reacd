@@ -1,12 +1,20 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedSubmitButton } from
-  '../../shared/submit-button/submit-button.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import Button from '@mui/material/Button';
+import type { SubmitButtonProps } from
+  '@fastsprout/reacd/adapter-runtime/components/submit-button/submit-button.props.js';
+import { useNativeField } from '../native-field.js';
 
-export type MuiSubmitButtonProps = ComponentProps<typeof SharedSubmitButton>;
-export const MuiSubmitButton: ComponentType<MuiSubmitButtonProps> = bindPrimitives(
-  SharedSubmitButton,
-  muiPrimitives,
-  'MuiSubmitButton',
-);
+export type MuiSubmitButtonProps = SubmitButtonProps;
+
+export function MuiSubmitButton(props: MuiSubmitButtonProps) {
+  const field = useNativeField(props);
+  return (
+    <Button
+      type="submit"
+      disabled={field.blocked}
+      variant={props.intent === 'secondary' ? 'outlined' : 'contained'}
+      color={props.intent === 'danger' ? 'error' : 'primary'}
+    >
+      {props.label}
+    </Button>
+  );
+}

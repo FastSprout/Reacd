@@ -6,11 +6,14 @@ import { isThemeAdapter } from '../../renderer/contracts/validate-adapter.js';
 import type { ThemeAdapter } from '../../renderer/contracts/theme-adapter.js';
 import { isReacdStore } from '../store.js';
 import type { ReacdStore } from '../store.js';
+import { defaultAdapter } from './default-adapter.js';
 
 export const providerSchema = z.strictObject({
   children: childrenSchema,
   templateId: labelSchema.optional(),
   templates: z.record(z.string(), templateSchema).optional(),
-  adapter: z.custom<ThemeAdapter>(isThemeAdapter, 'Invalid theme adapter.'),
+  adapter: z
+    .custom<ThemeAdapter>(isThemeAdapter, 'Invalid theme adapter.')
+    .prefault(defaultAdapter),
   store: z.custom<ReacdStore>(isReacdStore, 'Invalid Jotai store.').optional(),
 });

@@ -74,7 +74,7 @@ it('hydrates dates with isolated state and shared constraints', async () => {
     screen.getByRole('spinbutton', { name: /day, Event reader/i }),
   ).toHaveAttribute('aria-valuenow', '29');
   expect(screen.getByRole('button', { name: 'Clear Event reader' })).toBeDisabled();
-  await user.click(screen.getByRole('button', { name: 'Clear End Booking' }));
+  await user.click(screen.getByRole('button', { name: 'Clear Booking End' }));
   expect(success(client.read('booking')).value).toEqual({
     start: '2024-02-28',
     end: null,

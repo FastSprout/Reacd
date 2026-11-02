@@ -1,12 +1,14 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/popover/popover.adapter.js';
-import { SharedPopover } from '../../shared/popover/popover.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { PopoverProps } from
+  '@fastsprout/reacd/adapter-runtime/components/popover/popover.props.js';
+import { POPOVER_DEFAULTS } from
+  '@fastsprout/reacd/adapter-runtime/core/popover-policy.js';
+import { ShadcnClickPopover } from './click-popover.js';
+import { ShadcnHoverPopover } from './hover-popover.js';
 
-export type ShadcnPopoverProps = ComponentProps<typeof SharedPopover>;
-export const ShadcnPopover: ComponentType<ShadcnPopoverProps> = bindPrimitives(
-  SharedPopover,
-  shadcnPrimitives,
-  'ShadcnPopover',
-);
+export function ShadcnPopover(props: PopoverProps) {
+  return (props.mode ?? POPOVER_DEFAULTS.mode) === 'hover' ? (
+    <ShadcnHoverPopover {...props} />
+  ) : (
+    <ShadcnClickPopover {...props} />
+  );
+}

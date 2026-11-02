@@ -71,7 +71,7 @@ describe('generative RadioGroup', () => {
     expect(screen.getByText('two', { exact: true })).toBeVisible();
     for (const choice of screen.getAllByRole('radio', { name: 'Two' })) {
       expect(choice).toHaveAttribute('aria-checked', 'true');
-      expect(choice).toHaveAttribute('aria-disabled', 'true');
+      expect(choice).toBeDisabled();
     }
   });
   it('rejects incompatible and read-only definitions and missing live bindings', () => {

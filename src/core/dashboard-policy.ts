@@ -17,5 +17,7 @@ export const DASHBOARD_DEFAULTS = {
   missingGroup: 'This dashboard control requires a DashboardGroup region.',
   wrongSidebar: 'DashboardSidebar requires a sidebar region.',
   missingPanelLabel: 'A standalone DashboardPanel requires a label.',
+  missingHandleBoundary: 'This dashboard region has no following boundary.',
+  duplicateHandle: 'Declare at most one resize handle for each dashboard region.',
   stateRejected: 'Search state update was rejected. Edit the query to retry.',
 } as const;

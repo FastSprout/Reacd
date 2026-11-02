@@ -1,12 +1,8 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/container/container.adapter.js';
-import { SharedContainer } from '../../shared/container/container.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { ContainerProps } from
+  '@fastsprout/reacd/adapter-runtime/components/container/container.props.js';
+import { CardContent } from '../vendor/ui/card.js';
 
-export type ShadcnContainerProps = ComponentProps<typeof SharedContainer>;
-export const ShadcnContainer: ComponentType<ShadcnContainerProps> = bindPrimitives(
-  SharedContainer,
-  shadcnPrimitives,
-  'ShadcnContainer',
-);
+export type ShadcnContainerProps = ContainerProps;
+export function ShadcnContainer({ children }: ContainerProps) {
+  return <CardContent className="container mx-auto p-0">{children}</CardContent>;
+}

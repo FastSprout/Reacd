@@ -91,15 +91,15 @@ it('binds date ranges and protects shared access and limits', async () => {
       />
     </ReacdProvider>,
   );
-  await user.click(screen.getByRole('button', { name: 'Clear End Booking' }));
+  await user.click(screen.getByRole('button', { name: 'Clear Booking End' }));
   expect(success(registry.read('booking')).value).toEqual({
     start: '2024-02-28',
     end: null,
   });
-  await user.click(screen.getByRole('button', { name: 'Clear Start Booking' }));
+  await user.click(screen.getByRole('button', { name: 'Clear Booking Start' }));
   expect(success(registry.read('booking')).value).toEqual({ start: null, end: null });
   expect(
-    screen.getByRole('button', { name: 'Clear Start Read booking' }),
+    screen.getByRole('button', { name: 'Clear Read booking Start' }),
   ).toBeDisabled();
   act(() => {
     expect(

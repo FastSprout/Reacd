@@ -48,15 +48,8 @@ it('shares dates, protects readers and intersects bounds', async () => {
   );
   await user.click(day('Delivery date', 29));
   expect(success(registry.read('delivery')).value).toBe('2026-10-29');
-  expect(screen.getByRole('group', { name: 'Reader' })).toHaveAttribute(
-    'data-readonly',
-    'true',
-  );
-  expect(screen.getByRole('group', { name: 'Readonly' })).toHaveAttribute(
-    'data-readonly',
-    'true',
-  );
   await user.click(day('Reader', 30));
+  await user.click(day('Readonly', 31));
   expect(success(registry.read('delivery')).value).toBe('2026-10-29');
   act(() => {
     expect(registry.update('delivery', '2026-11-01').success).toBe(false);

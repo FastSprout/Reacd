@@ -14,10 +14,6 @@ import type { StateRegistry } from '../registry/registry.types.js';
 import { BoundContentNavigation } from './bound-content-navigation.js';
 import { BoundContentToc } from './bound-content-toc.js';
 
-vi.mock('../../renderer/navigation/native-navigation.js', () => ({
-  followHref: vi.fn(),
-}));
-
 const navigation = contentNavigationNodeSchema.parse({
   type: 'ContentNavigation',
   label: 'Hydrated documents',
@@ -64,7 +60,7 @@ it('hydrates IDs and isolates outline state between SSR requests', async () => {
   const container = document.createElement('div');
   container.innerHTML = renderToString(<Scene state={server} />);
   document.body.append(container);
-  const originalId = container.querySelector('button')?.getAttribute('aria-controls');
+  const originalId = container.querySelector('button')?.id;
   expect(originalId).toBeTruthy();
   let root: Root | undefined;
   try {
@@ -73,11 +69,15 @@ it('hydrates IDs and isolates outline state between SSR requests', async () => {
         onRecoverableError: errors,
       });
     });
-    expect(screen.getByRole('button', { name: 'Expand Guide' })).toHaveAttribute(
-      'aria-controls',
+    expect(screen.getByRole('button', { name: 'Guide' })).toHaveAttribute(
+      'id',
       originalId,
     );
-    await user.click(screen.getByRole('button', { name: 'Expand Guide' }));
+    const trigger = screen.getByRole('button', { name: 'Guide' });
+    await user.click(trigger);
+    const panelId = trigger.getAttribute('aria-controls');
+    expect(panelId).toBeTruthy();
+    expect(document.getElementById(panelId ?? '')).toBeVisible();
     await user.click(screen.getByRole('link', { name: 'Introduction' }));
     expect(client.read('expanded')).toMatchObject({ data: { value: ['guide'] } });
     expect(client.read('current')).toMatchObject({ data: { value: 'intro' } });

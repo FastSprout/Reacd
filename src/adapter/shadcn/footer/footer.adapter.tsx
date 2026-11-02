@@ -1,12 +1,18 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/footer/footer.adapter.js';
-import { SharedFooter } from '../../shared/footer/footer.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { FooterProps } from
+  '@fastsprout/reacd/adapter-runtime/components/footer/footer.props.js';
+import { CardContent, CardFooter } from '../vendor/ui/card.js';
 
-export type ShadcnFooterProps = ComponentProps<typeof SharedFooter>;
-export const ShadcnFooter: ComponentType<ShadcnFooterProps> = bindPrimitives(
-  SharedFooter,
-  shadcnPrimitives,
-  'ShadcnFooter',
-);
+export type ShadcnFooterProps = FooterProps;
+export function ShadcnFooter({ top, start, children, end, bottom }: FooterProps) {
+  return (
+    <CardContent role="contentinfo" className="grid min-w-0 gap-4 p-0">
+      {top}
+      <CardFooter className="flex-wrap justify-between gap-4 p-0">
+        {start}
+        {children}
+        {end}
+      </CardFooter>
+      {bottom}
+    </CardContent>
+  );
+}

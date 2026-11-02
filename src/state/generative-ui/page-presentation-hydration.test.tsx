@@ -43,7 +43,7 @@ describe('Page presentation hydration', () => {
     );
     expect(errors).toEqual([]);
     expect(
-      screen.getByRole('heading', { name: 'Hydrated action', level: 2 }),
+      screen.getByRole('heading', { name: 'Hydrated action', level: 3 }),
     ).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Hydrated action' }));
     expect(run).toHaveBeenCalledOnce();

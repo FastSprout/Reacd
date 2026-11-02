@@ -1,7 +1,7 @@
 import { expect, it, vi } from 'vitest';
 import { followHref } from './native-navigation.js';
 
-it('follows the captured destination with normal browser history', () => {
+it('follows a validated destination with normal browser history', () => {
   const location = globalThis.location;
   const assign = vi.fn();
   vi.stubGlobal('location', { assign });

@@ -43,6 +43,7 @@ const buttonSchema = z.strictObject({
   action: identifier,
   intent: z.enum(BUTTON_INTENTS).optional(),
   disabled: z.boolean().optional(),
+  pressed: z.boolean().optional(),
 });
 
 const inputSchema = z.strictObject({

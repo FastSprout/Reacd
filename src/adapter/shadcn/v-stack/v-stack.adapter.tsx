@@ -1,12 +1,15 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/v-stack/v-stack.adapter.js';
-import { SharedVStack } from '../../shared/v-stack/v-stack.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { VStackProps } from
+  '@fastsprout/reacd/adapter-runtime/components/v-stack/v-stack.props.js';
+import { CardContent } from '../vendor/ui/card.js';
 
-export type ShadcnVStackProps = ComponentProps<typeof SharedVStack>;
-export const ShadcnVStack: ComponentType<ShadcnVStackProps> = bindPrimitives(
-  SharedVStack,
-  shadcnPrimitives,
-  'ShadcnVStack',
-);
+export type ShadcnVStackProps = VStackProps;
+export function ShadcnVStack({ children, spacing = 'medium' }: VStackProps) {
+  return (
+    <CardContent
+      className="flex flex-col p-0"
+      style={{ gap: `var(--space-${spacing})` }}
+    >
+      {children}
+    </CardContent>
+  );
+}

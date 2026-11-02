@@ -117,7 +117,7 @@ it('hydrates isolated preference readers and resolves system mode', async () => 
     'true',
   );
   const image = screen.getByRole('img', { name: 'Bound illustration' });
-  expect(image.querySelector('img')).toHaveAttribute('src', '/dark.svg');
+  expect(image).toHaveAttribute('src', '/dark.svg');
   expect(errors).toEqual([]);
   view.unmount();
   container.remove();

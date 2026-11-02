@@ -1,12 +1,14 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedLocaleSelect } from
-  '../../shared/locale-select/locale-select.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import type { LocaleSelectProps } from
+  '@fastsprout/reacd/adapter-runtime/components/locale-select/locale-select.props.js';
+import { MuiSelect } from '../select/select.adapter.js';
 
-export type MuiLocaleSelectProps = ComponentProps<typeof SharedLocaleSelect>;
-export const MuiLocaleSelect: ComponentType<MuiLocaleSelectProps> = bindPrimitives(
-  SharedLocaleSelect,
-  muiPrimitives,
-  'MuiLocaleSelect',
-);
+export type MuiLocaleSelectProps = LocaleSelectProps;
+
+export function MuiLocaleSelect({ locales, ...props }: MuiLocaleSelectProps) {
+  return (
+    <MuiSelect
+      {...props}
+      items={locales.map(({ code, label }) => ({ value: code, label }))}
+    />
+  );
+}

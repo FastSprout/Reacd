@@ -1,11 +1,24 @@
-import type { ComponentProps, ComponentType } from 'react';
-import { SharedToggle } from '../../shared/toggle/toggle.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { muiPrimitives } from '../primitives/primitives.js';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import type { ToggleProps } from
+  '@fastsprout/reacd/adapter-runtime/components/toggle/toggle.props.js';
+import { useNativeField } from '../native-field.js';
 
-export type MuiToggleProps = ComponentProps<typeof SharedToggle>;
-export const MuiToggle: ComponentType<MuiToggleProps> = bindPrimitives(
-  SharedToggle,
-  muiPrimitives,
-  'MuiToggle',
-);
+export type MuiToggleProps = ToggleProps;
+
+export function MuiToggle(props: MuiToggleProps) {
+  const field = useNativeField(props);
+  return (
+    <FormControlLabel
+      label={props.label}
+      control={
+        <Switch
+          checked={props.checked}
+          disabled={field.disabled}
+          slotProps={{ input: { role: 'switch' } }}
+          onChange={(_event, checked) => props.onCheckedChange(checked)}
+        />
+      }
+    />
+  );
+}

@@ -9,6 +9,7 @@ import { boundedTree } from '../../core/tree-budget.js';
 import { identifierSchema } from '../shared/identifier.js';
 import { labelSchema } from '../shared/values.js';
 import { linkSchema } from '../link/link.schema.js';
+import { proseIdSchema } from '../prose/values.js';
 
 const itemShape = {
   key: identifierSchema,
@@ -20,6 +21,7 @@ const tocItemSchema: z.ZodType<ContentOutlineItem> = z.lazy(() =>
   z
     .strictObject({
       ...itemShape,
+      key: proseIdSchema,
       children: z.array(tocItemSchema).min(1).readonly().optional(),
     })
     .readonly(),

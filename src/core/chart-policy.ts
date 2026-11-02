@@ -2,9 +2,11 @@ export const CHART_KINDS = ['line', 'area', 'bar', 'donut'] as const;
 export const CHART_POLICY = {
   maxCategories: 50,
   maxSeries: 6,
+  minimumTraceContrast: 3,
   maximumMagnitude: 1_000_000_000_000,
   width: 640,
   height: 320,
+  minimumHeight: 160,
   padding: 32,
   zero: 0,
   unitDomain: 1,

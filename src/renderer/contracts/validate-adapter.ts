@@ -2,6 +2,8 @@ import { COMPONENT_NAMES } from '../../components/component-names.js';
 import { isRecord } from '../../core/value.js';
 import type { ThemeAdapter } from './theme-adapter.js';
 
+const COMPONENT_SET = new Set<string>(COMPONENT_NAMES);
+
 function isComponent(value: unknown): boolean {
   if (typeof value === 'function') return true;
   return (
@@ -22,11 +24,9 @@ export function isThemeAdapter(value: unknown): value is ThemeAdapter {
   const components = value['components'];
   return (
     isRecord(components) &&
-    Object.keys(components).length === COMPONENT_NAMES.length &&
-    COMPONENT_NAMES.every((name) => {
-      const entry = components[name];
+    Object.entries(components).every(([name, entry]) => {
       return (
-        Object.hasOwn(components, name) &&
+        COMPONENT_SET.has(name) &&
         isRecord(entry) &&
         entry['name'] === name &&
         typeof entry['render'] === 'function'
@@ -37,7 +37,8 @@ export function isThemeAdapter(value: unknown): value is ThemeAdapter {
 
 export function defineThemeAdapter(adapter: ThemeAdapter): ThemeAdapter {
   if (!isThemeAdapter(adapter)) {
-    throw new Error('A theme adapter must implement the complete reacd catalog.');
+    throw new Error('A theme adapter must declare valid SDK-backed component entries.');
   }
+  Object.freeze(adapter.components);
   return Object.freeze(adapter);
 }

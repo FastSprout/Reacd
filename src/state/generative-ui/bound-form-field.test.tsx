@@ -34,7 +34,7 @@ it('updates errors without remounting or losing canonical values', () => {
   });
   expect(screen.getByRole('textbox')).toBe(control);
   expect(control).toHaveValue('Retained');
-  expect(control).not.toHaveAttribute('aria-invalid');
+  expect(control).not.toHaveAttribute('aria-invalid', 'true');
   expect(screen.queryByRole('alert')).toBeNull();
 });
 

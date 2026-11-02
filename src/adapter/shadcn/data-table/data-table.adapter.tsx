@@ -1,12 +1,23 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/data-table/data-table.adapter.js';
-import { SharedDataTable } from '../../shared/data-table/data-table.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import type { DataTableProps } from
+  '@fastsprout/reacd/adapter-runtime/components/data-table/data-table.props.js';
+import { NativeTableView } from './native-table-view.js';
+import { useNativeTable } from './use-native-table.js';
 
-export type ShadcnDataTableProps = ComponentProps<typeof SharedDataTable>;
-export const ShadcnDataTable: ComponentType<ShadcnDataTableProps> = bindPrimitives(
-  SharedDataTable,
-  shadcnPrimitives,
-  'ShadcnDataTable',
-);
+export type ShadcnDataTableProps = DataTableProps;
+export function ShadcnDataTable(properties: DataTableProps) {
+  const table = useNativeTable({ ...properties, manual: true });
+  return (
+    <NativeTableView
+      table={table}
+      columns={properties.columns}
+      caption={properties.caption}
+      state={properties.state}
+      emptyMessage={properties.emptyMessage}
+      errorMessage={properties.errorMessage}
+      selectionEnabled={properties.onSelectionChange !== undefined}
+      sortingEnabled={properties.onSortingChange !== undefined}
+      filtersEnabled={properties.onFiltersChange !== undefined}
+      pagingEnabled={properties.onPaginationChange !== undefined}
+    />
+  );
+}

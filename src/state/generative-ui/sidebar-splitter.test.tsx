@@ -1,4 +1,5 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
+import { shadcnAdapter } from
+  '@fastsprout/reacd-shadcn';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -70,11 +71,11 @@ describe('Sidebar/Splitter generative state', () => {
     expect(success(registry.read('desktop')).value).toBe(false);
     expect(success(registry.read('mobile')).value).toBe(false);
     expect(success(isolated.read('desktop')).value).toBe(true);
-    const handle = screen.getByRole('separator', { name: 'Outline' });
+    const handle = screen.getByRole('separator', { name: 'Outline / Content' });
     fireEvent.keyDown(handle, { key: 'ArrowRight' });
     expect(success(registry.read('layout')).value).toEqual([
-      { id: 'outline', share: 51 },
-      { id: 'content', share: 49 },
+      { id: 'outline', share: 55 },
+      { id: 'content', share: 45 },
     ]);
     expect(
       registry.update('layout', [

@@ -42,7 +42,7 @@ it('preserves focus and request state through aside hydration', async () => {
   const markup = renderToString(
     <GenerativeUI adapter={shadcnAdapter} document={declaration} actions={actions} />,
   );
-  expect(markup).toContain('data-wide="false"');
+  expect(markup).toContain('aria-label="Hydrated navigation"');
   container.innerHTML = markup;
   document.body.appendChild(container);
   const errors: unknown[] = [];
@@ -55,7 +55,7 @@ it('preserves focus and request state through aside hydration', async () => {
     },
   );
   const aside = screen.getByRole('complementary', { name: 'Hydrated navigation' });
-  expect(aside).toHaveAttribute('data-wide', 'true');
+  expect(aside.className).toContain('md:sticky');
   await user.type(screen.getByLabelText('Hydrated page query'), 'Client query');
   const action = screen.getByRole('button', { name: 'Local navigation action' });
   action.focus();
@@ -63,7 +63,9 @@ it('preserves focus and request state through aside hydration', async () => {
     media.matches = false;
     media.dispatchEvent(new Event('change'));
   });
-  expect(aside).toHaveAttribute('data-wide', 'false');
+  expect(screen.getByRole('complementary', { name: 'Hydrated navigation' })).toBe(
+    aside,
+  );
   expect(action).toHaveFocus();
   await user.click(action);
   expect(actions.navigate).toHaveBeenCalledOnce();

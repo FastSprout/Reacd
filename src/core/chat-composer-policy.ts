@@ -5,6 +5,7 @@ export const CHAT_COMPOSER_POLICY = {
   rows: CONTENT_POLICY.defaultTextAreaRows,
   compositionKeyCode: 229,
   paletteBlockRem: 36,
+  paletteViewportPercent: 60,
 } as const;
 
 export const CHAT_COMPOSER_DEFAULTS = {

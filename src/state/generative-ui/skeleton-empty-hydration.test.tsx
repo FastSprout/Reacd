@@ -67,7 +67,7 @@ describe('Skeleton and Empty hydration', () => {
         },
       );
       expect(screen.getByRole('region', { name: 'Hydrated results' })).toHaveAttribute(
-        'data-loading',
+        'aria-busy',
         String(busy),
       );
       await user.type(screen.getByLabelText('Hydrated query'), 'Client query');

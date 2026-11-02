@@ -1,1 +1,1 @@
-export * from './changelog-versions.schema.js';
+export { changelogVersionsSchema } from './changelog-versions.schema.js';

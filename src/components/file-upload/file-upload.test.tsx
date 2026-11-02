@@ -5,11 +5,12 @@ import type { ReactNode } from 'react';
 import { FileUpload } from './file-upload.js';
 import type { FileUploadProps } from './file-upload.props.js';
 import { RenderContext } from '../shared/port.js';
-import { fileUploadEntries } from '../../adapter/shadcn/registry/file-upload.js';
+import { fileUploadSchema } from '../../schema/file-upload/index.js';
+import { renderEntry } from '../../renderer/contracts/render-entry.js';
 import { Issues } from '../../renderer/issues/issues.renderer.js';
+const entry = renderEntry('FileUpload', fileUploadSchema, ({ label }) => label);
 const port = {
-  render: (_name: string, props: unknown): ReactNode =>
-    fileUploadEntries.FileUpload.render(props),
+  render: (_name: string, props: unknown): ReactNode => entry.render(props),
   report: (issues: { path: string; message: string }[]): ReactNode => (
     <Issues issues={issues} />
   ),
@@ -35,7 +36,7 @@ it('provides a named closed component boundary and deterministic hydrated SSR', 
     hydrate: true,
     onRecoverableError: (error) => errors.push(error),
   });
-  expect(screen.getByRole('group', { name: 'Payload' })).toBeVisible();
+  expect(screen.getByText('Payload')).toBeVisible();
   expect(errors).toEqual([]);
   view.unmount();
   container.remove();

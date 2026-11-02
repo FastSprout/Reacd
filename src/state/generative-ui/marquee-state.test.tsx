@@ -1,60 +1,54 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-import { expect, it, vi } from 'vitest';
-import { ReacdProvider } from '../../index.js';
+import { act, render, screen } from '@testing-library/react';
+import { expect, it } from 'vitest';
 import { createStateRegistry } from '../registry/state-registry.js';
 import { success } from '../../../test-support/data-table.js';
-import { marqueeNodeSchema } from '../../schema/marquee/index.js';
+import { exampleDeclarationProbe, expectUnsupportedExample } from
+  '../../../test-support/example-declaration-probe.js';
+import { marqueeNodeSchema, marqueeSchema } from '../../schema/marquee/index.js';
 import { BoundMarquee } from './bound-marquee.js';
 const node = marqueeNodeSchema.parse({
-  type: 'Marquee',
-  label: 'Notices',
-  items: [{ id: 'one', label: 'Notice' }],
+  type: 'Marquee', label: 'Notices', items: [{ id: 'one', label: 'Notice' }],
   paused: { state: 'paused', mode: 'readWrite' },
 });
-it('writes pause state and keeps readonly bindings static', async () => {
-  vi.stubGlobal('matchMedia', () => ({
-    matches: false,
-    addEventListener: () => undefined,
-    removeEventListener: () => undefined,
-  }));
-  const user = userEvent.setup();
-  const registry = success(
-    createStateRegistry([
-      { key: 'paused', kind: 'boolean', initial: true, access: 'readWrite' },
-    ]),
-  );
-  const view = render(
-    <ReacdProvider adapter={shadcnAdapter}>
-      <BoundMarquee node={node} registry={registry} />
-    </ReacdProvider>,
-  );
-  await user.click(screen.getByRole('button', { name: 'Resume movement' }));
+function state() {
+  return success(createStateRegistry([
+    { key: 'paused', kind: 'boolean', initial: true, access: 'readWrite' },
+  ]));
+}
+it('reports the exact unsupported native Marquee boundary', () => {
+  expectUnsupportedExample(<BoundMarquee node={node} registry={state()} />,
+    'Marquee');
+});
+it('writes pause state and protects readers while forwarding readonly metadata', () => {
+  const probe = exampleDeclarationProbe();
+  const registry = state();
+  const view = render(<probe.Surface>
+    <BoundMarquee node={node} registry={registry} />
+  </probe.Surface>);
+  act(() => { probe.read('Marquee', marqueeSchema).onPausedChange(false); });
   expect(success(registry.read('paused')).value).toBe(false);
-  view.rerender(
-    <ReacdProvider adapter={shadcnAdapter}>
-      <BoundMarquee
-        node={{ ...node, paused: { state: 'paused', mode: 'read' } }}
-        registry={registry}
-      />
-    </ReacdProvider>,
-  );
-  expect(screen.getByRole('list', { name: 'Notices' })).toBeInTheDocument();
-  expect(screen.queryByRole('button')).toBeNull();
-  view.rerender(
-    <ReacdProvider adapter={shadcnAdapter}>
-      <BoundMarquee node={{ ...node, readOnly: true }} registry={registry} />
-    </ReacdProvider>,
-  );
-  expect(screen.queryByRole('button')).toBeNull();
-  vi.unstubAllGlobals();
+  view.rerender(<probe.Surface>
+    <BoundMarquee node={{ ...node, paused: { state: 'paused', mode: 'read' } }}
+      registry={registry} />
+  </probe.Surface>);
+  expect(probe.read('Marquee', marqueeSchema).readOnly).toBe(true);
+  act(() => { probe.read('Marquee', marqueeSchema).onPausedChange(true); });
+  expect(success(registry.read('paused')).value).toBe(false);
+  view.rerender(<probe.Surface>
+    <BoundMarquee node={{ ...node, readOnly: true }} registry={registry} />
+  </probe.Surface>);
+  expect(probe.read('Marquee', marqueeSchema).readOnly).toBe(true);
+  expect(probe.read('Marquee', marqueeSchema).paused).toBe(false);
 });
 it('rejects missing or mistyped shared pause state', () => {
-  render(
-    <ReacdProvider adapter={shadcnAdapter}>
-      <BoundMarquee node={node} registry={success(createStateRegistry([]))} />
-    </ReacdProvider>,
-  );
-  expect(screen.getByRole('alert')).toHaveTextContent('paused');
+  const probe = exampleDeclarationProbe();
+  for (const definitions of [[], [
+    { key: 'paused', kind: 'text', initial: 'true', access: 'readWrite' },
+  ]]) {
+    const view = render(<probe.Surface>
+      <BoundMarquee node={node} registry={success(createStateRegistry(definitions))} />
+    </probe.Surface>);
+    expect(screen.getByRole('alert')).toHaveTextContent('paused');
+    view.unmount();
+  }
 });

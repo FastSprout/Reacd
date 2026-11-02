@@ -1,12 +1,56 @@
-import type { ComponentProps, ComponentType } from 'react';
-export * from '../../shared/icon/icon.adapter.js';
-import { SharedIcon } from '../../shared/icon/icon.adapter.js';
-import { bindPrimitives } from '../../shared/primitives/context.js';
-import { shadcnPrimitives } from '../primitives/primitives.js';
+import {
+  Check,
+  CircleAlert,
+  CircleCheck,
+  Download,
+  ExternalLink,
+  Info,
+  LoaderCircle,
+  Minus,
+  Plus,
+  Search,
+  Settings,
+  SunMoon,
+  PanelLeft,
+  TriangleAlert,
+  Upload,
+  X,
+} from 'lucide-react';
 
-export type ShadcnIconProps = ComponentProps<typeof SharedIcon>;
-export const ShadcnIcon: ComponentType<ShadcnIconProps> = bindPrimitives(
-  SharedIcon,
-  shadcnPrimitives,
-  'ShadcnIcon',
-);
+const icons = {
+  add: Plus,
+  remove: Minus,
+  close: X,
+  check: Check,
+  search: Search,
+  info: Info,
+  warning: TriangleAlert,
+  error: CircleAlert,
+  success: CircleCheck,
+  settings: Settings,
+  appearance: SunMoon,
+  layout: PanelLeft,
+  download: Download,
+  upload: Upload,
+  external: ExternalLink,
+  loading: LoaderCircle,
+};
+import type { IconProps } from
+  '@fastsprout/reacd/adapter-runtime/components/icon/icon.props.js';
+import { ICON_POLICY } from '@fastsprout/reacd/adapter-runtime/core/icon-policy.js';
+import { Spinner } from '../vendor/ui/spinner.js';
+
+export type ShadcnIconProps = IconProps;
+export function ShadcnIcon(properties: IconProps) {
+  const Icon = properties.name === 'loading' ? Spinner : icons[properties.name];
+  const dimension = `${ICON_POLICY.dimensionsRem[properties.size ?? 'medium']}rem`;
+  return (
+    <Icon
+      role={properties.decorative ? undefined : 'img'}
+      aria-label={properties.decorative ? undefined : properties.label}
+      aria-hidden={properties.decorative}
+      style={{ width: dimension, height: dimension }}
+      className="shrink-0 motion-reduce:animate-none"
+    />
+  );
+}

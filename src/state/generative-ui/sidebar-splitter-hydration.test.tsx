@@ -59,7 +59,9 @@ it('hydrates stable IDs, isolated stores and a closed mobile sidebar', () => {
     <GenerativeUI adapter={shadcnAdapter} document={documentValue} registry={server} />,
   );
   document.body.appendChild(container);
-  const controls = screen.getByRole('separator').getAttribute('aria-controls');
+  const outlineId = screen
+    .getByRole('region', { name: 'Outline' })
+    .closest('[data-panel]')?.id;
   const errors: unknown[] = [];
   const view = render(
     <GenerativeUI adapter={shadcnAdapter} document={documentValue} registry={client} />,
@@ -70,11 +72,12 @@ it('hydrates stable IDs, isolated stores and a closed mobile sidebar', () => {
     },
   );
   expect(screen.queryByRole('dialog')).toBeNull();
-  expect(screen.getByRole('separator')).toHaveAttribute('aria-controls', controls);
+  expect(outlineId).toBeTruthy();
+  expect(screen.getByRole('separator')).toHaveAttribute('aria-controls', outlineId);
   fireEvent.keyDown(screen.getByRole('separator'), { key: 'ArrowDown' });
   expect(success(client.read('layout')).value).toEqual([
-    { id: 'outline', share: 51 },
-    { id: 'document', share: 49 },
+    { id: 'outline', share: 55 },
+    { id: 'document', share: 45 },
   ]);
   expect(success(server.read('layout')).value).toEqual([
     { id: 'outline', share: 50 },

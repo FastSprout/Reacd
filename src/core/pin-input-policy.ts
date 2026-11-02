@@ -7,6 +7,8 @@ export const PIN_INPUT_POLICY = {
   maskCharacter: '•',
   placeholder: '○',
   separator: '–',
+  formatLabel: 'Code format',
   numericPattern: '^[0-9]*$',
   alphanumericPattern: '^[a-zA-Z0-9]*$',
+  incompleteMessage: 'Enter the complete code.',
 } as const;
