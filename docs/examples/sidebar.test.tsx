@@ -54,10 +54,12 @@ it(
     );
     for (const variant of ['floating', 'inset', 'sidebar']) {
       await chooseOption(user, 'Sidebar appearance', variant);
-      expect(screen.getByRole('complementary')).toHaveAttribute(
-        'data-variant',
-        variant,
-      );
+      expect(screen.getByRole('complementary')).toBeVisible();
+      expect(
+        screen.getByRole('textbox', {
+          name: 'Sidebar workspace query',
+        }),
+      ).toHaveValue('Workspace query');
     }
   },
   INTERACTION_TIMEOUT_MS,

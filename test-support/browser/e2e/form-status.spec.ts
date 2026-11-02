@@ -18,18 +18,29 @@ for (const profile of ['Spacious', 'Compact']) {
       const form = page.getByRole('form', { name: 'Project form', exact: true });
       await page.getByRole('switch', { name: 'Form is submitting' }).check();
       await expect(form).toHaveAttribute('aria-busy', 'true');
-      const status = page.getByRole('status').filter({
-        hasText: 'Submitting Project form',
-      });
+      const status =
+        test.info().project.name === 'mui'
+          ? page.getByRole('progressbar', { name: 'Submitting Project form' })
+          : page.getByRole('status').filter({ hasText: 'Submitting Project form' });
       await expect(status).toBeVisible();
       expect(
         await status.evaluate((element) => element.closest('[aria-busy="true"]')),
       ).toBeNull();
       expect(await status.evaluate((element) => element.closest('[inert]'))).toBeNull();
-      await expect(form).toHaveAccessibleDescription('Form errors');
-      await expect(form.getByRole('alert', { name: 'Form errors' })).toContainText(
-        'The previous example failed. Retry is available.',
-      );
+      const summary = form.getByRole('alert').filter({
+        hasText: 'The previous example failed. Retry is available.',
+      });
+      await expect(summary).toBeVisible();
+      expect(
+        await summary.evaluate((element) => element.closest('[inert]')),
+      ).toBeNull();
+      const fieldset = form.locator('fieldset').first();
+      await expect(fieldset).toHaveAttribute('inert');
+      if (test.info().project.name !== 'mui') {
+        await expect(fieldset).toHaveAccessibleDescription(
+          'Network: The previous example failed. Retry is available.',
+        );
+      }
       expect(
         await form.evaluate((element) =>
           element instanceof HTMLFormElement ? [...new FormData(element)] : [],
@@ -44,7 +55,7 @@ for (const profile of ['Spacious', 'Compact']) {
       ).toBeVisible();
       await page.getByRole('switch', { name: 'Form is submitting' }).uncheck();
       await expect(status).toHaveCount(0);
-      await expect(form).not.toHaveAttribute('aria-busy');
+      await expect(form).toHaveAttribute('aria-busy', 'false');
       await page.getByRole('button', { name: 'Submit project', exact: true }).click();
       await expect(
         page.getByText('Submission attempts: 1', { exact: true }),

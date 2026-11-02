@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { watchPreviewFailures } from '../preview-failures.js';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 
 const PROFILES = ['Spacious', 'Compact'];
@@ -9,10 +10,35 @@ const TOLERANCE = 1;
 const LONG_LABEL = 'Regional approval and international logistics coordination';
 
 async function fields(page: Page, profile: string) {
+  const failures = watchPreviewFailures(page);
   await page.goto('/');
   await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
   await page.getByRole('option', { name: profile, exact: true }).click();
   await page.getByRole('button', { name: 'Fields', exact: true }).click();
+  if (test.info().project.name === 'mui') {
+    const message = 'Adapter "material-ui" does not support component "Select".';
+    await expect.poll(failures).toContainEqual({
+      name: 'UnsupportedAdapterComponentError',
+      adapterId: 'material-ui',
+      componentName: 'Select',
+      message,
+    });
+    const diagnostic = page.getByRole('alert').filter({
+      has: page.getByText('Cannot load Select', { exact: true }),
+    });
+    await expect(diagnostic).toContainText(message);
+    await expect(diagnostic.getByRole('combobox')).toHaveCount(0);
+    await expect(diagnostic.getByRole('button')).toHaveCount(0);
+    await expect(
+      page.getByRole('combobox', { name: 'Release status', exact: true }),
+    ).toHaveCount(0);
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = '200%';
+      document.documentElement.dir = 'rtl';
+    });
+    return false;
+  }
+  return true;
 }
 
 async function contained(page: Page) {
@@ -20,12 +46,14 @@ async function contained(page: Page) {
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
   ).toBeLessThanOrEqual(width + TOLERANCE);
-  const trigger = page.getByRole('combobox', { name: 'Release status', exact: true });
+  const trigger = page
+    .getByLabel('Release status', { exact: true })
+    .and(page.locator('button[role=combobox]'));
   const box = await trigger.boundingBox();
   if (box === null) throw new Error('Choice trigger must have geometry.');
   expect(box.width).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
   expect(box.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
-  const popup = page.locator('.reacd-base-select-popup:visible');
+  const popup = page.getByRole('listbox', { name: 'Release status', exact: true });
   const bounds = await popup.boundingBox();
   if (bounds === null) throw new Error('Choice popup must have geometry.');
   expect(bounds.x).toBeGreaterThanOrEqual(-TOLERANCE);
@@ -33,13 +61,26 @@ async function contained(page: Page) {
   expect(
     await popup.evaluate((element) => element.scrollWidth - element.clientWidth),
   ).toBeLessThanOrEqual(TOLERANCE);
+  const text = await popup.getByRole('option', { name: LONG_LABEL, exact: true })
+    .evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      return [...range.getClientRects()].map((rect) => ({
+        left: rect.left, right: rect.right,
+      }));
+    });
+  expect(text.length).toBeGreaterThan(0);
+  for (const fragment of text) {
+    expect(fragment.left).toBeGreaterThanOrEqual(bounds.x - TOLERANCE);
+    expect(fragment.right).toBeLessThanOrEqual(bounds.x + bounds.width + TOLERANCE);
+  }
 }
 
 for (const profile of PROFILES) {
   for (const width of WIDTHS) {
     test(`${profile} Select at ${width}px, 200% and RTL`, async ({ page }) => {
       await page.setViewportSize({ width, height: HEIGHT });
-      await fields(page, profile);
+      if (!(await fields(page, profile))) return;
       await page.getByRole('switch', { name: 'Right to left choices' }).check();
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
@@ -52,7 +93,7 @@ for (const profile of PROFILES) {
       await expect(
         page.getByRole('option', { name: LONG_LABEL, exact: true }),
       ).toBeVisible();
-      await expect(page.locator('.reacd-select-positioner:visible')).toHaveCSS(
+      await expect(page.getByRole('listbox', { name: 'Release status' })).toHaveCSS(
         'direction',
         'rtl',
       );
@@ -66,9 +107,11 @@ for (const profile of PROFILES) {
   }
 
   test(`${profile} single/multiple choices preserve native data`, async ({ page }) => {
-    await fields(page, profile);
+    if (!(await fields(page, profile))) return;
     const form = page.getByRole('form', { name: 'Choice form' });
-    const trigger = page.getByRole('combobox', { name: 'Release status', exact: true });
+    const trigger = page
+      .getByLabel('Release status', { exact: true })
+      .and(page.locator('button[role=combobox]'));
     await page.getByRole('button', { name: 'Clear Release status' }).click();
     await page.getByRole('button', { name: 'Save choices' }).click();
     await expect(trigger).toBeFocused();
@@ -90,7 +133,11 @@ for (const profile of PROFILES) {
     ]);
     await page.getByRole('switch', { name: 'Read-only choices' }).check();
     await trigger.click();
-    await page.getByRole('option', { name: 'Draft', exact: true }).click();
+    const draft = page.getByRole('option', { name: 'Draft', exact: true });
+    await expect(draft).toBeDisabled();
+    const bounds = await draft.boundingBox();
+    if (!bounds) throw new Error('Readonly choice must remain visible.');
+    await page.mouse.click(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
     await page.keyboard.press('Escape');
     await expect(trigger).toContainText(LONG_LABEL);
     await page.getByRole('button', { name: 'Save choices' }).click();

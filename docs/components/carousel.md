@@ -1,10 +1,16 @@
 ---
-template: preview.html
 reacd_preview: Carousel
-reacd_preview_height: 560
 ---
 
 # Carousel
+
+## Adapter availability
+
+The current bundled shadcn/ui and Material UI adapters have no native mapping for
+`Carousel`. The TSX examples and behavior below define its closed reacd contract.
+Native SDK integration remains pending. The live preview reports an explicit
+`UnsupportedAdapterComponentError`; compiled source and schema validation alone do
+not verify native rendering or interaction.
 
 Carousel presents controlled slides from validated component content. Inactive slides
 remain mounted while hidden and inert, preserving application edits without exposing

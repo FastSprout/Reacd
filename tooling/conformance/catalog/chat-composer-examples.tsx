@@ -1,8 +1,8 @@
 import { atom, useAtom } from 'jotai';
 import { App, Toggle, VStack } from '@fastsprout/reacd';
-import { ChatPromptExample } from '../../../docs/examples/chat-prompt.js';
-import { ChatPromptSubmitExample } from '../../../docs/examples/chat-prompt-submit.js';
-import { ChatPaletteExample } from '../../../docs/examples/chat-palette.js';
+import { ChatPromptExample } from '../fixtures/chat-prompt.js';
+import { ChatPromptSubmitExample } from '../fixtures/chat-prompt-submit.js';
+import { ChatPaletteExample } from '../fixtures/chat-palette.js';
 
 const rtlAtom = atom(false);
 

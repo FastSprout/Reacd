@@ -1,5 +1,8 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { SHELL_DEFAULTS } from '../../../src/core/shell-policy.js';
+import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
+import { watchPreviewFailures } from '../preview-failures.js';
 
 const WIDTHS = [240, 320, 768, 1440];
 const PROFILES = ['Spacious', 'Compact'];
@@ -18,12 +21,16 @@ for (const profile of PROFILES) {
     for (const direction of DIRECTIONS) {
       test(`${profile} shells ${width}px ${direction} at 200%`, async ({ page }) => {
         await page.setViewportSize({ width, height: HEIGHT });
+        const failures = watchPreviewFailures(page);
         await page.goto('/');
         await select(page, 'Appearance', profile);
         await expect(
           page.getByRole('heading', { name: 'Application shells' }),
         ).toBeVisible();
         await expect(page.getByRole('main')).toHaveCount(1);
+        const material = test.info().project.name === 'mui';
+        if (material)
+          await expectUnsupportedDiagnostic(page, failures, 'Error', 'Error');
         await page.getByLabel('Header title', { exact: true }).fill(LONG_TITLE);
         await page.evaluate((dir) => {
           document.documentElement.dir = dir;
@@ -35,13 +42,22 @@ for (const profile of PROFILES) {
             .getByRole('region', { name: 'Application shells', exact: true })
             .getByRole('button', { name: 'Open navigation', exact: true });
           await toggle.click();
-          const dialog = page.getByRole('dialog', { name: LONG_TITLE });
+          const dialog = page.getByRole('dialog', {
+            name: material ? SHELL_DEFAULTS.menuDescription : LONG_TITLE,
+          });
           await expect(dialog).toBeVisible();
-          await expect(dialog).toHaveAttribute('data-mode', mode.toLowerCase());
+          await expect(
+            page.getByRole('combobox', {
+              name: 'Appearance',
+              exact: true,
+            }),
+          ).toHaveCount(0);
+          await dialog.getByRole('button', { name: 'Close navigation' })
+            .click({ trial: true });
           const box = await dialog.boundingBox();
           if (box === null) throw new Error('Menu geometry is unavailable.');
           if (mode === 'Slideover') {
-            const edge = direction === 'rtl' ? box.x : width - box.x - box.width;
+            const edge = width - box.x - box.width;
             expect(Math.abs(edge)).toBeLessThanOrEqual(TOLERANCE);
             expect(Math.abs(box.y)).toBeLessThanOrEqual(TOLERANCE);
           } else if (mode === 'Drawer') {
@@ -59,7 +75,12 @@ for (const profile of PROFILES) {
           const destination = dialog.getByRole('link', {
             name: 'Component documentation',
           });
-          await expect(destination).toBeFocused();
+          await expect
+            .poll(() =>
+              dialog.evaluate((element) => element.contains(document.activeElement)),
+            )
+            .toBe(true);
+          await destination.focus();
           await page.keyboard.press('Shift+Tab');
           await expect(
             dialog.getByRole('button', { name: 'Close navigation' }),

@@ -1,15 +1,15 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { PageHeroExample } from './page-hero.js';
 
-it('renders the runnable PageHero reference', () => {
+it('introduces the product without stress text or layout controls', () => {
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <ReacdProvider>
       <PageHeroExample />
     </ReacdProvider>,
   );
-  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-  expect(screen.getAllByRole('heading').length).toBeGreaterThan(0);
+  expect(screen.getByRole('heading', { name: 'Build with reacd' })).toBeVisible();
+  expect(screen.queryByRole('switch')).toBeNull();
+  expect(screen.queryByRole('textbox')).toBeNull();
 });

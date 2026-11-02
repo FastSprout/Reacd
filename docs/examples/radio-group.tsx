@@ -13,13 +13,11 @@ const valueAtom = atom('');
 const disabledAtom = atom(false);
 const horizontalAtom = atom(false);
 const statusAtom = atom('No delivery saved.');
-const DESCRIPTION_REPETITIONS = 12;
 const ITEMS = [
   {
     value: 'standard',
     label: 'Standard delivery',
-    description:
-      'Delivery details: ' + 'delivery_configuration_'.repeat(DESCRIPTION_REPETITIONS),
+    description: 'Delivery details: receive tracking updates when your order ships',
   },
   { value: 'unavailable', label: 'Unavailable pickup', disabled: true },
   { value: 'express', label: 'Express delivery', description: 'Priority handling.' },

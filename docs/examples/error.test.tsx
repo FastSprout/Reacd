@@ -11,5 +11,6 @@ it('renders the documented Error declaration', () => {
     </ReacdProvider>,
   );
   expect(screen.getByText('Page unavailable')).toBeVisible();
+  expect(screen.getByRole('region', { name: 'Page unavailable' })).toBeVisible();
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 });

@@ -45,9 +45,7 @@ export function CollapsibleExample() {
             onOpenChange={setNested}
             retainContent
           >
-            <Text>
-              {'Long nested identifier: ' + 'configuration_value_'.repeat(24)}
-            </Text>
+            <Text>Notification settings are shared across this workspace.</Text>
           </Collapsible>
         </VStack>
       </Collapsible>

@@ -22,7 +22,7 @@ describe('documented CheckboxGroup', () => {
     await user.click(screen.getByRole('checkbox', { name: 'SMS notifications' }));
     expect(
       screen.getByRole('checkbox', { name: 'In-app notifications' }),
-    ).toHaveAttribute('aria-disabled', 'true');
+    ).toBeDisabled();
     await user.click(screen.getByRole('button', { name: 'Save channels' }));
     expect(screen.getByText('Saved channels: email, sms')).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Clear channels' }));

@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Switch
-reacd_preview_height: 560
 ---
 
 # Switch
@@ -53,5 +51,5 @@ Generative transport binds `checked` to boolean state with explicit read or read
 access. Read bindings behave as read-only controls. No HTML, classes, styling props, DOM
 events or uncontrolled defaults are exposed.
 
-The compiled [Switch example](../examples/switch.tsx) covers required submission,
-read-only state and host-controlled loading.
+The compiled [Switch example](../examples/switch.tsx) demonstrates one controlled
+publishing setting and required form submission.

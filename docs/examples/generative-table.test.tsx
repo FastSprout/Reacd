@@ -13,6 +13,12 @@ describe('documented generative DataTable state', () => {
       screen.getByRole('checkbox', { name: 'Select row beta' }),
     ).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Sort Amount' }));
+    expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveAttribute(
+      'aria-sort', 'descending',
+    );
+    expect(screen.getByRole('checkbox', { name: 'Select row alpha' }))
+      .toHaveAttribute('aria-checked', 'true');
+    await user.click(screen.getByRole('button', { name: 'Sort Amount' }));
     expect(screen.getByRole('button', { name: 'Previous page' })).toBeDisabled();
     expect(
       within(screen.getByRole('table')).getByText('Sample beta'),

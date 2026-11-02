@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: PinInput
-reacd_preview_height: 560
 ---
 
 # PinInput
@@ -23,9 +21,13 @@ import { PinInput } from '@fastsprout/reacd';
 />;
 ```
 
-Selection, arrows, deletion, and paste work through one accessible input. Pasted
-whitespace and hyphens are removed. Numeric mode accepts ASCII digits;
+Selection, arrows, deletion, and paste work through one accessible input. In
+shadcn/ui, pasted whitespace and hyphens are removed. Numeric mode accepts ASCII digits;
 `inputType="alphanumeric"` also accepts ASCII letters, preserving case.
+
+Material UI uses a native TextField for the canonical unseparated code. Grouping
+appears as a format hint. Native paste accepts code characters directly; it does
+not apply the shadcn paste transformer. Masking uses the actual password input.
 
 `mask` hides characters on screen. `otp` enables one-time-code autocomplete; whether SMS
 autofill appears depends on the browser and operating system. Masking does not encrypt

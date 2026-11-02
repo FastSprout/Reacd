@@ -1,6 +1,6 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { App } from './app.js';
 
 describe('component workbench', () => {
@@ -14,7 +14,11 @@ describe('component workbench', () => {
     await user.click(await screen.findByRole('button', { name: 'Sample projects' }));
     expect(screen.getByText('Selected Sample projects locally.')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Next page' }));
-    expect(screen.getByText('Selected page: 2. Page size: 10.')).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('navigation', { name: 'Sample result pages' })).getByRole(
+        'status',
+      ),
+    ).toHaveTextContent('Page 2 of 3');
   });
   it('filters component families and exposes a useful empty state', async () => {
     const user = userEvent.setup();
@@ -46,8 +50,13 @@ describe('component workbench', () => {
     await user.click(screen.getByLabelText('Notes'));
     await user.paste('Notes');
     await user.click(screen.getByText('Receive updates'));
+    const nativeSubmit = vi.fn<(event: Event) => void>();
+    screen.getByRole('form', { name: 'Example profile' })
+      .addEventListener('submit', nativeSubmit, { once: true });
     await user.click(screen.getByRole('button', { name: 'Save example' }));
-    expect(screen.getByText(/Saved locally: Example/)).toBeInTheDocument();
+    expect(nativeSubmit).toHaveBeenCalledTimes(1);
+    expect(nativeSubmit.mock.calls[0]?.[0].defaultPrevented).toBe(true);
+    expect(await screen.findByText(/Saved locally: Example/)).toBeInTheDocument();
   });
 
   it('activates and resets examples without enabling disabled actions', async () => {
@@ -126,14 +135,22 @@ describe('component workbench', () => {
       await user.keyboard('{ArrowDown}');
       await user.click(await screen.findByRole('option', { name: state }));
       if (state === 'Error') {
-        expect(screen.getByRole('alert')).toHaveTextContent('Example failure');
+        expect(
+          within(screen.getByRole('table', { name: 'Example inventory' })).getByRole(
+            'alert',
+          ),
+        ).toHaveTextContent('Example failure');
       } else if (state === 'Ready') {
         expect(
           screen.getByRole('table', { name: 'Example inventory' }),
         ).toBeInTheDocument();
       } else {
         const message = state === 'Empty' ? 'No data available.' : 'Loading data…';
-        expect(screen.getByText(message)).toHaveAttribute('role', 'status');
+        expect(
+          within(screen.getByRole('table', { name: 'Example inventory' })).getByRole(
+            'status',
+          ),
+        ).toHaveTextContent(message);
       }
     }
   });

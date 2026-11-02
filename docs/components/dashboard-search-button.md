@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: DashboardSearchButton
-reacd_preview_height: 560
 ---
 
 # DashboardSearchButton

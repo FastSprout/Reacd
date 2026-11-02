@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { hasInlineOverflow } from '../inline-overflow.js';
 import type { Locator, Page } from '@playwright/test';
 
 const WIDTHS = [240, 320, 375, 600, 768, 1024, 1440, 1920];
@@ -16,16 +17,10 @@ async function family(page: Page, name: string) {
   await page.getByRole('button', { name, exact: true }).click();
 }
 async function bounds(page: Page, region: Locator) {
-  const escaped = await region.evaluate((element, tolerance) => {
-    const outer = element.getBoundingClientRect();
-    return Array.from(element.querySelectorAll('button,p,span,h5')).some((child) => {
-      const box = child.getBoundingClientRect();
-      return (
-        box.width > 0 &&
-        (box.left < outer.left - tolerance || box.right > outer.right + tolerance)
-      );
-    });
-  }, TOLERANCE);
+  const escaped = await region.evaluate(hasInlineOverflow, {
+    selectors: 'button,p,span,h5',
+    tolerance: TOLERANCE,
+  });
   expect(escaped).toBe(false);
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),

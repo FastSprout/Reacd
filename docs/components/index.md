@@ -1,5 +1,12 @@
 # Components
 
+## Adapter availability
+
+This catalog defines the closed component contracts. Native adapter coverage is
+currently partial. Each reference identifies its example and contract; an absent mapping
+reports an explicit unsupported component error. The Editor family and CodeEditor are
+awaiting a verified SDK integration in both bundled adapters.
+
 Compose application views from reacd components. Properties describe logical intent,
 values, and actions. They do not expose native tags, class names, inline styles, or
 vendor-specific styling controls.

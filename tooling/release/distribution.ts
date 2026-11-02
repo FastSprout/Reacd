@@ -49,6 +49,11 @@ function distributionSchema(policy: PublicationPolicy) {
         registry: z.literal(policy.registry),
       }),
     })
+    .refine(
+      (value) =>
+        policy.name !== PUBLICATION_POLICY.name ||
+        value.dependencies[SHADCN_PUBLICATION_POLICY.name] === value.version,
+    )
     .refine((value) =>
       isDeepStrictEqual(
         value.peerDependencies,

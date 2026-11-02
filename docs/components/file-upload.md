@@ -1,10 +1,16 @@
 ---
-template: preview.html
 reacd_preview: FileUpload
-reacd_preview_height: 560
 ---
 
 # FileUpload
+
+## Adapter availability
+
+The current bundled shadcn/ui and Material UI adapters have no native mapping for
+`FileUpload`. The TSX examples and behavior below define its closed reacd contract.
+Native SDK integration remains pending. The live preview reports an explicit
+`UnsupportedAdapterComponentError`; compiled source and schema validation alone do
+not verify native rendering or interaction.
 
 FileUpload reads actual local file contents into a host-controlled, immutable list. The
 host owns persistence and network operations. The component performs no upload.
@@ -51,6 +57,7 @@ reader/writer permissions and the same cardinality/type constraints. The initial
 document budget remains one million characters; larger payloads belong in runtime state
 updates.
 
-The compiled live example uses Jotai, native form validation, real byte decoding,
-protection, host rejection and App direction. Image previews, folders, arbitrary accept
-expressions and network progress are outside this curated component.
+The example source declares Jotai state, form validation, byte decoding, protection,
+host rejection and App direction for the pending native integration. Image previews,
+folders, arbitrary accept expressions and network progress are outside this curated
+component.

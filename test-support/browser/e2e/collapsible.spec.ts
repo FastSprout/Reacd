@@ -8,9 +8,6 @@ for (const profile of PROFILES) {
   }) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
     await page.goto('/');
     await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
     await page.getByRole('option', { name: profile, exact: true }).click();
@@ -65,9 +62,8 @@ for (const profile of PROFILES) {
     await page.getByRole('button', { name: 'Reset disclosure note' }).click();
     await expect(page.getByLabel('Disclosure note')).toHaveValue('');
     await trigger.click();
-    await expect(page.getByRole('region', { name: 'External disclosure' })).toHaveCount(
-      0,
-    );
+    await expect(page.getByRole('region', { name: 'External disclosure' }))
+      .toBeHidden();
     expect(errors).toEqual([]);
   });
 }

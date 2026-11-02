@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: ChangelogVersions
-reacd_preview_height: 560
 ---
 
 # ChangelogVersions
@@ -27,7 +25,7 @@ Dates use canonical ISO calendar strings. An explicit display label requires a d
 otherwise the date string is displayed verbatim. No ambient timezone, clock or locale
 changes hydration output. Images require validated src and meaningful alt, reserve
 engine-owned dimensions, and display an accessible fallback when unavailable. The
-reference's missing image is an explicit failure-state placeholder, not a product asset.
+reference uses local documentation artwork; resource failures are exercised in tests.
 
 Variants are outline, soft, subtle, ghost and naked. Horizontal orientation wraps when
 space is insufficient. ChangelogVersion's optional indicator is decorative and defaults

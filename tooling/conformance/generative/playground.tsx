@@ -5,7 +5,7 @@ import {
   Alert,
   Button,
   Card,
-  CodeEditor,
+  Textarea,
   HStack,
   Section,
   SplitView,
@@ -65,11 +65,7 @@ export function GenerativePlayground() {
     >
       <SplitView>
         <Card>
-          <CodeEditor
-            label="JSON declaration"
-            value={source}
-            onValueChange={setSource}
-          />
+          <Textarea label="JSON declaration" value={source} onValueChange={setSource} />
           <HStack>
             <Button label="Render declaration" onPress={apply} />
             <Button label="Reset declaration" intent="secondary" onPress={reset} />

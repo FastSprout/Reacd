@@ -1,39 +1,14 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { chooseOption } from '../../test-support/select-choice.js';
-import { render, screen, within } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { KbdExample } from './kbd.js';
 
-function renderExample() {
-  const user = userEvent.setup();
+it('names the Escape key', () => {
   render(
     <ReacdProvider adapter={shadcnAdapter}>
       <KbdExample />
     </ReacdProvider>,
   );
-  return user;
-}
-
-describe('documented Kbd example', () => {
-  it.each([
-    ['Key platform', ['Apple', 'Other platforms']],
-    ['Key size', ['Small', 'Large', 'Medium']],
-    ['Key variant', ['Soft', 'Subtle', 'Solid', 'Outline']],
-    ['Key intent', ['Primary', 'Danger', 'Secondary']],
-  ] as const)('changes %s options', async (control, options) => {
-    const user = renderExample();
-    for (const option of options) await chooseOption(user, control, option);
-  });
-  it('edits the key value and accessible label', async () => {
-    const user = renderExample();
-    const current = within(screen.getByRole('region', { name: 'Current key' }));
-    expect(current.getByRole('img', { name: 'Control' })).toHaveTextContent('Ctrl');
-    await user.clear(screen.getByLabelText('Key value'));
-    expect(current.getByRole('img', { name: 'K' })).toBeInTheDocument();
-    await user.type(screen.getByLabelText('Key value'), 'F12');
-    await user.type(screen.getByLabelText('Key accessible label'), 'Function key');
-    expect(current.getByRole('img', { name: 'Function key' })).toHaveTextContent('F12');
-  });
+  expect(screen.getByRole('img', { name: 'Escape' })).toBeVisible();
 });

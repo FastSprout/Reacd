@@ -1,23 +1,17 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { ChatShimmerExample } from './chat-shimmer.js';
 
-it('runs progress text edits and switches to plain text when inactive', async () => {
-  const user = userEvent.setup();
+it('finishes sample progress without hiding its status text', async () => {
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <ReacdProvider>
       <ChatShimmerExample />
     </ReacdProvider>,
   );
-  const input = screen.getByRole('textbox', { name: 'Example progress text' });
-  await user.clear(input);
-  expect(screen.getByRole('status')).toHaveTextContent('Example progress');
-  await user.type(input, 'Updated example progress');
-  expect(screen.getByRole('status')).toHaveTextContent('Updated example progress');
-  await user.click(screen.getByRole('switch', { name: 'Animate example status' }));
+  expect(screen.getByRole('status')).toHaveTextContent('Processing a sample task.');
+  await userEvent.click(screen.getByRole('button', { name: 'Finish sample task' }));
   expect(screen.queryByRole('status')).toBeNull();
-  expect(screen.getByText('Updated example progress')).toBeVisible();
+  expect(screen.getByText('Sample task finished.')).toBeVisible();
 });

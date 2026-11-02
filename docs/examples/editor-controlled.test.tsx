@@ -1,49 +1,55 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { act, render, screen, waitFor } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-import { afterEach, beforeEach, expect, it } from 'vitest';
-import { ReacdProvider } from '@fastsprout/reacd';
-import { installEditorGeometry } from '../../test-support/editor-geometry.js';
+import { act, render } from '@testing-library/react';
+import type { EditorEdit } from '@fastsprout/reacd';
+import { expect, it } from 'vitest';
+import { editorSchema } from '../../src/schema/editor/editor.schema.js';
+import { toggleSchema } from '../../src/schema/toggle/toggle.schema.js';
+import { buttonComponentSchema as buttonSchema } from
+  '../../src/schema/button/button.schema.js';
+import {
+  exampleDeclarationProbe,
+  expectUnsupportedExample,
+} from '../../test-support/example-declaration-probe.js';
 import { EditorControlledExample } from './editor-controlled.js';
 
-let restore: () => void = () => undefined;
-beforeEach(() => {
-  restore = installEditorGeometry();
-});
-afterEach(() => restore());
-
-it('accepts atomic split/removal and rejects a later structural proposal', async () => {
-  const user = userEvent.setup();
+it('reports native unavailability and retains atomic document/selection vetoes', () => {
+  expectUnsupportedExample(<EditorControlledExample />, 'Editor');
+  const probe = exampleDeclarationProbe();
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <probe.Surface>
       <EditorControlledExample />
-    </ReacdProvider>,
+    </probe.Surface>,
   );
-  const editor = await screen.findByRole('textbox', { name: 'Controlled notes' });
-  expect(screen.getByText('Accepted blocks: 1')).toBeVisible();
-  expect(screen.getByText('Atomic edit requests: 0')).toBeVisible();
-  act(() => editor.focus());
-  await user.keyboard('{Enter}');
-  await waitFor(() => expect(screen.getByText('Accepted blocks: 2')).toBeVisible());
-  expect(editor.querySelectorAll('p')).toHaveLength(2);
-  expect(screen.queryByRole('alert')).toBeNull();
-  await user.keyboard('{Backspace}');
-  await waitFor(() => expect(screen.getByText('Accepted blocks: 1')).toBeVisible());
-  expect(editor.querySelectorAll('p')).toHaveLength(1);
-  expect(screen.queryByRole('alert')).toBeNull();
-  await user.click(screen.getByRole('switch', { name: 'Reject atomic edits' }));
-  act(() => editor.focus());
-  const previousRequests = screen.getByText(/^Atomic edit requests:/).textContent;
-  await user.keyboard('{Enter}');
-  await waitFor(() =>
-    expect(screen.getByText(/^Atomic edit requests:/).textContent).not.toBe(
-      previousRequests,
-    ),
+  const read = () => {
+    const value = probe.read('Editor', editorSchema, 'Controlled notes');
+    if (!('onEditChange' in value)) throw new Error('Expected atomic edit callback');
+    return value;
+  };
+  const initial = { value: read().value, selection: read().selection };
+  const split: EditorEdit = {
+    value: {
+      version: 1,
+      blocks: [
+        ...initial.value.blocks,
+        { type: 'paragraph', id: 'second', content: [] },
+      ],
+    },
+    selection: {
+      anchor: { blockId: 'second', offset: 0 },
+      focus: { blockId: 'second', offset: 0 },
+    },
+  };
+  act(() => read().onEditChange(split));
+  expect({ value: read().value, selection: read().selection }).toEqual(split);
+  expect(probe.texts()).toContain('Accepted blocks: 2');
+  act(() => read().onEditChange(initial));
+  expect(probe.texts()).toContain('Accepted blocks: 1');
+  act(() =>
+    probe.read('Toggle', toggleSchema, 'Reject atomic edits').onCheckedChange(true),
   );
-  await waitFor(() => expect(editor.querySelectorAll('p')).toHaveLength(1));
-  expect(screen.getByText('Accepted blocks: 1')).toBeVisible();
-  expect(screen.queryByRole('alert')).toBeNull();
-  await user.click(screen.getByRole('button', { name: 'Restore atomic draft' }));
-  expect(screen.getByText('Atomic edit requests: 0')).toBeVisible();
-  expect(editor.textContent).toBe('Controlled draft.');
+  act(() => read().onEditChange(split));
+  expect({ value: read().value, selection: read().selection }).toEqual(initial);
+  expect(probe.texts()).toContain('Atomic edit requests: 3');
+  act(() => probe.read('Button', buttonSchema, 'Restore atomic draft').onPress());
+  expect({ value: read().value, selection: read().selection }).toEqual(initial);
+  expect(probe.texts()).toContain('Atomic edit requests: 0');
 });

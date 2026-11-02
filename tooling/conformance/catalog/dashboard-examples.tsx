@@ -1,5 +1,5 @@
 import { Section } from '@fastsprout/reacd';
-import { DashboardExample } from '../../../docs/examples/dashboard.js';
+import { DashboardExample } from '../fixtures/dashboard.js';
 
 export function DashboardExamples() {
   return (

@@ -22,31 +22,21 @@ for (const profile of ['Spacious', 'Compact']) {
     const triggerBox = await role.boundingBox();
     if (triggerBox === null) throw new Error('Missing visible role trigger.');
     expect(triggerBox.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
-    const mirror = region.locator(
-      '.reacd-select-entry > input[aria-hidden="true"][tabindex="-1"]',
-    );
-    await expect(mirror).toHaveCount(1);
+    expect(triggerBox.x).toBeGreaterThanOrEqual(0);
+    expect(triggerBox.x + triggerBox.width).toBeLessThanOrEqual(240);
     expect(
-      await mirror.evaluate((element) => {
-        const style = getComputedStyle(element);
-        return {
-          width: style.width,
-          height: style.height,
-          position: style.position,
-          clipPath: style.clipPath,
-        };
-      }),
-    ).toEqual({
-      width: '1px',
-      height: '1px',
-      position: 'fixed',
-      clipPath: 'inset(50%)',
-    });
+      await role.evaluate((element) =>
+        element.closest('form')?.getAttribute('aria-label'),
+      ),
+    ).toBe('Local credential example');
     for (const flag of ['loading', 'disabled']) {
+      const hostFlag = await region.getByRole('switch', {
+        name: `Auth example ${flag}`,
+      }).elementHandle();
+      if (hostFlag === null) throw new Error('Missing native host switch.');
       await role.click();
       const option = page.getByRole('option', { name: 'Administrator', exact: true });
       await expect(option).toBeVisible();
-      const hostFlag = region.getByRole('switch', { name: `Auth example ${flag}` });
       await hostFlag.evaluate((element) => {
         if (!(element instanceof HTMLElement)) throw new Error('Missing host switch.');
         element.click();

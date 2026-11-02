@@ -18,6 +18,7 @@ const PUBLIC_ENTRIES = new Set([
   'jsx-runtime.ts',
   'jsx-dev-runtime.ts',
   'bootstrap.ts',
+  'styles.ts',
 ]);
 
 export function layerOf(file: string, root: string): number {

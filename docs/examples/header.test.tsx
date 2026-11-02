@@ -48,9 +48,14 @@ describe('documented Header example', () => {
       await chooseOption(user, 'Header menu mode', mode);
       await user.click(screen.getByRole('button', { name: 'Open navigation' }));
       expect(screen.getByRole('dialog')).toHaveAttribute(
-        'data-mode',
-        mode.toLowerCase(),
+        'data-slot',
+        mode === 'Modal' ? 'dialog-content' : 'sheet-content',
       );
+      if (mode !== 'Modal') {
+        expect(screen.getByRole('dialog')).toHaveAttribute(
+          'data-side', mode === 'Drawer' ? 'bottom' : 'right',
+        );
+      }
       await user.click(screen.getByRole('button', { name: 'Close navigation' }));
     }
     await user.type(title, 'Edited header');

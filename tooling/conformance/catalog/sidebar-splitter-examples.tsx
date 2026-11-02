@@ -1,6 +1,6 @@
 import { Section, VStack } from '@fastsprout/reacd';
-import { SidebarExample } from '../../../docs/examples/sidebar.js';
-import { SplitterExample } from '../../../docs/examples/splitter.js';
+import { SidebarExample } from '../fixtures/sidebar.js';
+import { SplitterExample } from '../fixtures/splitter.js';
 
 export function SidebarSplitterExamples() {
   return (

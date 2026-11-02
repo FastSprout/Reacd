@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: PageLogos
-reacd_preview_height: 560
 ---
 
 # PageLogos
@@ -26,5 +24,5 @@ retries it; stable keys preserve identity when items reorder.
 
 This adapter provides a static grid. It does not expose marquee animation or accept
 native image props, HTML, classes or CSS. Supply your own licensed brand assets. The
-reference example deliberately uses unavailable-image placeholders and makes no customer
-or partnership claim.
+reference example uses local documentation artwork and makes no customer or partnership
+claim.

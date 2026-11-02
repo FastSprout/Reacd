@@ -1,20 +1,23 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { act, render } from '@testing-library/react';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from '@fastsprout/reacd';
+import { codeEditorSchema } from '../../src/schema/code-editor/code-editor.schema.js';
+import {
+  exampleDeclarationProbe,
+  expectUnsupportedExample,
+} from '../../test-support/example-declaration-probe.js';
 import { CodeEditorExample } from './code-editor.js';
 
-it('runs the CodeEditor public example', async () => {
-  const user = userEvent.setup();
+it('reports native unavailability and retains accepted source state', () => {
+  expectUnsupportedExample(<CodeEditorExample />, 'CodeEditor');
+  const probe = exampleDeclarationProbe();
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <probe.Surface>
       <CodeEditorExample />
-    </ReacdProvider>,
+    </probe.Surface>,
   );
-  const source = screen.getByRole('textbox', { name: 'Editable source' });
-  await user.clear(source);
-  await user.type(source, 'Updated source');
-  expect(source).toHaveValue('Updated source');
-  expect(screen.getByText('Current source: Updated source')).toBeVisible();
+  const read = () => probe.read('CodeEditor', codeEditorSchema, 'Editable source');
+  expect(read().value).toBe('Draft source');
+  act(() => read().onValueChange('Updated source'));
+  expect(read().value).toBe('Updated source');
+  expect(probe.texts()).toContain('Current source: Updated source');
 });

@@ -7,6 +7,7 @@ import { SeparatorExample } from '../../../docs/examples/separator.js';
 import { AppExample } from '../../../docs/examples/app.js';
 import { ErrorExample } from '../../../docs/examples/error.js';
 import { ThemeExample } from '../../../docs/examples/theme.js';
+import { ViewBoundary } from '../loading/view-boundary.js';
 
 export function ShellExamples() {
   return (
@@ -19,7 +20,7 @@ export function ShellExamples() {
         <FooterExample />
         <AppExample />
         <ThemeExample />
-        <ErrorExample />
+        <ViewBoundary label="Error"><ErrorExample /></ViewBoundary>
       </VStack>
     </Section>
   );

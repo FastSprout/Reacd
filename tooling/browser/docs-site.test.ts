@@ -2,7 +2,7 @@ import { fileURLToPath, URL as NodeURL } from 'node:url';
 import { expect, it } from 'vitest';
 import site from '../../vite.site.config.js';
 
-it('serves only the built MkDocs multi-page site through Vite preview', () => {
+it('serves only the generated static reacd site through Vite preview', () => {
   expect(site).toEqual({
     root: fileURLToPath(new NodeURL('../../', import.meta.url)),
     appType: 'mpa',

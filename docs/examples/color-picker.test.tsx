@@ -1,41 +1,50 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { act, render } from '@testing-library/react';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from '@fastsprout/reacd';
+import { colorPickerSchema } from '../../src/schema/color-picker/index.js';
+import { toggleSchema } from '../../src/schema/toggle/toggle.schema.js';
+import { buttonComponentSchema as buttonSchema } from
+  '../../src/schema/button/button.schema.js';
+import { formSchema } from '../../src/schema/form/form.schema.js';
+import { appSchema } from '../../src/schema/app/app.schema.js';
+import {
+  exampleDeclarationProbe,
+  expectUnsupportedExample,
+} from '../../test-support/example-declaration-probe.js';
 import { ColorPickerExample } from './color-picker.js';
-it('runs color, rejection, protection and form examples', async () => {
-  const user = userEvent.setup();
+
+it('reports native unavailability and preserves color veto/protection metadata', () => {
+  expectUnsupportedExample(<ColorPickerExample />, 'ColorPicker');
+  const probe = exampleDeclarationProbe();
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <probe.Surface>
       <ColorPickerExample />
-    </ReacdProvider>,
+    </probe.Surface>,
   );
-  await user.click(screen.getByRole('button', { name: 'Black preset' }));
-  const hex = screen.getByRole('textbox', { name: 'Reference color hexadecimal' });
-  expect(hex).toHaveValue('#000000ff');
-  await user.click(screen.getByRole('switch', { name: 'Reject color changes' }));
-  await user.click(screen.getByRole('button', { name: 'Green preset' }));
-  expect(hex).toHaveValue('#000000ff');
-  await user.click(screen.getByRole('switch', { name: 'Read-only color' }));
-  expect(hex).toHaveAttribute('readonly');
-  await user.click(screen.getByRole('switch', { name: 'Disable color' }));
-  expect(hex).toBeDisabled();
-  await user.click(screen.getByRole('button', { name: 'Restore sample color' }));
-  expect(hex).toHaveValue('#33aa6680');
-  await user.click(screen.getByRole('switch', { name: 'Disable color' }));
-  await user.click(screen.getByRole('switch', { name: 'Read-only color' }));
-  await user.click(screen.getByRole('switch', { name: 'Reject color changes' }));
-  await user.click(screen.getByRole('switch', { name: 'Right to left colors' }));
-  const form = screen.getByRole('form');
-  if (!(form instanceof HTMLFormElement)) throw new Error('Missing form');
-  expect(
-    [...form.elements]
-      .filter(
-        (element) => element instanceof HTMLInputElement && !element.checkValidity(),
-      )
-      .map((element) => element.outerHTML),
-  ).toEqual([]);
-  await user.click(screen.getByRole('button', { name: 'Save color' }));
-  expect(screen.getByText('Color saved.')).toBeVisible();
+  const read = () => probe.read('ColorPicker', colorPickerSchema, 'Reference color');
+  const toggle = (label: string) =>
+    act(() => {
+      const value = probe.read('Toggle', toggleSchema, label);
+      value.onCheckedChange(!value.checked);
+    });
+  expect(read().value).toBe('#33aa6680');
+  act(() => read().onValueChange('#000000ff'));
+  expect(read().value).toBe('#000000ff');
+  toggle('Reject color changes');
+  act(() => read().onValueChange('#33aa6680'));
+  expect(read().value).toBe('#000000ff');
+  toggle('Read-only color');
+  toggle('Disable color');
+  expect(read().readOnly).toBe(true);
+  expect(read().disabled).toBe(true);
+  act(() => probe.read('Button', buttonSchema, 'Restore sample color').onPress());
+  expect(read().value).toBe('#33aa6680');
+  toggle('Disable color');
+  toggle('Read-only color');
+  toggle('Reject color changes');
+  toggle('Right to left colors');
+  expect(probe.read('App', appSchema).direction).toBe('rtl');
+  expect(read().readOnly).toBe(false);
+  expect(read().disabled).toBe(false);
+  act(() => probe.read('Form', formSchema, 'Color form').onSubmit());
+  expect(probe.texts()).toContain('Color saved.');
 });

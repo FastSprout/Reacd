@@ -15,12 +15,17 @@ async function fields(page: Page, profile: string) {
 }
 
 async function contained(page: Page) {
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth),
-  ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + ROUNDING_TOLERANCE);
-  for (const input of await page.locator('.reacd-input > input:not([hidden])').all()) {
-    const box = await input.boundingBox();
-    if (box === null) throw new Error('Visible input must have geometry.');
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + ROUNDING_TOLERANCE);
+  for (const label of ['Contact email', 'Project name']) {
+    const input = page.getByRole('textbox', { name: label, exact: true });
+    await expect(input).toBeVisible();
+    const box = await input.evaluate((element) => {
+      const target = element.closest('.MuiInputBase-root') ?? element;
+      const bounds = target.getBoundingClientRect();
+      return { height: bounds.height };
+    });
     expect(box.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
     expect(
       await input.evaluate((element, tolerance) => {

@@ -29,10 +29,11 @@ describe('documented feedback examples', () => {
     expect(
       screen.getByRole('button', { name: 'Ada Lovelace' }).closest('[dir]'),
     ).toHaveAttribute('dir', 'rtl');
-    expect(screen.getByRole('button', { name: 'Ada Lovelace' })).toHaveAttribute(
-      'data-orientation',
-      'vertical',
-    );
+    expect(
+      screen
+        .getByRole('button', { name: 'Ada Lovelace' })
+        .classList.contains('flex-col'),
+    ).toBe(true);
     await user.click(screen.getByRole('switch', { name: 'Disable profile action' }));
     expect(screen.getByRole('button', { name: 'Ada Lovelace' })).toBeDisabled();
     await user.click(screen.getByRole('switch', { name: 'Vertical identity' }));
@@ -63,7 +64,7 @@ describe('documented feedback examples', () => {
     );
     await user.clear(screen.getByLabelText('Progress segment label'));
     await user.type(screen.getByLabelText('Progress segment label'), 'Apps');
-    expect(screen.getByText('Apps')).toBeInTheDocument();
+    expect(screen.getByText('Apps: 25 / 128')).toBeInTheDocument();
   });
   it('runs banner actions, closes through state and restores visibility', async () => {
     const user = userEvent.setup();

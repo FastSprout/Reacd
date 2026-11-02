@@ -61,7 +61,7 @@ for (const profile of PROFILES) {
         ).toBeVisible();
         const loading = region.getByRole('switch', { name: 'Auth example loading' });
         await loading.check();
-        const status = form.getByRole('status');
+        const status = region.getByRole('status');
         await expect(status).toHaveText('Submitting');
         expect(
           await status.evaluate(
@@ -76,13 +76,13 @@ for (const profile of PROFILES) {
         await expect(email).toBeDisabled();
         await disabled.uncheck();
         await expect(email).toHaveValue('retained@example.com');
-        const logos = region.getByRole('region', { name: 'Example placeholder marks' });
-        await expect(
-          logos.getByRole('img', { name: 'First image placeholder' }),
-        ).toContainText('Image unavailable:');
+        const logos = region.getByRole('list', { name: 'Documentation artwork' });
+        await expect(logos.getByRole('img', {
+          name: 'Light appearance artwork', exact: true,
+        })).toBeVisible();
         await region.getByRole('button', { name: 'Reverse example marks' }).click();
         await expect(logos.getByRole('img').first()).toHaveAccessibleName(
-          'Second image placeholder',
+          'Dark appearance artwork',
         );
         await appearance.click();
         await page
@@ -92,11 +92,11 @@ for (const profile of PROFILES) {
           })
           .click();
         await expect(email).toHaveValue('retained@example.com');
-        const escaped = await measureAuthMediaEscapes(region, TOLERANCE);
-        expect(escaped).toEqual([]);
-        expect(
-          await page.evaluate(() => document.documentElement.scrollWidth),
-        ).toBeLessThanOrEqual(width + TOLERANCE);
+        await expect.poll(() => measureAuthMediaEscapes(region, TOLERANCE))
+          .toEqual([]);
+        await expect.poll(() => page.evaluate(() =>
+          document.documentElement.scrollWidth))
+          .toBeLessThanOrEqual(width + TOLERANCE);
         if (profile === 'Compact' && width === 320 && direction === 'rtl')
           await region.screenshot({ path: '.cache/auth-media-Compact-320-rtl.png' });
       });

@@ -1,10 +1,15 @@
 ---
-template: preview.html
 reacd_preview: EditorToolbar
-reacd_preview_height: 560
 ---
 
 # EditorToolbar
+
+## Adapter availability
+
+The Editor family currently has no native mapping in either bundled adapter. The TSX
+declarations and behavior below describe its closed contract, pending a verified SDK
+integration. The preview currently reports an explicit unsupported component error.
+Schema validation and compiled source do not establish native editing support.
 
 Declare formatting commands inside the nearest Editor's toolbar slot. The adapter
 resolves availability, active formatting and focus from that editor's private scope.
@@ -55,6 +60,6 @@ Optional generative EditorToolbar nodes contain only literal closed options. The
 command scope comes from the containing rendered Editor; commands are not remote actions
 or arbitrary state expressions. Normal selection stays private.
 
-Run the compiled [EditorToolbar example](../examples/editor-toolbar.tsx) in the
-component preview. It includes link/history commands and host-controlled toolbar
-protection. See [Editor](editor.md) for the document and controlled-state contract.
+The [EditorToolbar source](../examples/editor-toolbar.tsx) declares link/history
+commands and host-controlled toolbar protection. See [Editor](editor.md) for the
+document and controlled-state contract.

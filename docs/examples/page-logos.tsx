@@ -2,24 +2,24 @@ import { atom, useAtom } from 'jotai';
 import { Button, PageLogos, Text, VStack } from '@fastsprout/reacd';
 
 const reversedAtom = atom(false);
-const placeholders = [
-  { key: 'one', src: '/unavailable-logo-one.png', alt: 'First image placeholder' },
-  { key: 'two', src: '/unavailable-logo-two.png', alt: 'Second image placeholder' },
+const artwork = [
+  { key: 'one', src: '/color-mode-light.svg', alt: 'Light appearance artwork' },
+  { key: 'two', src: '/color-mode-dark.svg', alt: 'Dark appearance artwork' },
 ] as const;
 
 export function PageLogosExample() {
   const [reversed, setReversed] = useAtom(reversedAtom);
   return (
     <VStack>
-      <Text>Explicit unavailable-image placeholders, not customer logos.</Text>
+      <Text>Local documentation artwork, not customer endorsements.</Text>
       <Button
         label="Reverse example marks"
         onPress={() => setReversed((value) => !value)}
       />
       <PageLogos
-        label="Example placeholder marks"
-        title="Image fallback examples"
-        items={reversed ? [...placeholders].reverse() : placeholders}
+        label="Documentation artwork"
+        title="Appearance artwork"
+        items={reversed ? [...artwork].reverse() : artwork}
       />
     </VStack>
   );

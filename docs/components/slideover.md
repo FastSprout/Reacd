@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Slideover
-reacd_preview_height: 560
 ---
 
 # Slideover

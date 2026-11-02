@@ -1,10 +1,16 @@
 ---
-template: preview.html
 reacd_preview: ColorPicker
-reacd_preview_height: 560
 ---
 
 # ColorPicker
+
+## Adapter availability
+
+The current bundled shadcn/ui and Material UI adapters have no native mapping for
+`ColorPicker`. The TSX examples and behavior below define its closed reacd contract.
+Native SDK integration remains pending. The live preview reports an explicit
+`UnsupportedAdapterComponentError`; compiled source and schema validation alone do
+not verify native rendering or interaction.
 
 ColorPicker edits a host-controlled canonical color using a two-dimensional color area,
 hue, optional alpha, labelled presets and hexadecimal entry.
@@ -47,7 +53,7 @@ keyboard direction. SSR uses deterministic English labels and Latin digits. No l
 viewport is inferred from ambient browser settings.
 
 Optional generative UI binds text state with the mode-specific canonical constraint.
-Read bindings protect interaction. Apps and server requests use isolated stores. The
-compiled live example demonstrates Jotai, presets, native forms, host rejection,
-protection and direction. Arbitrary CSS colors, custom renderers and SDK props are not
-part of the public contract.
+Read bindings protect interaction. Apps and server requests use isolated stores.
+The example source declares Jotai state, presets, forms, host rejection, protection
+and direction for the pending native integration. Arbitrary CSS colors, custom
+renderers and SDK props are outside the public contract.

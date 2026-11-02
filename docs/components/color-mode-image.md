@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: ColorModeImage
-reacd_preview_height: 560
 ---
 
 # ColorModeImage
@@ -11,7 +9,7 @@ An accessible image with separate sources for resolved light and dark modes.
 <!-- reacd-live-preview -->
 
 ```tsx
---8<-- "examples/color-mode.tsx"
+--8<-- "examples/color-mode-image.tsx"
 ```
 
 ```tsx
@@ -33,5 +31,8 @@ Loading retains the accessible name and marks the image busy. Failure displays a
 fallback. Source changes reset that lifecycle. Generative mode is a resolved literal or
 read text binding and cannot write application state.
 
-The compiled [color-mode example](../examples/color-mode.tsx) uses explicit workspace
+The compiled [example](../examples/color-mode-image.tsx) uses explicit workspace
 illustrations to demonstrate palette-aware assets.
+
+The shared [appearance wrapper](../examples/appearance-preview.tsx) applies the
+selected light/dark palette. The example above contains only this control.

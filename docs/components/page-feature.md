@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: PageFeature
-reacd_preview_height: 560
 ---
 
 # PageFeature

@@ -9,7 +9,7 @@ selected adapter own native rendering, styles and responsive layout. Jotai owns 
 Use Node.js 22.12 or newer for the toolchain:
 
 ```sh
-npm install @fastsprout/reacd @fastsprout/reacd-shadcn
+npm install @fastsprout/reacd
 ```
 
 Supported React, ReactDOM and Jotai versions are declared in the package peer
@@ -35,7 +35,7 @@ React hooks, Jotai, validation utilities and your business modules remain availa
 
 ## Add a browser view
 
-This compiled and tested setup selects the separate shadcn adapter and imports its
+This compiled and tested setup uses the default shadcn adapter and imports the
 browser-only styles entry. It does not mount an application. Render its exported
 `InstallationExample` from your existing React host. Keep this module in the
 browser/client part of your application.
@@ -44,24 +44,28 @@ browser/client part of your application.
 --8<-- "examples/installation.tsx"
 ```
 
-`ReacdProvider` requires a complete explicit adapter and owns an isolated Jotai store.
-The child reads its atom inside that provider. Separate provider roots keep independent
-values even when the view declarations use the same atom definition.
+`ReacdProvider` defaults to shadcn/ui and owns an isolated Jotai store. The child reads
+its atom inside that provider. Separate provider roots keep independent values even when
+the view declarations use the same atom definition.
 
-The adapter styles entry is browser-only. Server code can import the engine and adapter
-without importing styles. This setup documents a browser React integration; it does not
+The styles entry is browser-only. Server code can import the engine and adapter without
+importing styles. This setup documents a browser React integration; it does not
 establish Next.js or React Server Components compatibility.
 
 ## Continue
 
+- [Application examples](examples/index.md)
 - [Component catalog](components/index.md)
 - [Theme adapters](guides/theme-adapters.md)
 - [State with Jotai](guides/state.md)
 - [Generative UI](guides/generative-ui.md)
 
-Each component reference embeds its runnable TSX example and displays that same source.
-Previews use isolated Jotai stores and the shadcn adapter. Open the example link to work
-in a separate tab. Reloading an example resets its unsaved state.
+Component references display closed contracts and their compiled TSX source. Available
+native mappings run in embedded previews with isolated Jotai stores. Choose **Example
+adapter** to compare supported mappings. An unavailable mapping reports an explicit
+unsupported component error; adapter coverage is currently partial. Source-file links
+download TSX for use in your own React host. Reloading a preview resets its unsaved
+application state.
 
 Repository development, examples and local documentation builds are described in
 [Contributing](https://github.com/FastSprout/Reacd/blob/main/CONTRIBUTING.md).

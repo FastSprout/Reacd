@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: InputMenu
-reacd_preview_height: 560
 ---
 
 # InputMenu

@@ -101,3 +101,16 @@ describe('repository enforcement', () => {
     ).toEqual(['facade', 'syntax']);
   });
 });
+it('enforces closed reacd authoring for the whole website application', () => {
+  expect(
+    inspectRepository(
+      [
+        {
+          path: '/repo/tooling/site/app/page.tsx',
+          source: 'export const Page = () => <div className="custom">Text</div>;',
+        },
+      ],
+      '/repo',
+    ),
+  ).toEqual(expect.arrayContaining([expect.objectContaining({ rule: 'application' })]));
+});

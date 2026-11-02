@@ -17,23 +17,43 @@ async function fields(page: Page, profile: string) {
 }
 
 async function containment(page: Page) {
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth),
-  ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + GEOMETRY_TOLERANCE);
-  for (const control of await page
-    .locator('.reacd-form-field,.reacd-switch,.reacd-textarea')
-    .all()) {
-    const box = await control.boundingBox();
-    if (box === null) throw new Error('Visible control needs geometry.');
-    for (const child of await control.locator('textarea,[role="switch"]').all()) {
-      const inner = await child.boundingBox();
-      if (inner === null) throw new Error('Visible input needs geometry.');
-      expect(inner.x).toBeGreaterThanOrEqual(box.x - GEOMETRY_TOLERANCE);
-      expect(inner.x + inner.width).toBeLessThanOrEqual(
-        box.x + box.width + GEOMETRY_TOLERANCE,
-      );
-      expect(inner.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
-    }
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + GEOMETRY_TOLERANCE);
+  const controls = [
+    page.getByRole('switch', { name: 'Publish updates', exact: true }),
+    page.getByRole('switch', { name: 'Approve account', exact: true }),
+    page.getByRole('textbox', { name: 'Release notes', exact: true }),
+    page.getByRole('textbox', { name: 'Account notes', exact: true }),
+  ];
+  for (const control of controls) {
+    await expect(control).toBeVisible();
+    const bounds = await control.evaluate((element) => {
+      const switchControl = element.getAttribute('role') === 'switch';
+      const target = switchControl ? element.closest('label') : element;
+      if (!target) throw new Error('Expected the associated SDK switch label.');
+      if (
+        switchControl &&
+        (!(target instanceof HTMLLabelElement) || target.control !== element)
+      ) {
+        throw new Error('Expected an actual clickable native label.');
+      }
+      const parent =
+        target.closest('[data-slot="field"], .MuiFormControl-root') ??
+        target.parentElement;
+      if (!parent) throw new Error('Expected a native field container.');
+      const inner = target.getBoundingClientRect();
+      const outer = parent.getBoundingClientRect();
+      return {
+        inner: { x: inner.x, width: inner.width, height: inner.height },
+        outer: { x: outer.x, width: outer.width },
+      };
+    });
+    expect(bounds.inner.x).toBeGreaterThanOrEqual(bounds.outer.x - GEOMETRY_TOLERANCE);
+    expect(bounds.inner.x + bounds.inner.width).toBeLessThanOrEqual(
+      bounds.outer.x + bounds.outer.width + GEOMETRY_TOLERANCE,
+    );
+    expect(bounds.inner.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
   }
 }
 
@@ -54,7 +74,7 @@ for (const profile of PROFILES) {
       });
       await expect(
         account.getByRole('group', {
-          name: 'Approval *',
+          name: /^Approval(?: \*)?$/,
           exact: true,
         }),
       ).toHaveCSS('direction', 'rtl');
@@ -72,11 +92,11 @@ for (const profile of PROFILES) {
     await page.getByRole('switch', { name: 'Read-only publishing' }).check();
     await page.getByRole('button', { name: 'Save publishing' }).click();
     await expect(publish).toBeFocused();
-    await expect(publish).toHaveAttribute('aria-checked', 'false');
+    await expect(publish).not.toBeChecked();
     await page.getByRole('switch', { name: 'Read-only publishing' }).uncheck();
     await publish.focus();
     await page.keyboard.press('Space');
-    await expect(publish).toHaveAttribute('aria-checked', 'true');
+    await expect(publish).toBeChecked();
     await page.getByRole('button', { name: 'Save publishing' }).click();
     await expect(page.getByText('Publishing saved.', { exact: true })).toBeVisible();
     const publishing = page.getByRole('form', { name: 'Publishing form' });
@@ -87,13 +107,30 @@ for (const profile of PROFILES) {
       }),
     ).toEqual({ publish: 'on' });
     const release = page.getByRole('textbox', { name: 'Release notes' });
+    const initialHeight = await release.evaluate((element) => element.clientHeight);
     await page.getByRole('button', { name: 'Fill long release notes' }).click();
-    await expect(release).toHaveAttribute('rows', String(CAPPED_ROWS));
+    await expect
+      .poll(() => release.evaluate((element) => element.clientHeight))
+      .toBeGreaterThan(initialHeight);
+    const maximum = await release.evaluate((element, rows) => {
+      const style = getComputedStyle(element);
+      return (
+        rows * parseFloat(style.lineHeight) +
+        parseFloat(style.paddingTop) +
+        parseFloat(style.paddingBottom)
+      );
+    }, CAPPED_ROWS);
+    expect(
+      await release.evaluate((element) => element.clientHeight),
+    ).toBeLessThanOrEqual(maximum + GEOMETRY_TOLERANCE);
     expect(
       await release.evaluate((field) => field.scrollHeight > field.clientHeight),
     ).toBe(true);
     await page.getByRole('button', { name: 'Clear release notes' }).click();
     await expect(release).toHaveAttribute('rows', String(BASE_ROWS));
+    await expect
+      .poll(() => release.evaluate((element) => element.clientHeight))
+      .toBeLessThanOrEqual(initialHeight + GEOMETRY_TOLERANCE);
     const notes = page.getByRole('textbox', { name: 'Account notes' });
     await page.getByRole('switch', { name: 'Approve account' }).check();
     await notes.fill('Reviewed by owner');

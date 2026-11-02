@@ -1,10 +1,16 @@
 ---
-template: preview.html
 reacd_preview: Marquee
-reacd_preview_height: 560
 ---
 
 # Marquee
+
+## Adapter availability
+
+The current bundled shadcn/ui and Material UI adapters have no native mapping for
+`Marquee`. The TSX examples and behavior below define its closed reacd contract.
+Native SDK integration remains pending. The live preview reports an explicit
+`UnsupportedAdapterComponentError`; compiled source and schema validation alone do
+not verify native rendering or interaction.
 
 Marquee displays bounded text notices with an explicit pause control and a complete
 readable alternative. Moving content never contains interactive controls.

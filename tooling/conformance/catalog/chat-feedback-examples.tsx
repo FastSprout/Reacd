@@ -1,8 +1,8 @@
 import { atom, useAtom } from 'jotai';
 import { App, Toggle, VStack } from '@fastsprout/reacd';
-import { ChatReasoningExample } from '../../../docs/examples/chat-reasoning.js';
-import { ChatToolExample } from '../../../docs/examples/chat-tool.js';
-import { ChatShimmerExample } from '../../../docs/examples/chat-shimmer.js';
+import { ChatReasoningExample } from '../fixtures/chat-reasoning.js';
+import { ChatToolExample } from '../fixtures/chat-tool.js';
+import { ChatShimmerExample } from '../fixtures/chat-shimmer.js';
 
 const rtlAtom = atom(false);
 

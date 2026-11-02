@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Locator, Page } from '@playwright/test';
+import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
+import { watchPreviewFailures } from '../preview-failures.js';
 
 const WIDTHS = [240, 320, 375, 600, 768, 1024, 1440, 1920];
 const HEIGHT = 1000;
@@ -32,6 +34,7 @@ for (const profile of ['Spacious', 'Compact']) {
       page,
     }) => {
       await page.setViewportSize({ width, height: HEIGHT });
+      const failures = watchPreviewFailures(page);
       await content(page, profile);
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
@@ -50,11 +53,16 @@ for (const profile of ['Spacious', 'Compact']) {
       await expect(
         page.getByText('Current milestone: build', { exact: true }),
       ).toBeVisible();
-      await expect(timeline.locator('[aria-current="step"]')).toHaveCount(1);
+      await expect(build).toHaveAttribute('aria-current', 'step');
       await expect(
         timeline.getByRole('button', { name: 'Release review' }),
       ).toBeDisabled();
       const scroll = page.getByRole('region', { name: 'Reference records' });
+      if (test.info().project.name === 'mui') {
+        await expectUnsupportedDiagnostic(page, failures, 'ScrollArea', 'ScrollArea');
+        await expect(scroll).toHaveCount(0);
+        return;
+      }
       await page.getByRole('switch', { name: 'Right to left records' }).check();
       await expect(scroll).toHaveCSS('direction', 'rtl');
       await scroll.focus();

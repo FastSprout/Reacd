@@ -9,8 +9,12 @@ changes and features bump minor; fixes bump patch.
 From 0.3.0, a release contains:
 
 - `@fastsprout/reacd`: the headless engine.
-- `@fastsprout/reacd-shadcn`: the complete shadcn/ui adapter.
-- `@fastsprout/reacd-mui`: the complete Material UI adapter.
+- `@fastsprout/reacd-shadcn`: the native shadcn/ui adapter.
+- `@fastsprout/reacd-mui`: the native Material UI adapter.
+
+Native adapter catalog coverage is currently partial. A missing mapping or unsupported
+SDK variant throws `UnsupportedAdapterComponentError` with the adapter and component
+names. See [adapter availability](../components/index.md#adapter-availability).
 
 Each adapter declares an exact peer on the same engine version. Release-please updates
 both adapter versions and engine peers. Version 0.2.0 introduced the separate shadcn
@@ -24,12 +28,13 @@ complete Check before release work: source policy, architecture, strict types, l
 schema and fixture validation, full coverage, build, installed-package acceptance,
 documentation and browser conformance. Failures stop the release.
 
-Successful checks upload a `docs-COMMIT_SHA` artifact containing the generated MkDocs
+Successful checks upload a `docs-COMMIT_SHA` artifact containing the generated reacd
 site, live previews and local assets. Serve that artifact locally to inspect the checked
 build. Artifacts expire after fourteen days.
 
-An artifact is not a deployment. `https://reacd.dev/` is the canonical URL; this
-workflow does not publish hosting or change DNS.
+After Check succeeds, Documentation deploys that exact artifact to GitHub Pages.
+Configure the repository's Pages source as GitHub Actions. The canonical URL is
+`https://reacd.dev/`; the workflow does not change DNS.
 
 ## Preparing a release
 
@@ -58,7 +63,7 @@ environment's `NPM_TOKEN` secret. Trusted publishing requires npm to authorize t
 repository and workflow; OIDC runner variables alone do not prove that authorization.
 
 The job installs the lockfile, builds and verifies isolated consumers. Packing copies
-each source README unchanged and strips development scripts, dependencies and
+each source README unchanged and strips scripts, development dependencies and
 package-manager configuration from published manifests. npm receives the same checked
 archives used in acceptance:
 

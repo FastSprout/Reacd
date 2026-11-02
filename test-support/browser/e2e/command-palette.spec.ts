@@ -15,7 +15,15 @@ for (const profile of PROFILES) {
       }) => {
         await page.setViewportSize({ width, height: HEIGHT });
         await page.goto('/');
-        await page.getByRole('button', { name: 'Navigation', exact: true }).click();
+        await page
+          .getByRole('navigation', { name: 'Component families', exact: true })
+          .getByRole('button', { name: 'Navigation', exact: true })
+          .click();
+        await expect(
+          page.getByRole('combobox', {
+            name: 'Sample command search',
+          }),
+        ).toBeVisible();
         await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
         await page.getByRole('option', { name: profile, exact: true }).click();
         if (direction === 'rtl') {
@@ -45,7 +53,10 @@ for (const profile of PROFILES) {
         await expect(page.getByText('Documentation inspected locally.')).toBeVisible();
         await input.fill(LONG_QUERY);
         const section = page.getByRole('region', { name: 'Command palette preview' });
-        await expect(section.getByRole('status')).toHaveText('No matching commands.');
+        await expect(
+          section.getByText('No matching commands.', { exact: true }),
+        ).toBeVisible();
+        await expect(section.getByRole('option')).toHaveCount(0);
         for (const status of ['Loading', 'Error', 'Ready']) {
           await page.getByRole('combobox', { name: 'Command result status' }).click();
           await page.getByRole('option', { name: status, exact: true }).click();

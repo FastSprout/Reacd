@@ -23,9 +23,9 @@ async function contained(page: Page) {
   expect(box.x + box.width).toBeLessThanOrEqual(
     (page.viewportSize()?.width ?? 0) + TOLERANCE,
   );
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth),
-  ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
 }
 
 for (const profile of PROFILES) {
@@ -73,7 +73,15 @@ for (const profile of PROFILES) {
     await expect(trigger).toBeFocused();
     await page.getByRole('switch', { name: 'Read-only language' }).check();
     await trigger.click();
-    await page.getByRole('option', { name: 'Arabic' }).click();
+    const arabic = page.getByRole('option', { name: 'Arabic', exact: true });
+    if (test.info().project.name === 'mui') {
+      await arabic.click();
+    } else {
+      await expect(arabic).toBeDisabled();
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Enter');
+      await page.keyboard.press('Escape');
+    }
     await expect(trigger).toHaveText('Polish (Poland)');
     await page.getByRole('switch', { name: 'Read-only language' }).uncheck();
     await page.getByRole('switch', { name: 'Disable language' }).check();

@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: DropdownMenu
-reacd_preview_height: 560
 ---
 
 # DropdownMenu
@@ -36,12 +34,13 @@ The engine owns positioning, focus, keyboard navigation and overflow containment
 
 ## Interaction
 
-Arrow keys, Home/End and typeahead navigate the menu. Escape dismisses a submenu before
-its parent menu and returns focus to the trigger. Native link browsing operations remain
-available. Labels wrap within a viewport-bounded scroll region, including in RTL.
+Arrow keys, Home/End and typeahead navigate the menu. The backward arrow returns
+from a submenu; Escape closes the menu chain and restores trigger focus. Native
+link browsing remains available. Long labels wrap within bounded scroll regions.
 
-The private shadcn adapter uses Base UI menu primitives. Applications provide no native
-HTML, CSS, positioning props, native event handlers or custom item renderers.
+The shadcn adapter uses its official Base UI menu recipe and native collision
+placement. Applications provide no native HTML, CSS, positioning props, native
+event handlers or custom item renderers.
 
 ## Generative state
 

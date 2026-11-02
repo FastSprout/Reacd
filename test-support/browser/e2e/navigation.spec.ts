@@ -1,3 +1,5 @@
+import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
+import { watchPreviewFailures } from '../preview-failures.js';
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
@@ -15,13 +17,23 @@ async function select(page: Page, name: string, option: string) {
 async function navigation(page: Page, profile: string) {
   await page.goto('/');
   await select(page, 'Appearance', profile);
-  await page.getByRole('button', { name: 'Navigation', exact: true }).click();
+  await page
+    .getByRole('navigation', {
+      name: 'Component families',
+      exact: true,
+    })
+    .getByRole('button', { name: 'Navigation', exact: true })
+    .click();
 }
 async function bounds(page: Page) {
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
   ).toBeLessThanOrEqual((await page.evaluate(() => innerWidth)) + TOLERANCE);
-  const escaped = await page.locator('.reacd-breadcrumb-label').evaluateAll(
+  const labels = page
+    .getByRole('navigation', { name: 'Sample navigation path' })
+    .locator('a, button, [aria-current="page"]');
+  expect(await labels.count()).toBeGreaterThan(0);
+  const escaped = await labels.evaluateAll(
     (labels, tolerance) =>
       labels.some((label) => {
         const box = label.getBoundingClientRect();
@@ -46,7 +58,19 @@ for (const profile of ['Spacious', 'Compact']) {
       await select(page, 'Pagination dataset', 'Billion-item count');
       const pager = page.getByRole('navigation', { name: 'Sample result pages' });
       await pager.getByRole('button', { name: 'Last page' }).click();
-      await expect(pager.getByRole('status')).toContainText('Page 100000000 of');
+      await expect(
+        page
+          .getByRole('region', {
+            name: 'Pagination preview',
+            exact: true,
+          })
+          .getByRole('status'),
+      ).toContainText('Page 100000000 of');
+      await expect(
+        page.getByText('Selected page: 100000000. Page size: 10.', {
+          exact: true,
+        }),
+      ).toBeVisible();
       await expect(pager.locator('[aria-current="page"]')).toHaveCount(1);
       await expect(pager.getByRole('button', { name: 'Next page' })).toBeDisabled();
       await page.getByLabel('Breadcrumb final label').fill(LONG_LABEL);
@@ -54,10 +78,20 @@ for (const profile of ['Spacious', 'Compact']) {
       await bounds(page);
       await page.getByRole('switch', { name: 'Right to left navigation' }).check();
       await expect(pager).toHaveCSS('direction', 'rtl');
-      await expect(page.locator('.reacd-breadcrumb-separator').first()).toHaveCSS(
-        'transform',
-        'matrix(-1, 0, 0, -1, 0, 0)',
-      );
+      const separator = page
+        .getByRole('navigation', {
+          name: 'Sample navigation path',
+        })
+        .locator('[aria-hidden="true"] svg')
+        .first();
+      await expect(separator).toBeVisible();
+      expect(
+        await separator.evaluate((element) => {
+          const style = getComputedStyle(element);
+          const rotate = style.rotate === 'none' ? 0 : parseFloat(style.rotate);
+          return new DOMMatrixReadOnly(style.transform).rotate(rotate).m11;
+        }),
+      ).toBe(-1);
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
       });
@@ -78,10 +112,21 @@ for (const profile of ['Spacious', 'Compact']) {
     page.on('pageerror', (error) => errors.push(error.message));
     await navigation(page, profile);
     const pager = page.getByRole('navigation', { name: 'Sample result pages' });
+    const status = page
+      .getByRole('region', {
+        name: 'Pagination preview',
+        exact: true,
+      })
+      .getByRole('status');
     const next = pager.getByRole('button', { name: 'Next page' });
     await next.focus();
     await page.keyboard.press('Enter');
-    await expect(pager.getByRole('status')).toContainText('Page 2 of 3');
+    await expect(status).toContainText('Page 2 of 3');
+    await expect(
+      page.getByText('Selected page: 2. Page size: 10.', {
+        exact: true,
+      }),
+    ).toBeVisible();
     await page.getByRole('switch', { name: 'Read-only pagination' }).check();
     await expect(next).toBeDisabled();
     await page.getByRole('switch', { name: 'Read-only pagination' }).uncheck();
@@ -89,9 +134,11 @@ for (const profile of ['Spacious', 'Compact']) {
     await expect(next).toBeDisabled();
     await page.getByRole('switch', { name: 'Disable pagination' }).uncheck();
     await select(page, 'Pagination page size', '25 per page');
-    await expect(pager.getByRole('status')).toContainText('Page 1 of 1');
+    await expect(status).toContainText('Page 1 of 1');
     await select(page, 'Pagination dataset', 'Empty dataset');
-    await expect(pager.getByRole('status')).toContainText('0 items');
+    await expect(status).toContainText(
+      test.info().project.name === 'mui' ? 'Page 1 of 0' : '0 items',
+    );
     await expect(next).toBeDisabled();
     const path = page.getByRole('navigation', { name: 'Sample navigation path' });
     const action = path.getByRole('button', { name: 'Sample projects' });
@@ -106,7 +153,9 @@ for (const profile of ['Spacious', 'Compact']) {
     await popup.waitForLoadState();
     await expect(popup).toHaveURL(/\/$/);
     await popup.close();
-    await expect(pager.getByRole('status')).toContainText('0 items');
+    await expect(status).toContainText(
+      test.info().project.name === 'mui' ? 'Page 1 of 0' : '0 items',
+    );
     expect(errors).toEqual([]);
   });
   test(`${profile} paging URLs use real native navigation`, async ({ page }) => {
@@ -116,9 +165,14 @@ for (const profile of ['Spacious', 'Compact']) {
         body: '<main>Orders host route</main>',
       }),
     );
+    const failures = watchPreviewFailures(page);
     await page.goto('/');
     await select(page, 'Appearance', profile);
     await page.getByRole('tab', { name: 'Generative UI', exact: true }).click();
+    if (test.info().project.name === 'mui') {
+      await expectUnsupportedDiagnostic(page, failures, 'Generative UI', 'SplitView');
+      return;
+    }
     await page.getByLabel('JSON declaration').fill(
       JSON.stringify({
         schemaVersion: '0.2',

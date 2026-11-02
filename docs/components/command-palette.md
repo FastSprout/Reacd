@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: CommandPalette
-reacd_preview_height: 560
 ---
 
 # CommandPalette
@@ -40,9 +38,9 @@ visible group blocks retain declaration order; admitted items within each group 
 their rank order. Use external filtering for server search or a different ranking
 algorithm.
 
-The private adapter uses Base UI's inline autocomplete/combobox behavior with shadcn
-input styling. It deliberately avoids adding cmdk, which shadcn's Command component
-uses. This closed matching contract replaces Nuxt UI's Fuse-based fuzzy search.
+The shadcn adapter uses its actual Command component and cmdk interaction behavior.
+The pure logical matcher supplies the documented ordering and result budget; the SDK
+owns keyboard interaction, focus and rendering.
 
 ## Interaction
 

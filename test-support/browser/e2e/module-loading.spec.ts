@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
+import { watchPreviewFailures } from '../preview-failures.js';
 import {
   bundleEntry,
   bundleManifestSchema,
@@ -25,6 +27,9 @@ async function select(page: Page, name: string, option: string) {
 }
 for (const profile of ['Spacious', 'Compact']) {
   test(`${profile} defers views and preserves state`, async ({ page }) => {
+    const failures = watchPreviewFailures(page);
+    const startupErrors: string[] = [];
+    page.on('pageerror', (error) => startupErrors.push(error.message));
     const requested: string[] = [];
     page.on('request', (request) => requested.push(new URL(request.url()).pathname));
     let release: () => void = () => undefined;
@@ -37,6 +42,7 @@ for (const profile of ['Spacious', 'Compact']) {
     });
     try {
       await page.goto('/');
+      expect(startupErrors).toEqual([]);
       await select(page, 'Appearance', profile);
       await expect(
         page.getByRole('heading', { name: 'Layout primitives', exact: true }),
@@ -53,13 +59,26 @@ for (const profile of ['Spacious', 'Compact']) {
       ).toBeVisible();
       await select(page, 'Appearance', profile === 'Spacious' ? 'Compact' : 'Spacious');
       release();
-      const name = page.getByLabel('Name', { exact: true });
+      const name = page.getByRole('textbox', { name: 'Name', exact: true });
       await name.fill('Retained lazy field');
       await page.getByRole('button', { name: 'Layout', exact: true }).click();
       await page.getByRole('button', { name: 'Fields', exact: true }).click();
       await expect(name).toHaveValue('Retained lazy field');
       expect(requested.filter((path) => path === `/${FILES.fields}`)).toHaveLength(1);
       await page.getByRole('tab', { name: 'Generative UI', exact: true }).click();
+      if (test.info().project.name === 'mui') {
+        await expectUnsupportedDiagnostic(
+          page, failures, 'Generative UI', 'SplitView',
+        );
+        await page.getByRole('tab', { name: 'Components', exact: true }).click();
+        await expect(name).toHaveValue('Retained lazy field');
+        expect(requested.filter(path => path === `/${FILES.playground}`))
+          .toHaveLength(1);
+        expect(requested).not.toContain(`/${FILES.data}`);
+        expect(requested).not.toContain(`/${FILES.actions}`);
+        expect(startupErrors).toEqual([]);
+        return;
+      }
       const note = page.getByLabel('Example note', { exact: true });
       await note.fill('Retained lazy note');
       const source = await page
@@ -77,6 +96,7 @@ for (const profile of ['Spacious', 'Compact']) {
       );
       expect(requested).not.toContain(`/${FILES.data}`);
       expect(requested).not.toContain(`/${FILES.actions}`);
+      expect(startupErrors).toEqual([]);
     } finally {
       release();
     }

@@ -15,14 +15,36 @@ async function fields(page: Page, profile: string) {
 }
 
 async function contained(page: Page) {
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth),
-  ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
-  for (const thumb of await page.locator('.reacd-range-thumb').all()) {
-    const box = await thumb.boundingBox();
-    if (box === null) throw new Error('Slider thumb must have geometry.');
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
+  const form = page.getByRole('form', { name: 'Slider form', exact: true });
+  const targets = form.getByRole('slider');
+  await expect(targets).toHaveCount(3);
+  const controls = await targets.all();
+  for (const thumb of controls) {
+    const box = await thumb.evaluate((element) => {
+      const target = element.closest('[data-slot="slider"], .MuiSlider-root');
+      if (!target) throw new Error('Expected the actual native slider track root.');
+      const bounds = target.getBoundingClientRect();
+      const thumb = element.closest('.MuiSlider-thumb');
+      if (thumb) {
+        const hit = getComputedStyle(thumb, '::after');
+        return {
+          width: bounds.width,
+          height: bounds.height,
+          hitWidth: parseFloat(hit.width),
+          hitHeight: parseFloat(hit.height),
+        };
+      }
+      return { width: bounds.width, height: bounds.height };
+    });
     expect(box.width).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
     expect(box.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
+    if ('hitWidth' in box) {
+      expect(box.hitWidth).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
+      expect(box.hitHeight).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
+    }
   }
 }
 
@@ -37,7 +59,9 @@ for (const profile of PROFILES) {
         document.documentElement.style.fontSize = '200%';
       });
       await contained(page);
-      const minimum = page.getByRole('slider', { name: 'Minimum Price interval' });
+      const minimum = page.getByRole('slider', {
+        name: /^(Minimum Price interval|Price interval Minimum)$/,
+      });
       await minimum.focus();
       await page.keyboard.press('ArrowRight');
       await expect(minimum).toHaveAttribute('aria-valuenow', '19');
@@ -53,8 +77,12 @@ for (const profile of PROFILES) {
     page,
   }) => {
     await fields(page, profile);
-    const minimum = page.getByRole('slider', { name: 'Minimum Price interval' });
-    const maximum = page.getByRole('slider', { name: 'Maximum Price interval' });
+    const minimum = page.getByRole('slider', {
+      name: /^(Minimum Price interval|Price interval Minimum)$/,
+    });
+    const maximum = page.getByRole('slider', {
+      name: /^(Maximum Price interval|Price interval Maximum)$/,
+    });
     await minimum.focus();
     await page.keyboard.press('End');
     await expect(minimum).toHaveAttribute('aria-valuenow', '80');
@@ -63,8 +91,9 @@ for (const profile of PROFILES) {
     await page.keyboard.press('Home');
     await expect(maximum).toHaveAttribute('aria-valuenow', '80');
     const output = page.getByRole('slider', { name: 'Output level', exact: true });
-    const root = page.locator('.reacd-range-root').filter({ has: output });
-    const track = root.locator('.reacd-range-control');
+    const track = page
+      .locator('[data-slot="slider"], .MuiSlider-root')
+      .filter({ has: output });
     await track.scrollIntoViewIfNeeded();
     const box = await track.boundingBox();
     if (box === null) throw new Error('Slider control must have geometry.');
@@ -72,6 +101,7 @@ for (const profile of PROFILES) {
     await expect(output).not.toHaveAttribute('aria-valuenow', '20');
     const canonical = await output.getAttribute('aria-valuenow');
     await page.getByRole('switch', { name: 'Read-only sliders' }).check();
+    await expect(output).toHaveAttribute('aria-readonly', 'true');
     await output.focus();
     await page.keyboard.press('Home');
     await expect(output).toHaveAttribute('aria-valuenow', canonical ?? '');

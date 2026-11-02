@@ -4,6 +4,14 @@ import { checkApplication } from './application.js';
 const inspect = (source: string) => checkApplication('app.tsx', source);
 
 describe('application boundary', () => {
+  it('permits document data properties while rejecting global DOM access', () => {
+    expect(inspect('const content = section.document;')).toEqual([]);
+    expect(inspect('const content = section["document"];')).toEqual([]);
+    expect(inspect('class Model { #value=1; read(){ return this.#value; } }')).toEqual(
+      [],
+    );
+    expect(inspect('const content = window.document;').length).toBeGreaterThan(0);
+  });
   it('permits composition, hooks, fragments, and ordinary business logic', () => {
     expect(
       inspect(`
@@ -38,6 +46,7 @@ describe('application boundary', () => {
     'document.createElement("div")',
     'window.document',
     'globalThis.document',
+    'self.document.body.append(self.document.createElement("div"))',
   ])('rejects an escape: %s', (source) => {
     expect(inspect(source).length).toBeGreaterThan(0);
   });

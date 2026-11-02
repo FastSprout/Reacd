@@ -1,0 +1,16 @@
+import {
+  asyncThunkCreator,
+  buildCreateSlice,
+  configureStore,
+} from '@reduxjs/toolkit';
+const store = configureStore({ reducer: (state = 0) => state });
+const create = buildCreateSlice({ creators: { asyncThunk: asyncThunkCreator } });
+export const invalid = create({
+  name: 'invalid',
+  initialState: 0,
+  reducers: creator => ({
+    load: creator.asyncThunk.withTypes<{ dispatch: typeof store.dispatch }>()(
+      async (_: void) => 0,
+    ),
+  }),
+});

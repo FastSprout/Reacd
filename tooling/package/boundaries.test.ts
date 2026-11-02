@@ -14,11 +14,18 @@ function read(path: string) {
   const input: unknown = JSON.parse(readFileSync(path, 'utf8'));
   return manifest.parse(input);
 }
-describe('independent engine and shadcn package boundaries', () => {
-  it('keeps the engine independent of design system packages and styles', () => {
+describe('separate engine and default SDK package boundaries', () => {
+  it('declares its default SDK while exposing a separate browser style entry', () => {
     const core = read('package.json');
     expect(isReleaseVersion(core.version)).toBe(true);
-    expect(core.dependencies).toEqual({ zod: '4.6.7' });
+    expect(core.dependencies).toEqual({
+      zod: '4.6.7',
+      '@fastsprout/reacd-shadcn': core.version,
+    });
+    expect(core.exports['./styles']).toEqual({
+      types: './dist/styles.d.ts',
+      import: './dist/styles.js',
+    });
     expect(core.exports).not.toHaveProperty('./styles.css');
     for (const layer of ['core', 'schema', 'components', 'renderer']) {
       expect(core.exports[`./adapter-runtime/${layer}/*.js`]).toEqual({
@@ -28,7 +35,7 @@ describe('independent engine and shadcn package boundaries', () => {
     }
     expect(core.exports).not.toHaveProperty('./adapter-runtime/*.js');
   });
-  it('publishes the complete separately selected adapter and browser styles', () => {
+  it('publishes the separate native SDK adapter and browser styles', () => {
     const adapter = read('packages/shadcn/package.json');
     expect(adapter.name).toBe('@fastsprout/reacd-shadcn');
     expect(adapter.version).toBe(read('package.json').version);

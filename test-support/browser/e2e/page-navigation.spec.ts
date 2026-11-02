@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { hasInlineOverflow } from '../inline-overflow.js';
 
 const WIDTHS = [240, 320, 768, 1440];
 const PROFILES = ['Spacious', 'Compact'];
@@ -26,14 +27,20 @@ for (const profile of PROFILES) {
         if (direction === 'rtl') {
           await region.getByRole('switch', { name: 'Page navigation RTL' }).check();
         }
-        const boxes = await region
-          .locator('.reacd-page-frame > *')
-          .evaluateAll((items) =>
-            items.map((item) => {
-              const box = item.getBoundingClientRect();
-              return { x: box.x, y: box.y };
-            }),
-          );
+        const pageScope = region.getByRole('region', {
+          name: 'Three-region page',
+          exact: true,
+        });
+        const frame =
+          test.info().project.name === 'mui'
+            ? pageScope.locator(':scope > .MuiStack-root')
+            : pageScope.locator('.reacd-page-frame');
+        const boxes = await frame.locator(':scope > *').evaluateAll((items) =>
+          items.map((item) => {
+            const box = item.getBoundingClientRect();
+            return { x: box.x, y: box.y };
+          }),
+        );
         expect(boxes).toHaveLength(3);
         const [left, body, right] = boxes;
         if (!left || !body || !right) throw new Error('Missing page region geometry.');
@@ -73,18 +80,10 @@ for (const profile of PROFILES) {
           .click();
         await expect(cta).toHaveValue('Retained CTA draft');
         await expect(draft).toHaveValue('Retained page draft');
-        const escaped = await region.evaluate((element, tolerance) => {
-          const outer = element.getBoundingClientRect();
-          return Array.from(
-            element.querySelectorAll('input,button,p,a,h1,h2,h3,h4,h5,h6'),
-          ).some((item) => {
-            const box = item.getBoundingClientRect();
-            return (
-              box.width > 0 &&
-              (box.left < outer.left - tolerance || box.right > outer.right + tolerance)
-            );
-          });
-        }, TOLERANCE);
+        const escaped = await region.evaluate(hasInlineOverflow, {
+          selectors: 'input,button,p,a,h1,h2,h3,h4,h5,h6',
+          tolerance: TOLERANCE,
+        });
         expect(escaped).toBe(false);
         expect(
           await page.evaluate(() => document.documentElement.scrollWidth),

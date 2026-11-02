@@ -9,10 +9,13 @@ const INSTALLED_BROWSER_POLICY = {
   label: 'Email summaries',
   disabled: 'Email summaries are disabled.',
   enabled: 'Email summaries are enabled.',
-  display: 'flex',
+  displays: { shadcn: 'flex', mui: 'block' },
 } as const;
 
-export async function exerciseInstalledBootstrap(consumer: string): Promise<void> {
+export async function exerciseInstalledBootstrap(
+  consumer: string,
+  adapter: 'shadcn' | 'mui' = 'shadcn',
+): Promise<void> {
   const policy = INSTALLED_BROWSER_POLICY;
   const server = await preview({
     root: consumer,
@@ -34,21 +37,21 @@ export async function exerciseInstalledBootstrap(consumer: string): Promise<void
       const first = switches.first();
       const second = switches.last();
       await expect(switches).toHaveCount(policy.applications);
-      await expect(first).toHaveCSS('display', policy.display);
-      await expect(first).toHaveAttribute('aria-checked', 'false');
-      await expect(second).toHaveAttribute('aria-checked', 'false');
+      await expect(first).toHaveCSS('display', policy.displays[adapter]);
+      await expect(first).toBeChecked({ checked: false });
+      await expect(second).toBeChecked({ checked: false });
       await expect(page.getByText(policy.disabled)).toHaveCount(policy.applications);
       await first.click();
-      await expect(first).toHaveAttribute('aria-checked', 'true');
-      await expect(second).toHaveAttribute('aria-checked', 'false');
+      await expect(first).toBeChecked({ checked: true });
+      await expect(second).toBeChecked({ checked: false });
       await expect(page.getByText(policy.enabled)).toBeVisible();
       await expect(page.getByText(policy.disabled)).toBeVisible();
       await first.click();
-      await expect(first).toHaveAttribute('aria-checked', 'false');
+      await expect(first).toBeChecked({ checked: false });
       await expect(page.getByText(policy.disabled)).toHaveCount(policy.applications);
       await second.click();
-      await expect(first).toHaveAttribute('aria-checked', 'false');
-      await expect(second).toHaveAttribute('aria-checked', 'true');
+      await expect(first).toBeChecked({ checked: false });
+      await expect(second).toBeChecked({ checked: true });
       assert.deepEqual(errors, [], 'Installed application emitted browser errors.');
     } finally {
       await browser.close();

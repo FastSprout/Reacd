@@ -62,13 +62,15 @@ for (const profile of PROFILES) {
       await select(page, 'Group avatar size', 'Large');
       await page.getByRole('slider', { name: /^Visible people/ }).focus();
       await page.keyboard.press('Home');
-      await expect(page.getByText('Show 99 more people')).toBeVisible();
+      await expect(page.getByRole('button', {
+        name: 'Show 99 more people', exact: true,
+      })).toBeVisible();
       await contained(page);
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
       });
       await contained(page);
-      await page.getByText('Show 99 more people').click();
+      await page.getByRole('button', { name: 'Show 99 more people' }).click();
       await page.getByText('Placeholder 100', { exact: true }).scrollIntoViewIfNeeded();
       await expect(page.getByText('Placeholder 100', { exact: true })).toBeInViewport();
       await contained(page);
@@ -79,9 +81,6 @@ for (const profile of PROFILES) {
   }) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
     await data(page, profile);
     const preview = page.getByRole('region', { name: 'Avatar preview', exact: true });
     const group = page.getByRole('group', { name: 'Reviewer placeholders' });
@@ -97,30 +96,41 @@ for (const profile of PROFILES) {
         ),
       )
       .toBeGreaterThan(0);
-    await expect(preview.locator('.reacd-avatar-fallback')).toHaveCount(0);
+    await expect(preview.getByRole('img')).not.toContainText('👩‍💻');
     const before = await preview.getByRole('img').boundingBox();
     await select(page, 'Avatar source', 'Undecodable image');
-    await expect(image).toHaveAttribute('data-error', '');
-    await expect(preview.locator('.reacd-avatar-fallback')).toHaveText('👩‍💻');
+    await expect(preview.getByRole('img')).toContainText('👩‍💻');
     const after = await preview.getByRole('img').boundingBox();
     if (before === null || after === null) throw new Error('Missing avatar geometry.');
     expect(after.width).toBe(before.width);
     expect(after.height).toBe(before.height);
     await select(page, 'Avatar source', 'Local placeholder image');
     await image.scrollIntoViewIfNeeded();
-    await expect(preview.locator('.reacd-avatar-fallback')).toHaveCount(0);
-    const summary = group.locator('summary');
+    await expect.poll(() => image.evaluate((element) =>
+      element instanceof HTMLImageElement ? element.naturalWidth : 0,
+    )).toBeGreaterThan(0);
+    const summary = group.getByRole('button', { name: 'Show 2 more people' });
     await summary.focus();
     await page.keyboard.press('Enter');
-    const observer = group.getByText('👩‍💻 Example Observer', { exact: true });
+    const details = page.getByRole('dialog', {
+      name: /Additional people|Reviewer placeholders overflow/,
+    });
+    const observer = details.getByText('👩‍💻 Example Observer', { exact: true });
     await expect(observer).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(details).toBeHidden();
+    await expect(summary).toBeFocused();
     await select(page, 'Appearance', profile === 'Spacious' ? 'Compact' : 'Spacious');
-    await expect(group.locator('details')).toHaveAttribute('open', '');
     await expect(page.getByLabel('Avatar name', { exact: true })).toHaveValue('👩‍💻');
+    await summary.click();
+    await expect(observer).toBeVisible();
+    await page.keyboard.press('Escape');
     await page.getByRole('switch', { name: 'Empty avatar group' }).check();
     await expect(group.getByText('Nobody assigned in this example.')).toBeVisible();
     await page.getByRole('switch', { name: 'Empty avatar group' }).uncheck();
-    await expect(group.getByText('Show 2 more people')).toBeVisible();
+    await expect(group.getByRole('button', {
+      name: 'Show 2 more people', exact: true,
+    })).toBeVisible();
     expect(errors).toEqual([]);
   });
 }

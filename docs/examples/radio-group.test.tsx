@@ -17,10 +17,7 @@ describe('documented RadioGroup', () => {
       screen.getByRole('switch', { name: 'Arrange delivery horizontally' }),
     );
     await user.click(screen.getByRole('switch', { name: 'Disable delivery choices' }));
-    expect(screen.getByRole('radio', { name: 'Express delivery' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    );
+    expect(screen.getByRole('radio', { name: 'Express delivery' })).toBeDisabled();
     await user.click(screen.getByRole('switch', { name: 'Disable delivery choices' }));
     await user.click(screen.getByRole('radio', { name: 'Express delivery' }));
     await user.click(screen.getByRole('button', { name: 'Save delivery' }));

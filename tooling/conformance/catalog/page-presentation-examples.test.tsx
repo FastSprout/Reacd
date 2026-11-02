@@ -34,7 +34,10 @@ it('retains drafts through every local layout control', async () => {
   const heading = screen.getByRole('heading', {
     name: 'PageHeroRetainsReadableLongUnbrokenContentAcrossNarrowScreens',
   });
-  expect(
-    hero.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING,
-  ).toBeTruthy();
+  expect(heading.closest('[style*=order]')).toHaveAttribute(
+    'style', expect.stringContaining('order: 1'),
+  );
+  expect(hero.closest('[style*=order]')).toHaveAttribute(
+    'style', expect.stringContaining('order: 0'),
+  );
 });

@@ -1,14 +1,10 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { expect, it, vi } from 'vitest';
+import { expect, it } from 'vitest';
 import { ReacdProvider } from '../../src/index.js';
 import { ContentNavigationExample } from './content-navigation.js';
 import { ContentTocExample } from './content-toc.js';
-
-vi.mock('../../src/renderer/navigation/native-navigation.js', () => ({
-  followHref: vi.fn(),
-}));
 
 it('runs controlled navigation through veto and recovery', async () => {
   const user = userEvent.setup();
@@ -19,7 +15,7 @@ it('runs controlled navigation through veto and recovery', async () => {
   );
   const region = within(screen.getByRole('navigation', { name: 'Documentation tree' }));
   await user.clear(screen.getByLabelText('Documentation group title'));
-  await user.click(region.getByRole('button', { name: 'Expand Guides' }));
+  await user.click(region.getByRole('button', { name: 'Guides' }));
   await user.click(screen.getByRole('switch', { name: 'Veto document activation' }));
   await user.click(region.getByRole('link', { name: 'Navigation introduction' }));
   expect(screen.getByText('Current document: none')).toBeVisible();

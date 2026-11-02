@@ -1,3 +1,4 @@
+import { DeferredView } from '../loading/deferred-view.js';
 import * as Lookup from '../../../docs/examples/editor-mention-lookup.js';
 import * as Mentions from '../../../docs/examples/editor-mention-menu.js';
 import * as Suggestions from '../../../docs/examples/editor-suggestion-menu.js';
@@ -12,14 +13,30 @@ import { EditorEmojiMenuExample } from '../../../docs/examples/editor-emoji-menu
 export function EditorExamples() {
   return (
     <VStack>
-      <EditorExample />
-      <EditorControlledExample />
-      <EditorToolbarExample />
-      <EditorDragHandleExample />
-      <Suggestions.EditorSuggestionMenuExample />
-      <Mentions.EditorMentionMenuExample />
-      <Lookup.EditorMentionLookupExample />
-      <EditorEmojiMenuExample />
+      <DeferredView label="Editor">
+        <EditorExample />
+      </DeferredView>
+      <DeferredView label="EditorControlled">
+        <EditorControlledExample />
+      </DeferredView>
+      <DeferredView label="EditorToolbar">
+        <EditorToolbarExample />
+      </DeferredView>
+      <DeferredView label="EditorDragHandle">
+        <EditorDragHandleExample />
+      </DeferredView>
+      <DeferredView label="EditorSuggestionMenu">
+        <Suggestions.EditorSuggestionMenuExample />
+      </DeferredView>
+      <DeferredView label="EditorMentionMenu">
+        <Mentions.EditorMentionMenuExample />
+      </DeferredView>
+      <DeferredView label="EditorMentionLookup">
+        <Lookup.EditorMentionLookupExample />
+      </DeferredView>
+      <DeferredView label="EditorEmojiMenu">
+        <EditorEmojiMenuExample />
+      </DeferredView>
     </VStack>
   );
 }

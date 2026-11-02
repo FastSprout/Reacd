@@ -14,14 +14,12 @@ const disabledAtom = atom(false);
 const horizontalAtom = atom(false);
 const statusAtom = atom('No channels saved.');
 const CHANNEL_LIMIT = 2;
-const DESCRIPTION_REPETITIONS = 12;
 const ITEMS = [
   {
     value: 'email',
     label: 'Email notifications',
     description:
-      'Notification details: ' +
-      'notification_configuration_'.repeat(DESCRIPTION_REPETITIONS),
+      'Notification details: ' + 'Choose when your workspace sends email notifications',
   },
   { value: 'sms', label: 'SMS notifications', description: 'Text messages.' },
   { value: 'inApp', label: 'In-app notifications' },

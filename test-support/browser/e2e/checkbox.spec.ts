@@ -15,12 +15,22 @@ async function fields(page: Page, profile: string) {
 }
 
 async function contained(page: Page) {
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth),
-  ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + ROUNDING_TOLERANCE);
-  for (const control of await page.locator('.reacd-checkbox [role="checkbox"]').all()) {
-    const box = await control.boundingBox();
-    if (box === null) throw new Error('Checkbox must have geometry.');
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + ROUNDING_TOLERANCE);
+  const targets = page.getByRole('checkbox', {
+    name: /^(Approve selected accounts|Approval reader)$/,
+  });
+  await expect(targets).toHaveCount(2);
+  const controls = await targets.all();
+  for (const control of controls) {
+    const box = await control.evaluate((element) => {
+      const target = element.closest('label');
+      if (!(target instanceof HTMLLabelElement) || target.control !== element)
+        throw new Error('Expected the actual associated native checkbox label.');
+      const bounds = target.getBoundingClientRect();
+      return { width: bounds.width, height: bounds.height };
+    });
     expect(box.width).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
     expect(box.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
   }
@@ -38,12 +48,20 @@ for (const profile of PROFILES) {
       await page.getByRole('switch', { name: 'Right to left approval' }).check();
       const writer = page.getByRole('checkbox', { name: 'Approve selected accounts' });
       await expect(writer).toHaveAttribute('aria-checked', 'mixed');
-      await expect(writer.locator('svg')).toHaveCSS('display', 'none');
+      await expect(writer).toHaveAccessibleName('Approve selected accounts');
+      await expect(
+        page.getByText('Approval state: mixed', { exact: true }),
+      ).toBeVisible();
       await expect(page.getByRole('form', { name: 'Approval form' })).toHaveCSS(
         'direction',
         'rtl',
       );
       await contained(page);
+      await page.getByText('Approve selected accounts', { exact: true }).click();
+      await expect(writer).toBeChecked();
+      await expect(
+        page.getByText('Approval state: approved', { exact: true }),
+      ).toBeVisible();
     });
   }
 
@@ -57,6 +75,7 @@ for (const profile of PROFILES) {
     await page.getByRole('switch', { name: 'Read-only approval' }).check();
     await page.getByRole('button', { name: 'Save approval' }).click();
     await expect(writer).toBeFocused();
+    await expect(writer).toHaveAttribute('aria-readonly', 'true');
     await writer.click();
     await expect(writer).toHaveAttribute('aria-checked', 'mixed');
     expect(
@@ -68,10 +87,10 @@ for (const profile of PROFILES) {
     await page.getByRole('switch', { name: 'Read-only approval' }).uncheck();
     await writer.focus();
     await page.keyboard.press('Space');
-    await expect(writer).toHaveAttribute('aria-checked', 'true');
-    await expect(reader).toHaveAttribute('aria-checked', 'true');
+    await expect(writer).toBeChecked();
+    await expect(reader).toBeChecked();
     await reader.click();
-    await expect(writer).toHaveAttribute('aria-checked', 'true');
+    await expect(writer).toBeChecked();
     await page.getByRole('button', { name: 'Save approval' }).click();
     await expect(page.getByText('Approval saved.', { exact: true })).toBeVisible();
     expect(

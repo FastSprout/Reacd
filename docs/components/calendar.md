@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Calendar
-reacd_preview_height: 560
 ---
 
 # Calendar
@@ -70,3 +68,15 @@ stores.
 
 The adapter composes DayPicker v10 and shadcn day buttons. Multiple-date selection,
 arbitrary slots, public date objects and styling escapes are outside the closed API.
+
+## Material UI
+
+The Material adapter uses the community MUI X DateCalendar. It supports single-date
+selection with one visible month. Range mode and two-month declarations throw an
+explicit unsupported-component error. The SDK owns keyboard navigation, focus and
+selection behavior. A narrow viewport scrolls the native calendar without shrinking
+its day controls.
+
+Locales use the installed date-fns locale data, preferring an exact match and
+otherwise matching the requested language. A language without locale data reports
+an explicit unsupported-component error.

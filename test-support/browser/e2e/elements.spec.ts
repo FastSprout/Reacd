@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { hasInlineOverflow } from '../inline-overflow.js';
 import type { Locator, Page } from '@playwright/test';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 const WIDTHS = [240, 360, 768, 1440];
@@ -17,15 +18,10 @@ async function contained(page: Page, content: Locator) {
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
   ).toBeLessThanOrEqual((await page.evaluate(() => innerWidth)) + TOLERANCE);
-  const escaped = await content.evaluate((element, tolerance) => {
-    const box = element.getBoundingClientRect();
-    return Array.from(
-      element.querySelectorAll('.reacd-button,.reacd-badge,.reacd-alert'),
-    ).some((child) => {
-      const rect = child.getBoundingClientRect();
-      return rect.left < box.left - tolerance || rect.right > box.right + tolerance;
-    });
-  }, TOLERANCE);
+  const escaped = await content.evaluate(hasInlineOverflow, {
+    selectors: 'button,[data-slot=badge],[role=alert],.MuiChip-root',
+    tolerance: TOLERANCE,
+  });
   expect(escaped).toBe(false);
 }
 
@@ -56,14 +52,19 @@ for (const profile of ['Spacious', 'Compact']) {
       expect(box.width).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
       expect(box.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
       const progress = section.getByRole('progressbar', { name: 'Uploaded items' });
-      const track = await progress.boundingBox();
-      const fill = await progress.locator('.reacd-progress-fill').boundingBox();
-      if (track === null || fill === null)
-        throw new Error('Missing progress geometry.');
-      expect(Math.abs(fill.x + fill.width - track.x - track.width)).toBeLessThanOrEqual(
-        TOLERANCE,
+      const indicator = progress.locator(
+        '.MuiLinearProgress-bar1, :scope > [data-state]',
       );
-      expect(fill.width).toBeCloseTo(track.width / 4, 0);
+      await expect(indicator).toHaveCount(1);
+      await expect.poll(async () => {
+        const track = await progress.boundingBox();
+        const fill = await indicator.boundingBox();
+        if (track === null || fill === null) return false;
+        const start = Math.max(fill.x, track.x);
+        const end = Math.min(fill.x + fill.width, track.x + track.width);
+        return Math.abs(end - track.x - track.width) <= TOLERANCE &&
+          Math.abs(end - start - track.width / 4) <= TOLERANCE;
+      }).toBe(true);
     });
   }
   test(`${profile} element keyboard, loading, slots and controlled actions`, async ({

@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: DashboardResizeHandle
-reacd_preview_height: 560
 ---
 
 # DashboardResizeHandle
@@ -26,18 +24,21 @@ catalog preview exposes the same Jotai state and controls.
 | label    | Optional visible-to-assistive-technology name override |
 | disabled | Optional local disabled state                          |
 
-The group supplies handles automatically between adjacent regions. An additional handle
-can be declared within a region that precedes another region. The handle consumes that
-region's engine context; it cannot replace behavior with arbitrary DOM callbacks.
+The group supplies handles automatically between adjacent regions. A handle declaration
+inside a region configures that region's existing native boundary separator. It sets the
+accessible label and disabled state without creating a nested resize engine. Exactly one
+SDK separator remains at the supported boundary location. Duplicate declarations produce
+a diagnostic and disable the ambiguous boundary.
 
-Arrow keys resize the adjacent pair; Shift uses a larger step. Home and End move to
-constraints. Horizontal movement respects scoped RTL direction. Pointer cancellation,
-lost capture and focus loss restore the previous layout; capture is released on finish
-and unmount. Rejected host candidates do not fabricate local sizes.
+Arrow keys resize the adjacent pair by five shares; Shift retains the native step. Home
+and End move to constraints. Horizontal keys use the SDK’s Left/Right semantics. Pointer
+cancellation, lost capture and focus loss complete the native interaction. Rejected host
+candidates do not fabricate local sizes.
 
 Handles are inactive while collapsed or in narrow reflow. The final region has no
-following handle. Missing group/region context produces a diagnostic. Native event,
-style, pixel sizing and arbitrary handle-rendering props are unavailable.
+following boundary; declaring a handle there produces a diagnostic, as does missing
+group/region context. Native event, style, pixel sizing and arbitrary handle-rendering
+props are unavailable.
 
 The shadcn adapter supports this closed contract. Native tags, classes, inline styles
 and vendor-specific escape hatches remain unavailable to application authors.

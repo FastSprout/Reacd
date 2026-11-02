@@ -1,3 +1,5 @@
+import { relative } from 'node:path';
+
 export const ADAPTER_PACKAGE_POLICY = {
   name: '@fastsprout/reacd-shadcn',
   styles: '@fastsprout/reacd-shadcn/styles',
@@ -5,7 +7,16 @@ export const ADAPTER_PACKAGE_POLICY = {
 } as const;
 
 export const ADAPTER_PACKAGE_ERROR =
-  'Concrete adapter packages are selected by applications, not engine modules.';
+  'Concrete adapters belong to the default composition boundary or applications.';
+
+export function isDefaultAdapterBinding(file: string, value: string, root: string) {
+  const path = relative(root, file);
+  return (
+    (path === 'src/state/provider/default-adapter.ts' &&
+      value === ADAPTER_PACKAGE_POLICY.name) ||
+    (path === 'src/styles.ts' && value === ADAPTER_PACKAGE_POLICY.styles)
+  );
+}
 
 export function isConcreteAdapterPackage(value: string): boolean {
   return ADAPTER_PACKAGE_POLICY.packages.some(

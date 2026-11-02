@@ -1,27 +1,18 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { ChatPaletteExample } from './chat-palette.js';
 
-it('composes a modal conversation and scoped dismissal', async () => {
-  const user = userEvent.setup();
+it('appends host-owned data while keeping the composer reachable', async () => {
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <ReacdProvider>
       <ChatPaletteExample />
     </ReacdProvider>,
   );
-  await user.click(screen.getByRole('button', { name: 'Open example conversation' }));
-  const draft = await screen.findByRole('textbox', { name: 'Palette message' });
-  await user.type(draft, 'Palette draft');
-  await user.keyboard('{Enter}');
-  expect(
-    within(screen.getByRole('log', { name: 'Palette transcript' })).getByText(
-      'Palette draft',
-      { exact: true },
-    ),
-  ).toBeVisible();
-  await user.keyboard('{Escape}');
-  expect(screen.queryByRole('dialog', { name: 'Example conversation' })).toBeNull();
+  const input = screen.getByRole('textbox', { name: 'Message' });
+  await userEvent.type(input, 'Hello');
+  await userEvent.click(screen.getByRole('button', { name: 'Send message' }));
+  expect(screen.getByRole('log')).toHaveTextContent('Hello');
+  expect(input).toHaveValue('');
 });

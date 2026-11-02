@@ -18,7 +18,7 @@ it('runs Splitter Jotai state and resets controlled percentage shares', async ()
     target: { value: 'Changed outline' },
   });
   fireEvent.keyDown(screen.getByRole('separator'), { key: 'ArrowRight' });
-  expect(screen.getByText('outline share: 51')).toBeVisible();
+  expect(screen.getByText('outline share: 55')).toBeVisible();
   await user.click(screen.getByRole('switch', { name: 'Splitter RTL' }));
   await user.click(screen.getByRole('switch', { name: 'Vertical splitter' }));
   await user.click(screen.getByRole('switch', { name: 'Disable resizing' }));

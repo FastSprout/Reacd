@@ -42,3 +42,24 @@ it('runs the documented context actions with optional retained opening', async (
   await user.click(screen.getByRole('menuitem', { name: 'Archive sample record' }));
   expect(screen.getByText('Sample record archived locally.')).toBeInTheDocument();
 });
+
+it('runs context choices and the native sharing submenu', async () => {
+  const user = userEvent.setup();
+  render(
+    <ReacdProvider adapter={shadcnAdapter}>
+      <ContextMenuExample />
+    </ReacdProvider>,
+  );
+  fireEvent.contextMenu(screen.getByRole('group', { name: 'Sample record context' }));
+  await user.click(await screen.findByRole('menuitemcheckbox', { name: 'Pin record' }));
+  expect(screen.getByText('Record is pinned.')).toBeVisible();
+  await user.click(screen.getByRole('menuitemradio', { name: 'Compact' }));
+  expect(screen.getByText('Density: compact')).toBeVisible();
+  screen.getByRole('menuitem', { name: 'Share' }).focus();
+  await user.keyboard('{ArrowRight}');
+  const copy = await screen.findByRole('menuitem', { name: 'Copy record identifier' });
+  await waitFor(() => expect(copy).toHaveFocus());
+  await user.keyboard('{Enter}');
+  expect(screen.getByText('Record identifier copied locally.')).toBeVisible();
+  await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
+});

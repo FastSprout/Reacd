@@ -1,13 +1,12 @@
 ---
-template: preview.html
 reacd_preview: InputRating
-reacd_preview_height: 560
 ---
 
 # InputRating
 
-Collect a controlled star rating, including half-star values, with one accessible
-slider. The host owns the number. Zero represents an unrated value.
+Collect a controlled rating, including half values. The host owns the number; zero
+represents an unrated value. Each adapter keeps its selected SDK's native controls and
+interaction.
 
 ```tsx
 import { InputRating } from '@fastsprout/reacd';
@@ -19,14 +18,26 @@ import { InputRating } from '@fastsprout/reacd';
   length={5}
   step={0.5}
   clearable
-  hoverable
 />;
 ```
 
-Arrow keys change one step. Home selects zero and End selects the maximum. Hover
-previews never change state. `clearable` adds a labelled clear button. The selected
-value is announced as a number of stars. When required, zero blocks form submission and
-focus moves to the visible slider.
+The default shadcn adapter composes its native scalar Slider. Arrow keys change one
+step, Home selects zero and End selects the maximum. Material UI uses its native Rating
+radio choices and star hover preview; readonly ratings use its nonfocusable image
+semantics. Neither adapter replaces its SDK's keyboard engine.
+
+Omitted `hoverable` uses the native default: false in shadcn, true in Material UI.
+Explicit `hoverable=true` is unsupported in shadcn; explicit `hoverable=false` is
+unsupported in Material UI. Those requests throw an adapter/component diagnostic rather
+than silently changing meaning or inventing pointer interaction.
+
+Hover previews never change host state. `clearable` adds a labelled clear button. When
+required, zero blocks logical form submission. shadcn focuses its native Slider thumb;
+Material UI focuses the named SDK form field group. The `name` prop applies to the SDK's
+native editable input. Material readonly image output retains its named value through a
+native Material Input successful form control; it adds no editable UI. Zero serializes
+as the SDK's empty choice. Unnamed ratings omit that readonly control, and disabled or
+inactive fields omit their value.
 
 | Prop                       | Meaning                               |
 | -------------------------- | ------------------------------------- |

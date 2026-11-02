@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Chart
-reacd_preview_height: 560
 ---
 
 # Chart
@@ -36,16 +34,28 @@ categories, six series and numeric magnitude up to one trillion. Malformed data 
 validation. Empty categories/series, loading and error have named states; retry only
 appears when an actual host callback is supplied.
 
-Traces use validated template text contrast. Patterns, dashes and markers distinguish
-series without depending on arbitrary primary colors. SVG rendering is private to the
-adapter. There are no public SVG props, CSS, custom formatters or chart-engine objects.
+Traces retain contrast against their template surface. The default shadcn adapter
+uses validated text colors, patterns, dashes and markers. SVG rendering is private to
+the adapter. There are no public SVG props, CSS, custom formatters or chart-engine
+objects.
 The original semantic table always remains available and scrolls locally if needed.
 
 Use Jotai for application data. Optional generative transport accepts the same literal
 content and a registered retry action. Chart does not invent its own application store.
-It uses deterministic geometry and has no ambient locale, clock or viewport defaults.
+Application declarations contain no chart geometry or device breakpoints.
 
-The live reference offers kinds, missing/zero/empty data, direction, an inverted
-template and real loading/error/retry transitions. It compiles from
-`docs/examples/chart.tsx`. This curated contract does not provide tooltips, selection,
-drag, animation or arbitrary Nuxt/TanStack chart definitions.
+The live example shows monthly sales as a bar chart with its original data table.
+It compiles from `docs/examples/chart.tsx`. Applications cannot inject arbitrary
+chart-engine definitions, custom renderers or interaction engines.
+
+## Material UI
+
+The Material adapter uses MUI X LineChart, BarChart and PieChart. Area charts use
+the native line series area option. Responsive sizing, markers, tooltips, keyboard
+interaction and motion follow the SDK's behavior. The original data table stays
+available below the chart.
+
+Colors come from the selected Material theme. Palette entries below 3:1 contrast
+against the paper surface use its validated text color instead. Native legends
+and the data table identify series; this mapping does not add custom SVG patterns
+or a separate chart interaction engine.

@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { z } from 'zod';
 import { describe, expect, it } from 'vitest';
 import { parsePublicationManifest } from './metadata.js';
 
@@ -16,7 +18,7 @@ function manifest() {
     engines: { node: '>=22.12.0' },
     peerDependencies: { react: '19.3.1', 'react-dom': '19.3.1', jotai: '3.0.1' },
     devDependencies: { react: '19.3.1', 'react-dom': '19.3.1', jotai: '3.0.1' },
-    dependencies: { zod: '4.6.7' },
+    dependencies: { zod: '4.6.7', '@fastsprout/reacd-shadcn': '0.1.0' },
   };
 }
 
@@ -28,9 +30,13 @@ describe('publication metadata', () => {
       peerDependencies: manifest().peerDependencies,
     });
     for (const version of ['1.0.0-rc.1', '1.0.0+build.42']) {
-      expect(parsePublicationManifest({ ...manifest(), version }).version).toBe(
-        version,
-      );
+      expect(
+        parsePublicationManifest({
+          ...manifest(),
+          version,
+          dependencies: { '@fastsprout/reacd-shadcn': version },
+        }).version,
+      ).toBe(version);
     }
   });
 
@@ -63,15 +69,27 @@ describe('publication metadata', () => {
     );
   });
 
-  it('accepts absent runtime dependencies but rejects malformed maps', () => {
+  it('requires runtime default adapter and rejects malformed maps', () => {
     const input = manifest();
     const withoutDependencies = { ...input };
     Reflect.deleteProperty(withoutDependencies, 'dependencies');
-    expect(parsePublicationManifest(withoutDependencies).name).toBe(
-      '@fastsprout/reacd',
-    );
+    expect(() => parsePublicationManifest(withoutDependencies)).toThrow();
     expect(() => parsePublicationManifest({ ...input, dependencies: [] })).toThrow(
       'Publication manifest',
     );
   });
+});
+
+it('requires the public default SDK dependency at the engine release version', () => {
+  const input: unknown = JSON.parse(readFileSync('package.json', 'utf8'));
+  const manifest = z.record(z.string(), z.unknown()).parse(input);
+  const version = manifest['version'];
+  expect(manifest['dependencies']).toHaveProperty('@fastsprout/reacd-shadcn', version);
+  expect(parsePublicationManifest(manifest).version).toBe(version);
+  expect(() =>
+    parsePublicationManifest({
+      ...manifest,
+      dependencies: { '@fastsprout/reacd-shadcn': '0.0.0' },
+    }),
+  ).toThrow();
 });

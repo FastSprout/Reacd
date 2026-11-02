@@ -1,10 +1,15 @@
 ---
-template: preview.html
 reacd_preview: EditorEmojiMenu
-reacd_preview_height: 560
 ---
 
 # EditorEmojiMenu
+
+## Adapter availability
+
+The Editor family currently has no native mapping in either bundled adapter. The TSX
+declarations and behavior below describe its closed contract, pending a verified SDK
+integration. The preview currently reports an explicit unsupported component error.
+Schema validation and compiled source do not establish native editing support.
 
 EditorEmojiMenu connects a closed item catalog to the nearest Editor. Type `:` in the
 editable document to filter results. Arrow keys select enabled options, Enter applies

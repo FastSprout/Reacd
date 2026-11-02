@@ -49,6 +49,7 @@ export function dashboardDocument(selection = true) {
               collapsedContent: [text('Short label')],
               children: [
                 { type: 'Input', label: 'Navigation draft', value: binding('draft') },
+                { type: 'DashboardResizeHandle' },
               ],
             },
           ],
@@ -83,7 +84,7 @@ export function dashboardDocument(selection = true) {
                     },
                   ],
                   end: [text('Toolbar end')],
-                  children: [{ type: 'DashboardResizeHandle' }],
+                  children: [],
                 },
               ],
             },

@@ -1,11 +1,12 @@
+import { DeferredView } from '../loading/deferred-view.js';
 import * as SearchButton from '../../../docs/examples/content-search-button.js';
 import { NavigationExample } from '../../../docs/examples/navigation.js';
 import { atom, useAtom } from 'jotai';
 import { App, Section, Toggle, VStack } from '@fastsprout/reacd';
-import { PaginationExample } from '../../../docs/examples/pagination.js';
+import { PaginationExample } from '../fixtures/pagination.js';
 import { BreadcrumbExample } from '../../../docs/examples/breadcrumb.js';
 import { LinkExample } from '../../../docs/examples/link.js';
-import { TabsExample } from '../../../docs/examples/tabs.js';
+import { TabsExample } from '../fixtures/tabs.js';
 import { FooterColumnsExample } from '../../../docs/examples/footer-columns.js';
 import { NavigationMenuExample } from '../../../docs/examples/navigation-menu.js';
 import { StepperExample } from '../../../docs/examples/stepper.js';
@@ -32,30 +33,68 @@ export function NavigationExamples() {
             checked={rtl}
             onCheckedChange={setRtl}
           />
-          <BreadcrumbExample />
-          <LinkExample />
-          <TabsExample />
-          <FooterColumnsExample />
-          <NavigationMenuExample />
-          <StepperExample />
-          <CommandPaletteExample />
-          <DrawerExample />
-          <SlideoverExample />
-          <DropdownMenuExample />
-          <ContextMenuExample />
-          <ContentSurroundExample />
-          <ContentSearchExample />
-          <SearchButton.ContentSearchButtonExample />
-          <ContentNavigationExample />
-          <ContentTocExample />
-          <ToastExample />
-          <PaginationExample />
+          <DeferredView label="Breadcrumb">
+            <BreadcrumbExample />
+          </DeferredView>
+          <DeferredView label="Link">
+            <LinkExample />
+          </DeferredView>
+          <DeferredView label="Tabs">
+            <TabsExample />
+          </DeferredView>
+          <DeferredView label="FooterColumns">
+            <FooterColumnsExample />
+          </DeferredView>
+          <DeferredView label="NavigationMenu">
+            <NavigationMenuExample />
+          </DeferredView>
+          <DeferredView label="Stepper">
+            <StepperExample />
+          </DeferredView>
+          <DeferredView label="CommandPalette">
+            <CommandPaletteExample />
+          </DeferredView>
+          <DeferredView label="Drawer">
+            <DrawerExample />
+          </DeferredView>
+          <DeferredView label="Slideover">
+            <SlideoverExample />
+          </DeferredView>
+          <DeferredView label="DropdownMenu">
+            <DropdownMenuExample />
+          </DeferredView>
+          <DeferredView label="ContextMenu">
+            <ContextMenuExample />
+          </DeferredView>
+          <DeferredView label="ContentSurround">
+            <ContentSurroundExample />
+          </DeferredView>
+          <DeferredView label="ContentSearch">
+            <ContentSearchExample />
+          </DeferredView>
+          <DeferredView label="ContentSearchButton">
+            <SearchButton.ContentSearchButtonExample />
+          </DeferredView>
+          <DeferredView label="ContentNavigation">
+            <ContentNavigationExample />
+          </DeferredView>
+          <DeferredView label="ContentToc">
+            <ContentTocExample />
+          </DeferredView>
+          <DeferredView label="Toast">
+            <ToastExample />
+          </DeferredView>
+          <DeferredView label="Pagination">
+            <PaginationExample />
+          </DeferredView>
         </VStack>
-        <NavigationExample />
+        <DeferredView label="Navigation">
+          <NavigationExample />
+        </DeferredView>
       </Section>
     </App>
   );
 }
 import { ContentNavigationExample } from '../../../docs/examples/content-navigation.js';
 import { ContentTocExample } from '../../../docs/examples/content-toc.js';
-import { ToastExample } from '../../../docs/examples/toast.js';
+import { ToastExample } from '../fixtures/toast.js';

@@ -58,7 +58,9 @@ function validate(input: unknown, policy: PublicationPolicy): string {
   const dependencies = record(
     manifest['dependencies'] === undefined ? {} : manifest['dependencies'],
   );
-  if (policy.name !== PUBLICATION_POLICY.name) {
+  if (policy.name === PUBLICATION_POLICY.name) {
+    matches(dependencies[SHADCN_PUBLICATION_POLICY.name], version);
+  } else {
     matches(peers[PUBLICATION_POLICY.name], version);
   }
   if (policy.name !== PUBLICATION_POLICY.name) {

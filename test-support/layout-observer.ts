@@ -48,9 +48,17 @@ export function installLayout(width = 1024): () => void {
         400,
       );
     });
+  const inline = vi
+    .spyOn(HTMLElement.prototype, 'offsetWidth', 'get')
+    .mockImplementation(() => currentWidth);
+  const block = vi
+    .spyOn(HTMLElement.prototype, 'offsetHeight', 'get')
+    .mockReturnValue(400);
   vi.stubGlobal('ResizeObserver', ControlledResizeObserver);
   return () => {
     geometry.mockRestore();
+    inline.mockRestore();
+    block.mockRestore();
     vi.stubGlobal('ResizeObserver', original);
     observers.clear();
   };

@@ -20,6 +20,7 @@ export const PUBLICATION_POLICY = {
     './jsx-runtime',
     './jsx-dev-runtime',
     './bootstrap',
+    './styles',
     './adapter-runtime/core/*.js',
     './adapter-runtime/schema/*.js',
     './adapter-runtime/components/*.js',

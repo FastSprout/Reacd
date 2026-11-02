@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: ColorModeAvatar
-reacd_preview_height: 560
 ---
 
 # ColorModeAvatar
@@ -11,7 +9,7 @@ An Avatar with separate image sources for resolved light and dark modes.
 <!-- reacd-live-preview -->
 
 ```tsx
---8<-- "examples/color-mode.tsx"
+--8<-- "examples/color-mode-avatar.tsx"
 ```
 
 ```tsx
@@ -33,4 +31,7 @@ Switching source resets the private image lifecycle, retaining the account name 
 the new source loads or fails. Generative mode accepts a resolved literal or read text
 binding. It never writes application state.
 
-See the compiled [color-mode example](../examples/color-mode.tsx).
+See the compiled [color-mode example](../examples/color-mode-avatar.tsx).
+
+The shared [appearance wrapper](../examples/appearance-preview.tsx) applies the
+selected palette while keeping the example focused on one avatar.

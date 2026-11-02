@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: InputDate
-reacd_preview_height: 560
 ---
 
 # InputDate
@@ -91,8 +89,15 @@ segments retain left-to-right numeric order inside an RTL App. Arabic locales re
 their numeric bidi behavior. Rendering does not select dates from the ambient clock or
 timezone.
 
-The field does not open an implicit calendar popup. Compose the separate Calendar
-component with the same controlled state when your application needs both entry modes.
+The shadcn field does not open an implicit calendar popup. Compose the separate
+Calendar component with the same controlled state when you need both entry modes.
+
+The Material adapter uses the community MUI X DatePicker, including its native
+calendar popup and segmented field. It supports single dates; range mode throws an
+explicit unsupported-component error. Locales use installed date-fns data,
+preferring an exact match and otherwise matching the requested language. A language
+without locale data reports an explicit unsupported-component error. Numeric
+formatting follows the native SDK and its date adapter.
 
 ## Props
 

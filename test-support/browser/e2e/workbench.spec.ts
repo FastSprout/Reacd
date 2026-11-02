@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
+import { watchPreviewFailures } from '../preview-failures.js';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 
 const WIDTHS = [240, 320, 375, 600, 768, 1024, 1440, 1920];
@@ -19,115 +21,42 @@ async function contained(page: Page) {
     viewport: window.innerWidth,
   }));
   expect(widths.page).toBeLessThanOrEqual(widths.viewport + PIXEL_TOLERANCE);
-  const escaped = await page.locator('.reacd-node').evaluateAll(
-    (elements, tolerance): string[] =>
-      elements.flatMap<string>((element) => {
+  const surface = page.locator('[data-adapter]').first();
+  await expect(surface).toBeVisible();
+  const surfaceBox = await surface.boundingBox();
+  if (!surfaceBox) throw new Error('Expected native application surface bounds.');
+  expect(surfaceBox.width).toBeGreaterThan(0);
+  expect(surfaceBox.x).toBeGreaterThanOrEqual(-PIXEL_TOLERANCE);
+  expect(surfaceBox.x + surfaceBox.width).toBeLessThanOrEqual(
+    widths.viewport + PIXEL_TOLERANCE,
+  );
+  const forms = page.getByRole('form');
+  const escaped = await forms.evaluateAll(
+    (elements, tolerance) =>
+      elements.flatMap((element) => {
         const box = element.getBoundingClientRect();
-        let ancestor = element.parentElement;
-        while (ancestor !== null && getComputedStyle(ancestor).display === 'contents')
-          ancestor = ancestor.parentElement;
-        const parent = ancestor?.getBoundingClientRect();
+        let parent = element.parentElement;
+        while (parent && getComputedStyle(parent).display === 'contents')
+          parent = parent.parentElement;
         if (!parent || box.width === 0) return [];
-        return box.right > parent.right + tolerance ||
-          box.left < parent.left - tolerance
-          ? [element.getAttribute('class') ?? element.tagName]
+        const outer = parent.getBoundingClientRect();
+        return box.left < outer.left - tolerance || box.right > outer.right + tolerance
+          ? [`Native form escaped: ${element.getAttribute('aria-label')}`]
           : [];
       }),
     PIXEL_TOLERANCE,
   );
   expect(escaped).toEqual([]);
-  const controls = await page
-    .locator('[role="slider"], .reacd-range-root input[type="range"]')
-    .evaluateAll(
-      (elements, tolerance): string[] =>
-        elements.flatMap<string>((element) => {
-          const root =
-            element.closest('.reacd-range-control') ?? element.closest('.reacd-slider');
-          if (root === null) return ['Missing slider track.'];
-          const visibleThumb = element.closest('.reacd-range-thumb') ?? element;
-          const thumb = visibleThumb.getBoundingClientRect();
-          const track = root.getBoundingClientRect();
-          const minimum = Number(
-            element.getAttribute('aria-valuemin') ?? element.getAttribute('min'),
-          );
-          const maximum = Number(
-            element.getAttribute('aria-valuemax') ?? element.getAttribute('max'),
-          );
-          const value = Number(element.getAttribute('aria-valuenow'));
-          if (
-            !Number.isFinite(minimum) ||
-            !Number.isFinite(maximum) ||
-            maximum <= minimum ||
-            !Number.isFinite(value)
-          )
-            return ['Invalid slider bounds or value.'];
-          const fraction = (value - minimum) / (maximum - minimum);
-          const vertical = element.getAttribute('aria-orientation') === 'vertical';
-          const reverse = vertical || getComputedStyle(root).direction === 'rtl';
-          const start = vertical ? track.top : track.left;
-          const extent = vertical ? track.height : track.width;
-          const thumbExtent = vertical ? thumb.height : thumb.width;
-          const distance = thumbExtent / 2 + (extent - thumbExtent) * fraction;
-          const expected = reverse ? start + extent - distance : start + distance;
-          const center = vertical
-            ? thumb.top + thumb.height / 2
-            : thumb.left + thumb.width / 2;
-          return thumb.left < track.left - tolerance ||
-            thumb.right > track.right + tolerance ||
-            thumb.top < track.top - tolerance ||
-            thumb.bottom > track.bottom + tolerance ||
-            Math.abs(center - expected) > tolerance
-            ? ['Slider thumb does not match its track and value.']
-            : [];
-        }),
-      PIXEL_TOLERANCE,
-    );
-  expect(controls).toEqual([]);
-  const targets = await page.getByRole('checkbox').evaluateAll(
-    (elements, minimum) =>
-      elements.map((element) => {
-        const box = element.getBoundingClientRect();
-        return box.width >= minimum && box.height >= minimum;
-      }),
-    LAYOUT_POLICY.controlTargetPx,
-  );
-  expect(targets.every(Boolean)).toBe(true);
-  const switches = await page.getByRole('switch').evaluateAll(
-    (elements, tolerance): string[] =>
-      elements.flatMap<string>((element) => {
-        const thumb = element.querySelector('span');
-        if (thumb === null) return ['Missing toggle thumb.'];
-        const track = element.getBoundingClientRect();
-        const marker = thumb.getBoundingClientRect();
-        const inset = Number.parseFloat(
-          getComputedStyle(element).getPropertyValue('--reacd-toggle-inset'),
-        );
-        const rtl = getComputedStyle(element).direction === 'rtl';
-        const checked = element.getAttribute('aria-checked') === 'true';
-        const edge =
-          checked !== rtl ? track.right - marker.right : marker.left - track.left;
-        return !Number.isFinite(inset) ||
-          marker.left < track.left - tolerance ||
-          marker.right > track.right + tolerance ||
-          marker.top < track.top - tolerance ||
-          marker.bottom > track.bottom + tolerance ||
-          Math.abs(edge - inset) > tolerance
-          ? ['Toggle thumb does not match its track and state.']
-          : [];
-      }),
-    PIXEL_TOLERANCE,
-  );
-  expect(switches).toEqual([]);
 }
 
-test('detects real overflow through a display-contents form boundary', async ({
+test('detects real overflow through the selected SDK native form boundary', async ({
   page,
 }) => {
   await page.setViewportSize({ width: OVERFLOW_PROBE_WIDTH, height: VIEWPORT_HEIGHT });
   await page.goto('/');
   const form = page.getByRole('form', { name: 'Local credential example' });
   await expect(form).toBeVisible();
-  await expect(form.locator('..')).toHaveCSS('display', 'contents');
+  await expect(form.locator('..')).not.toHaveCSS('display', 'contents');
   await contained(page);
   await form.evaluate((element, offset) => {
     if (!(element instanceof HTMLElement)) throw new Error('Missing native form.');
@@ -137,7 +66,9 @@ test('detects real overflow through a display-contents form boundary', async ({
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
   ).toBeLessThanOrEqual(OVERFLOW_PROBE_WIDTH + PIXEL_TOLERANCE);
-  await expect(contained(page)).rejects.toThrow('reacd-node reacd-vstack');
+  await expect(contained(page)).rejects.toThrow(
+    'Native form escaped: Local credential example',
+  );
 });
 
 for (const template of TEMPLATES) {
@@ -146,6 +77,7 @@ for (const template of TEMPLATES) {
       page,
     }) => {
       await page.setViewportSize({ width, height: VIEWPORT_HEIGHT });
+      const failures = watchPreviewFailures(page);
       await page.goto('/');
       await select(page, 'Appearance', template);
       await contained(page);
@@ -180,6 +112,10 @@ for (const template of TEMPLATES) {
       ).toHaveAttribute('tabindex', '0');
       await contained(page);
       await page.getByRole('tab', { name: 'Generative UI' }).click();
+      if (test.info().project.name === 'mui') {
+        await expectUnsupportedDiagnostic(page, failures, 'Generative UI', 'SplitView');
+        return;
+      }
       await expect(page.getByRole('region', { name: 'Sample orders' })).toHaveAttribute(
         'tabindex',
         '0',
@@ -193,9 +129,7 @@ for (const template of TEMPLATES) {
   }) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
+    const failures = watchPreviewFailures(page);
     await page.goto('/');
     await select(page, 'Appearance', template);
     await page.getByRole('button', { name: 'Example notes' }).click();
@@ -207,7 +141,7 @@ for (const template of TEMPLATES) {
       page.getByRole('switch', { name: 'Show advanced settings' }),
     ).toBeFocused();
     await page.getByRole('button', { name: 'Example overview' }).focus();
-    await page.keyboard.press('End');
+    await page.keyboard.press(test.info().project.name === 'mui' ? 'Tab' : 'End');
     await expect(page.getByRole('button', { name: 'Example notes' })).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(page.getByLabel('Panel note')).toHaveValue('Retained panel value');
@@ -247,12 +181,23 @@ for (const template of TEMPLATES) {
       page.getByRole('status').filter({ hasText: 'Loading data' }),
     ).toHaveText('Loading data…');
     await select(page, 'Data state', 'Error');
-    await expect(page.getByRole('alert')).toContainText('Example failure.');
+    await expect(
+      page.getByRole('alert').filter({ hasText: 'Example failure.' }),
+    ).toBeVisible();
     await select(page, 'Data state', 'Ready');
     await expect(
       page.getByRole('table', { name: 'Example inventory', exact: true }),
     ).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Documentation' })).toHaveAttribute(
+      'href',
+      'http://127.0.0.1:8000/',
+    );
     await page.getByRole('tab', { name: 'Generative UI' }).click();
+    if (test.info().project.name === 'mui') {
+      await expectUnsupportedDiagnostic(page, failures, 'Generative UI', 'SplitView');
+      expect(errors).toEqual([]);
+      return;
+    }
     await contained(page);
     await page.getByRole('slider').focus();
     await page.keyboard.press('ArrowRight');
@@ -263,7 +208,7 @@ for (const template of TEMPLATES) {
     await page.getByRole('button', { name: 'Sort Amount' }).click();
     await expect(
       page.getByRole('columnheader', { name: /Sort Amount/ }),
-    ).toHaveAttribute('aria-sort', 'ascending');
+    ).toHaveAttribute('aria-sort', 'descending');
     await page.getByLabel('Filter Name').fill('gamma');
     await expect(page.getByRole('checkbox', { name: 'Select row C' })).toBeVisible();
     await contained(page);

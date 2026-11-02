@@ -18,7 +18,7 @@ it('changes the documented timeline and retains controlled progress', async () =
   await user.click(screen.getByRole('switch', { name: 'Reverse timeline' }));
   await user.click(screen.getByRole('switch', { name: 'Right to left timeline' }));
   await user.click(screen.getByRole('switch', { name: 'Horizontal timeline' }));
-  expect(screen.getByRole('list')).toHaveAttribute('data-orientation', 'horizontal');
+  expect(screen.getByRole('list').classList.contains('flex-row')).toBe(true);
   expect(screen.getByRole('button', { name: 'Release review' })).toBeDisabled();
   await user.click(screen.getByRole('switch', { name: 'Horizontal timeline' }));
 });

@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: ColorModeSelect
-reacd_preview_height: 560
 ---
 
 # ColorModeSelect
@@ -12,7 +10,7 @@ available in server output before the option popup mounts.
 <!-- reacd-live-preview -->
 
 ```tsx
---8<-- "examples/color-mode.tsx"
+--8<-- "examples/color-mode-select.tsx"
 ```
 
 ```tsx
@@ -36,4 +34,7 @@ and the validated template used for that preference.
 Generative value uses read/readWrite text state. Required systemMode is a resolved
 literal or read binding. Enum constraints also protect subsequent host writes.
 
-See the compiled [color-mode example](../examples/color-mode.tsx).
+See the compiled [color-mode example](../examples/color-mode-select.tsx).
+
+The shared [appearance wrapper](../examples/appearance-preview.tsx) applies the
+selected light/dark palette. The example above contains only this control.

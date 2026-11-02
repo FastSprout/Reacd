@@ -1,5 +1,7 @@
 import '@fastsprout/reacd-shadcn/styles';
 import { browserAdapter } from './adapter.js';
+import { ViewBoundary } from
+  '../../tooling/conformance/loading/view-boundary.js';
 import { COMPOSITION_HOST_EVENTS } from './composition-events.js';
 import { useEffect } from 'react';
 import { atom, useAtom } from 'jotai';
@@ -169,15 +171,17 @@ function CompositionSafety() {
                 },
               ]}
             >
-              <Popover
-                title="Shared popup"
-                description="Shared fallback popup"
-                triggerLabel="Open shared popup"
-                open={popover}
-                onOpenChange={setPopover}
-              >
-                <Button label="Shared popup action" onPress={() => undefined} />
-              </Popover>
+              <ViewBoundary label="Shared tab popup">
+                <Popover
+                  title="Shared popup"
+                  description="Shared fallback popup"
+                  triggerLabel="Open shared popup"
+                  open={popover}
+                  onOpenChange={setPopover}
+                >
+                  <Button label="Shared popup action" onPress={() => undefined} />
+                </Popover>
+              </ViewBoundary>
             </Tabs>
             <Text>{`Shared popup intent: ${String(popover)}`}</Text>
           </Section>

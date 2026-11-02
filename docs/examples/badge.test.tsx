@@ -15,8 +15,5 @@ it('runs documented badge severity and size changes', async () => {
   await user.click(screen.getByRole('switch', { name: 'Badge warning state' }));
   expect(screen.getByText('Review required')).toBeInTheDocument();
   await user.click(screen.getByRole('switch', { name: 'Large badge' }));
-  expect(screen.getByText('Review required').closest('[data-size]')).toHaveAttribute(
-    'data-size',
-    'large',
-  );
+  expect(screen.getByText('Review required').className).toContain('text-base');
 });

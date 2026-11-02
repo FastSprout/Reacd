@@ -19,6 +19,7 @@ const STYLING_PROPS = new Set([
 const DOM_GLOBALS = new Set([
   'document',
   'window',
+  'self',
   'globalThis',
   'HTMLElement',
   'customElements',
@@ -29,6 +30,7 @@ const RAW_RUNTIME = /(?:react(?:-dom)?(?:\/|$)|jsx(?:-dev)?-runtime)/;
 
 export function checkApplication(file: string, source: string): PolicyDiagnostic[] {
   const issues: PolicyDiagnostic[] = [];
+  const propertyNames = new Set<number>();
   const add = (offset: number, message: string) => {
     issues.push(diagnostic(file, source, offset, 'application', message));
   };
@@ -83,8 +85,13 @@ export function checkApplication(file: string, source: string): PolicyDiagnostic
     JSXSpreadAttribute(node) {
       add(node.start, 'Spread props can bypass closed component contracts.');
     },
+    MemberExpression(node) {
+      if (!node.computed && node.property.type === 'Identifier') {
+        propertyNames.add(node.property.start);
+      }
+    },
     Identifier(node) {
-      if (DOM_GLOBALS.has(node.name)) {
+      if (DOM_GLOBALS.has(node.name) && !propertyNames.has(node.start)) {
         add(node.start, `Browser internals are forbidden: ${node.name}.`);
       }
     },

@@ -10,23 +10,53 @@ const GITHUB_REPORTERS: ReporterDescription[] =
 
 export default defineConfig({
   testDir: 'test-support/browser/e2e',
+  testIgnore: '**/docs-*.spec.ts',
   fullyParallel: true,
   forbidOnly: true,
   workers: BROWSER_EXECUTION_POLICY.maxWorkers,
   retries: 0,
   reporter: [['list'], ['html', { open: 'never' }], ...GITHUB_REPORTERS],
-  projects: ['mui', 'shadcn'].map((name) => ({
-    name,
-    use: {
-      storageState: {
-        cookies: [],
-        origins: [4174, 4175, 4176, 4177, 4178].map((port) => ({
-          origin: `http://127.0.0.1:${port}`,
-          localStorage: [{ name: 'reacd-conformance-adapter', value: name }],
-        })),
+  projects: [
+    ...['mui', 'shadcn'].map((name) => ({
+      name,
+      testIgnore: ['**/docs-*.spec.ts', '**/pin-readability.spec.ts'],
+      use: {
+        storageState: {
+          cookies: [],
+          origins: [4174, 4175, 4176, 4177, 4178].map((port) => ({
+            origin: `http://127.0.0.1:${port}`,
+            localStorage: [{ name: 'reacd-conformance-adapter', value: name }],
+          })),
+        },
       },
-    },
-  })),
+    })),
+    ...(['chromium', 'firefox', 'webkit'] as const).map((browserName) => ({
+      name: `pin-${browserName}`,
+      testMatch: '**/pin-readability.spec.ts',
+      use: {
+        browserName,
+        ...(browserName === 'chromium'
+          ? {
+              permissions: ['clipboard-read', 'clipboard-write'],
+            }
+          : {}),
+        storageState: {
+          cookies: [],
+          origins: [
+            {
+              origin: 'http://127.0.0.1:4174',
+              localStorage: [
+                {
+                  name: 'reacd-conformance-adapter',
+                  value: 'shadcn',
+                },
+              ],
+            },
+          ],
+        },
+      },
+    })),
+  ],
   use: {
     baseURL: 'http://127.0.0.1:4174',
     browserName: 'chromium',
@@ -39,12 +69,6 @@ export default defineConfig({
         'npm run preview -- --config vite.conformance.config.ts ' +
         '--port 4174 --strictPort',
       url: 'http://127.0.0.1:4174',
-      reuseExistingServer: false,
-    },
-    {
-      command:
-        'npm run preview -- --config vite.site.config.ts ' + '--port 4175 --strictPort',
-      url: 'http://127.0.0.1:4175',
       reuseExistingServer: false,
     },
     ...[

@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { createStore } from 'jotai';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { EditorFieldView } from './editor-field-view.js';
+import { ViewBoundary } from '../../tooling/conformance/loading/view-boundary.js';
 import '@fastsprout/reacd-shadcn/styles';
 
 function Root() {
@@ -15,7 +16,9 @@ function Root() {
       store={store}
       templateId={compact ? 'erp-compact' : 'saas-modern-light'}
     >
-      <EditorFieldView onTemplate={() => setCompact(!compact)} />
+      <ViewBoundary label="Editor metadata">
+        <EditorFieldView onTemplate={() => setCompact(!compact)} />
+      </ViewBoundary>
     </ReacdProvider>
   );
 }

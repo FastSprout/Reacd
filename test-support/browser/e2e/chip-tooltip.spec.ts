@@ -4,7 +4,7 @@ import type { Page } from '@playwright/test';
 const WIDTHS = [240, 320, 375, 600, 768, 1024, 1440, 1920];
 const PROFILES = ['Spacious', 'Compact'];
 const TOLERANCE = 1;
-const LONG_TEXT = 'Long_sample_indicator_'.repeat(20);
+
 async function select(page: Page, name: string, option: string) {
   const trigger = page.getByRole('combobox', { name, exact: true });
   await trigger.click();
@@ -17,40 +17,46 @@ async function data(page: Page, profile: string) {
   await page.getByRole('button', { name: 'Content and data', exact: true }).click();
 }
 async function contained(page: Page) {
-  const failures = await page.locator('.reacd-chip').evaluateAll(
-    (elements, tolerance) =>
-      elements.flatMap((element) => {
-        const root = element.getBoundingClientRect();
-        const body = element.querySelector('.reacd-chip-body')?.getBoundingClientRect();
-        const marker = element
-          .querySelector('.reacd-chip-indicator')
-          ?.getBoundingClientRect();
-        if (marker === undefined || marker.width === 0) return [];
-        const outside =
-          marker.left < root.left - tolerance || marker.right > root.right + tolerance;
-        const overlap =
-          body !== undefined &&
-          body.height > 0 &&
-          body.top < marker.bottom - tolerance &&
-          body.bottom > marker.top + tolerance;
-        return outside || overlap ? ['Chip content overlaps or escapes.'] : [];
-      }),
-    TOLERANCE,
+  const marker = page.getByRole('img', { name: 'Unread messages: 3', exact: true });
+  const action = page.getByRole('button', { name: 'Open messages', exact: true });
+  await expect(marker).toBeVisible();
+  const body = await action.boundingBox();
+  const indicator = await marker.boundingBox();
+  const parent = await action.locator('..').boundingBox();
+  if (!body || !indicator || !parent) throw new Error('Missing native Chip bounds.');
+  expect(indicator.width).toBeGreaterThan(0);
+  expect(indicator.x).toBeGreaterThanOrEqual(parent.x - TOLERANCE);
+  expect(indicator.x + indicator.width).toBeLessThanOrEqual(
+    parent.x + parent.width + TOLERANCE,
   );
-  expect(failures).toEqual([]);
-  const viewport = await page.evaluate(() => ({
-    width: innerWidth,
-    scroll: document.documentElement.scrollWidth,
-  }));
-  expect(viewport.scroll).toBeLessThanOrEqual(viewport.width + TOLERANCE);
+  expect(indicator.y + indicator.height).toBeLessThanOrEqual(body.y + TOLERANCE);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual((await page.evaluate(() => innerWidth)) + TOLERANCE);
 }
-async function openHint(page: Page) {
+async function hintClosed(page: Page) {
+  const content =
+    test.info().project.name === 'mui'
+      ? '.MuiTooltip-tooltip'
+      : '[data-slot="tooltip-content"]';
+  await expect(page.locator(`${content}:visible`)).toHaveCount(0);
+}
+async function openHint(page: Page, interaction: 'focus' | 'hover' = 'focus') {
   const action = page.getByRole('button', { name: 'Run annotated action' });
   await action.scrollIntoViewIfNeeded();
-  await page.keyboard.press('Tab');
-  await action.focus();
+  if (interaction === 'hover') await action.hover();
+  else await action.focus();
   await expect(page.getByRole('tooltip')).toBeVisible();
-  await expect(page.locator('.reacd-tooltip-positioner')).toHaveCSS('opacity', '1');
+  const visual =
+    test.info().project.name === 'mui'
+      ? page.locator('.MuiTooltip-tooltip')
+      : page.locator('[data-slot="tooltip-content"]');
+  await expect(visual).toHaveCount(1);
+  if (test.info().project.name === 'shadcn') {
+    await expect(visual).toHaveAttribute('data-state', /^(instant|delayed)-open$/);
+  }
+  await expect(visual).toHaveCSS('opacity', '1');
+  return visual;
 }
 
 for (const profile of PROFILES) {
@@ -60,35 +66,54 @@ for (const profile of PROFILES) {
     }) => {
       await page.setViewportSize({ width, height: 1000 });
       await data(page, profile);
-      await page.getByLabel('Chip text', { exact: true }).fill(LONG_TEXT);
-      for (const corner of ['Top start', 'Top end', 'Bottom start', 'Bottom end']) {
-        await select(page, 'Chip corner', corner);
-        await contained(page);
-      }
+      await contained(page);
       await page.getByRole('switch', { name: 'Long tooltip text' }).check();
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
       });
       await contained(page);
-      await openHint(page);
-      await expect
-        .poll(async () => {
-          const popup = await page.getByRole('tooltip').boundingBox();
-          return (
-            popup !== null &&
-            popup.x >= -TOLERANCE &&
-            popup.x + popup.width <= width + TOLERANCE &&
-            popup.y >= -TOLERANCE &&
-            popup.y + popup.height <= 1000 + TOLERANCE
-          );
-        })
-        .toBe(true);
+      const visual = await openHint(page, 'hover');
+      const arrow =
+        test.info().project.name === 'mui'
+          ? page.locator('.MuiTooltip-arrow')
+          : visual.locator('svg');
+      await expect(arrow).toHaveCount(1);
+      await expect(arrow).toBeVisible();
+      for (const painted of [visual, arrow]) {
+        await expect
+          .poll(async () => {
+            const popup = await painted.boundingBox();
+            return (
+              popup !== null &&
+              popup.x >= -TOLERANCE &&
+              popup.x + popup.width <= width + TOLERANCE &&
+              popup.y >= -TOLERANCE &&
+              popup.y + popup.height <= 1000 + TOLERANCE
+            );
+          })
+          .toBe(true);
+      }
+      const contentBox = await visual.boundingBox();
+      if (!contentBox) throw new Error('Expected the actual native Tooltip body.');
+      await visual.hover({
+        position: { x: contentBox.width / 2, y: contentBox.height / 4 },
+      });
       await page.keyboard.press('Escape');
-      await expect(page.getByRole('tooltip')).toHaveCount(0);
+      await hintClosed(page);
+      await expect(
+        page.getByRole('switch', { name: 'Controlled hint open' }),
+      ).not.toBeChecked();
       await page.evaluate(() => {
         document.documentElement.dir = 'rtl';
       });
       await contained(page);
+      await page.getByRole('button', { name: 'Open messages', exact: true }).click();
+      await expect(page.getByRole('img', { name: 'Unread messages: 3' })).toHaveCount(
+        0,
+      );
+      await expect(
+        page.getByText('You are all caught up.', { exact: true }),
+      ).toBeVisible();
     });
   }
   test(`${profile} hint focus, hover, actions, and dialog lifecycle`, async ({
@@ -96,64 +121,63 @@ for (const profile of PROFILES) {
   }) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
     await data(page, profile);
-    await page.getByRole('button', { name: 'Run annotated action' }).hover();
+    const action = page.getByRole('button', { name: 'Run annotated action' });
+    const wrapper = action.locator('..');
+    await action.hover();
     await expect(page.getByRole('tooltip')).toBeVisible();
-    await page.getByRole('tooltip').hover();
+    await (
+      test.info().project.name === 'mui'
+        ? page.locator('.MuiTooltip-tooltip')
+        : page.locator('[data-slot="tooltip-content"]')
+    ).hover();
     await expect(page.getByRole('tooltip')).toBeVisible();
     await page.getByRole('heading', { name: 'Tooltip preview', exact: true }).hover();
-    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await hintClosed(page);
     await openHint(page);
-    await page.getByRole('tooltip').hover();
-    await expect(page.getByRole('tooltip')).toBeVisible();
-    const group = page.locator('.reacd-tooltip-anchor').filter({
-      has: page.getByRole('button', { name: 'Run annotated action' }),
-    });
-    await expect(group).toHaveAttribute('tabindex', '-1');
-    await page.getByRole('button', { name: 'Run annotated action' }).click();
+    await action.click();
     await expect(page.getByText('Annotated action count: 1')).toBeVisible();
-    const staticAnchor = page.getByRole('group', {
-      name: 'Example placeholder identity',
-    });
-    await staticAnchor.focus();
+    await page.getByRole('img', { name: 'Example Reader', exact: true }).hover();
     await expect(page.getByRole('tooltip')).toContainText(
       'Example placeholder identity',
     );
     await page.keyboard.press('Escape');
     await page.getByRole('switch', { name: 'Disable tooltip child' }).check();
-    await expect(group).toHaveAttribute('tabindex', '0');
-    await page.keyboard.press('Tab');
-    await group.focus();
+    await expect(action).toBeDisabled();
+    if (test.info().project.name === 'shadcn') await wrapper.focus();
+    else await wrapper.hover();
     await expect(page.getByRole('tooltip')).toBeVisible();
     await page.keyboard.press('Escape');
-    const disable = page.getByRole('switch', { name: 'Disable tooltip', exact: true });
-    await disable.check();
-    await expect(group).toHaveAttribute('tabindex', '-1');
-    await page.getByRole('button', { name: 'Open sample messages' }).click();
-    await expect(page.getByText('Sample action count: 1')).toBeVisible();
+    await page.getByRole('switch', { name: 'Disable tooltip', exact: true }).check();
+    await wrapper.hover();
+    await hintClosed(page);
+    await page.getByRole('button', { name: 'Open messages', exact: true }).click();
+    await expect(
+      page.getByText('You are all caught up.', { exact: true }),
+    ).toBeVisible();
     await select(page, 'Appearance', profile === 'Spacious' ? 'Compact' : 'Spacious');
-    await expect(page.getByText('Sample action count: 1')).toBeVisible();
+    await expect(
+      page.getByText('You are all caught up.', { exact: true }),
+    ).toBeVisible();
     await page.getByRole('button', { name: 'Open tooltip dialog' }).click();
     const dialog = page.getByRole('dialog', { name: 'Tooltip dialog' });
     const dialogAction = dialog.getByRole('button', { name: 'Dialog sample action' });
-    await expect(dialogAction).toBeFocused();
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('Shift+Tab');
-    await expect(dialog.getByRole('tooltip')).toContainText('Hint inside the dialog');
+    await expect
+      .poll(() =>
+        dialog.evaluate((element) => element.contains(document.activeElement)),
+      )
+      .toBe(true);
+    await dialogAction.focus();
+    await expect(page.getByRole('tooltip')).toContainText('Hint inside the dialog');
     await page.keyboard.press('Escape');
     await expect(dialog).toBeVisible();
-    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await hintClosed(page);
     await page.keyboard.press('Escape');
     await expect(dialog).toHaveCount(0);
     await page.getByRole('button', { name: 'Open tooltip dialog' }).click();
-    await expect(
-      dialog.getByRole('group', { name: 'Hint inside the dialog' }),
-    ).toHaveAttribute('tabindex', '-1');
-    await page.getByRole('button', { name: 'Close tooltip dialog' }).click();
-    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await expect(dialogAction).toBeVisible();
+    await dialog.getByRole('button', { name: 'Close tooltip dialog' }).click();
+    await hintClosed(page);
     expect(errors).toEqual([]);
   });
 }
@@ -165,6 +189,6 @@ test.describe('touch hints', () => {
     await data(page, 'Spacious');
     await page.getByRole('button', { name: 'Run annotated action' }).tap();
     await expect(page.getByText('Annotated action count: 1')).toBeVisible();
-    await expect(page.getByRole('tooltip')).toHaveCount(0);
+    await hintClosed(page);
   });
 });

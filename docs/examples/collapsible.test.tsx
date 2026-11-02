@@ -20,7 +20,7 @@ describe('documented Collapsible example', () => {
     await user.type(screen.getByLabelText('Disclosure note'), 'Retained note');
     await chooseOption(user, 'Disclosure role', 'Editor');
     await user.click(screen.getByRole('button', { name: 'Nested settings' }));
-    expect(screen.getByText(/Long nested identifier/)).toBeVisible();
+    expect(screen.getByText(/Notification settings are shared/)).toBeVisible();
     await user.click(trigger);
     expect(screen.getByLabelText('Disclosure note')).not.toBeVisible();
     expect(screen.getByText('Disclosure is closed')).toBeVisible();
@@ -30,7 +30,7 @@ describe('documented Collapsible example', () => {
     expect(screen.getByRole('combobox', { name: 'Disclosure role' })).toHaveTextContent(
       'Editor',
     );
-    expect(screen.getByText(/Long nested identifier/)).toBeVisible();
+    expect(screen.getByText(/Notification settings are shared/)).toBeVisible();
     expect(screen.getByRole('button', { name: 'Unavailable settings' })).toBeDisabled();
     await user.click(screen.getByRole('button', { name: 'Reset disclosure note' }));
     expect(screen.getByLabelText('Disclosure note')).toHaveValue('');

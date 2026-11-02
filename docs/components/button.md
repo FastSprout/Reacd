@@ -1,12 +1,14 @@
 ---
-template: preview.html
 reacd_preview: Button
-reacd_preview_height: 560
 ---
 
 # Button
 
 Trigger an application action through a typed callback.
+
+## Usage
+
+Declare the action and keep its state next to the view.
 
 <!-- reacd-live-preview -->
 
@@ -18,7 +20,7 @@ Trigger an application action through a typed callback.
 <Button label="Save changes" onPress={saveChanges} />
 ```
 
-## Properties
+## API
 
 | Property   | Type                             | Purpose              |
 | ---------- | -------------------------------- | -------------------- |
@@ -26,6 +28,7 @@ Trigger an application action through a typed callback.
 | `onPress`  | `() => void`                     | Application action   |
 | `intent`   | `primary`, `secondary`, `danger` | Logical emphasis     |
 | `disabled` | `boolean`                        | Prevent activation   |
+| `pressed`  | `boolean`                        | Controlled selection |
 
 Optional leadingIcon and trailingIcon use the closed semantic Icon names and render
 decoratively beside the visible label. Optional loading blocks activation, exposes
@@ -36,6 +39,22 @@ native disabled semantics for pointer and keyboard interactions.
 Enter, Space and pointer activation request onPress. Button is always type button; it
 does not submit a surrounding form. Labels wrap and icons reflow when space is limited.
 The adapter owns dimensions and design tokens in every template.
+
+## Pressed state
+
+Use optional `pressed` for an action that represents a selected state. The
+application controls its value: `true` and `false` expose the matching native
+`aria-pressed` state; omitting it leaves an ordinary action button. Keep the
+accessible label stable while the selection changes.
+
+```tsx
+<Button label="Mono" pressed={preset === 'mono'} onPress={selectMono} />
+```
+
+Activation requests `onPress` and does not change `pressed` automatically. Use
+the callback to update Jotai state. Set `intent` separately when the selection
+needs different visual emphasis. Both generative transports accept the same
+optional boolean.
 
 ## Intent
 

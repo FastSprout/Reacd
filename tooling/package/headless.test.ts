@@ -12,8 +12,12 @@ beforeEach(() => {
   execute.mockReset();
 });
 afterEach(() => rmSync(parent, { recursive: true, force: true }));
-it('installs only the engine without repository dependency symlinks', () => {
-  verifyHeadlessInstall(process.cwd(), '/checked/package.tgz', parent);
+it('installs the default SDK transitively without repository symlinks', () => {
+  verifyHeadlessInstall(
+    process.cwd(),
+    { engine: '/checked/package.tgz', shadcn: '/checked/shadcn.tgz' },
+    parent,
+  );
   const input: unknown = JSON.parse(
     readFileSync(join(parent, 'headless-consumer/package.json'), 'utf8'),
   );
@@ -21,6 +25,7 @@ it('installs only the engine without repository dependency symlinks', () => {
     private: true,
     type: 'module',
     dependencies: { '@fastsprout/reacd': 'file:///checked/package.tgz' },
+    overrides: { '@fastsprout/reacd-shadcn': 'file:///checked/shadcn.tgz' },
   });
   expect(execute).toHaveBeenCalledTimes(2);
   expect(execute).toHaveBeenLastCalledWith(process.execPath, ['headless.mjs'], {
@@ -32,7 +37,11 @@ it.each([1, 2])('rejects failed headless stage %s', (stage) => {
   execute.mockImplementation(() => {
     if (execute.mock.calls.length === stage) throw new Error('Headless failed.');
   });
-  expect(() => verifyHeadlessInstall(process.cwd(), '/checked.tgz', parent)).toThrow(
-    'Headless failed',
-  );
+  expect(() =>
+    verifyHeadlessInstall(
+      process.cwd(),
+      { engine: '/checked.tgz', shadcn: '/shadcn.tgz' },
+      parent,
+    ),
+  ).toThrow('Headless failed');
 });

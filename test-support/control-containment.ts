@@ -28,10 +28,23 @@ export function measureControlEscapes(
         style.clipPath === SDK_MIRROR.clipping;
       if (unpaintedMirror) return [];
       const box = item.getBoundingClientRect();
+      let left = box.left;
+      let right = box.right;
+      for (
+        let parent = item.parentElement;
+        parent !== null && parent !== element;
+        parent = parent.parentElement
+      ) {
+        if (getComputedStyle(parent).overflowX !== 'visible') {
+          const clip = parent.getBoundingClientRect();
+          left = Math.max(left, clip.left);
+          right = Math.min(right, clip.right);
+        }
+      }
       if (
-        box.width > 0 &&
-        (box.left < outer.left - boundaryTolerance ||
-          box.right > outer.right + boundaryTolerance)
+        right > left && box.height > 0 &&
+        (left < outer.left - boundaryTolerance ||
+          right > outer.right + boundaryTolerance)
       ) {
         return [
           {

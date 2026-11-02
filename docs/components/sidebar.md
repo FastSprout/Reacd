@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Sidebar
-reacd_preview_height: 560
 ---
 
 # Sidebar
@@ -53,3 +51,17 @@ validated recursively, including action references in collapsed content.
 
 This is a closed React adaptation of shadcn Sidebar. Raw provider context, cookie
 persistence, styling hooks, native tags and arbitrary keyboard shortcuts are not public.
+
+## Native desktop and mobile transitions
+
+The shadcn adapter composes its native Sheet and Collapsible components. Only one
+content tree is mounted at a time. Host-controlled and Jotai application state is
+preserved when the container changes between docked navigation and a modal sheet. The
+SDK may remount uncontrolled DOM content when that modality changes; persist important
+form values in application state. Resizing does not change the separate desktop `open`
+and mobile `mobileOpen` values.
+
+An input can lose focus when the SDK changes presentation and remounts it. The
+replacement remains keyboard-accessible, and native modal focus trapping is
+released when navigation docks. Keep its value controlled when it must survive
+this transition.

@@ -1,48 +1,69 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { act, render, screen, waitFor } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-import { afterEach, beforeEach, expect, it } from 'vitest';
-import { ReacdProvider } from '@fastsprout/reacd';
-import { installEditorGeometry } from '../../test-support/editor-geometry.js';
-import { selectEditorText } from '../../test-support/editor-selection.js';
+import { act, render } from '@testing-library/react';
+import type { EditorDocument } from '@fastsprout/reacd';
+import { expect, it } from 'vitest';
+import { editorSchema } from '../../src/schema/editor/editor.schema.js';
+import { toggleSchema } from '../../src/schema/toggle/toggle.schema.js';
+import { buttonComponentSchema as buttonSchema } from
+  '../../src/schema/button/button.schema.js';
+import { appSchema } from '../../src/schema/app/app.schema.js';
+import {
+  exampleDeclarationProbe,
+  expectUnsupportedExample,
+} from '../../test-support/example-declaration-probe.js';
 import { EditorExample } from './editor.js';
 
-let restore: () => void = () => undefined;
-beforeEach(() => {
-  restore = installEditorGeometry();
-});
-afterEach(() => restore());
-
-it('runs editing, host replacement, protection and shared readers', async () => {
-  const user = userEvent.setup();
+it(
+  'reports native unavailability and preserves shared accepted/rejected documents',
+  () => {
+  expectUnsupportedExample(<EditorExample />, 'Editor');
+  const probe = exampleDeclarationProbe();
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <probe.Surface>
       <EditorExample />
-    </ReacdProvider>,
+    </probe.Surface>,
   );
-  const writer = await screen.findByRole('textbox', { name: 'Project notes' });
-  const reader = await screen.findByRole('textbox', { name: 'Notes reader' });
-  expect(screen.getByText('Document edit requests: 0')).toBeVisible();
-  expect(reader).toHaveAttribute('aria-readonly', 'true');
-  act(() => selectEditorText(writer));
-  await user.keyboard('!');
-  await waitFor(() => expect(reader.textContent).toBe('Start a project note.!'));
-  expect(screen.getByText('Document edit requests: 1')).toBeVisible();
-  await user.click(screen.getByRole('button', { name: 'Replace notes from host' }));
-  await waitFor(() => expect(writer.textContent).toBe('Replaced by the host.'));
-  expect(reader.textContent).toBe('Replaced by the host.');
-  expect(screen.getByText('Document edit requests: 1')).toBeVisible();
-  await user.click(screen.getByRole('switch', { name: 'Reject note changes' }));
-  act(() => selectEditorText(writer));
-  await user.keyboard('!');
-  await waitFor(() => expect(writer.textContent).toBe('Replaced by the host.'));
-  expect(screen.getByText('Document edit requests: 2')).toBeVisible();
-  await user.click(screen.getByRole('switch', { name: 'Read-only notes' }));
-  expect(writer).toHaveAttribute('contenteditable', 'false');
-  await user.click(screen.getByRole('switch', { name: 'Disable notes' }));
-  expect(writer).toHaveAttribute('aria-disabled', 'true');
-  await user.click(screen.getByRole('switch', { name: 'Right to left notes' }));
-  await user.click(screen.getByRole('button', { name: 'Restore notes document' }));
-  await waitFor(() => expect(reader.textContent).toBe('Start a project note.'));
-  expect(screen.getByText('Document edit requests: 0')).toBeVisible();
+  const read = (label = 'Project notes') => {
+    const value = probe.read('Editor', editorSchema, label);
+    if (!('onValueChange' in value)) throw new Error('Expected document callback');
+    return value;
+  };
+  const press = (label: string) =>
+    act(() => probe.read('Button', buttonSchema, label).onPress());
+  const toggle = (label: string) =>
+    act(() => {
+      const value = probe.read('Toggle', toggleSchema, label);
+      value.onCheckedChange(!value.checked);
+    });
+  const initial = read().value;
+  const proposal: EditorDocument = {
+    version: 1,
+    blocks: [
+      {
+        type: 'paragraph',
+        id: 'accepted',
+        content: [{ type: 'text', text: 'Accepted' }],
+      },
+    ],
+  };
+  expect(read('Notes reader').readOnly).toBe(true);
+  act(() => read().onValueChange(proposal));
+  expect(read('Notes reader').value).toEqual(proposal);
+  expect(probe.texts()).toContain('Document edit requests: 1');
+  press('Replace notes from host');
+  const host = read().value;
+  expect(host).not.toEqual(proposal);
+  expect(read('Notes reader').value).toEqual(host);
+  toggle('Reject note changes');
+  act(() => read().onValueChange(proposal));
+  expect(read().value).toEqual(host);
+  expect(probe.texts()).toContain('Document edit requests: 2');
+  toggle('Read-only notes');
+  toggle('Disable notes');
+  toggle('Right to left notes');
+  expect(read()).toMatchObject({ readOnly: true, disabled: true });
+  expect(probe.read('App', appSchema).direction).toBe('rtl');
+  press('Restore notes document');
+  expect(read().value).toEqual(initial);
+  expect(read('Notes reader').value).toEqual(initial);
+  expect(probe.texts()).toContain('Document edit requests: 0');
 });

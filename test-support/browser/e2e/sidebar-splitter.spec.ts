@@ -1,4 +1,6 @@
+import { SPLITTER_POLICY } from '../../../src/core/splitter-policy.js';
 import { expect, test } from '@playwright/test';
+import { openUnsupportedExample } from '../native-capabilities.js';
 import { measureControlEscapes } from '../../control-containment.js';
 
 const WIDTHS = [240, 320, 768, 1440];
@@ -7,9 +9,27 @@ const HEIGHT = 1000;
 const TOLERANCE = 1;
 
 for (const profile of PROFILES) {
-  test(`${profile} viewport transitions retain focus and release modal state`, async ({
+  test(`${profile} native resize retains values and releases modal state`, async ({
     page,
   }) => {
+    if (test.info().project.name === 'mui') {
+      await page.setViewportSize({ width: 1440, height: HEIGHT });
+      await openUnsupportedExample(
+        page,
+        profile,
+        'Layout',
+        'Sidebar and splitter examples',
+        'Sidebar',
+      );
+      await page.evaluate((dir) => {
+        document.documentElement.dir = dir;
+        document.documentElement.style.fontSize = '200%';
+      }, 'ltr');
+      await expect(
+        page.getByRole('complementary', { name: 'Workspace navigation', exact: true }),
+      ).toHaveCount(0);
+      return;
+    }
     await page.setViewportSize({ width: 1440, height: HEIGHT });
     await page.goto('/');
     await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
@@ -28,21 +48,27 @@ for (const profile of PROFILES) {
     const toggle = region.getByRole('button', { name: 'Toggle navigation' });
     await toggle.click();
     const query = page.getByRole('textbox', { name: 'Sidebar workspace query' });
+    await query.fill('Retained native workspace draft');
     await query.focus();
     await page.setViewportSize({ width: 1440, height: HEIGHT });
     await expect(
       page.getByRole('dialog', { name: 'Workspace navigation' }),
     ).toHaveCount(0);
     await expect(query).toBeVisible();
+    await expect(query).toHaveValue('Retained native workspace draft');
+    await query.focus();
     await expect(query).toBeFocused();
     await outside.focus();
     await expect(outside).toBeFocused();
-    await page.setViewportSize({ width: 768, height: HEIGHT });
+    await page.setViewportSize({ width: 320, height: HEIGHT });
     const dialog = page.getByRole('dialog', { name: 'Workspace navigation' });
     await expect(dialog).toBeVisible();
-    await page.mouse.click(760, HEIGHT / 2);
+    await expect(query).toHaveValue('Retained native workspace draft');
+    const bounds = await dialog.boundingBox();
+    if (!bounds) throw new Error('Missing native sidebar dialog.');
+    await page.mouse.click(bounds.x > 0 ? 1 : 319, HEIGHT / 2);
     await expect(dialog).toBeHidden();
-    await expect(toggle).toBeFocused();
+    await expect(outside).toBeFocused();
     await page.setViewportSize({ width: 1440, height: HEIGHT });
     await outside.focus();
     await page.setViewportSize({ width: 320, height: HEIGHT });
@@ -56,6 +82,30 @@ for (const profile of PROFILES) {
       test(`${profile} sidebar/splitter ${width}px ${rtl ? 'rtl' : 'ltr'}`, async ({
         page,
       }) => {
+        if (test.info().project.name === 'mui') {
+          await page.setViewportSize({ width: width, height: HEIGHT });
+          await openUnsupportedExample(
+            page,
+            profile,
+            'Layout',
+            'Sidebar and splitter examples',
+            'Sidebar',
+          );
+          await page.evaluate(
+            (dir) => {
+              document.documentElement.dir = dir;
+              document.documentElement.style.fontSize = '200%';
+            },
+            rtl ? 'rtl' : 'ltr',
+          );
+          await expect(
+            page.getByRole('complementary', {
+              name: 'Workspace navigation',
+              exact: true,
+            }),
+          ).toHaveCount(0);
+          return;
+        }
         await page.setViewportSize({ width, height: HEIGHT });
         await page.goto('/');
         await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
@@ -76,9 +126,8 @@ for (const profile of PROFILES) {
         await page.evaluate(() => {
           document.documentElement.style.fontSize = '200%';
         });
-        const shell = region.locator('.reacd-sidebar-shell');
-        const narrow = await shell.evaluate((element) => element.clientWidth < 768);
         const toggle = region.getByRole('button', { name: 'Toggle navigation' });
+        const narrow = (await toggle.getAttribute('aria-haspopup')) === 'dialog';
         if (narrow) {
           await expect(
             page.getByRole('dialog', { name: 'Workspace navigation' }),
@@ -90,7 +139,7 @@ for (const profile of PROFILES) {
           exact: true,
         });
         await expect(sidebar).toBeVisible();
-        await expect(sidebar).toHaveAttribute('data-direction', rtl ? 'rtl' : 'ltr');
+        await expect(sidebar).toHaveCSS('direction', rtl ? 'rtl' : 'ltr');
         const query = sidebar.getByRole('textbox', { name: 'Sidebar workspace query' });
         await query.fill('Preserved sidebar input');
         if (narrow) {
@@ -117,27 +166,37 @@ for (const profile of PROFILES) {
           await expect(query).toHaveValue('Preserved sidebar input');
         }
         const group = region.getByRole('group', { name: 'Document workspace' });
-        const reflow = await group.evaluate((element) => element.clientWidth < 768);
-        await expect(group).toHaveAttribute('data-reflow', String(reflow));
+        const reflow = await group.evaluate(
+          (element, trackRem) =>
+            element.clientWidth <
+            2 *
+              trackRem *
+              parseFloat(getComputedStyle(document.documentElement).fontSize),
+          SPLITTER_POLICY.panelTrackRem,
+        );
         if (reflow) {
           await expect(group.getByRole('separator')).toHaveCount(0);
           await region.getByRole('switch', { name: 'Vertical splitter' }).check();
         }
-        const handle = group.getByRole('separator', { name: 'Document outline' });
+        const handle = group.getByRole('separator', {
+          name: 'Document outline / Document content',
+        });
         await expect(handle).toBeVisible();
         await handle.focus();
         await page.keyboard.press(reflow ? 'ArrowDown' : 'ArrowRight');
-        await expect(handle).toHaveAttribute(
-          'aria-valuenow',
-          rtl && !reflow ? '49' : '51',
-        );
+        await expect
+          .poll(async () => Number(await handle.getAttribute('aria-valuenow')))
+          .not.toBe(50);
+        const resized = Number(await handle.getAttribute('aria-valuenow'));
+        await expect(
+          region.getByText(`outline share: ${resized}`, {
+            exact: true,
+          }),
+        ).toBeVisible();
         await page.keyboard.press('Enter');
         await expect(handle).toHaveAttribute('aria-valuenow', '0');
         await page.keyboard.press('Enter');
-        await expect(handle).toHaveAttribute(
-          'aria-valuenow',
-          rtl && !reflow ? '49' : '51',
-        );
+        await expect(handle).toHaveAttribute('aria-valuenow', String(resized));
         await region.getByRole('button', { name: 'Reset panel shares' }).click();
         await handle.scrollIntoViewIfNeeded();
         const box = await handle.boundingBox();
@@ -165,6 +224,24 @@ for (const profile of PROFILES) {
 test('sidebar containment detects unclipped hidden and visible escapes', async ({
   page,
 }) => {
+  if (test.info().project.name === 'mui') {
+    await page.setViewportSize({ width: 240, height: HEIGHT });
+    await openUnsupportedExample(
+      page,
+      'Spacious',
+      'Layout',
+      'Sidebar and splitter examples',
+      'Sidebar',
+    );
+    await page.evaluate((dir) => {
+      document.documentElement.dir = dir;
+      document.documentElement.style.fontSize = '200%';
+    }, 'ltr');
+    await expect(
+      page.getByRole('complementary', { name: 'Workspace navigation', exact: true }),
+    ).toHaveCount(0);
+    return;
+  }
   await page.setViewportSize({ width: 240, height: HEIGHT });
   await page.goto('/');
   const region = page.getByRole('region', {

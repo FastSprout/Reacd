@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: AvatarGroup
-reacd_preview_height: 560
 ---
 
 # AvatarGroup
@@ -10,10 +8,10 @@ AvatarGroup displays named identities with a shared logical size. Extra entries 
 accessible through an expandable list. Items wrap within their container instead of
 overlapping each other.
 
-## Example
+## Usage
 
-The component catalog runs this compiled example with labeled sample identities. It
-includes empty data, a long name, and the supported maximum of 100 items.
+Show two reviewers and use the native overflow disclosure to see the other two.
+The component owns disclosure state; this static example needs no application state.
 
 <!-- reacd-live-preview -->
 
@@ -31,7 +29,7 @@ includes empty data, a long name, and the supported maximum of 100 items.
 | `size`         | `small`, `medium`, `large` | `medium`                |
 | `emptyMessage` | Nonempty string            | `No people to display.` |
 
-The label names the group visibly and accessibly. `max` controls how many identities
+The label supplies the group's accessible name. `max` controls how many identities
 appear before the overflow disclosure. `emptyMessage` supplies feedback for empty data.
 
 Each item has a unique stable `id`, a required `name`, and optional `src` and `fallback`
@@ -54,6 +52,5 @@ component remains mounted. Emptying the group removes its disclosure.
 
 Version `0.2` accepts literal AvatarGroup properties. Hosts can replace those
 declarations or supply reactive TSX props. Group items do not introduce a new named
-state kind. Server rendering includes identities and disclosure contents; hydration
-retains their stable IDs and accessible names. Chip and Tooltip integrations remain
-separate catalog work, rather than arbitrary item markup escapes.
+state kind. Server rendering includes the initially visible identities. The native
+SDK mounts overflow content when opened and retains the full accessible names.

@@ -112,12 +112,21 @@ describe('verified local release archive', () => {
   it('rejects mismatched engine and adapter release versions', () => {
     rmSync(fixture.root, { recursive: true, force: true });
     fixture = releasePackFixture(true, '0.3.0');
-    const input: unknown = JSON.parse(readFileSync(join(fixture.root, 'package.json'),
-      'utf8'));
+    const input: unknown = JSON.parse(
+      readFileSync(join(fixture.root, 'package.json'), 'utf8'),
+    );
     const engine = z.record(z.string(), z.unknown()).parse(input);
-    writeFileSync(join(fixture.root, 'package.json'), JSON.stringify({
-      ...engine, version: '0.4.0',
-    }));
+    writeFileSync(
+      join(fixture.root, 'package.json'),
+      JSON.stringify({
+        ...engine,
+        version: '0.4.0',
+        dependencies: {
+          ...z.record(z.string(), z.string()).parse(engine['dependencies']),
+          '@fastsprout/reacd-shadcn': '0.4.0',
+        },
+      }),
+    );
     expect(() => packShadcnArchive(fixture.root)).toThrow('versions must match');
   });
 
@@ -200,16 +209,13 @@ describe('verified local release archive', () => {
     rejectsCleanly('Temporary cleanup failed');
   });
 
-  it.each(['LICENSE', 'README.md'])(
-    'checks the entire %s',
-    (name) => {
-      npmOutput = (destination, workspace) => {
-        writeFileSync(join(workspace, name), `Unapproved replacement for ${name}`);
-        return JSON.stringify(fixture.pack(destination, workspace));
-      };
-      rejectsCleanly(name);
-    },
-  );
+  it.each(['LICENSE', 'README.md'])('checks the entire %s', (name) => {
+    npmOutput = (destination, workspace) => {
+      writeFileSync(join(workspace, name), `Unapproved replacement for ${name}`);
+      return JSON.stringify(fixture.pack(destination, workspace));
+    };
+    rejectsCleanly(name);
+  });
 
   it('revalidates embedded publication metadata', () => {
     npmOutput = (destination, workspace) => {
@@ -222,6 +228,10 @@ describe('verified local release archive', () => {
         JSON.stringify({
           ...value,
           version: '0.2.0',
+          dependencies: {
+            ...z.record(z.string(), z.string()).parse(value['dependencies']),
+            '@fastsprout/reacd-shadcn': '0.2.0',
+          },
         }),
       );
       return JSON.stringify(fixture.pack(destination, workspace));

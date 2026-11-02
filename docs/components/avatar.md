@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Avatar
-reacd_preview_height: 560
 ---
 
 # Avatar
@@ -12,8 +10,8 @@ logical props without image attributes or CSS.
 
 ## Example
 
-The component catalog runs this compiled TSX example. Its images are local placeholders,
-not real profile photographs.
+The compiled example displays one identity using a local illustration. The illustration
+is a placeholder rather than a real profile photograph.
 
 <!-- reacd-live-preview -->
 

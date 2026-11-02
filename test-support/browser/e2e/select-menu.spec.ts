@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { openUnsupportedExample } from '../native-capabilities.js';
 import type { Page } from '@playwright/test';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 
@@ -7,10 +8,21 @@ const HEIGHT = 1000;
 const TOLERANCE = 1;
 
 async function fields(page: Page, profile: string) {
+  if (test.info().project.name === 'mui') {
+    await openUnsupportedExample(page, profile, 'Fields', 'SelectMenu');
+    await expect(
+      page.getByRole('combobox', { name: 'Primary record', exact: true }),
+    ).toHaveCount(0);
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = '200%';
+    });
+    return true;
+  }
   await page.goto('/');
   await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
   await page.getByRole('option', { name: profile, exact: true }).click();
   await page.getByRole('button', { name: 'Fields', exact: true }).click();
+  return false;
 }
 
 async function contained(page: Page) {
@@ -25,7 +37,7 @@ for (const profile of ['Spacious', 'Compact']) {
       page,
     }) => {
       await page.setViewportSize({ width, height: HEIGHT });
-      await fields(page, profile);
+      if (await fields(page, profile)) return;
       await page.getByRole('switch', { name: 'Right to left selection' }).check();
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
@@ -35,7 +47,7 @@ for (const profile of ['Spacious', 'Compact']) {
         exact: true,
       });
       await trigger.click();
-      const list = page.getByRole('listbox', { name: 'Primary record options' });
+      const list = page.getByRole('listbox');
       await expect(list).toHaveCSS('direction', 'rtl');
       const option = list.getByRole('option', { name: /An option with a long label/ });
       await expect(option).toBeVisible();
@@ -54,6 +66,7 @@ for (const profile of ['Spacious', 'Compact']) {
       await query.fill('beta');
       await list.getByRole('option', { name: 'Beta', exact: true }).click();
       await trigger.click();
+      await expect(query).toBeFocused();
       await expect(query).toHaveValue('beta');
       await page.keyboard.press('Escape');
       await expect(trigger).toBeFocused();
@@ -64,7 +77,7 @@ for (const profile of ['Spacious', 'Compact']) {
   test(`${profile} native forms, readonly required and disabled history clear`, async ({
     page,
   }) => {
-    await fields(page, profile);
+    if (await fields(page, profile)) return;
     const primary = page.getByRole('combobox', { name: 'Primary record', exact: true });
     await page.getByRole('switch', { name: 'Read-only selection' }).check();
     await page.getByRole('button', { name: 'Save primary record' }).click();
@@ -101,7 +114,7 @@ for (const profile of ['Spacious', 'Compact']) {
     await primary.focus();
     await page.keyboard.press('Tab');
     await expect(
-      page.getByRole('button', { name: 'Clear selection: Primary record' }),
+      page.getByRole('button', { name: 'Clear selection Primary record' }),
     ).toBeFocused();
     await page.keyboard.press('Space');
     await expect(primary).toHaveText('Choose an option.');
@@ -115,26 +128,20 @@ for (const profile of ['Spacious', 'Compact']) {
   });
 
   test(`${profile} veto and nested popup Escape remain scoped`, async ({ page }) => {
-    await fields(page, profile);
+    if (await fields(page, profile)) return;
     await page.getByRole('switch', { name: 'Decline selection' }).check();
     const trigger = page.getByRole('combobox', { name: 'Primary record', exact: true });
     await trigger.click();
     await page.getByRole('option', { name: /Answer/ }).click();
     await expect(trigger).toHaveText('Choose an option.');
-    await expect(
-      page.getByRole('listbox', { name: 'Primary record options', exact: true }),
-    ).toBeVisible();
+    await expect(page.getByRole('listbox')).toBeVisible();
     await page.keyboard.press('Escape');
     await page.getByRole('button', { name: 'Open nested selection' }).click();
     const dialog = page.getByRole('dialog', { name: 'Nested selection', exact: true });
     await dialog.getByRole('combobox', { name: 'Dialog records', exact: true }).click();
-    await expect(
-      dialog.getByRole('listbox', { name: 'Dialog records options', exact: true }),
-    ).toBeVisible();
+    await expect(dialog.getByRole('listbox')).toBeVisible();
     await page.keyboard.press('Escape');
-    await expect(
-      dialog.getByRole('listbox', { name: 'Dialog records options', exact: true }),
-    ).toBeHidden();
+    await expect(dialog.getByRole('listbox')).toBeHidden();
     await expect(dialog).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
@@ -142,6 +149,11 @@ for (const profile of ['Spacious', 'Compact']) {
 }
 
 test('host close restores focus without a focus-changing click', async ({ page }) => {
+  if (test.info().project.name === 'mui') {
+    await openUnsupportedExample(page, 'Spacious', 'Fields', 'SelectMenu');
+    await expect(page.getByRole('combobox', { name: 'Focus records' })).toHaveCount(0);
+    return;
+  }
   await page.goto('/');
   await page.getByRole('tab', { name: 'Generative UI', exact: true }).click();
   const source = page.getByRole('textbox', { name: 'JSON declaration' });
@@ -167,7 +179,7 @@ test('host close restores focus without a focus-changing click', async ({ page }
   await apply.click();
   const trigger = page.getByRole('combobox', { name: 'Focus records', exact: true });
   const query = page.getByRole('combobox', { name: 'Search Focus records' });
-  await expect(query).toBeVisible();
+  await expect(query).toBeFocused();
   await query.press('Escape');
   await expect(query).toBeHidden();
   await source.fill(
@@ -189,13 +201,14 @@ test('host close restores focus without a focus-changing click', async ({ page }
 });
 
 test('IME Enter and process keys do not commit options', async ({ page }) => {
-  await fields(page, 'Spacious');
+  if (await fields(page, 'Spacious')) return;
   const trigger = page.getByRole('combobox', {
     name: 'Primary record',
     exact: true,
   });
   await trigger.click();
   const query = page.getByRole('combobox', { name: 'Search Primary record' });
+  await expect(query).toBeFocused();
   await query.press('ArrowDown');
   await query.evaluate((input) => {
     input.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }));
@@ -213,9 +226,7 @@ test('IME Enter and process keys do not commit options', async ({ page }) => {
     input.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }));
   });
   await expect(trigger).toHaveText('Choose an option.');
-  await expect(
-    page.getByRole('listbox', { name: 'Primary record options', exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole('listbox')).toBeVisible();
   await query.press('Escape');
   await expect(trigger).toBeFocused();
 });
@@ -223,7 +234,7 @@ test('IME Enter and process keys do not commit options', async ({ page }) => {
 test('Space edits query and Tab leaves without selecting or trapping focus', async ({
   page,
 }) => {
-  await fields(page, 'Spacious');
+  if (await fields(page, 'Spacious')) return;
   const trigger = page.getByRole('combobox', { name: 'Primary record', exact: true });
   await trigger.click();
   const query = page.getByRole('combobox', { name: 'Search Primary record' });

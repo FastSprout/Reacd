@@ -1,5 +1,12 @@
 # Remote Mention lookup
 
+## Adapter availability
+
+The Editor family currently has no native mapping in either bundled adapter. The TSX
+declarations and behavior below describe its closed contract, pending a verified SDK
+integration. The preview currently reports an explicit unsupported component error.
+Schema validation and compiled source do not establish native editing support.
+
 EditorMentionMenu can receive correlated lookup results instead of a local items list.
 The host performs the lookup and returns closed data. The editor keeps its native
 selection, keyboard navigation and mention insertion behavior.
@@ -14,11 +21,11 @@ selection, keyboard navigation and mention insertion behavior.
 </Editor>
 ```
 
-The live example is a local response simulator. It makes no network request. Resolve,
-Fail, Empty and Clear controls deliver real host states to the menu. Save a ready
-response, change the query, then replay it to observe stale-response protection. The
-host's delivered state and the menu's accepted state can differ when a response is
-stale.
+The source example declares a local response simulator for the pending editor
+integration. It makes no network request. Resolve, Fail, Empty and Clear controls
+deliver real host states to the menu. Save a ready response, change the query, then
+replay it to observe stale-response protection. The host's delivered state and the
+menu's accepted state can differ when a response is stale.
 
 The remote variant requires label, results and onQueryChange. results initially equals
 null. It cannot be combined with local items. disabled is optional. Public types are

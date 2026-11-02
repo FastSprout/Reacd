@@ -1,4 +1,5 @@
 import { EDITOR_MENU_EXAMPLES } from './editor-menu-examples.js';
+import { ProseExample } from '../../docs/examples/prose.js';
 import { EDITOR_EXAMPLES } from '../adapter-editor-examples.js';
 import { EDITOR_DRAG_HANDLE_EXAMPLES } from './editor-drag-handle-examples.js';
 import { LOCALE_EXAMPLES } from './locale-examples.js';
@@ -86,6 +87,7 @@ export const OPTIONS = [
 const action = () => undefined;
 
 export const EXAMPLES: Record<keyof ComponentCatalog, ReactNode> = {
+  Prose: <ProseExample />,
   ...EDITOR_EXAMPLES,
   ...EDITOR_MENU_EXAMPLES,
   ...EDITOR_DRAG_HANDLE_EXAMPLES,

@@ -15,9 +15,9 @@ it('preserves selected pages across a scoped direction change', async () => {
   const pager = within(screen.getByRole('navigation', { name: 'Sample result pages' }));
   await user.click(pager.getByRole('button', { name: 'Next page' }));
   await user.click(screen.getByRole('switch', { name: 'Right to left navigation' }));
-  expect(view.container.querySelector('.reacd-app')).toHaveAttribute('dir', 'rtl');
+  expect(view.container.querySelector('[lang]')).toHaveAttribute('dir', 'rtl');
   expect(pager.getByRole('status')).toHaveTextContent('Page 2 of 3');
   await user.click(screen.getByRole('switch', { name: 'Right to left navigation' }));
-  expect(view.container.querySelector('.reacd-app')).toHaveAttribute('dir', 'ltr');
+  expect(view.container.querySelector('[lang]')).toHaveAttribute('dir', 'ltr');
   expect(pager.getByRole('status')).toHaveTextContent('Page 2 of 3');
 });

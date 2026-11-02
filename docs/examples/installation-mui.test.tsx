@@ -10,11 +10,12 @@ it('isolates installed browser views with interactive local state', async () => 
   expect(first.getByText('Email summaries are disabled.')).toBeVisible();
   expect(second.getByText('Email summaries are disabled.')).toBeVisible();
   const toggle = first.getByRole('switch', { name: 'Email summaries' });
+  if (!(toggle instanceof HTMLInputElement)) throw new Error('Missing switch input.');
   await user.click(toggle);
-  expect(toggle).toHaveAttribute('aria-checked', 'true');
+  expect(toggle.checked).toBe(true);
   expect(first.getByText('Email summaries are enabled.')).toBeVisible();
   expect(second.getByText('Email summaries are disabled.')).toBeVisible();
   await user.click(toggle);
-  expect(toggle).toHaveAttribute('aria-checked', 'false');
+  expect(toggle.checked).toBe(false);
   expect(first.getByText('Email summaries are disabled.')).toBeVisible();
 });

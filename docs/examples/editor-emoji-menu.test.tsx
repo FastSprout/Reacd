@@ -1,50 +1,66 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen, waitFor } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { act, render } from '@testing-library/react';
+import type { EditorDocument } from '@fastsprout/reacd';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from '@fastsprout/reacd';
-import { installEditorGeometry } from '../../test-support/editor-geometry.js';
+import { editorSchema } from '../../src/schema/editor/editor.schema.js';
+import { editorEmojiMenuSchema } from
+  '../../src/schema/editor-emoji-menu/editor-emoji-menu.schema.js';
+import { toggleSchema } from '../../src/schema/toggle/toggle.schema.js';
+import { buttonComponentSchema as buttonSchema } from
+  '../../src/schema/button/button.schema.js';
+import { appSchema } from '../../src/schema/app/app.schema.js';
+import {
+  exampleDeclarationProbe,
+  expectUnsupportedExample,
+} from '../../test-support/example-declaration-probe.js';
 import { EditorEmojiMenuExample } from './editor-emoji-menu.js';
 
-it('runs the editor-emoji-menu example with input and protection', async () => {
-  const restore = installEditorGeometry();
-  try {
-    render(
-      <ReacdProvider adapter={shadcnAdapter}>
-        <EditorEmojiMenuExample />
-      </ReacdProvider>,
-    );
-    const box = await screen.findByRole('textbox', { name: 'Emoji document' });
-    box.focus();
-    await userEvent.keyboard(':wa');
-    await userEvent.click(await screen.findByRole('option', { name: 'Wave' }));
-    expect(box).toHaveFocus();
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Reset editor-emoji-menu' }),
-    );
-    await waitFor(() => expect(box.textContent).toBe(''));
-    await userEvent.click(
-      screen.getByRole('switch', {
-        name: 'Read-only editor-emoji-menu',
-      }),
-    );
-    expect(box).toHaveAttribute('contenteditable', 'false');
-    await userEvent.click(
-      screen.getByRole('switch', {
-        name: 'Read-only editor-emoji-menu',
-      }),
-    );
-    await userEvent.click(
-      screen.getByRole('switch', {
-        name: 'Right to left editor-emoji-menu',
-      }),
-    );
-    await userEvent.click(
-      screen.getByRole('switch', {
-        name: 'Right to left editor-emoji-menu',
-      }),
-    );
-  } finally {
-    restore();
-  }
+it(
+  'reports native unavailability and preserves accepted document/menu metadata',
+  () => {
+  expectUnsupportedExample(<EditorEmojiMenuExample />, 'Editor');
+  const probe = exampleDeclarationProbe();
+  render(
+    <probe.Surface>
+      <EditorEmojiMenuExample />
+    </probe.Surface>,
+  );
+  const read = () => {
+    const value = probe.read('Editor', editorSchema, 'Emoji document');
+    if (!('onValueChange' in value)) throw new Error('Expected document callback');
+    return value;
+  };
+  const initial = read().value;
+  const menu = probe.read('EditorEmojiMenu', editorEmojiMenuSchema, 'Wave options');
+  expect(menu.items.map((item) => item.name)).toEqual(['wave', 'check']);
+  const proposal: EditorDocument = {
+    version: 1,
+    blocks: [
+      {
+        type: 'paragraph',
+        id: 'intro',
+        content: [{ type: 'emoji', name: 'wave', value: '👋' }],
+      },
+    ],
+  };
+  act(() => read().onValueChange(proposal));
+  expect(read().value).toEqual(proposal);
+  act(() =>
+    probe
+      .read('Toggle', toggleSchema, 'Read-only editor-emoji-menu')
+      .onCheckedChange(true),
+  );
+  expect(read().readOnly).toBe(true);
+  act(() =>
+    probe
+      .read('Toggle', toggleSchema, 'Read-only editor-emoji-menu')
+      .onCheckedChange(false),
+  );
+  act(() =>
+    probe
+      .read('Toggle', toggleSchema, 'Right to left editor-emoji-menu')
+      .onCheckedChange(true),
+  );
+  expect(probe.read('App', appSchema).direction).toBe('rtl');
+  act(() => probe.read('Button', buttonSchema, 'Reset editor-emoji-menu').onPress());
+  expect(read().value).toEqual(initial);
 });

@@ -5,7 +5,7 @@ import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { PageLogosExample } from './page-logos.js';
 
-it('reverses honest keyed placeholders', async () => {
+it('reverses keyed local artwork', async () => {
   const user = userEvent.setup();
   render(
     <ReacdProvider adapter={shadcnAdapter}>
@@ -14,11 +14,11 @@ it('reverses honest keyed placeholders', async () => {
   );
   expect(screen.getAllByRole('img')[0]).toHaveAttribute(
     'alt',
-    'First image placeholder',
+    'Light appearance artwork',
   );
   await user.click(screen.getByRole('button', { name: 'Reverse example marks' }));
   expect(screen.getAllByRole('img')[0]).toHaveAttribute(
     'alt',
-    'Second image placeholder',
+    'Dark appearance artwork',
   );
 });

@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: ChatMessages
-reacd_preview_height: 560
 ---
 
 # ChatMessages
@@ -27,7 +25,8 @@ request status and host-controlled recovery.
 - `emptyLabel`: optional replacement for `No messages yet.`.
 - `followLatest`: defaults true; false disables automatic scrolling and its control.
 
-The focusable log announces changes politely and is busy during submission/streaming.
+The native SDK's focusable transcript region contains a politely announcing log.
+The log is busy during submission/streaming.
 Following initially reaches the end, then stops when the reader scrolls upward.
 `Jump to latest message` resumes following without moving keyboard focus or the page.
 Scrolling stays within the transcript. Narrow screens and RTL use the same data.

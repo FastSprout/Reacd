@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Splitter
-reacd_preview_height: 560
 ---
 
 # Splitter
@@ -39,20 +37,22 @@ invalid totals are rejected before rendering. Rejected host changes do not fabri
 local uncontrolled values.
 
 Handles expose separator semantics, adjacent panel IDs and current bounds. Arrow keys
-resize the adjacent pair by one share; Shift uses ten. Home and End move to bounds.
-Horizontal arrows follow scoped RTL direction. Enter collapses the primary panel when
-configured and restores its last expanded share. Other panels retain their shares.
+resize the adjacent pair by five shares. Shift retains the same native step. Home and
+End move to bounds. Horizontal arrows use the SDK’s Left/Right semantics. Enter
+collapses the primary panel when configured and restores its last expanded share. Other
+panels retain their shares.
 
-Pointer cancellation, lost capture and focus loss restore the starting layout.
-Completion keeps the latest accepted value. Capture is released on completion,
-cancellation and unmount. Narrow horizontal groups reflow into document order; controls
-remain reachable. Vertical workspaces use an engine-owned extent and scroll individual
-panels as needed.
+Pointer cancellation, lost capture and focus loss complete the native interaction.
+Completion keeps the latest host-accepted value. Capture is released on completion,
+cancellation and unmount. Narrow horizontal groups use native document-flow
+regions with resizing inactive; controlled values remain available. Vertical
+workspaces use an engine-owned extent and scroll individual panels as needed.
 
 Generative UI uses the explicit panelLayout state kind with a readWrite binding. Initial
 and live layouts are checked against the same panel constraints. Persistence is a host
 state concern; the renderer never reads storage or the ambient clock during SSR.
 
-The shadcn adapter follows its resizable composition and APG semantics using a private
-percentage engine. It does not expose react-resizable-panels APIs, native handle props,
-CSS sizing, low-level DOM callbacks or automatic localStorage behavior.
+The shadcn adapter composes the official Resizable components, backed by
+react-resizable-panels. The SDK owns resizing and separator accessibility. It does not
+expose react-resizable-panels APIs, native handle props, CSS sizing, low-level DOM
+callbacks or automatic localStorage behavior.

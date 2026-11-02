@@ -47,6 +47,7 @@ export function releasePackFixture(
     scripts: { example: 'vite --config vite.examples.config.ts' },
     packageManager: 'npm@11.19.0',
   };
+  if (!adapter) manifest.dependencies['@fastsprout/reacd-shadcn'] = version;
   if (adapter) {
     manifest.peerDependencies[PUBLICATION_POLICY.name] = version;
     const engineInput: unknown = JSON.parse(readFileSync('package.json', 'utf8'));
@@ -55,6 +56,10 @@ export function releasePackFixture(
       JSON.stringify({
         ...createDistributionManifest(engineInput),
         version,
+        dependencies: {
+          ...createDistributionManifest(engineInput).dependencies,
+          '@fastsprout/reacd-shadcn': version,
+        },
         devDependencies: PUBLICATION_POLICY.peers,
       }),
     );

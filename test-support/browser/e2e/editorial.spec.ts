@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { openUnsupportedExample } from '../native-capabilities.js';
 
 const WIDTHS = [240, 320, 768, 1440];
 const PROFILES = ['Spacious', 'Compact'];
@@ -10,6 +11,27 @@ for (const profile of PROFILES) {
   for (const width of WIDTHS) {
     for (const direction of DIRECTIONS) {
       test(`${profile} editorial ${width}px ${direction} at 200%`, async ({ page }) => {
+        if (test.info().project.name === 'mui') {
+          await page.setViewportSize({ width: width, height: HEIGHT });
+          await openUnsupportedExample(
+            page,
+            profile,
+            'Layout',
+            'Editorial examples',
+            'BlogPost',
+          );
+          await page.evaluate((dir) => {
+            document.documentElement.dir = dir;
+            document.documentElement.style.fontSize = '200%';
+          }, direction);
+          await expect(
+            page.getByRole('article', {
+              name: 'Inspect illustrative article',
+              exact: true,
+            }),
+          ).toHaveCount(0);
+          return;
+        }
         await page.setViewportSize({ width, height: HEIGHT });
         await page.goto('/');
         const appearance = page.getByRole('combobox', {
@@ -30,10 +52,17 @@ for (const profile of PROFILES) {
           document.documentElement.style.fontSize = '200%';
         });
         const media = region.getByRole('img', {
-          name: 'Unavailable editorial image placeholder',
+          name: 'Light template artwork',
         });
         await media.scrollIntoViewIfNeeded();
-        await expect(media).toHaveText(/Image unavailable/);
+        await expect
+          .poll(() =>
+            media.evaluate(
+              (element) =>
+                element instanceof HTMLImageElement && element.naturalWidth > 0,
+            ),
+          )
+          .toBe(true);
         const mediaBox = await media.boundingBox();
         expect(mediaBox?.width).toBeGreaterThan(0);
         expect(mediaBox?.height).toBeGreaterThan(0);
@@ -59,11 +88,15 @@ for (const profile of PROFILES) {
           .getByRole('switch', { name: 'Collection version indicators' })
           .check();
         await expect(
-          region.getByRole('article', { name: 'Review illustrative version' }),
-        ).toHaveAttribute('data-indicator', 'false');
+          region
+            .getByRole('article', { name: 'Review illustrative version' })
+            .locator('[aria-hidden="true"]:has(>svg)'),
+        ).toHaveCount(0);
         await expect(
-          region.getByRole('article', { name: 'Illustrative version record' }),
-        ).toHaveAttribute('data-indicator', 'true');
+          region
+            .getByRole('article', { name: 'Illustrative version record' })
+            .locator('[aria-hidden="true"]:has(>svg)'),
+        ).toHaveCount(1);
         const title = region.getByRole('button', {
           name: 'Inspect illustrative article',
         });
@@ -102,4 +135,34 @@ for (const profile of PROFILES) {
       });
     }
   }
+}
+
+for (const profile of PROFILES) {
+  test(`${profile} editorial failed artwork keeps its accessible fallback`, async ({
+    page,
+  }) => {
+    if (test.info().project.name === 'mui') {
+      await openUnsupportedExample(
+        page,
+        profile,
+        'Layout',
+        'Editorial examples',
+        'BlogPost',
+      );
+      return;
+    }
+    await page.route('**/color-mode-light.svg', (route) =>
+      route.fulfill({
+        status: 404,
+      }),
+    );
+    await page.goto('/');
+    await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
+    await page.getByRole('option', { name: profile, exact: true }).click();
+    const article = page.getByRole('article', { name: 'Inspect illustrative article' });
+    const fallback = article.getByRole('img', { name: 'Light template artwork' });
+    await expect(fallback).toContainText('Image unavailable');
+    await expect(fallback).toContainText('Light template artwork');
+    await expect(fallback.locator('img')).toHaveCount(0);
+  });
 }

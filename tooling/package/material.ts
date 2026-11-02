@@ -4,14 +4,14 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import type { MaterialPackageArchives } from './archives.js';
 import { INSTALLED_COMPILER_POLICY } from './compiler-policy.js';
 import { buildInstalledBootstrap } from './bootstrap.js';
 import { exerciseInstalledBootstrap } from './browser.js';
 
 export async function verifyMaterialInstall(
   root: string,
-  engineArchive: string,
-  materialArchive: string,
+  archives: MaterialPackageArchives,
   parent: string,
 ): Promise<void> {
   const consumer = join(parent, 'material-consumer');
@@ -22,9 +22,10 @@ export async function verifyMaterialInstall(
       private: true,
       type: 'module',
       devDependencies: installedTypeDependencies(root),
+      overrides: { '@fastsprout/reacd-shadcn': pathToFileURL(archives.shadcn).href },
       dependencies: {
-        '@fastsprout/reacd': pathToFileURL(engineArchive).href,
-        '@fastsprout/reacd-mui': pathToFileURL(materialArchive).href,
+        '@fastsprout/reacd': pathToFileURL(archives.engine).href,
+        '@fastsprout/reacd-mui': pathToFileURL(archives.mui).href,
       },
     }),
   );
@@ -43,8 +44,8 @@ export async function verifyMaterialInstall(
     execution,
   );
   assert(
-    !existsSync(join(consumer, 'node_modules/@fastsprout/reacd-shadcn')),
-    'Material UI must install without the shadcn adapter.',
+    existsSync(join(consumer, 'node_modules/@fastsprout/reacd-shadcn')),
+    'The engine default SDK must be installed beside the explicit Material adapter.',
   );
   const fixtureRoot = resolve(root, 'tooling/package/fixtures');
   for (const [source, target] of [
@@ -55,7 +56,12 @@ export async function verifyMaterialInstall(
     const content = readFileSync(join(fixtureRoot, source), 'utf8')
       .replaceAll('@fastsprout/reacd-shadcn', '@fastsprout/reacd-mui')
       .replaceAll('shadcnAdapter', 'muiAdapter')
-      .replaceAll('shadcn-ui', 'material-ui');
+      .replaceAll('shadcn-ui', 'material-ui')
+      .replaceAll('<ReacdProvider>', '<ReacdProvider adapter={muiAdapter}>')
+      .replaceAll(
+        '<GenerativeUI document',
+        '<GenerativeUI adapter={muiAdapter} document',
+      );
     writeFileSync(join(consumer, target), content);
   }
   writeFileSync(
@@ -74,13 +80,10 @@ export async function verifyMaterialInstall(
   execFileSync(process.execPath, ['installed.mjs'], execution);
   writeFileSync(
     join(consumer, 'independence.mjs'),
-    "import { createRequire } from 'node:module';\n" +
-      "import assert from 'node:assert/strict';\n" +
-      'const require = createRequire(import.meta.url);\n' +
-      "assert.throws(() => require.resolve('@fastsprout/reacd-shadcn'), " +
-      "{ code: 'MODULE_NOT_FOUND' });\n",
+    "import assert from 'node:assert/strict';\n" +
+      "assert.ok(import.meta.resolve('@fastsprout/reacd-shadcn'));\n",
   );
   execFileSync(process.execPath, ['independence.mjs'], execution);
   buildInstalledBootstrap(root, consumer, 'mui');
-  await exerciseInstalledBootstrap(consumer);
+  await exerciseInstalledBootstrap(consumer, 'mui');
 }

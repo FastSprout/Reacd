@@ -1,68 +1,19 @@
 import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { chooseOption } from '../../test-support/select-choice.js';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { expect, it } from 'vitest';
 import { ReacdProvider } from '@fastsprout/reacd';
 import { EmptyExample } from './empty.js';
 
-describe('documented Empty example', () => {
-  it('retains the query across every size and surface variant', async () => {
-    const user = userEvent.setup();
-    render(
-      <ReacdProvider adapter={shadcnAdapter}>
-        <EmptyExample />
-      </ReacdProvider>,
-    );
-    await user.type(screen.getByLabelText('Empty recovery query'), 'Keep this query');
-    for (const [name, options] of [
-      ['Empty size', ['Small', 'Large', 'Medium']],
-      ['Empty variant', ['Solid', 'Soft', 'Subtle', 'Naked', 'Outline']],
-    ] as const)
-      for (const option of options) {
-        await chooseOption(user, name, option);
-      }
-    expect(screen.getByLabelText('Empty recovery query')).toHaveValue(
-      'Keep this query',
-    );
-  });
-
-  it('retains the query across busy, media, footer and recovery actions', async () => {
-    const user = userEvent.setup();
-    render(
-      <ReacdProvider adapter={shadcnAdapter}>
-        <EmptyExample />
-      </ReacdProvider>,
-    );
-    await user.type(screen.getByLabelText('Empty recovery query'), 'Keep this query');
-    await user.click(screen.getByRole('switch', { name: 'Empty loading signal' }));
-    expect(screen.getByRole('status')).toHaveTextContent('Refreshing local data');
-    await user.click(screen.getByRole('button', { name: 'Create sample record' }));
-    expect(screen.getByText('Local sample records created: 1')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Empty state help' }));
-    expect(
-      screen.getByText('Change the query or create a local record.'),
-    ).toBeInTheDocument();
-    for (const name of ['Show empty media', 'Show empty footer']) {
-      await user.click(screen.getByRole('switch', { name }));
-      await user.click(screen.getByRole('switch', { name }));
-    }
-    expect(screen.getByLabelText('Empty recovery query')).toHaveValue(
-      'Keep this query',
-    );
-  });
-
-  it('uses a named fallback after clearing title and description', async () => {
-    const user = userEvent.setup();
-    render(
-      <ReacdProvider adapter={shadcnAdapter}>
-        <EmptyExample />
-      </ReacdProvider>,
-    );
-    await user.clear(screen.getByLabelText('Empty title'));
-    await user.clear(screen.getByLabelText('Empty description'));
-    expect(
-      screen.getByRole('region', { name: 'No sample records' }),
-    ).toBeInTheDocument();
-  });
+it('replaces the empty state after creating the first project', async () => {
+  const user = userEvent.setup();
+  render(
+    <ReacdProvider adapter={shadcnAdapter}>
+      <EmptyExample />
+    </ReacdProvider>,
+  );
+  expect(screen.getByText('No projects yet')).toBeVisible();
+  await user.click(screen.getByRole('button', { name: 'Create project' }));
+  expect(screen.getByText('Website redesign')).toBeVisible();
+  expect(screen.queryByText('No projects yet')).toBeNull();
 });

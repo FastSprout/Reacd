@@ -36,6 +36,9 @@ describe('installed browser bootstrap acceptance', () => {
     expect(readFileSync(join(consumer, 'bootstrap.tsx'), 'utf8')).toContain(
       "from '@fastsprout/reacd/bootstrap'",
     );
+    expect(readFileSync(join(consumer, 'bootstrap.tsx'), 'utf8')).toContain(
+      "import '@fastsprout/reacd/styles'",
+    );
     expect(readFileSync(join(consumer, 'index.html'), 'utf8')).toContain(
       'src="/bootstrap.tsx"',
     );

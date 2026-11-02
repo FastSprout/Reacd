@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, it, vi } from 'vitest';
@@ -17,7 +17,17 @@ it('checks an independent Material archive with strict consumers', async () => {
   const root = process.cwd();
   const parent = mkdtempSync(join(tmpdir(), 'reacd-material-test-'));
   try {
-    await verifyMaterialInstall(root, '/engine.tgz', '/mui.tgz', parent);
+    execute.mockImplementation(() => {
+      mkdirSync(
+        join(parent, 'material-consumer/node_modules/@fastsprout/reacd-shadcn'),
+        { recursive: true },
+      );
+    });
+    await verifyMaterialInstall(
+      root,
+      { engine: '/engine.tgz', shadcn: '/shadcn.tgz', mui: '/mui.tgz' },
+      parent,
+    );
     const consumer = join(parent, 'material-consumer');
     expect(readFileSync(join(consumer, 'consumer.tsx'), 'utf8')).toContain(
       "from '@fastsprout/reacd-mui'",
@@ -34,7 +44,7 @@ it('checks an independent Material archive with strict consumers', async () => {
       { cwd: consumer, stdio: 'inherit' },
     );
     expect(build).toHaveBeenCalledWith(root, consumer, 'mui');
-    expect(browser).toHaveBeenCalledWith(consumer);
+    expect(browser).toHaveBeenCalledWith(consumer, 'mui');
   } finally {
     rmSync(parent, { recursive: true, force: true });
   }

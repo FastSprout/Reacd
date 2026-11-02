@@ -4,6 +4,7 @@ import { checkArchitecture, checkFacade } from './architecture.js';
 import { checkSource } from './source.js';
 import { isPublicEntry } from './layers.js';
 import type { PolicyDiagnostic } from './diagnostic.js';
+import { checkNativeStyles } from './native-styles.js';
 
 export interface SourceFile {
   path: string;
@@ -18,6 +19,7 @@ export function inspectRepository(files: readonly SourceFile[], root: string) {
     if (name.startsWith('src/adapter/shadcn/vendor/')) continue;
     if (GENERATED_RELEASE_TEXT.has(name)) continue;
     issues.push(...checkSource(path, source));
+    if (name.endsWith('.css')) issues.push(...checkNativeStyles(path, source, root));
     if (!/\.[cm]?[jt]sx?$/.test(name)) continue;
     const test = /(?:__tests__|test-support|e2e)\/|\.(?:test|spec)\./.test(name);
     if (test) continue;
@@ -27,6 +29,7 @@ export function inspectRepository(files: readonly SourceFile[], root: string) {
     }
     if (
       name.startsWith('tooling/conformance/') ||
+      name.startsWith('tooling/site/app/') ||
       name.startsWith('docs/examples/') ||
       name.startsWith('examples/')
     ) {

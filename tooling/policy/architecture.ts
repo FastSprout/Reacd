@@ -1,5 +1,9 @@
-import { ADAPTER_PACKAGE_ERROR, isConcreteAdapterPackage } from './adapter-package.js';
-import { adapterOwnershipError } from './adapter-ownership.js';
+import { dirname, resolve } from 'node:path';
+import {
+  ADAPTER_PACKAGE_ERROR,
+  isConcreteAdapterPackage,
+  isDefaultAdapterBinding,
+} from './adapter-package.js';
 import { adapterRuntimeError } from './adapter-runtime.js';
 import { diagnostic } from './diagnostic.js';
 import type { PolicyDiagnostic } from './diagnostic.js';
@@ -7,6 +11,8 @@ import { importVisitor } from './imports.js';
 import { inspectSource } from './parse.js';
 import { LAYERS, layerOf, isTestModule, isVendorModule } from './layers.js';
 import { internalPath } from './module-path.js';
+import { nativeAdapterImportError } from './native-adapter.js';
+import { checkNativeUiSource } from './native-ui-source.js';
 import { isTrustedUiDependency } from './ui-dependencies.js';
 import { componentOwnershipError, reactOwnershipError } from './ownership.js';
 
@@ -37,7 +43,15 @@ export function checkArchitecture(
       add(offset, 'Computed imports cannot be verified. Use a literal path.');
       return;
     }
-    if (isConcreteAdapterPackage(value)) {
+    const nativeError = nativeAdapterImportError(file, value, root);
+    if (nativeError !== null) {
+      add(offset, nativeError);
+      return;
+    }
+    if (
+      isConcreteAdapterPackage(value) &&
+      !isDefaultAdapterBinding(file, value, root)
+    ) {
       add(offset, ADAPTER_PACKAGE_ERROR);
       return;
     }
@@ -65,9 +79,7 @@ export function checkArchitecture(
       add(offset, NATIVE_UI_DEPENDENCY_ERROR);
       return;
     }
-    const ownershipError =
-      adapterOwnershipError(file, target, root) ??
-      componentOwnershipError(file, target, root);
+    const ownershipError = componentOwnershipError(file, target, root);
     if (ownershipError !== null) {
       add(offset, ownershipError);
       return;
@@ -80,14 +92,23 @@ export function checkArchitecture(
     }
   });
   const syntax = inspectSource(file, source, visitor);
-  return [...issues, ...syntax];
+  return [...issues, ...checkNativeUiSource(file, source, root), ...syntax];
 }
 
 export function checkFacade(file: string, source: string): PolicyDiagnostic[] {
   const issues: PolicyDiagnostic[] = [];
+  const root = resolve(dirname(file), '..');
   const references = importVisitor(({ value, offset }) => {
+    const nativeError =
+      value === null ? null : nativeAdapterImportError(file, value, root);
     const sdkError = value === null ? null : adapterRuntimeError(value);
-    if (value !== null && isConcreteAdapterPackage(value)) {
+    if (nativeError !== null) {
+      issues.push(diagnostic(file, source, offset, 'architecture', nativeError));
+    } else if (
+      value !== null &&
+      isConcreteAdapterPackage(value) &&
+      !isDefaultAdapterBinding(file, value, root)
+    ) {
       issues.push(
         diagnostic(file, source, offset, 'architecture', ADAPTER_PACKAGE_ERROR),
       );
@@ -126,5 +147,5 @@ export function checkFacade(file: string, source: string): PolicyDiagnostic[] {
       }
     },
   });
-  return [...issues, ...syntax];
+  return [...issues, ...checkNativeUiSource(file, source, root), ...syntax];
 }

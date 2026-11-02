@@ -107,14 +107,14 @@ describe('native UI dependency boundary', () => {
       ).toEqual([]);
   });
 
-  it('preserves the trusted stylesheet import from state bootstrap', () => {
+  it('rejects common control CSS imports from state bootstrap', () => {
     expect(
       checkArchitecture(
         `${root}/src/state/bootstrap.tsx`,
         "import '../renderer/styles.css';",
         root,
       ),
-    ).toEqual([]);
+    ).toEqual([expect.objectContaining({ rule: 'architecture' })]);
   });
 
   it.each([

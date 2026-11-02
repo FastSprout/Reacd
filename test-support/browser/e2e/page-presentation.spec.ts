@@ -1,3 +1,4 @@
+import { hasInlineOverflow } from '../inline-overflow.js';
 import { expect, test } from '@playwright/test';
 
 const WIDTHS = [240, 320, 768, 1440];
@@ -5,6 +6,7 @@ const PROFILES = ['Spacious', 'Compact'];
 const DIRECTIONS = ['ltr', 'rtl'];
 const HEIGHT = 1000;
 const TOLERANCE = 1;
+const HERO_TITLE = 'PageHeroRetainsReadableLongUnbrokenContentAcrossNarrowScreens';
 
 for (const profile of PROFILES) {
   for (const width of WIDTHS) {
@@ -43,13 +45,21 @@ for (const profile of PROFILES) {
         const hero = region.getByLabel('Page hero draft');
         await card.fill('Retained card');
         await hero.fill('Retained hero');
-        const heroSurface = region.locator('[data-kind="hero"]');
-        const copyBox = await heroSurface
-          .locator('.reacd-page-intro-copy')
-          .boundingBox();
-        const contentBox = await heroSurface
-          .locator('.reacd-page-intro-content')
-          .boundingBox();
+        const material = test.info().project.name === 'mui';
+        const heading = region.getByRole('heading', {
+          name: HERO_TITLE,
+          exact: true,
+        });
+        const copy = heading.locator(material ? '../..' : '..');
+        const columns = copy.locator('..');
+        const content = columns.locator(':scope > *').filter({
+          has: page.getByLabel('Page hero draft'),
+        });
+        const heroSurface = columns.locator('..');
+        await expect(copy).toHaveCount(1);
+        await expect(content).toHaveCount(1);
+        const copyBox = await copy.boundingBox();
+        const contentBox = await content.boundingBox();
         if (copyBox === null || contentBox === null) {
           throw new Error('Hero regions must have measurable geometry.');
         }
@@ -74,20 +84,13 @@ for (const profile of PROFILES) {
           .uncheck();
         await expect(card).toHaveValue('Retained card');
         await expect(hero).toHaveValue('Retained hero');
-        expect(
-          await hero.evaluate((input) => {
-            const scope = input.closest('.reacd-page-introduction');
-            const heading = scope?.querySelector('.reacd-page-title');
-            return (
-              heading !== undefined &&
-              heading !== null &&
-              Boolean(
-                input.compareDocumentPosition(heading) &
-                Node.DOCUMENT_POSITION_FOLLOWING,
-              )
-            );
-          }),
-        ).toBe(true);
+        const reversedCopy = await copy.boundingBox();
+        const reversedContent = await content.boundingBox();
+        if (!reversedCopy || !reversedContent)
+          throw new Error('Expected retained native hero regions.');
+        expect(reversedContent.y + reversedContent.height).toBeLessThanOrEqual(
+          reversedCopy.y + TOLERANCE,
+        );
         const title = region.getByRole('button', { name: 'Inspect feature details' });
         await title.focus();
         await page.keyboard.press('Tab');
@@ -103,18 +106,10 @@ for (const profile of PROFILES) {
           .click();
         await expect(card).toHaveValue('Retained card');
         await expect(hero).toHaveValue('Retained hero');
-        const escaped = await region.evaluate((element, tolerance) => {
-          const outer = element.getBoundingClientRect();
-          return Array.from(
-            element.querySelectorAll('input,button,p,a,h1,h2,h3,h4,h5,h6'),
-          ).some((child) => {
-            const box = child.getBoundingClientRect();
-            return (
-              box.width > 0 &&
-              (box.left < outer.left - tolerance || box.right > outer.right + tolerance)
-            );
-          });
-        }, TOLERANCE);
+        const escaped = await region.evaluate(hasInlineOverflow, {
+          selectors: 'input,button,p,a,h1,h2,h3,h4,h5,h6',
+          tolerance: TOLERANCE,
+        });
         expect(escaped).toBe(false);
         expect(
           await page.evaluate(() => document.documentElement.scrollWidth),

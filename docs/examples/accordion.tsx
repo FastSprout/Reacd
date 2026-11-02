@@ -19,9 +19,7 @@ export function AccordionExample() {
             value: 'overview',
             label: 'Example overview',
             content: (
-              <Text>
-                {'Content stays within its panel. ' + 'long_identifier_'.repeat(24)}
-              </Text>
+              <Text>Review the release checklist, task owners and delivery dates.</Text>
             ),
           },
           {

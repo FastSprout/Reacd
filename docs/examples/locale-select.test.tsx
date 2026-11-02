@@ -17,8 +17,9 @@ it('applies host language and direction with protected controls', async () => {
   await user.click(await screen.findByRole('option', { name: 'Arabic' }));
   await waitFor(() => expect(control).toHaveAttribute('aria-expanded', 'false'));
   expect(screen.getByText('Selected locale: ar')).toBeVisible();
-  expect(view.container.querySelector('.reacd-app')).toHaveAttribute('dir', 'rtl');
-  expect(view.container.querySelector('.reacd-app')).toHaveAttribute('lang', 'ar');
+  const application = view.container.querySelector('[lang="ar"]');
+  expect(application).toHaveAttribute('dir', 'rtl');
+  expect(application).toHaveAttribute('lang', 'ar');
   await user.click(screen.getByRole('switch', { name: 'Read-only language' }));
   expect(control).toHaveAttribute('aria-readonly', 'true');
   await user.click(screen.getByRole('switch', { name: 'Disable language' }));

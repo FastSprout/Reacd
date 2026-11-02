@@ -1,12 +1,10 @@
 import '@fastsprout/reacd-shadcn/styles';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { SharedListbox } from '../../src/adapter/shared/listbox/listbox.adapter.js';
-import { PrimitiveScope } from '../../src/adapter/shared/primitives/context.js';
-import { muiPrimitives } from '../../src/adapter/mui/primitives/primitives.js';
-import { shadcnPrimitives } from '../../src/adapter/shadcn/primitives/primitives.js';
+import { Listbox, ReacdProvider } from '../../src/index.js';
 import { browserAdapter } from './adapter.js';
 import { FieldMetadataContext } from '../../src/renderer/form-field/field-metadata.js';
+import { ViewBoundary } from '../../tooling/conformance/loading/view-boundary.js';
 
 function Harness() {
   const [value, setValue] = useState('');
@@ -69,7 +67,7 @@ function Harness() {
             descriptionIds: ['group-help', 'group-error', 'group-help'],
           }}
         >
-          <SharedListbox
+          <Listbox
             label="Control"
             items={[
               { value: '42', label: 'Answer' },
@@ -97,9 +95,9 @@ function Harness() {
 const root = document.getElementById('root');
 if (root === null) throw new Error('Missing acceptance root.');
 createRoot(root).render(
-  <PrimitiveScope
-    primitives={browserAdapter.id === 'material-ui' ? muiPrimitives : shadcnPrimitives}
-  >
-    <Harness />
-  </PrimitiveScope>,
+  <ReacdProvider adapter={browserAdapter}>
+    <ViewBoundary label="Listbox metadata">
+      <Harness />
+    </ViewBoundary>
+  </ReacdProvider>,
 );

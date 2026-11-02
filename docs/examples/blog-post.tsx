@@ -15,10 +15,10 @@ export function BlogPostExample() {
       date="2026-10-29"
       dateLabel="Example record date"
       badge={<Text>Example category</Text>}
-      authors={<Text>Author slot placeholder</Text>}
+      authors={<Text>reacd documentation</Text>}
       image={{
-        src: '/missing-editorial-example.png',
-        alt: 'Unavailable editorial image placeholder',
+        src: '/color-mode-light.svg',
+        alt: 'Light template artwork',
       }}
       footer={
         <Text>{inspected ? 'Article inspected' : 'Article awaiting inspection'}</Text>

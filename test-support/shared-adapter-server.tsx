@@ -1,8 +1,6 @@
 import { ActiveTestTheme } from './active-test-theme.js';
 import type { ReactNode } from 'react';
 import { renderToString as renderServer } from 'react-dom/server';
-import { PrimitiveScope } from '../src/adapter/shared/primitives/context.js';
-import { testPrimitives } from './active-test-primitives.js';
 
 export function renderToString(
   children: ReactNode,
@@ -10,7 +8,7 @@ export function renderToString(
 ) {
   return renderServer(
     <ActiveTestTheme>
-      <PrimitiveScope primitives={testPrimitives}>{children}</PrimitiveScope>
+      {children}
     </ActiveTestTheme>,
     options,
   );

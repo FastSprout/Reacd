@@ -30,8 +30,15 @@ it('runs the documented veto, status, query and accepted-action flow', async () 
   );
   for (const status of ['Loading', 'Error', 'Ready']) {
     await chooseOption(user, 'Documentation result status', status);
+    if (status !== 'Ready') {
+      expect(screen.queryByRole('option', {
+        name: 'Inspect architecture reference',
+      })).toBeNull();
+    }
   }
-  await user.click(command);
+  await user.click(screen.getByRole('option', {
+    name: 'Inspect architecture reference',
+  }));
   await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   expect(screen.getByText('Architecture reference inspected.')).toBeVisible();
 });

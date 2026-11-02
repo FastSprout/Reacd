@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Text
-reacd_preview_height: 560
 ---
 
 # Text
@@ -24,14 +22,18 @@ Display content with a logical role and safe layout behavior.
 
 Available roles are `headline`, `subheadline`, `body`, `caption`, and `display`.
 
+`headline` and `subheadline` create headings within the current section scope.
+`display` emphasizes metrics without adding a heading to the document outline.
+
 ## Long content
 
 ```tsx
 <Text lineLimit={2}>{description}</Text>
 ```
 
-Text wraps within its container. A line limit retains a way to access the full content
-rather than silently discarding it.
+Text wraps within its container. A line limit adds a **Full text** disclosure.
+Open it with a pointer, Enter or Space to read the complete content. The selected
+adapter uses its native disclosure control and keeps the text in one layout item.
 
 The template supplies typography. Application views do not choose HTML heading tags,
 arbitrary font sizes, or CSS overflow rules.

@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: ColorModeButton
-reacd_preview_height: 560
 ---
 
 # ColorModeButton
@@ -12,7 +10,7 @@ label stays stable; pressed state means the resolved palette is dark.
 <!-- reacd-live-preview -->
 
 ```tsx
---8<-- "examples/color-mode.tsx"
+--8<-- "examples/color-mode-button.tsx"
 ```
 
 ```tsx
@@ -36,9 +34,12 @@ Apply the resulting palette through Theme or ReacdProvider. Optional
 `useSystemColorMode(serverFallback)` observes the device after hydration; the explicit
 fallback stabilizes server markup. No document mutation or persistence is implicit.
 
-The compiled [color-mode example](../examples/color-mode.tsx) uses both template
+The compiled [color-mode example](../examples/color-mode-button.tsx) uses both template
 profiles and their exported `darkTemplateVariants`. Applications can provide their own
 complete validated templates. Existing input state survives palette changes.
 
 Generative value is a text binding with read/readWrite access. Required systemMode is a
 light/dark literal or read text binding. The bridge computes resolvedMode automatically.
+
+The shared [appearance wrapper](../examples/appearance-preview.tsx) applies the
+selected light/dark palette. The example above contains only this control.

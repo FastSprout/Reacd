@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: ChatReasoning
-reacd_preview_height: 560
 ---
 
 # ChatReasoning

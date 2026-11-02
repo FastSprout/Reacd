@@ -1,8 +1,7 @@
 import { relative, resolve } from 'node:path';
 
-const SHARED_ADAPTER_SCOPE = 'shared';
 export const ADAPTER_OWNERSHIP_ERROR =
-  'Concrete adapters may depend on shared behavior, never another adapter.';
+  'Adapter UI must not depend on shared UI or another adapter.';
 
 function adapterScope(file: string, root: string): string | undefined {
   const path = relative(resolve(root, 'src/adapter'), file);
@@ -16,12 +15,7 @@ export function adapterOwnershipError(
 ): string | null {
   const owner = adapterScope(file, root);
   const dependency = adapterScope(target, root);
-  if (
-    owner === undefined ||
-    dependency === undefined ||
-    dependency === SHARED_ADAPTER_SCOPE ||
-    owner === dependency
-  ) {
+  if (owner === undefined || dependency === undefined || owner === dependency) {
     return null;
   }
   return ADAPTER_OWNERSHIP_ERROR;

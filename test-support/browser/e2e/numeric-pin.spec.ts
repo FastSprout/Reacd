@@ -14,33 +14,49 @@ async function fields(page: Page, profile: string) {
   await page.getByRole('button', { name: 'Fields', exact: true }).click();
 }
 async function contained(page: Page) {
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth),
-  ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
-  const overflow = await page
-    .locator('.reacd-input-number, .reacd-pin-input')
-    .evaluateAll(
-      (elements, tolerance) =>
-        elements.some((element) => {
-          const parent = element.parentElement?.getBoundingClientRect();
-          const box = element.getBoundingClientRect();
-          return (
-            parent !== undefined &&
-            (box.left < parent.left - tolerance || box.right > parent.right + tolerance)
-          );
-        }),
-      TOLERANCE,
-    );
-  expect(overflow).toBe(false);
-  const targets = await page.locator('.reacd-number-step, .reacd-pin-slot').evaluateAll(
-    (elements, minimum) =>
-      elements.every((element) => {
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
+  const quantity = page.getByRole('textbox', { name: 'Quantity', exact: true });
+  const code = page.getByRole('textbox', { name: 'Verification code', exact: true });
+  await expect(quantity).toBeVisible();
+  await expect(code).toBeVisible();
+  for (const input of [quantity, code]) {
+    expect(
+      await input.evaluate((element, tolerance) => {
+        const parent = element.closest('[data-slot="field"]') ?? element.parentElement;
+        if (!parent) throw new Error('Missing native field');
+        const bounds = parent.getBoundingClientRect();
         const box = element.getBoundingClientRect();
-        return box.width >= minimum && box.height >= minimum;
-      }),
-    LAYOUT_POLICY.controlTargetPx,
+        return (
+          box.left >= bounds.left - tolerance && box.right <= bounds.right + tolerance
+        );
+      }, TOLERANCE),
+    ).toBe(true);
+  }
+  const targets = page
+    .getByRole('button', { name: /^(Increase|Decrease) Quantity$/ })
+    .or(code);
+  const geometry = await targets.evaluateAll((elements) =>
+    elements.map((element) => {
+      const target = element.closest('.MuiInputBase-root') ?? element;
+      const box = target.getBoundingClientRect();
+      return {
+        label: element.getAttribute('aria-label') ?? element.id,
+        width: box.width,
+        height: box.height,
+      };
+    }),
   );
-  expect(targets).toBe(true);
+  for (const target of geometry) {
+    const evidence = JSON.stringify(target);
+    expect(target.width, evidence).toBeGreaterThanOrEqual(
+      LAYOUT_POLICY.controlTargetPx,
+    );
+    expect(target.height, evidence).toBeGreaterThanOrEqual(
+      LAYOUT_POLICY.controlTargetPx,
+    );
+  }
 }
 for (const profile of PROFILES) {
   for (const width of WIDTHS) {
@@ -54,12 +70,20 @@ for (const profile of PROFILES) {
         document.documentElement.style.fontSize = '200%';
       });
       await contained(page);
-      await page.getByLabel('Verification code').scrollIntoViewIfNeeded();
-      await expect(page.getByLabel('Verification code')).toBeInViewport();
+      await page
+        .getByRole('textbox', { name: 'Verification code', exact: true })
+        .scrollIntoViewIfNeeded();
+      await expect(
+        page.getByRole('textbox', { name: 'Verification code', exact: true }),
+      ).toBeInViewport();
       await page.getByRole('switch', { name: 'Right to left numeric field' }).check();
       await page.getByRole('switch', { name: 'Right to left PIN field' }).check();
-      await expect(page.locator('.reacd-input-number')).toHaveCSS('direction', 'rtl');
-      await expect(page.locator('.reacd-pin-input')).toHaveCSS('direction', 'rtl');
+      await expect(
+        page.getByRole('textbox', { name: 'Quantity', exact: true }),
+      ).toHaveCSS('direction', 'rtl');
+      await expect(
+        page.getByRole('textbox', { name: 'Verification code', exact: true }),
+      ).toHaveCSS('direction', 'rtl');
       await contained(page);
     });
   }
@@ -96,9 +120,12 @@ for (const profile of PROFILES) {
     await page.getByRole('button', { name: 'Submit code' }).click();
     await expect(page.getByText('Code submitted.', { exact: true })).toHaveCount(0);
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.evaluate(async () => {
-      await navigator.clipboard.writeText('00 1-234');
-    });
+    await page.evaluate(
+      async (code) => {
+        await navigator.clipboard.writeText(code);
+      },
+      test.info().project.name === 'mui' ? '001234' : '00 1-234',
+    );
     await code.focus();
     await page.keyboard.press('ControlOrMeta+A');
     await page.keyboard.press('ControlOrMeta+V');
@@ -108,6 +135,14 @@ for (const profile of PROFILES) {
     await expect(code).toHaveAttribute('type', 'password');
     await page.getByRole('button', { name: 'Submit code' }).click();
     await expect(page.getByText('Code submitted.', { exact: true })).toBeVisible();
+    expect(
+      await page
+        .getByRole('form', { name: 'Code verification' })
+        .evaluate((element) => {
+          if (!(element instanceof HTMLFormElement)) throw new Error('Native form');
+          return [...new FormData(element)];
+        }),
+    ).toEqual([['code', '001234']]);
     await page.getByRole('button', { name: 'Clear code' }).click();
     await expect(code).toHaveValue('');
     expect(errors).toEqual([]);

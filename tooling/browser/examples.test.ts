@@ -1,19 +1,13 @@
 import { expect, it } from 'vitest';
 import configuration from '../../playwright.config.js';
 
-it('serves built examples alongside both existing mandatory conformance hosts', () => {
+it('serves examples and conformance separately from the dedicated docs host', () => {
   expect(configuration.webServer).toEqual([
     expect.objectContaining({
       command:
         'npm run preview -- --config vite.conformance.config.ts ' +
         '--port 4174 --strictPort',
       url: 'http://127.0.0.1:4174',
-      reuseExistingServer: false,
-    }),
-    expect.objectContaining({
-      command:
-        'npm run preview -- --config vite.site.config.ts ' + '--port 4175 --strictPort',
-      url: 'http://127.0.0.1:4175',
       reuseExistingServer: false,
     }),
     ...[

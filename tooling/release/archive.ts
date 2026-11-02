@@ -17,6 +17,8 @@ export const RELEASE_ARCHIVE_POLICY = {
     'dist/index.d.ts',
     'dist/bootstrap.js',
     'dist/bootstrap.d.ts',
+    'dist/styles.js',
+    'dist/styles.d.ts',
     'dist/renderer/bootstrap/bootstrap.d.ts',
     'dist/generative.js',
     'dist/generative.d.ts',

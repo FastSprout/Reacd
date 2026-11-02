@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { openUnsupportedExample } from '../native-capabilities.js';
 import type { Page } from '@playwright/test';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 
@@ -8,17 +9,28 @@ const TOLERANCE = 1;
 const LONG_LABEL = 'Unbroken_reference_action_'.repeat(8);
 
 async function fields(page: Page, profile: string) {
+  if (test.info().project.name === 'mui') {
+    await openUnsupportedExample(page, profile, 'Fields', 'FieldGroup');
+    await expect(
+      page.getByRole('textbox', { name: 'Reference query', exact: true }),
+    ).toHaveCount(0);
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = '200%';
+    });
+    return true;
+  }
   await page.goto('/');
   await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
   await page.getByRole('option', { name: profile, exact: true }).click();
   await page.getByRole('button', { name: 'Fields', exact: true }).click();
+  return false;
 }
 
 for (const profile of ['Spacious', 'Compact']) {
   for (const width of WIDTHS) {
     test(`${profile} field group at ${width}px and 200%`, async ({ page }) => {
       await page.setViewportSize({ width, height: HEIGHT });
-      await fields(page, profile);
+      if (await fields(page, profile)) return;
       await page.getByRole('textbox', { name: 'Group action label' }).fill(LONG_LABEL);
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
@@ -61,7 +73,7 @@ for (const profile of ['Spacious', 'Compact']) {
   test(`${profile} grouped controls retain keyboard order`, async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    await fields(page, profile);
+    if (await fields(page, profile)) return;
     const group = page.getByRole('group', { name: 'Reference search controls' });
     await group.getByRole('textbox', { name: 'Reference query' }).focus();
     await page.keyboard.type('Text');

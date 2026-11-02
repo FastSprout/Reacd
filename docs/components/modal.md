@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Modal
-reacd_preview_height: 560
 ---
 
 # Modal
@@ -10,10 +8,10 @@ Modal opens a controlled dialog using the active theme and Jotai state. It owns 
 management, keyboard dismissal, background interaction, and portal layout. Application
 code supplies reacd content and logical values.
 
-## Example
+## Usage
 
-This is the same source compiled and run under Actions and feedback in the local
-catalog. Wrap it in `ReacdProvider` when placing it in another application.
+Edit a display name, save it, and reopen the dialog. Jotai keeps the host values;
+Modal owns focus and dismissal. Wrap the example in `ReacdProvider` in your app.
 
 <!-- reacd-live-preview -->
 

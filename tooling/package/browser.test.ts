@@ -11,7 +11,7 @@ const mocks = vi.hoisted(() => ({
   on: vi.fn(),
   click: vi.fn(),
   count: vi.fn(),
-  attribute: vi.fn(),
+  checked: vi.fn(),
   css: vi.fn(),
   visible: vi.fn(),
   browserExpect: vi.fn(),
@@ -49,12 +49,12 @@ beforeEach(() => {
   mocks.closeBrowser.mockResolvedValue(undefined);
   mocks.click.mockResolvedValue(undefined);
   mocks.count.mockResolvedValue(undefined);
-  mocks.attribute.mockResolvedValue(undefined);
+  mocks.checked.mockResolvedValue(undefined);
   mocks.css.mockResolvedValue(undefined);
   mocks.visible.mockResolvedValue(undefined);
   mocks.browserExpect.mockReturnValue({
     toHaveCount: mocks.count,
-    toHaveAttribute: mocks.attribute,
+    toBeChecked: mocks.checked,
     toHaveCSS: mocks.css,
     toBeVisible: mocks.visible,
   });
@@ -76,8 +76,8 @@ describe('actual installed browser acceptance', () => {
     expect(mocks.count).toHaveBeenCalledWith(2);
     expect(mocks.css).toHaveBeenCalledWith('display', 'flex');
     expect(mocks.click).toHaveBeenCalledTimes(3);
-    expect(mocks.attribute).toHaveBeenCalledWith('aria-checked', 'true');
-    expect(mocks.attribute).toHaveBeenCalledWith('aria-checked', 'false');
+    expect(mocks.checked).toHaveBeenCalledWith({ checked: true });
+    expect(mocks.checked).toHaveBeenCalledWith({ checked: false });
     expect(mocks.closeBrowser).toHaveBeenCalledOnce();
     expect(mocks.closeServer).toHaveBeenCalledOnce();
   });
@@ -129,4 +129,10 @@ describe('actual installed browser acceptance', () => {
     await expect(exerciseInstalledBootstrap('/consumer')).rejects.toThrow('cleanup');
     expect(mocks.closeBrowser).toHaveBeenCalledOnce();
   });
+});
+
+it('checks native Material input styling', async () => {
+  const { exerciseInstalledBootstrap } = await import('./browser.js');
+  await exerciseInstalledBootstrap('/installed/material', 'mui');
+  expect(mocks.css).toHaveBeenCalledWith('display', 'block');
 });

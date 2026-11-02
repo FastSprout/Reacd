@@ -35,7 +35,7 @@ export function TabsExample() {
           },
           {
             value: 'restricted',
-            label: 'Restricted settings: ' + 'permission_scope_'.repeat(8),
+            label: 'Restricted settings: administrator permission required',
             disabled: true,
           },
           {

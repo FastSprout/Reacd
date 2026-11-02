@@ -4,12 +4,16 @@ import { Button, Card, PageColumns, Text, VStack } from '@fastsprout/reacd';
 const selectedAtom = atom('None');
 const ITEMS = [
   { key: 'first', title: 'First', body: 'Declarations describe information.' },
-  { key: 'second', title: 'Second', body: 'Templates supply appearance. '.repeat(6) },
+  {
+    key: 'second',
+    title: 'Second',
+    body: 'Design templates supply consistent colors, typography and spacing.',
+  },
   { key: 'third', title: 'Third', body: 'Schemas validate external data.' },
   {
     key: 'fourth',
     title: 'Fourth',
-    body: 'Adapters own trusted native rendering. '.repeat(4),
+    body: 'Adapters connect each declaration to its selected SDK and native controls.',
   },
   { key: 'fifth', title: 'Fifth', body: 'Application state belongs to Jotai.' },
   { key: 'sixth', title: 'Sixth', body: 'Browser checks verify actual geometry.' },

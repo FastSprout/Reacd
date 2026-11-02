@@ -1,10 +1,15 @@
 ---
-template: preview.html
 reacd_preview: EditorDragHandle
-reacd_preview_height: 560
 ---
 
 # EditorDragHandle
+
+## Adapter availability
+
+The Editor family currently has no native mapping in either bundled adapter. The TSX
+declarations and behavior below describe its closed contract, pending a verified SDK
+integration. The preview currently reports an explicit unsupported component error.
+Schema validation and compiled source do not establish native editing support.
 
 EditorDragHandle selects and reorders logical blocks inside an Editor scope. Native
 pointer dragging and explicit Move up/Move down controls share the editor's validated
@@ -48,6 +53,7 @@ Native sessions end on drop/cancel, Escape, unmount, target changes or protectio
 Platforms without native dragging can use the same keyboard move controls. The component
 exposes no general drag framework or arbitrary drag payload API.
 
-The compiled live example shows a fixed Review target, controlled order, protection,
-host rejection and restoration. Optional generative declarations use the same closed
-properties inside Editor; no extra state kind or executable callback is needed.
+The source example declares a fixed Review target, controlled order, protection, host
+rejection and restoration for the pending SDK integration. Optional generative
+declarations use the same closed properties inside Editor; no extra state kind or
+executable callback is needed.

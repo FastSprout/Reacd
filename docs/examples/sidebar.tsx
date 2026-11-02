@@ -90,7 +90,7 @@ export function SidebarExample() {
             value={query}
             onValueChange={setQuery}
           />
-          <Text>{'Long_sidebar_label_'.repeat(16)}</Text>
+          <Text>Projects, reports and settings for your workspace.</Text>
         </Sidebar>
       </App>
       <Text>{action}</Text>

@@ -1,0 +1,11 @@
+import { asyncThunkCreator, buildCreateSlice } from '@reduxjs/toolkit';
+const create = buildCreateSlice({ creators: { asyncThunk: asyncThunkCreator } });
+export const invalid = create({
+  name: 'invalid',
+  initialState: 0,
+  reducers: creator => ({
+    load: creator.asyncThunk.withTypes<{ state: { count: number } }>()(
+      async (_: void) => 0,
+    ),
+  }),
+});

@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Input
-reacd_preview_height: 560
 ---
 
 # Input
@@ -67,5 +65,5 @@ Optional generative transport binds text with explicit read/readWrite access. Re
 bindings force read-only behavior. Host writes honor maximum length and normalization
 constraints; minimum length and complete email syntax remain submission rules.
 
-The compiled [Input example](../examples/input.tsx) covers required email submission,
-loading, read-only/disabled behavior, inherited field metadata and scoped RTL.
+The compiled [Input example](../examples/input.tsx) demonstrates controlled email
+editing, autofill and required native form submission.

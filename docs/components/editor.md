@@ -1,10 +1,15 @@
 ---
-template: preview.html
 reacd_preview: Editor
-reacd_preview_height: 560
 ---
 
 # Editor
+
+## Adapter availability
+
+The Editor family currently has no native mapping in either bundled adapter. The TSX
+declarations and behavior below describe its closed contract, pending a verified SDK
+integration. The preview currently reports an explicit unsupported component error.
+Schema validation and compiled source do not establish native editing support.
 
 Edit a controlled rich document through a labelled, theme-adapted editor. Declare the
 view in TSX and keep its document in application state.
@@ -66,10 +71,11 @@ Editor. Group descriptions and errors join the editor's accessible guidance; the
 owns its error announcement. Loading or disabled AuthForm also protects its editor
 children. This does not add Editor name, required or FormData properties.
 
-Server rendering provides a labelled static preview. The native editor initializes after
-hydration. Application code uses no native HTML, CSS, SDK objects or DOM refs. The
-adapter owns wrapping, selection, paste handling, focus and theme styling. No arbitrary
-extension, style, class or raw HTML property is accepted.
+The Editor contract requires a labelled server preview and native initialization after
+hydration once an adapter implementation is available. Application code uses no native
+HTML, CSS, SDK objects or DOM refs. The adapter owns wrapping, selection, paste
+handling, focus and theme styling. No arbitrary extension, style, class or raw HTML
+property is accepted.
 
 Optional generative transport binds `value` to richDocument state with explicit
 read/readWrite access. Read bindings force read-only behavior. Toolbar and auxiliary
@@ -77,6 +83,6 @@ slots are recursively validated. Selection is not transported. Use independent s
 registries for independent apps and SSR requests. Schema validation is separate from
 native interaction and browser verification.
 
-Run the compiled [Editor example](../examples/editor.tsx) in the component preview. It
-shows a shared reader, host replacement, declined writes, protection and scoped RTL. See
+The [Editor source](../examples/editor.tsx) demonstrates the intended controlled reader,
+host replacement, declined writes, protection and scoped RTL contract. See
 [EditorToolbar](editor-toolbar.md) for closed formatting commands.

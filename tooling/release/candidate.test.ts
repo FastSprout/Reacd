@@ -34,6 +34,13 @@ function fixture(version = identity.version) {
       JSON.stringify({
         ...record,
         version,
+        dependencies:
+          manifest === 'package.json'
+            ? {
+                ...z.record(z.string(), z.string()).parse(record['dependencies']),
+                '@fastsprout/reacd-shadcn': version,
+              }
+            : record['dependencies'],
         peerDependencies: {
           ...peers,
           ...(manifest.startsWith('packages/') ? { '@fastsprout/reacd': version } : {}),
@@ -69,6 +76,13 @@ it.each(['package.json', 'packages/shadcn/package.json'])(
       JSON.stringify({
         ...record,
         version: '0.1.0',
+        dependencies:
+          name === 'package.json'
+            ? {
+                ...z.record(z.string(), z.string()).parse(record['dependencies']),
+                '@fastsprout/reacd-shadcn': '0.1.0',
+              }
+            : record['dependencies'],
         peerDependencies: {
           ...peers,
           ...(name.startsWith('packages/') ? { '@fastsprout/reacd': '0.1.0' } : {}),

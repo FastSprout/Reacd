@@ -1,0 +1,188 @@
+title: reacd
+description: High-level React UI with closed components and theme adapters
+origin: https://reacd.dev/
+navigation:
+  - Overview: index.md
+  - Get started: getting-started.md
+  - Examples:
+      - Overview: examples/index.md
+      - Component showcase: examples/showcase.md
+      - Counter: examples/counter.md
+      - Contact form: examples/contact-form.md
+      - Orders dashboard: examples/orders-dashboard.md
+  - Adapters:
+      - Overview: guides/theme-adapters.md
+      - shadcn/ui: guides/adapters/shadcn.md
+      - Material UI: guides/adapters/mui.md
+  - Components:
+      - Catalog: components/index.md
+      - Layout:
+          - App: components/app.md
+          - Container: components/container.md
+          - Divider: components/divider.md
+          - Grid: components/grid.md
+          - HStack: components/h-stack.md
+          - Main: components/main.md
+          - ScrollArea: components/scroll-area.md
+          - Section: components/section.md
+          - Separator: components/separator.md
+          - Spacer: components/spacer.md
+          - Splitter: components/splitter.md
+          - SplitView: components/split-view.md
+          - Toolbar: components/toolbar.md
+          - VStack: components/v-stack.md
+          - Viewport: components/viewport.md
+      - Content:
+          - Avatar: components/avatar.md
+          - AvatarGroup: components/avatar-group.md
+          - Badge: components/badge.md
+          - Card: components/card.md
+          - Chip: components/chip.md
+          - CodeBlock: components/code-block.md
+          - Icon: components/icon.md
+          - Kbd: components/kbd.md
+          - Prose: components/prose.md
+          - Skeleton: components/skeleton.md
+          - Text: components/text.md
+          - User: components/user.md
+      - Forms:
+          - AuthForm: components/auth-form.md
+          - Button: components/button.md
+          - Calendar: components/calendar.md
+          - Checkbox: components/checkbox.md
+          - CheckboxGroup: components/checkbox-group.md
+          - ColorPicker: components/color-picker.md
+          - FieldGroup: components/field-group.md
+          - FileUpload: components/file-upload.md
+          - Form: components/form.md
+          - FormField: components/form-field.md
+          - Input: components/input.md
+          - InputDate: components/input-date.md
+          - InputMenu: components/input-menu.md
+          - InputNumber: components/input-number.md
+          - InputRating: components/input-rating.md
+          - InputTags: components/input-tags.md
+          - InputTime: components/input-time.md
+          - Listbox: components/listbox.md
+          - PinInput: components/pin-input.md
+          - RadioGroup: components/radio-group.md
+          - Select: components/select.md
+          - SelectMenu: components/select-menu.md
+          - Slider: components/slider.md
+          - SubmitButton: components/submit-button.md
+          - Switch: components/switch.md
+          - TextArea: components/text-area.md
+          - Textarea: components/textarea.md
+          - Toggle: components/toggle.md
+      - Navigation:
+          - Breadcrumb: components/breadcrumb.md
+          - CommandPalette: components/command-palette.md
+          - Footer: components/footer.md
+          - FooterColumns: components/footer-columns.md
+          - Header: components/header.md
+          - Link: components/link.md
+          - LocaleSelect: components/locale-select.md
+          - Navigation: components/navigation.md
+          - NavigationMenu: components/navigation-menu.md
+          - Pagination: components/pagination.md
+          - Sidebar: components/sidebar.md
+          - Stepper: components/stepper.md
+          - Tabs: components/tabs.md
+      - Feedback and overlays:
+          - Accordion: components/accordion.md
+          - Alert: components/alert.md
+          - Banner: components/banner.md
+          - Collapsible: components/collapsible.md
+          - ContextMenu: components/context-menu.md
+          - Drawer: components/drawer.md
+          - DropdownMenu: components/dropdown-menu.md
+          - Empty: components/empty.md
+          - Error: components/error.md
+          - Modal: components/modal.md
+          - Popover: components/popover.md
+          - Progress: components/progress.md
+          - ProgressGroup: components/progress-group.md
+          - Slideover: components/slideover.md
+          - Spinner: components/spinner.md
+          - Toast: components/toast.md
+          - Tooltip: components/tooltip.md
+      - Data and media:
+          - Carousel: components/carousel.md
+          - Chart: components/chart.md
+          - DataTable: components/data-table.md
+          - Marquee: components/marquee.md
+          - Table: components/table.md
+          - Timeline: components/timeline.md
+          - Tree: components/tree.md
+      - Editor:
+          - CodeEditor: components/code-editor.md
+          - Editor: components/editor.md
+          - EditorDragHandle: components/editor-drag-handle.md
+          - EditorEmojiMenu: components/editor-emoji-menu.md
+          - EditorMentionMenu: components/editor-mention-menu.md
+          - EditorSuggestionMenu: components/editor-suggestion-menu.md
+          - EditorToolbar: components/editor-toolbar.md
+          - Mention lookup: components/editor-mention-lookup.md
+      - Chat:
+          - ChatAttachment: components/chat-attachment.md
+          - ChatMessage: components/chat-message.md
+          - ChatMessages: components/chat-messages.md
+          - ChatPalette: components/chat-palette.md
+          - ChatPrompt: components/chat-prompt.md
+          - ChatPromptSubmit: components/chat-prompt-submit.md
+          - ChatReasoning: components/chat-reasoning.md
+          - ChatShimmer: components/chat-shimmer.md
+          - ChatTool: components/chat-tool.md
+      - Pages:
+          - Page: components/page.md
+          - PageAnchors: components/page-anchors.md
+          - PageAside: components/page-aside.md
+          - PageBody: components/page-body.md
+          - PageCTA: components/page-cta.md
+          - PageCard: components/page-card.md
+          - PageColumns: components/page-columns.md
+          - PageFeature: components/page-feature.md
+          - PageGrid: components/page-grid.md
+          - PageHeader: components/page-header.md
+          - PageHero: components/page-hero.md
+          - PageLinks: components/page-links.md
+          - PageList: components/page-list.md
+          - PageLogos: components/page-logos.md
+          - PageSection: components/page-section.md
+      - Dashboard:
+          - DashboardGroup: components/dashboard-group.md
+          - DashboardNavbar: components/dashboard-navbar.md
+          - DashboardPanel: components/dashboard-panel.md
+          - DashboardResizeHandle: components/dashboard-resize-handle.md
+          - DashboardSearch: components/dashboard-search.md
+          - DashboardSearchButton: components/dashboard-search-button.md
+          - DashboardSidebar: components/dashboard-sidebar.md
+          - DashboardSidebarCollapse: components/dashboard-sidebar-collapse.md
+          - DashboardSidebarToggle: components/dashboard-sidebar-toggle.md
+          - DashboardToolbar: components/dashboard-toolbar.md
+      - Documentation and publishing:
+          - BlogPost: components/blog-post.md
+          - BlogPosts: components/blog-posts.md
+          - ChangelogVersion: components/changelog-version.md
+          - ChangelogVersions: components/changelog-versions.md
+          - ContentNavigation: components/content-navigation.md
+          - ContentSearch: components/content-search.md
+          - ContentSearchButton: components/content-search-button.md
+          - ContentSurround: components/content-surround.md
+          - ContentToc: components/content-toc.md
+          - PricingPlan: components/pricing-plan.md
+          - PricingPlans: components/pricing-plans.md
+          - PricingTable: components/pricing-table.md
+      - Appearance:
+          - ColorModeAvatar: components/color-mode-avatar.md
+          - ColorModeButton: components/color-mode-button.md
+          - ColorModeImage: components/color-mode-image.md
+          - ColorModeSelect: components/color-mode-select.md
+          - ColorModeSwitch: components/color-mode-switch.md
+          - Theme: components/theme.md
+  - Guides:
+      - State with Jotai: guides/state.md
+      - Generative UI: guides/generative-ui.md
+  - Releases:
+      - Changelog: changelog.md
+      - Release process: guides/releases.md

@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: ColorModeSwitch
-reacd_preview_height: 560
 ---
 
 # ColorModeSwitch
@@ -12,7 +10,7 @@ requests light or dark, even when the current preference is system.
 <!-- reacd-live-preview -->
 
 ```tsx
---8<-- "examples/color-mode.tsx"
+--8<-- "examples/color-mode-switch.tsx"
 ```
 
 ```tsx
@@ -34,5 +32,8 @@ SSR output and subscribes after hydration.
 
 Generative UI uses a text value binding and an explicit systemMode literal/read binding.
 Read access prevents changes. See the compiled
-[color-mode example](../examples/color-mode.tsx) and
+[color-mode example](../examples/color-mode-switch.tsx) and
 [ColorModeButton](color-mode-button.md) for template composition.
+
+The shared [appearance wrapper](../examples/appearance-preview.tsx) applies the
+selected light/dark palette. The example above contains only this control.

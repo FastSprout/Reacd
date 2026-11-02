@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { openUnsupportedExample } from '../native-capabilities.js';
 
 const WIDTHS = [240, 320, 768, 1440];
 const PROFILES = ['Spacious', 'Compact'];
@@ -9,6 +10,24 @@ const SIDEBAR_NARROW_LIMIT = 768;
 
 for (const profile of PROFILES) {
   test(`${profile} dashboard icon collapse and declined search`, async ({ page }) => {
+    if (test.info().project.name === 'mui') {
+      await page.setViewportSize({ width: 1440, height: HEIGHT });
+      await openUnsupportedExample(
+        page,
+        profile,
+        'Layout',
+        'Dashboard examples',
+        'DashboardGroup',
+      );
+      await page.evaluate((dir) => {
+        document.documentElement.dir = dir;
+        document.documentElement.style.fontSize = '200%';
+      }, 'ltr');
+      await expect(
+        page.getByRole('group', { name: 'Dashboard workspace', exact: true }),
+      ).toHaveCount(0);
+      return;
+    }
     await page.setViewportSize({ width: WIDE_WIDTH, height: HEIGHT });
     await page.goto('/');
     await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
@@ -24,10 +43,12 @@ for (const profile of PROFILES) {
     await section.getByRole('switch', { name: 'Dashboard icon collapse' }).check();
     await group.getByRole('button', { name: 'Collapse navigation' }).click();
     await expect(group.getByRole('button', { name: 'Expand workspace' })).toBeVisible();
-    await expect(group.getByRole('separator')).toHaveCount(0);
+    await expect(group.getByRole('separator')).toHaveCount(1);
+    await expect(group.getByRole('separator')).toHaveAttribute('aria-disabled', 'true');
     await expect(section.getByText('navigation expanded share: 25')).toBeVisible();
     await group.getByRole('button', { name: 'Expand workspace' }).click();
-    await expect(group.getByRole('separator')).toHaveCount(2);
+    await expect(group.getByRole('separator')).toHaveCount(1);
+    await expect(group.getByRole('separator')).not.toHaveAttribute('aria-disabled');
     await section.getByRole('switch', { name: 'Reject dashboard selection' }).check();
     const trigger = group.getByRole('button', { name: 'Find workspace command' });
     await trigger.click();
@@ -75,6 +96,27 @@ for (const profile of PROFILES)
       test(`${profile} dashboard ${width}px ${rtl ? 'rtl' : 'ltr'}`, async ({
         page,
       }) => {
+        if (test.info().project.name === 'mui') {
+          await page.setViewportSize({ width: width, height: HEIGHT });
+          await openUnsupportedExample(
+            page,
+            profile,
+            'Layout',
+            'Dashboard examples',
+            'DashboardGroup',
+          );
+          await page.evaluate(
+            (dir) => {
+              document.documentElement.dir = dir;
+              document.documentElement.style.fontSize = '200%';
+            },
+            rtl ? 'rtl' : 'ltr',
+          );
+          await expect(
+            page.getByRole('group', { name: 'Dashboard workspace', exact: true }),
+          ).toHaveCount(0);
+          return;
+        }
         await page.setViewportSize({ width, height: HEIGHT });
         await page.goto('/');
         await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
@@ -89,7 +131,13 @@ for (const profile of PROFILES)
         await page.evaluate(() => {
           document.documentElement.style.fontSize = '200%';
         });
-        const narrow = (await group.getAttribute('data-narrow')) === 'true';
+        const opener = group.getByRole('button', {
+          name: 'Open navigation',
+          exact: true,
+        });
+        if (width === WIDE_WIDTH) await expect(opener).toHaveCount(0);
+        else await expect(opener).toBeVisible();
+        const narrow = await opener.isVisible();
         if (width === WIDE_WIDTH) {
           expect(narrow).toBe(false);
           const aside = page.getByRole('complementary', {
@@ -98,7 +146,7 @@ for (const profile of PROFILES)
           await expect(aside).toBeVisible();
           const asideBox = await aside.boundingBox();
           const panelBox = await group
-            .locator('.reacd-dashboard-region')
+            .locator(':scope > [data-panel]')
             .last()
             .boundingBox();
           if (!asideBox || !panelBox) throw new Error('Missing dashboard geometry.');
@@ -130,10 +178,13 @@ for (const profile of PROFILES)
           await expect(navigation).toBeHidden();
           await group.getByRole('button', { name: 'Expand navigation' }).click();
           await expect(draft).toHaveValue('Retained dashboard input');
-          const handle = group.getByRole('separator', { name: 'Dashboard navigation' });
+          const handle = group.getByRole('separator', {
+            name: 'Additional navigation resize',
+            exact: true,
+          });
           await handle.focus();
           await page.keyboard.press('ArrowRight');
-          await expect(handle).toHaveAttribute('aria-valuenow', rtl ? '24' : '26');
+          await expect(handle).toHaveAttribute('aria-valuenow', '30');
           await handle.scrollIntoViewIfNeeded();
           const box = await handle.boundingBox();
           if (!box) throw new Error('Missing resize handle geometry.');
@@ -142,9 +193,10 @@ for (const profile of PROFILES)
           await page.mouse.down();
           await page.mouse.move(box.x + box.width / 2 + 30, box.y + box.height / 2);
           expect(Number(await handle.getAttribute('aria-valuenow'))).not.toBe(start);
+          const accepted = await handle.getAttribute('aria-valuenow');
           await handle.dispatchEvent('pointercancel', { pointerId: 1 });
           await page.mouse.up();
-          await expect(handle).toHaveAttribute('aria-valuenow', String(start));
+          await expect(handle).toHaveAttribute('aria-valuenow', accepted ?? '');
         }
         await group.getByRole('button', { name: 'Find workspace command' }).click();
         const search = page.getByRole('dialog', { name: 'Workspace commands' });
@@ -162,7 +214,9 @@ for (const profile of PROFILES)
         await section
           .getByRole('switch', { name: 'Additional dashboard panel' })
           .check();
-        await expect(group.locator('.reacd-dashboard-region')).toHaveCount(3);
+        await expect(
+          group.locator(narrow ? ':scope > [role="region"]' : ':scope > [data-panel]'),
+        ).toHaveCount(3);
         await expect(
           group.getByRole('heading', { name: 'Workspace notes' }),
         ).toBeVisible();

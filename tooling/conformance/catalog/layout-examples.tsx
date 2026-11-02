@@ -1,7 +1,8 @@
+import { ViewBoundary } from '../loading/view-boundary.js';
 import { CoreLayoutExamples } from './core-layout-examples.js';
 import { atom, useAtom } from 'jotai';
-import { AccordionExample } from '../../../docs/examples/accordion.js';
-import { CollapsibleExample } from '../../../docs/examples/collapsible.js';
+import { AccordionExample } from '../fixtures/accordion.js';
+import { CollapsibleExample } from '../fixtures/collapsible.js';
 import { ShellExamples } from './shell-examples.js';
 import { PageCompositionExamples } from './page-composition-examples.js';
 import { PagePresentationExamples } from './page-presentation-examples.js';
@@ -44,45 +45,69 @@ export function LayoutExamples() {
             checked={compact}
             onCheckedChange={setCompact}
           />
-          <Spacer />
+          <ViewBoundary label="Spacer"><Spacer /></ViewBoundary>
         </Toolbar>
-        <PageCompositionExamples />
-        <PagePresentationExamples />
-        <PageNavigationExamples />
-        <SidebarSplitterExamples />
-        <DashboardExamples />
-        <EditorialExamples />
-        <PricingExamples />
-        <AuthMediaExamples />
-        <SplitView>
-          <CodeBlock label="TSX declaration" content={SOURCE} />
-          <Viewport compact={compact}>
-            <VStack>
-              <Grid columns={3}>
-                <Card>
-                  <Text>First example</Text>
-                </Card>
-                <Card>
-                  <Text>Second example</Text>
-                </Card>
-                <Card>
-                  <Text>Third example</Text>
-                </Card>
-              </Grid>
-              <Divider />
-              <AccordionExample />
-              <CollapsibleExample />
-              <ShellExamples />
-              <HStack>
-                <Text lineLimit={2}>
-                  {'Long content without spaces: ' +
-                    'component_containment_'.repeat(24)}
-                </Text>
-                <Text>Adjacent content stays in normal flow.</Text>
-              </HStack>
-            </VStack>
-          </Viewport>
-        </SplitView>
+        <ViewBoundary label="Page composition examples">
+          <PageCompositionExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Page presentation examples">
+          <PagePresentationExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Page navigation examples">
+          <PageNavigationExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Sidebar and splitter examples">
+          <SidebarSplitterExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Dashboard examples">
+          <DashboardExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Editorial examples">
+          <EditorialExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Pricing examples">
+          <PricingExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Auth and media examples">
+          <AuthMediaExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Split view preview">
+          <SplitView>
+            <CodeBlock label="TSX declaration" content={SOURCE} />
+            <Viewport compact={compact}>
+              <VStack>
+                <Grid columns={3}>
+                  <Card>
+                    <Text>First example</Text>
+                  </Card>
+                  <Card>
+                    <Text>Second example</Text>
+                  </Card>
+                  <Card>
+                    <Text>Third example</Text>
+                  </Card>
+                </Grid>
+              </VStack>
+            </Viewport>
+          </SplitView>
+        </ViewBoundary>
+        <ViewBoundary label="Divider preview"><Divider /></ViewBoundary>
+        <ViewBoundary label="Accordion example"><AccordionExample /></ViewBoundary>
+        <ViewBoundary label="Collapsible example">
+          <CollapsibleExample />
+        </ViewBoundary>
+        <ViewBoundary label="Application shell examples">
+          <ShellExamples />
+        </ViewBoundary>
+        <ViewBoundary label="Long text flow">
+          <HStack>
+            <Text lineLimit={2}>
+              {'Long content without spaces: ' +
+                'component_containment_'.repeat(24)}
+            </Text>
+            <Text>Adjacent content stays in normal flow.</Text>
+          </HStack>
+        </ViewBoundary>
       </VStack>
       <CoreLayoutExamples />
     </Section>

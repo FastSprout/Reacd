@@ -10,5 +10,5 @@ it('runs the Spinner public example', () => {
       <SpinnerExample />
     </ReacdProvider>,
   );
-  expect(screen.getByRole('status')).toHaveTextContent('Loading the sample');
+  expect(screen.getByRole('status', { name: 'Loading the sample' })).toBeVisible();
 });

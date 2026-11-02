@@ -1,10 +1,16 @@
 ---
-template: preview.html
 reacd_preview: Listbox
-reacd_preview_height: 560
 ---
 
 # Listbox
+
+## Adapter availability
+
+The current bundled shadcn/ui and Material UI adapters have no native mapping for
+`Listbox`. The TSX examples and behavior below define its closed reacd contract.
+Native SDK integration remains pending. The live preview reports an explicit
+`UnsupportedAdapterComponentError`; compiled source and schema validation alone do
+not verify native rendering or interaction.
 
 Choose from a visible list of options. Focus and typeahead help inspect choices; only
 explicit activation requests a change. Values stay controlled by the host.

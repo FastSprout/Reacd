@@ -160,3 +160,36 @@ describe('publication workflow capability boundary', () => {
     }
   });
 });
+
+it('updates the default SDK dependency and local workspace lock with releases', () => {
+  const input: unknown = JSON.parse(readFileSync('release-please-config.json', 'utf8'));
+  const config = z
+    .object({
+      packages: z.object({
+        '.': z.object({
+          'extra-files': z.array(z.unknown()),
+        }),
+      }),
+    })
+    .parse(input);
+  const changes = config.packages['.']['extra-files'];
+  expect(changes).toContainEqual({
+    type: 'json',
+    path: 'package.json',
+    jsonpath: "$.dependencies['@fastsprout/reacd-shadcn']",
+  });
+  expect(changes).toContainEqual({
+    type: 'json',
+    path: 'package-lock.json',
+    jsonpath: "$.packages[''].dependencies['@fastsprout/reacd-shadcn']",
+  });
+  for (const adapter of ['shadcn', 'mui']) {
+    for (const field of ['version', "peerDependencies['@fastsprout/reacd']"]) {
+      expect(changes).toContainEqual({
+        type: 'json',
+        path: 'package-lock.json',
+        jsonpath: `$.packages['packages/${adapter}'].${field}`,
+      });
+    }
+  }
+});

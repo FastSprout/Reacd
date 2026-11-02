@@ -43,7 +43,9 @@ describe('compiled navigation composition examples', () => {
     expect(screen.getByText('Menu help selected locally.')).toBeInTheDocument();
     await user.click(screen.getByRole('switch', { name: 'Vertical navigation menu' }));
     await user.click(screen.getByRole('switch', { name: 'Disable menu action' }));
-    await user.click(trigger);
+    await user.keyboard('{Escape}');
+    trigger.focus();
+    await user.keyboard('{Enter}');
     expect(
       await screen.findByRole('button', { name: 'Open sample locally' }),
     ).toBeDisabled();

@@ -53,7 +53,7 @@ export function SplitterExample() {
                     value={query}
                     onValueChange={setQuery}
                   />
-                  <Text>{'Long_outline_label_'.repeat(16)}</Text>
+                  <Text>Project outline and supporting notes.</Text>
                 </VStack>
               ),
             },
@@ -64,8 +64,8 @@ export function SplitterExample() {
               maxShare: 100,
               content: (
                 <Text>
-                  Resize with arrows, Shift, Home or End. Enter collapses the outline.
-                  This is a local interactive fixture.
+                  Use arrows, Home or End to resize. Enter collapses the outline. Resize
+                  the panels to arrange your workspace.
                 </Text>
               ),
             },

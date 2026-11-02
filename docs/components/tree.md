@@ -1,10 +1,16 @@
 ---
-template: preview.html
 reacd_preview: Tree
-reacd_preview_height: 560
 ---
 
 # Tree
+
+## Adapter availability
+
+The current bundled shadcn/ui and Material UI adapters have no native mapping for
+`Tree`. The TSX examples and behavior below define its closed reacd contract.
+Native SDK integration remains pending. The live preview reports an explicit
+`UnsupportedAdapterComponentError`; compiled source and schema validation alone do
+not verify native rendering or interaction.
 
 Tree presents bounded hierarchical data with controlled selection and expansion. Focus
 is independent of selection; navigating never silently changes host data.

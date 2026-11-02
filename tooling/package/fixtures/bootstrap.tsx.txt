@@ -1,3 +1,4 @@
+import '@fastsprout/reacd/styles';
 import { mountApplication } from '@fastsprout/reacd/bootstrap';
 import { InstallationExample } from './installation.js';
 

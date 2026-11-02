@@ -1,15 +1,27 @@
 import { expect, test } from '@playwright/test';
-import type { Page } from '@playwright/test';
+import { openUnsupportedExample } from '../native-capabilities.js';
+import type { Locator, Page } from '@playwright/test';
 
 const WIDTHS = [240, 360, 1440];
 const HEIGHT = 1000;
 const TOLERANCE = 1;
 
 async function fields(page: Page, profile: string) {
+  if (test.info().project.name === 'mui') {
+    await openUnsupportedExample(page, profile, 'Fields', 'InputMenu');
+    await expect(
+      page.getByRole('combobox', { name: 'Destination', exact: true }),
+    ).toHaveCount(0);
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = '200%';
+    });
+    return true;
+  }
   await page.goto('/');
   await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
   await page.getByRole('option', { name: profile, exact: true }).click();
   await page.getByRole('button', { name: 'Fields', exact: true }).click();
+  return false;
 }
 
 async function contained(page: Page) {
@@ -18,13 +30,36 @@ async function contained(page: Page) {
   ).toBeLessThanOrEqual((await page.evaluate(() => innerWidth)) + TOLERANCE);
 }
 
+async function fullTextFits(control: Locator) {
+  const failures = await control.evaluate((element, tolerance) => {
+    const box = element.getBoundingClientRect();
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const range = document.createRange();
+    const failures = [];
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      range.selectNodeContents(node);
+      for (const text of range.getClientRects()) {
+        if (
+          text.left < box.left - tolerance ||
+          text.right > box.right + tolerance ||
+          text.top < box.top - tolerance ||
+          text.bottom > box.bottom + tolerance
+        )
+          failures.push(node.textContent);
+      }
+    }
+    return failures;
+  }, TOLERANCE);
+  expect(failures).toEqual([]);
+}
+
 for (const profile of ['Spacious', 'Compact']) {
   for (const width of WIDTHS) {
     test(`${profile} suggestions ${width}px, long labels, RTL and 200%`, async ({
       page,
     }) => {
       await page.setViewportSize({ width, height: HEIGHT });
-      await fields(page, profile);
+      if (await fields(page, profile)) return;
       await page.getByRole('switch', { name: 'Right to left suggestions' }).check();
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
@@ -36,6 +71,7 @@ for (const profile of ['Spacious', 'Compact']) {
       await expect(
         list.getByRole('option', { name: /A destination with/ }),
       ).toBeVisible();
+      await fullTextFits(list.getByRole('option', { name: /A destination with/ }));
       const box = await list.boundingBox();
       expect(box).not.toBeNull();
       if (box === null) throw new Error('Missing popup geometry.');
@@ -44,6 +80,15 @@ for (const profile of ['Spacious', 'Compact']) {
       await contained(page);
       await list.getByRole('option', { name: /Kraków/ }).click();
       await expect(input).toHaveValue('Kraków');
+      const submit = page.getByRole('button', {
+        name: 'Save destination',
+        exact: true,
+      });
+      await fullTextFits(submit);
+      const submitBox = await submit.boundingBox();
+      if (submitBox === null) throw new Error('Missing native submit geometry.');
+      expect(submitBox.x).toBeGreaterThanOrEqual(-TOLERANCE);
+      expect(submitBox.x + submitBox.width).toBeLessThanOrEqual(width + TOLERANCE);
       await page.getByRole('button', { name: 'Save destination', exact: true }).click();
       const form = page.getByRole('form', { name: 'Destination form' });
       expect(
@@ -58,7 +103,7 @@ for (const profile of ['Spacious', 'Compact']) {
   test(`${profile} accepted clear restores the text editing focus`, async ({
     page,
   }) => {
-    await fields(page, profile);
+    if (await fields(page, profile)) return;
     const input = page.getByRole('combobox', { name: 'Destination', exact: true });
     await input.fill('Custom place');
     await input.press('Escape');
@@ -75,7 +120,7 @@ for (const profile of ['Spacious', 'Compact']) {
   test(`${profile} required readonly, disabled, veto and nested scope`, async ({
     page,
   }) => {
-    await fields(page, profile);
+    if (await fields(page, profile)) return;
     const input = page.getByRole('combobox', { name: 'Destination', exact: true });
     await page.getByRole('switch', { name: 'Read-only suggestions' }).check();
     await page.getByRole('button', { name: 'Save destination', exact: true }).click();
@@ -112,7 +157,7 @@ for (const profile of ['Spacious', 'Compact']) {
 test('composition commits final text once and never selects or submits early', async ({
   page,
 }) => {
-  await fields(page, 'Spacious');
+  if (await fields(page, 'Spacious')) return;
   const input = page.getByRole('combobox', { name: 'Destination', exact: true });
   await input.click();
   await page.keyboard.press('ArrowDown');
@@ -136,7 +181,7 @@ for (const profile of ['Spacious', 'Compact']) {
   test(`${profile} required feedback recovers after a readonly host write`, async ({
     page,
   }) => {
-    await fields(page, profile);
+    if (await fields(page, profile)) return;
     await page.getByRole('switch', { name: 'Read-only suggestions' }).check();
     await page.getByRole('button', { name: 'Save destination', exact: true }).click();
     const input = page.getByRole('combobox', { name: 'Destination', exact: true });
@@ -154,7 +199,7 @@ for (const profile of ['Spacious', 'Compact']) {
   });
 
   test(`${profile} disabled field protects its open portal`, async ({ page }) => {
-    await fields(page, profile);
+    if (await fields(page, profile)) return;
     const input = page.getByRole('combobox', { name: 'Destination', exact: true });
     const disable = await page
       .getByRole('switch', {

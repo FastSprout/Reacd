@@ -14,33 +14,32 @@ async function fields(page: Page, profile: string) {
   await page.getByRole('option', { name: profile, exact: true }).click();
   await page.getByRole('button', { name: 'Fields', exact: true }).click();
 }
+function rating(page: Page) {
+  const form = page.getByRole('form', { name: 'Rating form', exact: true });
+  return test.info().project.name === 'mui'
+    ? form.locator('.MuiRating-root')
+    : form.locator('[data-slot="slider"]');
+}
 async function contained(page: Page) {
+  const root = rating(page);
+  await expect(root).toHaveCount(1);
+  await expect(root).toBeVisible();
+  const fits = await root.evaluate((element, tolerance) => {
+    const parent = element.parentElement?.getBoundingClientRect();
+    const box = element.getBoundingClientRect();
+    if (!parent) throw new Error('Expected native rating field metadata.');
+    return box.left >= parent.left - tolerance && box.right <= parent.right + tolerance;
+  }, TOLERANCE);
+  expect(fits).toBe(true);
+  const bounds = await root.boundingBox();
+  if (!bounds) throw new Error('Expected native rating hit area.');
+  expect(bounds.width).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
+  expect(bounds.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
   ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
-  const invalid = await page.locator('.reacd-input-rating').evaluateAll(
-    (elements, tolerance) =>
-      elements.some((element) => {
-        const parent = element.parentElement?.getBoundingClientRect();
-        const box = element.getBoundingClientRect();
-        return (
-          parent !== undefined &&
-          (box.left < parent.left - tolerance || box.right > parent.right + tolerance)
-        );
-      }),
-    TOLERANCE,
-  );
-  expect(invalid).toBe(false);
-  const targets = await page.locator('.reacd-rating-star').evaluateAll(
-    (elements, minimum) =>
-      elements.every((element) => {
-        const box = element.getBoundingClientRect();
-        return box.width >= minimum && box.height >= minimum;
-      }),
-    LAYOUT_POLICY.controlTargetPx,
-  );
-  expect(targets).toBe(true);
 }
+
 for (const profile of PROFILES) {
   for (const width of WIDTHS) {
     test(`${profile} rating containment at ${width}px and 200%`, async ({ page }) => {
@@ -51,17 +50,20 @@ for (const profile of PROFILES) {
         document.documentElement.style.fontSize = '200%';
       });
       await contained(page);
-      await page
-        .getByRole('slider', { name: 'Service rating' })
-        .scrollIntoViewIfNeeded();
-      await expect(
-        page.getByRole('slider', { name: 'Service rating' }),
-      ).toBeInViewport();
+      await rating(page).scrollIntoViewIfNeeded();
+      await expect(rating(page)).toBeInViewport();
       await page.getByRole('switch', { name: 'Right to left rating' }).check();
-      await expect(page.locator('.reacd-input-rating')).toHaveCSS('direction', 'rtl');
+      await expect(rating(page)).toHaveCSS('direction', 'rtl');
       await contained(page);
-      const half = page.locator('.reacd-rating-star-fill[data-half="true"]');
-      await expect(half).toHaveCSS('clip-path', 'inset(0px 0px 0px 50%)');
+      if (test.info().project.name === 'mui') {
+        await expect(
+          page.getByRole('radio', { name: '2.5 Stars', exact: true }),
+        ).toBeChecked();
+      } else {
+        await expect(
+          page.getByRole('slider', { name: 'Service rating' }),
+        ).toHaveAttribute('aria-valuetext', '2.5 of 5 stars');
+      }
     });
   }
   test(`${profile} rating pointer, half-step keyboard and required form`, async ({
@@ -70,38 +72,83 @@ for (const profile of PROFILES) {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
     await fields(page, profile);
-    const control = page.locator('.reacd-rating-control');
+    const material = test.info().project.name === 'mui';
+    const control = rating(page);
     const box = await control.boundingBox();
-    if (box === null) throw new Error('Expected rating geometry.');
+    if (!box) throw new Error('Expected native rating geometry.');
     const point = { x: box.width * POINTER_FRACTION, y: box.height / 2 };
     await control.hover({ position: point });
     await expect(page.getByText('Rating: 2.5 of 5', { exact: true })).toBeVisible();
-    await control.click({ position: point });
+    if (material) {
+      await page
+        .locator('label')
+        .filter({
+          has: page.getByText('1.5 Stars', { exact: true }),
+        })
+        .click();
+    } else await control.click({ position: point });
     await expect(page.getByText('Rating: 1.5 of 5', { exact: true })).toBeVisible();
-    const slider = page.getByRole('slider', { name: 'Service rating' });
-    await slider.focus();
+    const keyboard = material
+      ? page.getByRole('radio', { name: '1.5 Stars', exact: true })
+      : page.getByRole('slider', { name: 'Service rating' });
+    await keyboard.focus();
     await page.keyboard.press('ArrowRight');
-    await expect(slider).toHaveAttribute('aria-valuenow', '2');
+    await expect(page.getByText('Rating: 2 of 5', { exact: true })).toBeVisible();
     await page.getByRole('switch', { name: 'Right to left rating' }).check();
     await expect(control).toHaveCSS('direction', 'rtl');
-    await slider.focus();
+    if (material)
+      await page.getByRole('radio', { name: '2 Stars', exact: true }).focus();
+    else await keyboard.focus();
     await page.keyboard.press('ArrowRight');
-    await expect(slider).toHaveAttribute('aria-valuenow', '1.5');
-    await control.click({ position: point });
-    await expect(slider).toHaveAttribute('aria-valuenow', '4');
+    await expect(page.getByText('Rating: 1.5 of 5', { exact: true })).toBeVisible();
+    if (material) {
+      await page
+        .locator('label')
+        .filter({
+          has: page.getByText('4 Stars', { exact: true }),
+        })
+        .click();
+    } else await control.click({ position: point });
+    await expect(page.getByText('Rating: 4 of 5', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Clear Service rating' }).click();
     await page.getByRole('button', { name: 'Save rating' }).click();
     await expect(page.getByText('Rating is not saved.', { exact: true })).toBeVisible();
-    await expect(slider).toBeFocused();
-    await page.keyboard.press('ArrowLeft');
-    await expect(slider).toHaveAttribute('aria-valuenow', '0.5');
+    const focus = material
+      ? page.getByRole('group', { name: /^Service rating(?: \*)?$/ })
+      : keyboard;
+    await expect(focus).toBeFocused();
+    if (material) {
+      await page.getByRole('radio', { name: '0.5 Stars', exact: true }).focus();
+      await page.keyboard.press('Space');
+    } else await page.keyboard.press('ArrowLeft');
+    await expect(page.getByText('Rating: 0.5 of 5', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Save rating' }).click();
     await expect(page.getByText('Rating saved.', { exact: true })).toBeVisible();
+    const form = page.getByRole('form', { name: 'Rating form', exact: true });
+    const nativeValue = () =>
+      form.evaluate((element) => {
+        if (!(element instanceof HTMLFormElement))
+          throw new Error('Missing rating form.');
+        return [...new FormData(element)];
+      });
+    expect(await nativeValue()).toEqual([['serviceRating', '0.5']]);
     await page.getByRole('switch', { name: 'Read-only rating' }).check();
-    await expect(slider).toHaveAttribute('aria-readonly', 'true');
+    if (material) {
+      await expect(
+        form.getByRole('img', { name: '0.5 Stars', exact: true }),
+      ).toBeVisible();
+      await expect(form.getByRole('radio')).toHaveCount(0);
+      await form.getByRole('img', { name: '0.5 Stars', exact: true }).click();
+    } else {
+      await expect(keyboard).toHaveAttribute('aria-readonly', 'true');
+      await keyboard.focus();
+      await page.keyboard.press('ArrowRight');
+    }
+    await expect(page.getByText('Rating: 0.5 of 5', { exact: true })).toBeVisible();
     await expect(
       page.getByRole('button', { name: 'Clear Service rating' }),
     ).toBeDisabled();
+    expect(await nativeValue()).toEqual([['serviceRating', '0.5']]);
     expect(errors).toEqual([]);
   });
 }

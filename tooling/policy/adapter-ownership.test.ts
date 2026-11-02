@@ -8,7 +8,6 @@ it.each([
   ['src/core/value.ts', 'src/adapter/mui/button.tsx'],
   ['src/adapter/mui/button.tsx', 'src/renderer/value.ts'],
   ['src/adapter/mui/button.tsx', 'src/adapter/mui/input.tsx'],
-  ['src/adapter/mui/button.tsx', 'src/adapter/shared/value.ts'],
 ])('preserves legal ownership checks from %s to %s', (from, target) => {
   expect(
     adapterOwnershipError(resolve(root, from), resolve(root, target), root),
@@ -20,6 +19,8 @@ it.each([
   ['shadcn', 'mui'],
   ['shared', 'mui'],
   ['shared', 'shadcn'],
+  ['mui', 'shared'],
+  ['shadcn', 'shared'],
 ])('rejects cross-owner access from %s to %s', (from, target) => {
   expect(
     adapterOwnershipError(

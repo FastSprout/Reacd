@@ -18,6 +18,7 @@ import { internalPath, isCodeReference, resolveModule } from './module-path.js';
 import { checkModuleCycles } from './module-cycles.js';
 import type { ModuleNode } from './module-cycles.js';
 import { inspectSource } from './parse.js';
+import { checkNativeStyles } from './native-styles.js';
 
 interface LayerSource {
   readonly path: string;
@@ -29,13 +30,15 @@ export function checkLayerGraph(
   root: string,
 ): PolicyDiagnostic[] {
   const nodes = new Map<string, ModuleNode>();
+  const issues: PolicyDiagnostic[] = [];
   for (const { path, source } of sources) {
     const absolute = resolve(root, path);
-    if (isProductionModule(absolute, root)) {
+    if (absolute.endsWith('.css')) {
+      issues.push(...checkNativeStyles(absolute, source, root));
+    } else if (isProductionModule(absolute, root)) {
       nodes.set(absolute, { path: absolute, source, edges: [] });
     }
   }
-  const issues: PolicyDiagnostic[] = [];
   for (const node of nodes.values()) {
     const facade = isPublicEntry(node.path, root);
     const local = facade

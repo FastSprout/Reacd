@@ -7,9 +7,7 @@ export interface ImportReference {
   runtimeNames?: readonly string[];
 }
 
-export function importVisitor(
-  visit: (reference: ImportReference) => void,
-): VisitorObject {
+export function importVisitor(visit: (reference: ImportReference) => void) {
   return {
     ImportDeclaration(node) {
       visit({
@@ -88,5 +86,5 @@ export function importVisitor(
         offset: node.start,
       });
     },
-  };
+  } satisfies VisitorObject;
 }

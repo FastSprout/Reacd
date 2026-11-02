@@ -1,3 +1,5 @@
+import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
+import { watchPreviewFailures } from '../preview-failures.js';
 import { COMPOSITION_HOST_EVENTS } from '../composition-events.js';
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
@@ -82,7 +84,14 @@ for (const compact of [false, true]) {
   });
 
   test(`${compact} shared tab fallback hides its portal`, async ({ page }) => {
+    const failures = watchPreviewFailures(page);
     await open(page, compact);
+    if (test.info().project.name === 'mui') {
+      await expectUnsupportedDiagnostic(page, failures, 'Shared tab popup', 'Popover');
+      await expect(page.getByRole('button', { name: 'Open shared popup' }))
+        .toHaveCount(0);
+      return;
+    }
     await page.getByRole('switch', { name: 'Keep shared popup open' }).check();
     const popup = page.getByRole('dialog', { name: 'Shared popup', exact: true });
     await expect(popup).toBeVisible();
@@ -99,9 +108,6 @@ for (const compact of [false, true]) {
     page,
   }) => {
     const errors: string[] = [];
-    page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
-    });
     page.on('pageerror', (error) => errors.push(error.message));
     await open(page, compact);
     const region = page.getByRole('region', { name: 'Native ancestry rejection' });

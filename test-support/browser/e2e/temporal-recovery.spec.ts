@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test';
+import { openTemporalProof, unsupportedTemporalProof } from
+  '../temporal-proofs.js';
 
 for (const template of ['saas-modern-light', 'erp-compact']) {
   for (const kind of ['date', 'time']) {
@@ -14,14 +16,24 @@ for (const template of ['saas-modern-light', 'erp-compact']) {
     test(`${template} ${kind} programmatic reset preserves active segment`, async ({
       page,
     }) => {
-      await page.goto('/temporal-recovery.html');
-      if (template === 'erp-compact') {
-        await page.getByRole('button', { name: 'Switch template' }).click();
-      }
+      const { material, failures } = await openTemporalProof(page, template);
       const region = page.getByRole('region', { name: `${kind} reset proof` });
+      if (material) {
+        await unsupportedTemporalProof(page, failures,
+          kind === 'date' ? 'Date range recovery' : 'Time range recovery',
+          kind === 'date' ? 'InputDate' : 'InputTime');
+        await expect(region.getByRole('status', { name: 'Range value' }))
+          .toHaveText(JSON.stringify(initial));
+        await region.getByRole('button', { name: 'Replace', exact: true }).click();
+        await expect(region.getByRole('status', { name: 'Range value' }))
+          .toHaveText(JSON.stringify(replacement));
+        await expect(region.getByRole('status', { name: 'Range writes' }))
+          .toHaveText('[]');
+        return;
+      }
       const part = kind === 'date' ? 'month' : 'hour';
       const segment = region.getByRole('spinbutton', {
-        name: new RegExp(`${part}, Start ${kind} range`, 'i'),
+        name: new RegExp(`${part}, ${kind} range Start`, 'i'),
       });
       await segment.focus();
       await segment.evaluate((element) => element.closest('form')?.reset());
@@ -45,11 +57,21 @@ for (const template of ['saas-modern-light', 'erp-compact']) {
     }) => {
       const errors: string[] = [];
       page.on('pageerror', (error) => errors.push(error.message));
-      await page.goto('/temporal-recovery.html');
-      if (template === 'erp-compact') {
-        await page.getByRole('button', { name: 'Switch template' }).click();
-      }
+      const { material, failures } = await openTemporalProof(page, template);
       const region = page.getByRole('region', { name: `${kind} reset proof` });
+      if (material) {
+        await unsupportedTemporalProof(page, failures,
+          kind === 'date' ? 'Date range recovery' : 'Time range recovery',
+          kind === 'date' ? 'InputDate' : 'InputTime');
+        await expect(region.getByRole('status', { name: 'Range value' }))
+          .toHaveText(JSON.stringify(initial));
+        await region.getByRole('button', { name: 'Replace', exact: true }).click();
+        await expect(region.getByRole('status', { name: 'Range value' }))
+          .toHaveText(JSON.stringify(replacement));
+        await expect(region.getByRole('status', { name: 'Range writes' }))
+          .toHaveText('[]');
+        return;
+      }
       const writes = region.getByRole('status', { name: 'Range writes' });
       await region.getByRole('button', { name: 'Replace', exact: true }).click();
       await region.getByRole('textbox', { name: `Unrelated ${kind}` }).fill('Edited');
@@ -100,17 +122,22 @@ for (const template of ['saas-modern-light', 'erp-compact']) {
     test(`${template} ${kind} external recovery and same-value draft`, async ({
       page,
     }) => {
-      await page.goto('/temporal-recovery.html');
-      if (template === 'erp-compact') {
-        await page.getByRole('button', { name: 'Switch template' }).click();
-      }
+      const { material, failures } = await openTemporalProof(page, template);
       const region = page.getByRole('region', { name: `${kind} recovery proof` });
-      const segment = region.getByRole('spinbutton', {
-        name: new RegExp(
-          `${kind === 'date' ? 'month' : 'hour'}, ${kind} recovery`,
-          'i',
-        ),
-      });
+      if (material && kind === 'time') {
+        await unsupportedTemporalProof(page, failures, 'Time recovery', 'InputTime');
+        await expect(region.getByRole('status', { name: 'Recovery writes' }))
+          .toHaveText('0');
+        return;
+      }
+      const segment = material
+        ? region.getByRole('group', { name: 'date recovery', exact: true })
+          .getByRole('spinbutton', { name: /^month(?:,|$)/i })
+        : region.getByRole('spinbutton', {
+          name: new RegExp(
+            `${kind === 'date' ? 'month' : 'hour'}, ${kind} recovery`, 'i',
+          ),
+        });
       await segment.focus();
       await page.keyboard.press('ArrowUp');
       await region.getByRole('button', { name: 'Save', exact: true }).click();

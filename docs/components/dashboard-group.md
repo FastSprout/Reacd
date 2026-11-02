@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: DashboardGroup
-reacd_preview_height: 560
 ---
 
 # DashboardGroup
@@ -40,9 +38,10 @@ shares while an engine-derived presentation reallocates space. Icon collapse res
 bounded logical share; mobile navigation always uses its independent state.
 
 The full group width and measured rem tracks own responsive behavior. A narrow sidebar
-column cannot force a desktop modal. Layout changes retain field state. Nested groups
-use independent context. No automatic storage, fixed viewport positioning or size units
-are public. Persist the validated value through the host's isolated Jotai store.
+column cannot force a desktop modal. Layout changes preserve controlled field state.
+Nested groups use independent context. No automatic storage, fixed viewport positioning
+or size units are public. Persist the validated value through the host's isolated Jotai
+store.
 
 Generative UI uses panelLayout plus separate boolean readWrite state keys. Query and
 selection data are separate from layout. Runtime constraints also reject incompatible
@@ -50,3 +49,12 @@ host writes.
 
 The shadcn adapter supports this closed contract. Native tags, classes, inline styles
 and vendor-specific escape hatches remain unavailable to application authors.
+
+## Native desktop and mobile transitions
+
+The shadcn adapter composes its native Sheet and Collapsible components. Only one
+content tree is mounted at a time. Host-controlled and Jotai application state is
+preserved when the container changes between docked navigation and a modal sheet. The
+SDK may remount uncontrolled DOM content when that modality changes; persist important
+form values in application state. Resizing does not change the separate desktop `open`
+and mobile `mobileOpen` values.

@@ -14,7 +14,13 @@ for (const profile of PROFILES) {
         await page.goto('/');
         await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
         await page.getByRole('option', { name: profile, exact: true }).click();
-        await page.getByRole('button', { name: 'Navigation', exact: true }).click();
+        await page
+          .getByRole('navigation', {
+            name: 'Component families',
+            exact: true,
+          })
+          .getByRole('button', { name: 'Navigation', exact: true })
+          .click();
         if (direction === 'rtl')
           await page.getByRole('switch', { name: 'Right to left navigation' }).check();
         await page.evaluate(() => {
@@ -25,7 +31,7 @@ for (const profile of PROFILES) {
         const first = list.getByRole('tab', { name: 'Account preferences' });
         await expect(
           list.getByRole('tab', { name: /^Restricted settings:/ }),
-        ).toHaveCSS('opacity', '1');
+        ).toBeDisabled();
         const last = list.getByRole('tab', { name: 'Billing preferences' });
         const alias = page.getByLabel('Account alias');
         await alias.fill('Retained account');

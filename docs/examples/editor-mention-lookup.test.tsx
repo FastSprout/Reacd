@@ -1,133 +1,165 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { act, render } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
-import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-import { ReacdProvider } from '@fastsprout/reacd';
-import { installEditorGeometry } from '../../test-support/editor-geometry.js';
-import { selectEditorText } from '../../test-support/editor-selection.js';
+import type { EditorDocument } from '@fastsprout/reacd';
+import { expect, it } from 'vitest';
+import { editorSchema } from '../../src/schema/editor/editor.schema.js';
+import { editorMentionMenuSchema } from
+  '../../src/schema/editor-mention-menu/editor-mention-menu.schema.js';
+import { editorMentionLookupRequestSchema } from
+  '../../src/schema/editor-mention-menu/lookup.schema.js';
+import { toggleSchema } from '../../src/schema/toggle/toggle.schema.js';
+import { buttonComponentSchema as buttonSchema } from
+  '../../src/schema/button/button.schema.js';
+import { appSchema } from '../../src/schema/app/app.schema.js';
+import {
+  exampleDeclarationProbe,
+  expectUnsupportedExample,
+} from '../../test-support/example-declaration-probe.js';
 import { EditorMentionLookupExample } from './editor-mention-lookup.js';
 
-let restore: () => void = () => undefined;
-beforeEach(() => {
-  restore = installEditorGeometry();
-  vi.spyOn(window, 'scrollBy').mockImplementation(() => undefined);
-});
-afterEach(() => {
-  restore();
-  vi.restoreAllMocks();
-});
-async function press(label: string) {
-  await userEvent.click(screen.getByRole('button', { name: label }));
-}
-function requestKey() {
-  const text = screen.getByText(/^Lookup key: /).textContent;
-  if (text === null) throw new Error('Expected current lookup key.');
-  return text.slice('Lookup key: '.length);
-}
-it('simulates correlated results, stale replies and real fuzzy insertion', async () => {
+it(
+  'reports native unavailability and retains correlated host replies and vetoes',
+  () => {
+  expectUnsupportedExample(<EditorMentionLookupExample />, 'Editor');
+  const probe = exampleDeclarationProbe();
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <probe.Surface>
       <EditorMentionLookupExample />
-    </ReacdProvider>,
+    </probe.Surface>,
   );
-  const box = await screen.findByRole('textbox', { name: 'Directory lookup document' });
-  expect(screen.getByText('Lookup requests: 0')).toBeVisible();
-  expect(screen.queryByRole('button', { name: 'Resolve current' })).toBeNull();
-  box.focus();
-  await userEvent.keyboard('@qq');
-  expect(screen.getByText('Lookup requests: 3')).toBeVisible();
-  expect(await screen.findByText('Loading results.')).toBeVisible();
-  const first = requestKey();
-  await press('Clear response');
-  expect(screen.getByText('Delivered response: none')).toBeVisible();
-  expect(screen.getByText('Loading results.')).toBeVisible();
-  await press('Fail current');
-  expect(await screen.findByRole('alert')).toHaveTextContent('Simulated lookup error.');
-  await press('Empty current');
-  expect(await screen.findByText('No matching results.')).toBeVisible();
-  await press('Resolve current');
-  expect(
-    await screen.findByRole('option', { name: `Directory entry ${first}` }),
-  ).toBeVisible();
-  await press('Save response for replay');
-  expect(screen.getByText('Lookup requests: 3')).toBeVisible();
-  act(() => selectEditorText(box, 'all'));
-  await userEvent.keyboard('@rr');
-  const second = requestKey();
-  expect(second).not.toBe(first);
-  expect(screen.getByText('Lookup query: rr')).toBeVisible();
-  await press('Resolve current');
-  await press('Replay saved response');
-  expect(
-    await screen.findByRole('option', { name: `Directory entry ${second}` }),
-  ).toBeVisible();
-  expect(screen.queryByRole('option', { name: `Directory entry ${first}` })).toBeNull();
-  act(() => selectEditorText(box, 'all'));
-  await userEvent.keyboard('@qq');
-  const third = requestKey();
-  expect(third).not.toBe(first);
-  expect(screen.getByText('Lookup query: qq')).toBeVisible();
-  await press('Replay saved response');
-  expect(screen.queryByRole('option', { name: `Directory entry ${first}` })).toBeNull();
-  expect(screen.getByText('Loading results.')).toBeVisible();
-  await press('Resolve current');
-  await userEvent.click(
-    await screen.findByRole('option', { name: `Directory entry ${third}` }),
+  const menu = () => {
+    const value = probe.read(
+      'EditorMentionMenu',
+      editorMentionMenuSchema,
+      'Remote directory options',
+    );
+    if (!('onQueryChange' in value)) throw new Error('Expected lookup callback');
+    return value;
+  };
+  const editor = () => {
+    const value = probe.read('Editor', editorSchema, 'Directory lookup document');
+    if (!('onValueChange' in value)) throw new Error('Expected document callback');
+    return value;
+  };
+  const initial = editor().value;
+  const press = (label: string) =>
+    act(() => probe.read('Button', buttonSchema, label).onPress());
+  const request = (key: string, query: string) =>
+    act(() =>
+      menu().onQueryChange(editorMentionLookupRequestSchema.parse({ key, query })),
+    );
+  expect(menu().results).toBeNull();
+  request('request-1', 'qq');
+  expect(menu().results).toEqual({ key: 'request-1', query: 'qq', status: 'loading' });
+  expect(probe.texts()).toContain('Lookup requests: 1');
+  press('Clear response');
+  expect(menu().results).toBeNull();
+  press('Fail current');
+  expect(menu().results).toMatchObject({
+    status: 'error',
+    error: 'Simulated lookup error.',
+    key: 'request-1',
+  });
+  press('Empty current');
+  expect(menu().results).toMatchObject({ status: 'ready', items: [] });
+  press('Resolve current');
+  const saved = menu().results;
+  expect(saved).toMatchObject({
+    key: 'request-1',
+    status: 'ready',
+    items: [{ id: 'directory-person', label: 'Directory entry request-1' }],
+  });
+  press('Save response for replay');
+  request('request-2', 'rr');
+  press('Resolve current');
+  expect(menu().results).toMatchObject({ key: 'request-2' });
+  press('Replay saved response');
+  expect(menu().results).toEqual(saved);
+  expect(probe.texts()).toEqual(
+    expect.arrayContaining([
+      'Lookup requests: 2',
+      'Lookup key: request-2',
+      'Lookup query: rr',
+    ]),
   );
-  await waitFor(() => expect(box.textContent).toBe(`@Directory entry ${third} `));
-  await waitFor(() => expect(box).toHaveFocus());
-  await press('Reset lookup document');
-  await waitFor(() => expect(box.textContent).toBe(''));
-  expect(screen.getByText('Lookup requests: 0')).toBeVisible();
-  await userEvent.click(screen.getByRole('switch', { name: 'Reject lookup edits' }));
-  box.focus();
-  await userEvent.keyboard('@qq');
-  expect(box.textContent).toBe('');
-  const beforeProtection = screen.getByText(/^Lookup requests: /).textContent;
-  await userEvent.click(
-    screen.getByRole('switch', { name: 'Read-only lookup document' }),
-  );
-  expect(box).toHaveAttribute('aria-readonly', 'true');
-  await userEvent.click(
-    screen.getByRole('switch', { name: 'Disable lookup document' }),
-  );
-  expect(box).toHaveAttribute('aria-disabled', 'true');
-  await userEvent.click(screen.getByRole('switch', { name: 'Right to left lookup' }));
-  expect(screen.getByText(/^Lookup requests: /).textContent).toBe(beforeProtection);
-  await press('Reset lookup document');
+  request('request-3', 'qq');
+  expect(menu().results).toMatchObject({ key: 'request-3', status: 'loading' });
+  press('Replay saved response');
+  expect(probe.texts()).toContain('Lookup key: request-3');
+  press('Resolve current');
+  expect(menu().results).toMatchObject({ key: 'request-3', status: 'ready' });
+  const proposal: EditorDocument = {
+    version: 1,
+    blocks: [
+      {
+        type: 'paragraph',
+        id: 'directory-note',
+        content: [
+          {
+            type: 'mention',
+            id: 'directory-person',
+            label: 'Directory entry request-3',
+          },
+        ],
+      },
+    ],
+  };
+  act(() => editor().onValueChange(proposal));
+  expect(editor().value).toEqual(proposal);
+  const toggle = (label: string) =>
+    act(() => probe.read('Toggle', toggleSchema, label).onCheckedChange(true));
+  toggle('Reject lookup edits');
+  act(() => editor().onValueChange(initial));
+  expect(editor().value).toEqual(proposal);
+  toggle('Read-only lookup document');
+  toggle('Disable lookup document');
+  toggle('Right to left lookup');
+  expect(editor()).toMatchObject({ readOnly: true, disabled: true });
+  expect(probe.read('App', appSchema).direction).toBe('rtl');
+  press('Reset lookup document');
+  expect(editor()).toMatchObject({ value: initial, readOnly: false, disabled: false });
+  expect(menu().results).toBeNull();
+  expect(probe.texts()).toContain('Lookup requests: 0');
+  expect(probe.read('App', appSchema).direction).toBe('ltr');
 });
 
-it('hydrates without requests and isolates independent provider sessions', async () => {
+it(
+  'hydrates headless declarations without requests and isolates provider sessions',
+  () => {
+  const first = exampleDeclarationProbe();
+  const second = exampleDeclarationProbe();
   const tree = (
-    <ReacdProvider adapter={shadcnAdapter}>
+    <first.Surface>
       <EditorMentionLookupExample />
-    </ReacdProvider>
+    </first.Surface>
   );
   const markup = renderToString(tree);
   expect(markup).toContain('Lookup requests: 0');
   const container = document.createElement('div');
   container.innerHTML = markup;
-  document.body.appendChild(container);
+  document.body.append(container);
   const errors: unknown[] = [];
   const view = render(tree, {
     container,
     hydrate: true,
     onRecoverableError: (error) => errors.push(error),
   });
-  const other = render(tree);
+  const other = render(
+    <second.Surface>
+      <EditorMentionLookupExample />
+    </second.Surface>,
+  );
   try {
-    const first = await within(container).findByRole('textbox', {
-      name: 'Directory lookup document',
-    });
-    await within(other.container).findByRole('textbox', {
-      name: 'Directory lookup document',
-    });
     expect(errors).toEqual([]);
-    first.focus();
-    await userEvent.keyboard('@qq');
-    expect(within(container).getByText('Lookup requests: 3')).toBeVisible();
-    expect(within(other.container).getByText('Lookup requests: 0')).toBeVisible();
+    const menu = first.read(
+      'EditorMentionMenu',
+      editorMentionMenuSchema,
+      'Remote directory options',
+    );
+    if (!('onQueryChange' in menu)) throw new Error('Expected lookup callback');
+    act(() => menu.onQueryChange({ key: 'isolated', query: 'qq' }));
+    expect(first.texts()).toContain('Lookup requests: 1');
+    expect(second.texts()).toContain('Lookup requests: 0');
     expect(errors).toEqual([]);
   } finally {
     view.unmount();

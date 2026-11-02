@@ -24,8 +24,5 @@ it('preserves local actions under a scoped template', async () => {
   );
   await user.click(screen.getByRole('button', { name: 'Run scoped action' }));
   expect(screen.getByText('Scoped actions: 1')).toBeVisible();
-  expect(screen.getByText('Scoped compact appearance')).toHaveAttribute(
-    'data-role',
-    'caption',
-  );
+  expect(screen.getByText('Scoped compact appearance').className).toContain('text-sm');
 });

@@ -1,5 +1,4 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import '@fastsprout/reacd-shadcn/styles';
+import '@fastsprout/reacd/styles';
 import { atom, useAtom } from 'jotai';
 import { ReacdProvider, Text, Toggle, VStack } from '@fastsprout/reacd';
 
@@ -17,7 +16,7 @@ function InstallationView() {
 
 export function InstallationExample() {
   return (
-    <ReacdProvider adapter={shadcnAdapter}>
+    <ReacdProvider>
       <InstallationView />
     </ReacdProvider>
   );

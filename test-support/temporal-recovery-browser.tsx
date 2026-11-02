@@ -1,7 +1,10 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
+import { browserAdapter } from './browser/adapter.js';
+import { ViewBoundary } from
+  '../tooling/conformance/loading/view-boundary.js';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { InputDate, InputTime, ReacdProvider } from '../src/index.js';
+import { Form, InputDate, InputTime, ReacdProvider, SubmitButton } from
+  '../src/index.js';
 import type { TemporalRange } from '../src/core/date-time.js';
 import '@fastsprout/reacd-shadcn/styles';
 
@@ -20,6 +23,7 @@ function RangeExample({ kind }: { kind: 'date' | 'time' }) {
   const [readOnly, setReadOnly] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [saved, setSaved] = useState('');
+  const [unrelated, setUnrelated] = useState('Initial');
   const properties = {
     mode: 'range' as const,
     label: `${kind} range`,
@@ -35,6 +39,13 @@ function RangeExample({ kind }: { kind: 'date' | 'time' }) {
   return (
     <section aria-label={`${kind} reset proof`}>
       <form
+        onResetCapture={(event) => {
+          event.preventDefault();
+          setUnrelated('Initial');
+          if (readOnly || disabled) return;
+          setWrites((current) => [...current, initial]);
+          if (!decline) setValue(initial);
+        }}
         onSubmit={(event) => {
           event.preventDefault();
           setSaved(
@@ -42,14 +53,18 @@ function RangeExample({ kind }: { kind: 'date' | 'time' }) {
           );
         }}
       >
-        {kind === 'date' ? (
-          <InputDate {...properties} referenceDate="2024-01-01" />
-        ) : (
-          <InputTime {...properties} />
-        )}
+        <ViewBoundary label={kind === 'date'
+          ? 'Date range recovery' : 'Time range recovery'}>
+          {kind === 'date' ? (
+            <InputDate {...properties} referenceDate="2024-01-01" />
+          ) : (
+            <InputTime {...properties} />
+          )}
+        </ViewBoundary>
         <label>
           Unrelated {kind}
-          <input defaultValue="Initial" />
+          <input value={unrelated}
+            onChange={(event) => setUnrelated(event.currentTarget.value)} />
         </label>
         <button type="button" onClick={() => setValue(replacement)}>
           Replace
@@ -93,25 +108,22 @@ function RecoveryExample({ kind }: { kind: 'date' | 'time' }) {
   };
   return (
     <section aria-label={`${kind} recovery proof`}>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          setSaved(saved + 1);
-        }}
-      >
+      <Form label={`${kind} recovery form`} onSubmit={() => setSaved(saved + 1)}>
         {kind === 'date' ? (
           <InputDate {...properties} referenceDate="2024-02-29" />
         ) : (
-          <InputTime {...properties} />
+          <ViewBoundary label="Time recovery">
+            <InputTime {...properties} />
+          </ViewBoundary>
         )}
-        <button type="button" onClick={() => setValue(replacement)}>
-          Replace
-        </button>
-        <button type="button" onClick={() => setRefresh(refresh + 1)}>
-          Refresh
-        </button>
-        <button type="submit">Save</button>
-      </form>
+        <SubmitButton label="Save" />
+      </Form>
+      <button type="button" onClick={() => setValue(replacement)}>
+        Replace
+      </button>
+      <button type="button" onClick={() => setRefresh(refresh + 1)}>
+        Refresh
+      </button>
       <output aria-label="Recovery saved">{saved}</output>
       <output aria-label="Recovery writes">{writes}</output>
       <output aria-label="Refresh count">{refresh}</output>
@@ -122,7 +134,7 @@ function RecoveryExample({ kind }: { kind: 'date' | 'time' }) {
 function Example() {
   const [templateId, setTemplateId] = useState('saas-modern-light');
   return (
-    <ReacdProvider adapter={shadcnAdapter} templateId={templateId}>
+    <ReacdProvider adapter={browserAdapter} templateId={templateId}>
       <FixtureContent
         onTemplate={() =>
           setTemplateId(

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { openUnsupportedExample } from '../native-capabilities.js';
 
 const WIDTHS = [240, 320, 768, 1440];
 const PROFILES = ['Spacious', 'Compact'];
@@ -10,6 +11,27 @@ for (const profile of PROFILES) {
   for (const width of WIDTHS) {
     for (const direction of DIRECTIONS) {
       test(`${profile} pricing ${width}px ${direction} at 200%`, async ({ page }) => {
+        if (test.info().project.name === 'mui') {
+          await page.setViewportSize({ width: width, height: HEIGHT });
+          await openUnsupportedExample(
+            page,
+            profile,
+            'Layout',
+            'Pricing examples',
+            'PricingPlan',
+          );
+          await page.evaluate((dir) => {
+            document.documentElement.dir = dir;
+            document.documentElement.style.fontSize = '200%';
+          }, direction);
+          await expect(
+            page.getByRole('article', {
+              name: 'Illustrative pricing plan',
+              exact: true,
+            }),
+          ).toHaveCount(0);
+          return;
+        }
         await page.setViewportSize({ width, height: HEIGHT });
         await page.goto('/');
         const appearance = page.getByRole('combobox', {
@@ -60,9 +82,14 @@ for (const profile of PROFILES) {
           name: 'Illustrative comparison table',
           exact: true,
         });
-        const nativeCaption = await scroll.locator('caption').boundingBox();
-        expect(nativeCaption?.width).toBeLessThanOrEqual(TOLERANCE);
-        expect(nativeCaption?.height).toBeLessThanOrEqual(TOLERANCE);
+        const table = scroll.getByRole('table', {
+          name: 'Illustrative comparison table',
+          exact: true,
+        });
+        await expect(table.locator('caption')).toBeVisible();
+        await expect(table.locator('caption')).toHaveText(
+          'Illustrative comparison table',
+        );
         const overflowing = await scroll.evaluate(
           (element) => element.scrollWidth > element.clientWidth,
         );
@@ -87,7 +114,7 @@ for (const profile of PROFILES) {
         await expect(choose).toBeInViewport();
         await expect
           .poll(async () => {
-            const outer = await scroll.boundingBox();
+            const outer = await choose.locator('xpath=ancestor::th[1]').boundingBox();
             const target = await choose.boundingBox();
             return (
               outer !== null &&
@@ -97,7 +124,7 @@ for (const profile of PROFILES) {
             );
           })
           .toBe(true);
-        const scrollBox = await scroll.boundingBox();
+        const scrollBox = await choose.locator('xpath=ancestor::th[1]').boundingBox();
         const chooseBox = await choose.boundingBox();
         if (scrollBox === null || chooseBox === null)
           throw new Error('Missing tier action geometry.');
@@ -111,7 +138,7 @@ for (const profile of PROFILES) {
         );
         if (profile === 'Compact' && width === 320 && direction === 'rtl') {
           await plan.screenshot({ path: '.cache/pricing-plan-Compact-320-rtl.png' });
-          await region.locator('.reacd-pricing-comparison').screenshot({
+          await scroll.screenshot({
             path: '.cache/pricing-table-Compact-320-rtl.png',
           });
         }
@@ -128,7 +155,7 @@ for (const profile of PROFILES) {
           return Array.from(
             element.querySelectorAll('input,button,p,a,h1,h2,h3,h4,h5,h6'),
           ).some((item) => {
-            if (item.closest('.reacd-pricing-table-region')) return false;
+            if (item.closest('[data-slot="table-container"]')) return false;
             const box = item.getBoundingClientRect();
             return (
               box.width > 0 &&

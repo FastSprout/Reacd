@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: Textarea
-reacd_preview_height: 560
 ---
 
 # Textarea
@@ -62,5 +60,5 @@ Generative transport binds text with explicit read/readWrite access. A read bind
 makes the field read-only. Maximum-length constraints apply to shared host writes;
 minimum length stays a submission rule so editing remains possible.
 
-The compiled [Textarea example](../examples/textarea.tsx) includes automatic/manual
-height, protected editing and content longer than the row cap.
+The compiled [Textarea example](../examples/textarea.tsx) demonstrates controlled
+release notes with bounded automatic height.

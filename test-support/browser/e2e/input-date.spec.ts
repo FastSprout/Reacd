@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
-import { LAYOUT_POLICY } from '../../../src/core/policy.js';
+import { watchPreviewFailures } from '../preview-failures.js';
 
 const PROFILES = ['Spacious', 'Compact'];
 const WIDTHS = [240, 360, 768, 1440];
@@ -12,117 +12,188 @@ async function fields(page: Page, profile: string) {
   await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
   await page.getByRole('option', { name: profile, exact: true }).click();
   await page.getByRole('button', { name: 'Fields', exact: true }).click();
+  return (
+    (await page.locator('[data-adapter]').first().getAttribute('data-adapter')) ===
+    'material-ui'
+  );
 }
-
-async function contained(page: Page) {
-  expect(
-    await page.evaluate(() => document.documentElement.scrollWidth),
-  ).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + TOLERANCE);
-  for (const field of await page.locator('.reacd-input-date').all()) {
+async function rangeDiagnostic(
+  page: Page,
+  failures: ReturnType<typeof watchPreviewFailures>,
+) {
+  const message = 'Adapter "material-ui" does not support component "InputDate".';
+  await expect.poll(failures).toContainEqual({
+    name: 'UnsupportedAdapterComponentError',
+    adapterId: 'material-ui',
+    componentName: 'InputDate',
+    message,
+  });
+  await expect(
+    page.getByRole('form', { name: 'Dates form' }).getByRole('alert'),
+  ).toHaveText(`Cannot load InputDate range${message}`);
+  await expect(
+    page.locator('input[name="booking.start"],input[name="booking.end"]'),
+  ).toHaveCount(0);
+}
+async function contained(page: Page, material: boolean) {
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth - innerWidth))
+    .toBeLessThanOrEqual(TOLERANCE);
+  const labels = material
+    ? ['Event date']
+    : ['Event date', 'Booking dates Start', 'Booking dates End'];
+  for (const label of labels) {
+    const group = page.getByRole('group', { name: label, exact: true });
+    await expect(group).toHaveCount(1);
+    await expect(group.getByRole('spinbutton')).toHaveCount(3);
     expect(
-      await field.evaluate((element, tolerance) => {
+      await group.evaluate((element, tolerance) => {
         const outer = element.getBoundingClientRect();
-        return Array.from(element.querySelectorAll('.reacd-date-segment,button')).every(
-          (child) => {
-            const box = child.getBoundingClientRect();
-            return (
-              box.left >= outer.left - tolerance && box.right <= outer.right + tolerance
-            );
-          },
-        );
+        return [...element.querySelectorAll('[role=spinbutton]')].every((child) => {
+          const box = child.getBoundingClientRect();
+          const range = document.createRange();
+          range.selectNodeContents(child);
+          const text = range.getBoundingClientRect();
+          return (
+            box.width > 0 &&
+            box.height > 0 &&
+            box.left >= outer.left - tolerance &&
+            box.right <= outer.right + tolerance &&
+            text.left >= outer.left - tolerance &&
+            text.right <= outer.right + tolerance
+          );
+        });
       }, TOLERANCE),
     ).toBe(true);
   }
+}
+async function canonical(page: Page) {
+  return page.getByRole('form', { name: 'Dates form' }).evaluate((element) => {
+    if (!(element instanceof HTMLFormElement)) throw new Error('Expected form');
+    return Object.fromEntries(new FormData(element));
+  });
 }
 
 for (const profile of PROFILES) {
   for (const width of WIDTHS) {
     test(`${profile} dates at ${width}px, 200%, RTL and Arabic`, async ({ page }) => {
+      const failures = watchPreviewFailures(page);
       await page.setViewportSize({ width, height: HEIGHT });
-      await fields(page, profile);
-      await contained(page);
+      const material = await fields(page, profile);
+      if (material) await rangeDiagnostic(page, failures);
+      await contained(page, material);
       await page.evaluate(() => {
         document.documentElement.style.fontSize = '200%';
       });
-      await contained(page);
+      await contained(page, material);
       await page.getByRole('switch', { name: 'Right to left dates' }).check();
-      await expect(page.locator('.reacd-input-date').first()).toHaveCSS(
-        'direction',
-        'rtl',
-      );
-      await expect(page.locator('.reacd-date-segments').first()).toHaveCSS(
-        'direction',
-        'ltr',
-      );
-      await contained(page);
+      const form = page.getByRole('form', { name: 'Dates form' });
+      await expect
+        .poll(() =>
+          form.evaluate((element) => {
+            for (let node: Element | null = element; node; node = node.parentElement)
+              if (node.getAttribute('dir') === 'rtl') return true;
+            return false;
+          }),
+        )
+        .toBe(true);
+      const event = page.getByRole('group', { name: 'Event date', exact: true });
+      if (!material) await expect(event).toHaveCSS('direction', 'ltr');
+      await contained(page, material);
       await page.getByRole('switch', { name: 'Arabic date locale' }).check();
-      await expect(page.locator('.reacd-date-segments').first()).toHaveCSS(
-        'direction',
-        'rtl',
-      );
-      await contained(page);
-      const targets = page.locator(
-        '.reacd-date-segment:is([role="spinbutton"],[role="textbox"])',
-      );
-      for (const segment of await targets.all()) {
-        const box = await segment.boundingBox();
-        if (box === null) throw new Error('Date segment must have geometry.');
-        expect(box.width).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
-        expect(box.height).toBeGreaterThanOrEqual(LAYOUT_POLICY.controlTargetPx);
-      }
+      if (!material) await expect(event).toHaveCSS('direction', 'rtl');
+      await contained(page, material);
+      expect((await canonical(page))['event']).toBe('2024-02-28');
     });
   }
 
-  test(`${profile} date keyboard, native form and protected state`, async ({
-    page,
-  }) => {
+  test(`${profile} date keyboard, forms and protection`, async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    await fields(page, profile);
-    const day = page.getByRole('spinbutton', { name: /day, Event date/i });
+    const failures = watchPreviewFailures(page);
+    const material = await fields(page, profile);
+    if (material) await rangeDiagnostic(page, failures);
+    const event = page.getByRole('group', { name: 'Event date', exact: true });
+    const day = event.getByRole('spinbutton', { name: /^day(?:,|$)/i });
+    const month = event.getByRole('spinbutton', { name: /^month(?:,|$)/i });
     await day.focus();
     await page.keyboard.press('ArrowUp');
     await expect(
       page.getByText('Event date: 2024-02-29', { exact: true }),
     ).toBeVisible();
-    await page.getByRole('button', { name: 'Save dates' }).click();
+    const save = page.getByRole('button', { name: 'Save dates' });
+    await save.click();
     await expect(page.getByText('Dates saved.', { exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'Clear End Booking dates' }).click();
-    await page.getByRole('button', { name: 'Save dates' }).click();
-    await expect(
-      page.getByRole('spinbutton', { name: /month, End Booking dates/i }),
-    ).toBeFocused();
+    const data = { event: '2024-02-29' };
+    expect(await canonical(page)).toEqual(
+      material
+        ? data
+        : { ...data, 'booking.start': '2024-02-28', 'booking.end': '2024-03-01' },
+    );
+    if (!material) {
+      await page.getByRole('button', { name: 'Clear Booking dates End' }).click();
+      await save.click();
+      await expect(
+        page
+          .getByRole('group', { name: 'Booking dates End', exact: true })
+          .getByRole('spinbutton', { name: /^month/i }),
+      ).toBeFocused();
+      expect((await canonical(page))['booking.end']).toBe('');
+    }
     await page.getByRole('button', { name: 'Restore sample dates' }).click();
-    const month = page.getByRole('spinbutton', { name: /month, Event date/i });
     await month.focus();
     await page.keyboard.press('Backspace');
     await expect(month).not.toHaveAttribute('aria-valuenow');
-    await page.getByRole('button', { name: 'Save dates' }).click();
+    await save.click();
     await expect(month).toBeFocused();
     await expect(
-      page.getByText('Complete all date segments or clear the field.'),
+      page
+        .getByText(
+          material
+            ? 'Date must be within its allowed limits.'
+            : 'Complete all date segments or clear the field.',
+          { exact: true },
+        )
+        .first(),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Restore sample dates' }).click();
+    await expect(month).toHaveAttribute('aria-valuenow', '2');
     await page.getByRole('switch', { name: 'Right to left dates' }).check();
     await month.focus();
     await page.keyboard.press('ArrowRight');
-    await expect(day).toBeFocused();
+    if (!material) await expect(day).toBeFocused();
+    else
+      await expect
+        .poll(() =>
+          event.evaluate((element) => element.contains(document.activeElement)),
+        )
+        .toBe(true);
+    await day.focus();
     await page.keyboard.press('ArrowUp');
     await expect(
       page.getByText('Event date: 2024-02-29', { exact: true }),
     ).toBeVisible();
     await page.getByRole('switch', { name: 'Arabic date locale' }).check();
-    const arabicDay = page.locator('.reacd-date-segment[data-type="day"]').first();
+    const arabicDay = material ? day : event.locator('[data-type=day]');
     await arabicDay.focus();
     await page.keyboard.press('ArrowDown');
     await expect(
       page.getByText('Event date: 2024-02-28', { exact: true }),
     ).toBeVisible();
     await page.getByRole('switch', { name: 'Read-only dates' }).check();
-    await expect(page.getByRole('button', { name: 'Clear Event date' })).toBeDisabled();
+    await arabicDay.focus();
+    await page.keyboard.press('ArrowUp');
+    await expect(
+      page.getByText('Event date: 2024-02-28', { exact: true }),
+    ).toBeVisible();
+    const clear = page.getByRole('button', { name: 'Clear Event date' });
+    if (material) await expect(clear).toHaveCount(0);
+    else await expect(clear).toBeDisabled();
     await page.getByRole('switch', { name: 'Read-only dates' }).uncheck();
     await page.getByRole('switch', { name: 'Disable dates' }).check();
-    await expect(page.getByRole('button', { name: 'Clear Event date' })).toBeDisabled();
+    if (material) await expect(clear).toHaveCount(0);
+    else await expect(clear).toBeDisabled();
+    expect(await canonical(page)).toEqual({});
     expect(errors).toEqual([]);
   });
 }

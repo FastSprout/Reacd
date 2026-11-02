@@ -1,9 +1,9 @@
-import * as Foundations from '../../../docs/examples/element-foundations.js';
+import * as Foundations from '../fixtures/element-foundations.js';
 import { SpinnerExample } from '../../../docs/examples/spinner.js';
 import { LocaleSelectExample } from '../../../docs/examples/locale-select.js';
-import { ColorModeExample } from '../../../docs/examples/color-mode.js';
+import { ColorModeExample } from '../fixtures/color-mode.js';
 import { atom, useAtom } from 'jotai';
-import { ModalExample } from '../../../docs/examples/modal.js';
+import { ModalExample } from '../fixtures/modal.js';
 import { BannerExample } from '../../../docs/examples/banner.js';
 
 import {

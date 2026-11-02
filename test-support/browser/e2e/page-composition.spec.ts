@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { hasInlineOverflow } from '../inline-overflow.js';
 import type { Locator, Page } from '@playwright/test';
 
 const WIDTHS = [240, 320, 768, 1440];
@@ -6,7 +7,7 @@ const PROFILES = ['Spacious', 'Compact'];
 const DIRECTIONS = ['ltr', 'rtl'];
 const HEIGHT = 1000;
 const TOLERANCE = 1;
-const WIDE_ASIDE_WIDTH = 768;
+const WIDE_ASIDE_WIDTH = { mui: 900, shadcn: 768 };
 const WIDE_GEOMETRY_WIDTH = 1440;
 
 async function appearance(page: Page, profile: string) {
@@ -17,7 +18,9 @@ async function appearance(page: Page, profile: string) {
 async function geometry(items: Locator) {
   return items.evaluateAll((elements) =>
     elements.map((element) => {
-      const box = element.getBoundingClientRect();
+      const card = element.closest('.MuiCard-root, .bg-card');
+      if (!card) throw new Error('Expected the selected SDK Card for this action.');
+      const box = card.getBoundingClientRect();
       return { x: box.x, y: box.y, width: box.width, height: box.height };
     }),
   );
@@ -43,7 +46,7 @@ for (const profile of PROFILES) {
         await bodyQuery.fill('Retained body state');
         await listQuery.fill('Retained list state');
         await page.getByRole('switch', { name: 'Divide page list' }).check();
-        await expect(region.getByRole('list')).toHaveAttribute('data-divide', 'true');
+        await expect(region.getByRole('list').getByRole('separator')).toHaveCount(2);
         await expect(region.getByRole('listitem')).toHaveCount(3);
         await appearance(page, profile === 'Compact' ? 'Spacious' : 'Compact');
         await appearance(page, profile);
@@ -59,10 +62,19 @@ for (const profile of PROFILES) {
         await expect(aside).toBeVisible();
         await expect(aside).toHaveCSS(
           'position',
-          width >= WIDE_ASIDE_WIDTH ? 'sticky' : 'static',
+          width >=
+            WIDE_ASIDE_WIDTH[test.info().project.name === 'mui' ? 'mui' : 'shadcn']
+            ? 'sticky'
+            : 'static',
         );
-        const flow = await geometry(region.locator('.reacd-page-column-item'));
-        const grid = await geometry(region.locator('.reacd-page-grid > .reacd-card'));
+        const flow = await geometry(
+          region.getByRole('button', { name: /^Inspect flow / }),
+        );
+        const grid = await geometry(
+          region.getByRole('button', { name: /^Inspect grid / }),
+        );
+        expect(flow).toHaveLength(6);
+        expect(grid).toHaveLength(6);
         const flowColumns = new Set(flow.map((item) => Math.round(item.x))).size;
         const gridColumns = new Set(grid.map((item) => Math.round(item.x))).size;
         for (const count of [flowColumns, gridColumns]) {
@@ -93,19 +105,10 @@ for (const profile of PROFILES) {
           await first.click();
           await expect(page.getByText(`Selected ${kind}: First`)).toBeVisible();
         }
-        const escaped = await region.evaluate((element, tolerance) => {
-          const outer = element.getBoundingClientRect();
-          return Array.from(element.querySelectorAll('input,button,p,a,li')).some(
-            (child) => {
-              const box = child.getBoundingClientRect();
-              return (
-                box.width > 0 &&
-                (box.left < outer.left - tolerance ||
-                  box.right > outer.right + tolerance)
-              );
-            },
-          );
-        }, TOLERANCE);
+        const escaped = await region.evaluate(hasInlineOverflow, {
+          selectors: 'input,button,p,a,li',
+          tolerance: TOLERANCE,
+        });
         expect(escaped).toBe(false);
         expect(
           await page.evaluate(() => document.documentElement.scrollWidth),

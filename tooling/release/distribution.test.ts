@@ -83,10 +83,10 @@ describe('consumer-only publication metadata', () => {
       expect(() => parseDistributionManifest({ ...valid, files })).toThrow();
   });
 
-  it('accepts omitted runtime dependencies but not a malformed dependency map', () => {
+  it('requires matching default SDK dependency and rejects malformed maps', () => {
     const input = source();
     Reflect.deleteProperty(input, 'dependencies');
-    expect(createDistributionManifest(input).dependencies).toEqual({});
+    expect(() => createDistributionManifest(input)).toThrow();
     expect(() => createDistributionManifest({ ...input, dependencies: [] })).toThrow();
   });
 });

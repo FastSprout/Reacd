@@ -32,5 +32,5 @@ it('runs controlled slider edits, save, protection and RTL examples', async () =
   await user.click(screen.getByRole('switch', { name: 'Right to left sliders' }));
   expect(output).toHaveAttribute('aria-readonly', 'true');
   await user.click(screen.getByRole('switch', { name: 'Disable sliders' }));
-  expect(output).toBeDisabled();
+  expect(output).toHaveAttribute('data-disabled');
 });

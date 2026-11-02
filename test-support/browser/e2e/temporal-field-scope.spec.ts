@@ -1,10 +1,13 @@
 import { expect, test } from '@playwright/test';
+import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
+import { watchPreviewFailures } from '../preview-failures.js';
 
 for (const profile of ['Spacious', 'Compact']) {
   for (const mode of ['single', 'range']) {
     test(`${profile} ${mode} temporal fields inherit disabled scope`, async ({
       page,
     }) => {
+      const failures = watchPreviewFailures(page);
       const errors: string[] = [];
       page.on('pageerror', (error) => errors.push(error.message));
       await page.setViewportSize({ width: 360, height: 1000 });
@@ -12,6 +15,14 @@ for (const profile of ['Spacious', 'Compact']) {
       await page.getByRole('combobox', { name: 'Appearance', exact: true }).click();
       await page.getByRole('option', { name: profile, exact: true }).click();
       await page.getByRole('tab', { name: 'Generative UI', exact: true }).click();
+      if (await page.locator('[data-adapter]').first()
+        .getAttribute('data-adapter') === 'material-ui') {
+        await expectUnsupportedDiagnostic(page, failures, 'Generative UI', 'SplitView');
+        await expect(page.getByRole('form', { name: 'Scoped temporal form' }))
+          .toHaveCount(0);
+        expect(errors).toEqual([]);
+        return;
+      }
       const date =
         mode === 'single' ? '2026-10-14' : { start: '2026-10-14', end: '2026-10-20' };
       const time =
@@ -76,7 +87,7 @@ for (const profile of ['Spacious', 'Compact']) {
       await page.getByRole('button', { name: 'Render declaration' }).click();
       const form = page.getByRole('form', { name: 'Scoped temporal form' });
       const scope = form.getByRole('group', {
-        name: 'Disabled schedule *',
+        name: /^Disabled schedule(?: \*)?$/,
         exact: true,
       });
       const segments = scope.getByRole('spinbutton');
@@ -90,7 +101,7 @@ for (const profile of ['Spacious', 'Compact']) {
       }
       await expect(form.getByText('Scope review', { exact: true })).toHaveCount(1);
       const before = await form
-        .locator('input[type="hidden"][name]')
+        .locator('input[name]')
         .evaluateAll((items) => items.map((item) => item.getAttribute('value')));
       await page.getByRole('button', { name: 'Render declaration' }).focus();
       await page.keyboard.press('Tab');
@@ -102,7 +113,7 @@ for (const profile of ['Spacious', 'Compact']) {
       ).toBe(false);
       expect(
         await form
-          .locator('input[type="hidden"][name]')
+          .locator('input[name]')
           .evaluateAll((items) => items.map((item) => item.getAttribute('value'))),
       ).toEqual(before);
       expect(

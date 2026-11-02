@@ -1,7 +1,5 @@
 ---
-template: preview.html
 reacd_preview: DataTable
-reacd_preview_height: 560
 ---
 
 # DataTable
@@ -61,6 +59,10 @@ Filters apply before stable multi-column sorting and pagination. Null cells sort
 either direction. Filters support `equals`, `contains`, `greaterThan`, and `lessThan`;
 operators and values must match the declared column kind.
 
+The shadcn adapter uses the SDK sorting cycle. A numeric column starts descending;
+a text column starts ascending. Repeated activation reverses the direction and
+then clears sorting. The column header announces the current direction.
+
 ## Controller API
 
 `createDataTableController(registry, { columns, bindings })` returns a validated
@@ -88,4 +90,5 @@ generative renderer and adapter.
 --8<-- "examples/generative-table.tsx"
 ```
 
-Use the live TSX preview above to run this example.
+The live preview above demonstrates the TSX DataTable. This separate source
+example demonstrates its generative state bindings.

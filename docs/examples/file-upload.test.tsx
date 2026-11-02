@@ -1,42 +1,61 @@
-import { shadcnAdapter } from '@fastsprout/reacd-shadcn';
-import { render, screen, waitFor } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { act, render } from '@testing-library/react';
 import { expect, it } from 'vitest';
-import { ReacdProvider } from '@fastsprout/reacd';
+import { readUploadBytes } from '@fastsprout/reacd';
+import { fileUploadSchema } from '../../src/schema/file-upload/index.js';
+import { toggleSchema } from '../../src/schema/toggle/toggle.schema.js';
+import { buttonComponentSchema as buttonSchema } from
+  '../../src/schema/button/button.schema.js';
+import { formSchema } from '../../src/schema/form/form.schema.js';
+import { appSchema } from '../../src/schema/app/app.schema.js';
+import {
+  exampleDeclarationProbe,
+  expectUnsupportedExample,
+} from '../../test-support/example-declaration-probe.js';
 import { FileUploadExample } from './file-upload.js';
-it('runs documented file payload, protection, rejection and form flows', async () => {
-  const user = userEvent.setup();
+
+it(
+  'reports native unavailability and preserves file bytes, vetoes and host state',
+  () => {
+  expectUnsupportedExample(<FileUploadExample />, 'FileUpload');
+  const probe = exampleDeclarationProbe();
   render(
-    <ReacdProvider adapter={shadcnAdapter}>
+    <probe.Surface>
       <FileUploadExample />
-    </ReacdProvider>,
+    </probe.Surface>,
   );
-  expect(screen.getByText('No content yet.')).toBeVisible();
-  await user.click(screen.getByRole('button', { name: 'Save files' }));
-  expect(screen.getByRole('alert')).toBeVisible();
-  await user.click(screen.getByRole('button', { name: 'Restore sample file' }));
-  expect(screen.getByText(/: 5 bytes/)).toBeVisible();
-  await user.click(screen.getByRole('switch', { name: 'Reject file changes' }));
-  await user.click(screen.getByRole('button', { name: /Remove Saved-document/ }));
-  expect(screen.getByText(/: 5 bytes/)).toBeVisible();
-  await user.click(screen.getByRole('switch', { name: 'Read-only files' }));
-  await user.click(screen.getByRole('switch', { name: 'Disable files' }));
-  const form = screen.getByRole('form', { name: 'Files form' });
-  expect(form).toBeInstanceOf(HTMLFormElement);
-  if (!(form instanceof HTMLFormElement)) throw new Error('Missing form');
-  expect(new FormData(form).has('attachments')).toBe(false);
-  await user.click(screen.getByRole('switch', { name: 'Disable files' }));
-  expect(new FormData(form).get('attachments')).toContain('SGVsbG8=');
-  await user.click(screen.getByRole('switch', { name: 'Read-only files' }));
-  await user.click(screen.getByRole('switch', { name: 'Reject file changes' }));
-  await user.click(screen.getByRole('switch', { name: 'Right to left files' }));
-  await user.upload(
-    screen.getByLabelText('Attachments', { selector: 'input' }),
-    new File(['x'], 'local.txt', { lastModified: 0 }),
-  );
-  await waitFor(() => expect(screen.getByText(/local.txt: 1 bytes/)).toBeVisible());
-  await user.click(screen.getByRole('button', { name: 'Save files' }));
-  expect(screen.getByText('Files saved.')).toBeVisible();
-  await user.click(screen.getByRole('button', { name: 'Clear files' }));
-  expect(screen.getByText('No content yet.')).toBeVisible();
+  const read = () => probe.read('FileUpload', fileUploadSchema, 'Attachments');
+  const press = (label: string) =>
+    act(() => probe.read('Button', buttonSchema, label).onPress());
+  const toggle = (label: string) =>
+    act(() => {
+      const value = probe.read('Toggle', toggleSchema, label);
+      value.onCheckedChange(!value.checked);
+    });
+  expect(read().value).toEqual([]);
+  expect(read().required).toBe(true);
+  expect(probe.texts()).toContain('No content yet.');
+  press('Restore sample file');
+  const sample = read().value[0];
+  if (!sample) throw new Error('Missing sample file');
+  expect([...readUploadBytes(sample)]).toEqual([72, 101, 108, 108, 111]);
+  expect(probe.texts()).toContain(`${sample.name}: 5 bytes`);
+  toggle('Reject file changes');
+  act(() => read().onValueChange([]));
+  expect(read().value).toEqual([sample]);
+  toggle('Read-only files');
+  toggle('Disable files');
+  expect(read().readOnly).toBe(true);
+  expect(read().disabled).toBe(true);
+  toggle('Disable files');
+  toggle('Read-only files');
+  toggle('Reject file changes');
+  toggle('Right to left files');
+  expect(probe.read('App', appSchema).direction).toBe('rtl');
+  act(() => read().onValueChange([{ ...sample, id: 'local', name: 'local.txt' }]));
+  expect(read().value[0]?.name).toBe('local.txt');
+  act(() => probe.read('Form', formSchema, 'Files form').onSubmit());
+  expect(probe.texts()).toContain('Files saved.');
+  press('Clear files');
+  expect(read().value).toEqual([]);
+  expect(probe.texts()).toContain('No content yet.');
 });
