@@ -54,31 +54,19 @@ it('deploys the checked main artifact without rebuilding', () => {
   }
 });
 
-it('connects Pages only to the existing verified main check', () => {
+it('keeps release publication gated without duplicating Pages deployment', () => {
   const source: unknown = parse(readFileSync('.github/workflows/release.yml', 'utf8'));
   const release = z
     .object({
-      jobs: z.object({
-        check: z.object({ uses: z.string() }),
-        documentation: z.object({
-          if: z.string(),
-          needs: z.string(),
-          uses: z.string(),
-          permissions,
-        }),
-      }),
+      jobs: z
+        .object({
+          check: z.object({ uses: z.string() }),
+          release: z.object({ needs: z.string() }),
+        })
+        .passthrough(),
     })
     .parse(source);
   expect(release.jobs.check.uses).toBe('./.github/workflows/check.yml');
-  expect(release.jobs.documentation).toEqual({
-    if: "github.event_name == 'push'",
-    needs: 'check',
-    uses: './.github/workflows/pages.yml',
-    permissions: {
-      contents: 'read',
-      actions: 'read',
-      pages: 'write',
-      'id-token': 'write',
-    },
-  });
+  expect(release.jobs.release.needs).toBe('check');
+  expect(release.jobs).not.toHaveProperty('documentation');
 });

@@ -1,0 +1,68 @@
+name: Documentation checks
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: documentation-main
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22.23.4'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - run: npm install --global npm@11.19.0
+      - run: npm ci
+      - run: npm run policy
+      - run: npm run lint:layers
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run schema:check
+      - run: npm run fixtures:check
+      - run: npm run docs:check
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm run test:docs
+      - name: Preserve failed documentation diagnostics
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: failed-docs-${{ github.sha }}
+          path: |
+            test-results/docs-devices/
+            playwright-report/docs-devices/
+          if-no-files-found: ignore
+          include-hidden-files: true
+          retention-days: 14
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: docs-${{ github.sha }}
+          path: site/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
+  deploy:
+    needs: check
+    uses: ./.github/workflows/pages.yml
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
