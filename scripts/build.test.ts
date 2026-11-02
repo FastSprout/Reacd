@@ -36,7 +36,11 @@ describe('production build runner', () => {
       execute.mock.invocationCallOrder[0] ?? 0,
     );
     expect(execute.mock.calls).toEqual([
-      [process.execPath, [compiler, '-p', 'tsconfig.build.json'], { stdio: 'inherit' }],
+      [
+        process.execPath,
+        [compiler, '-p', 'tsconfig.contracts.json'],
+        { stdio: 'inherit' },
+      ],
       [
         process.execPath,
         [compiler, '-p', 'packages/shadcn/tsconfig.build.json'],
@@ -47,6 +51,7 @@ describe('production build runner', () => {
         [compiler, '-p', 'packages/mui/tsconfig.build.json'],
         { stdio: 'inherit' },
       ],
+      [process.execPath, [compiler, '-p', 'tsconfig.build.json'], { stdio: 'inherit' }],
       [
         process.execPath,
         [vite, 'build', '--config', 'vite.styles.config.ts'],
@@ -86,7 +91,7 @@ describe('production build runner', () => {
     await expect(import('./build.mjs')).rejects.toBe(failure);
     expect(execute).not.toHaveBeenCalled();
   });
-  it.each([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])(
+  it.each([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])(
     'stops on build stage %s failure',
     async (stage) => {
       const failure = new Error('Build failed.');

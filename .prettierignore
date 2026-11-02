@@ -5,7 +5,7 @@ dist/
 coverage/
 test-results/
 playwright-report/
-site/
+/site/
 package-lock.json
 schema/*.json
 test-support/fixtures/generative/*.json

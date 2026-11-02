@@ -59,8 +59,8 @@ const installedManifest = z.object({
   type: z.literal('module'),
   dependencies: z.strictObject({
     '@fastsprout/reacd': z.string(),
-    '@fastsprout/reacd-shadcn': z.string(),
   }),
+  overrides: z.strictObject({ '@fastsprout/reacd-shadcn': z.string() }),
 });
 const diagnostics = [
   'TS2745: Children must have type never.',

@@ -6,8 +6,9 @@
 [![Apache-2.0 license][license-badge]][license]
 
 Compose application views in TSX. The renderer and theme adapter handle HTML, styles and
-responsive layout; Jotai connects application state. Choose shadcn/ui or Material UI.
-Templates change appearance without changing the view declaration.
+responsive layout; Jotai connects application state. shadcn/ui is the default;
+Material UI is an explicit alternative. Templates change appearance without
+changing the view declaration.
 
 [Documentation][docs] · [Get started][start] · [Components][components] · [Theme
 adapters][adapters] · [State][state] · [Changelog][changelog] ·
@@ -18,7 +19,7 @@ adapters][adapters] · [State][state] · [Changelog][changelog] ·
 Install `@fastsprout/reacd` into an existing React application:
 
 ```sh
-npm install @fastsprout/reacd @fastsprout/reacd-shadcn
+npm install @fastsprout/reacd
 ```
 
 The [getting started guide][start] covers TypeScript's JSX configuration, the provider
@@ -43,8 +44,9 @@ export function ToggleExample() {
 }
 ```
 
-Select `shadcnAdapter` from `@fastsprout/reacd-shadcn` at your `ReacdProvider` root. For
-Material UI, install `@fastsprout/reacd-mui` and select its `muiAdapter`. This is the
+`ReacdProvider` uses shadcn/ui by default, with a monochrome light or dark template.
+For Material UI, install `@fastsprout/reacd-mui` and select its `muiAdapter`.
+This is the
 [runnable Toggle example][example]. Optional [generative UI][generative] binds
 components to typed state with explicit read or read/write access.
 

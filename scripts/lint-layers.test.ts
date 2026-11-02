@@ -22,7 +22,7 @@ afterEach(() => {
 describe('layer lint CLI', () => {
   it('discovers production sources without local specifications', async () => {
     await import('./lint-layers.js');
-    expect(discover).toHaveBeenCalledWith(['src/**/*.{ts,tsx,mts,cts}']);
+    expect(discover).toHaveBeenCalledWith(['src/**/*.{ts,tsx,mts,cts,css}']);
     expect(read).toHaveBeenCalledWith(
       expect.stringMatching(/src\/core\/value\.ts$/),
       'utf8',
@@ -46,6 +46,24 @@ describe('layer lint CLI', () => {
   it('rejects an empty production inventory', async () => {
     discover.mockReturnValue(['src/core/value.test.ts']);
     await expect(import('./lint-layers.js')).rejects.toThrow('production modules');
+  });
+
+  it('reports forbidden CSS dependencies from the standalone CLI', async () => {
+    discover.mockReturnValue(['src/adapter/mui/styles.css']);
+    read.mockReturnValue("@import '../../renderer/styles.css';");
+    await import('./lint-layers.js');
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringMatching(/src\/adapter\/mui\/styles\.css:1:1 \[architecture\]/),
+    );
+    expect(process.exitCode).toBe(1);
+  });
+
+  it('accepts SDK style imports and native theme tokens', async () => {
+    discover.mockReturnValue(['src/adapter/shadcn/styles.css']);
+    read.mockReturnValue("@import 'tailwindcss';\n:root { --primary: red; }");
+    await import('./lint-layers.js');
+    expect(console.error).not.toHaveBeenCalled();
+    expect(process.exitCode).toBeUndefined();
   });
 
   it('propagates discovery and read failures', async () => {

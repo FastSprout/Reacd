@@ -34,7 +34,7 @@ const options = INSTALLED_COMPILER_POLICY;
 try {
   const archive = packReleaseArchive(root);
   const adapterArchive = packShadcnArchive(root);
-  verifyHeadlessInstall(root, archive, temporary);
+  verifyHeadlessInstall(root, { engine: archive, shadcn: adapterArchive }, temporary);
   const modules = join(temporary, 'node_modules');
   const installed = join(modules, '@fastsprout/reacd');
   await mkdir(installed, { recursive: true });
@@ -62,6 +62,8 @@ try {
     ...Object.keys(metadata.peerDependencies),
     '@types',
   ]);
+  dependencies.delete(metadata.name);
+  dependencies.delete(adapter.name);
   for (const name of dependencies) {
     const target = join(modules, name);
     await mkdir(dirname(target), { recursive: true });
@@ -113,8 +115,8 @@ try {
         private: true,
         type: 'module',
         devDependencies: installedTypeDependencies(root),
-        dependencies: {
-          '@fastsprout/reacd': pathToFileURL(archive).href,
+        dependencies: { '@fastsprout/reacd': pathToFileURL(archive).href },
+        overrides: {
           '@fastsprout/reacd-shadcn': pathToFileURL(adapterArchive).href,
         },
       }),
@@ -137,7 +139,11 @@ try {
     buildInstalledBootstrap(root, clean);
     await exerciseInstalledBootstrap(clean);
     const materialArchive = packMuiArchive(root);
-    await verifyMaterialInstall(root, archive, materialArchive, isolated);
+    await verifyMaterialInstall(
+      root,
+      { engine: archive, shadcn: adapterArchive, mui: materialArchive },
+      isolated,
+    );
   } finally {
     await rm(isolated, { recursive: true, force: true });
   }

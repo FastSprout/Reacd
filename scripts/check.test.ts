@@ -37,6 +37,7 @@ describe('main check runner', () => {
           'test:package',
           'docs:check',
           'test:browser',
+          'test:docs',
         ].map((name) => ['npm', ['run', name], { stdio: 'inherit' }]),
       );
       expect(report).not.toHaveBeenCalled();

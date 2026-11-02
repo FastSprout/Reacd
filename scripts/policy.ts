@@ -17,7 +17,7 @@ const files = globSync([
   'release-please-config.json',
   '.release-please-manifest.json',
   'tsconfig*.json',
-  'mkdocs.yml',
+  'site.config.yml',
   '.github/**/*.yml',
   '.prettierrc.json',
   '.oxlintrc.json',

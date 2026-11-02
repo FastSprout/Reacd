@@ -18,7 +18,7 @@ rmSync(new URL('../packages/mui/dist/', import.meta.url), {
   recursive: true,
   force: true,
 });
-execFileSync(process.execPath, [compiler, '-p', 'tsconfig.build.json'], {
+execFileSync(process.execPath, [compiler, '-p', 'tsconfig.contracts.json'], {
   stdio: 'inherit',
 });
 execFileSync(
@@ -29,6 +29,9 @@ execFileSync(
   },
 );
 execFileSync(process.execPath, [compiler, '-p', 'packages/mui/tsconfig.build.json'], {
+  stdio: 'inherit',
+});
+execFileSync(process.execPath, [compiler, '-p', 'tsconfig.build.json'], {
   stdio: 'inherit',
 });
 for (const adapter of ['shadcn', 'mui']) {

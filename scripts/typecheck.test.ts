@@ -19,11 +19,13 @@ describe('type checking runner', () => {
     );
     expect(execute.mock.calls).toEqual(
       [
-        'tsconfig.build.json',
+        'tsconfig.contracts.json',
         'packages/shadcn/tsconfig.build.json',
         'packages/mui/tsconfig.build.json',
+        'tsconfig.build.json',
         '.',
         'tooling/conformance',
+        'tooling/site/app',
         'docs/examples',
         'examples',
       ].map((project) => [

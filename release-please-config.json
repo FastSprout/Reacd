@@ -30,6 +30,38 @@
           "type": "json",
           "path": "packages/mui/package.json",
           "jsonpath": "$.peerDependencies['@fastsprout/reacd']"
+        },
+        {
+          "type": "json",
+          "path": "package.json",
+          "jsonpath": "$.dependencies['@fastsprout/reacd-shadcn']"
+        },
+        {
+          "type": "json",
+          "path": "package-lock.json",
+          "jsonpath":
+            "$.packages[''].dependencies['@fastsprout/reacd-shadcn']"
+        },
+        {
+          "type": "json",
+          "path": "package-lock.json",
+          "jsonpath": "$.packages['packages/shadcn'].version"
+        },
+        {
+          "type": "json",
+          "path": "package-lock.json",
+          "jsonpath":
+            "$.packages['packages/shadcn'].peerDependencies['@fastsprout/reacd']"
+        },
+        {
+          "type": "json",
+          "path": "package-lock.json",
+          "jsonpath": "$.packages['packages/mui'].version"
+        },
+        {
+          "type": "json",
+          "path": "package-lock.json",
+          "jsonpath": "$.packages['packages/mui'].peerDependencies['@fastsprout/reacd']"
         }
       ]
     }

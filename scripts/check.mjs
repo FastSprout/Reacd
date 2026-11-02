@@ -12,6 +12,7 @@ const checks = [
   'test:package',
   'docs:check',
   'test:browser',
+  'test:docs',
 ];
 for (const check of checks) {
   try {

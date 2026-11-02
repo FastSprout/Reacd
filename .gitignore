@@ -1,7 +1,7 @@
 # Dependencies and generated builds
 node_modules/
 dist/
-site/
+/site/
 
 # Local plans, agent workspaces and verification output
 /specs/

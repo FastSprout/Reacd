@@ -4,10 +4,10 @@ import { checkLayerGraph } from '../tooling/policy/layer-graph.js';
 import { isProductionModule } from '../tooling/policy/layers.js';
 
 const root = process.cwd();
-const files = globSync(['src/**/*.{ts,tsx,mts,cts}'])
+const files = globSync(['src/**/*.{ts,tsx,mts,cts,css}'])
   .sort()
   .map((path) => resolve(root, path))
-  .filter((path) => isProductionModule(path, root))
+  .filter((path) => isProductionModule(path, root) || path.endsWith('.css'))
   .map((path) => ({ path, source: readFileSync(path, 'utf8') }));
 if (files.length === 0) {
   throw new Error('No owned production modules found. Run from the repository root.');

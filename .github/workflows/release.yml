@@ -27,6 +27,15 @@ jobs:
     uses: ./.github/workflows/check.yml
     permissions:
       contents: read
+  documentation:
+    if: github.event_name == 'push'
+    needs: check
+    uses: ./.github/workflows/pages.yml
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
   release:
     if: github.event_name == 'push'
     needs: check
