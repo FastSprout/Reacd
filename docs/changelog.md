@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.3.1](https://github.com/FastSprout/Reacd/compare/v0.3.0...v0.3.1) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **adapters:** Components and variants without a native SDK mapping now throw UnsupportedAdapterComponentError instead of using a shared fallback. See the documented adapter availability before upgrading.
+
+### Features
+
+* **adapters:** render with native shadcn and Material UI SDKs ([110b5a2](https://github.com/FastSprout/Reacd/commit/110b5a22248492db701225db082b57914a2f1b07))
+* **docs:** generate the site with reacd and native theme controls ([afe8928](https://github.com/FastSprout/Reacd/commit/afe8928b1dd368f4c6409fb1dab18744298dd9f2))
+
+
+### Bug Fixes
+
+* **adapters:** preserve native field and popup behavior ([2c9febf](https://github.com/FastSprout/Reacd/commit/2c9febff9125d37fd1d989f36fabfc4523c9c421))
+* **ci:** deploy checked documentation and validate native packages ([4a2ac5c](https://github.com/FastSprout/Reacd/commit/4a2ac5c62b3ef9b2cae9dffca502024d6446d057))
+* **shadcn:** keep data table filter labels within their tracks ([fd644a6](https://github.com/FastSprout/Reacd/commit/fd644a660f00c160660e3eded1837da3138e3aee))
+
+
+### Continuous Integration
+
+* parallelize complete release verification ([59b95f4](https://github.com/FastSprout/Reacd/commit/59b95f43305bd6efb2c9e14eea708ab7d1c0dcfd))
+
 ## [0.3.0](https://github.com/FastSprout/Reacd/compare/v0.2.1...v0.3.0) (2026-10-31)
 
 ### Added
