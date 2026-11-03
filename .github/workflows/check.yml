@@ -5,7 +5,6 @@ on:
   push:
     branches-ignore:
       - main
-      - release/0.3.1-readiness
   workflow_call:
 
 permissions:
