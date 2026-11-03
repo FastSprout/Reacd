@@ -15,7 +15,8 @@ export function headingAnchor(title: string, anchors: Set<string>): string {
     title
       .toLowerCase()
       .replace(/[^\p{L}\p{N}\s_-]/gu, '')
-      .replace(/\s+/g, '-') || 'section';
+      .replace(/\s+/g, '-')
+      .replace(/^-+/, '') || 'section';
   let id = base;
   let suffix = 1;
   while (anchors.has(id)) id = `${base}-${suffix++}`;
