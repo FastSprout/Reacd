@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
 import { watchPreviewFailures } from '../preview-failures.js';
+import { hasTextOverflow } from '../text-overflow.js';
 import { scrollOverflowDiagnostic } from '../scroll-overflow.js';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 
@@ -131,6 +132,9 @@ for (const template of TEMPLATES) {
         'tabindex',
         '0',
       );
+      const label = page.getByRole('checkbox', { name: 'Enabled', exact: true })
+        .locator('..').getByText('Enabled', { exact: true });
+      expect(await label.evaluate(hasTextOverflow, PIXEL_TOLERANCE)).toBe(false);
       const choice = page.getByRole('combobox', { name: 'Filter Active' });
       const bounds = await choice.evaluate((element) => {
         const box = element.getBoundingClientRect();

@@ -21,6 +21,8 @@ it('uses the associated SDK label as the full native pointer target', async () =
   expect(label).not.toHaveTextContent('Weekly mail');
   expect(control).toHaveAccessibleDescription('Weekly mail');
   expect(control.className).toContain('w-4');
+  expect(screen.getByText('Summary', { exact: true }))
+    .toHaveClass('[overflow-wrap:anywhere]');
   await userEvent.click(screen.getByText('Summary', { exact: true }));
   expect(change).toHaveBeenCalledExactlyOnceWith(true);
 });

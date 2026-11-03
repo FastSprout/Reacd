@@ -64,7 +64,7 @@ export function ShadcnCheckboxControl({
             );
           }}
         />
-        <FieldTitle className="min-w-0 break-words">{label}</FieldTitle>
+        <FieldTitle className="min-w-0 [overflow-wrap:anywhere]">{label}</FieldTitle>
       </FieldLabel>
       {description && <p id={`${id}-help`}>{description}</p>}
       {error && <FieldError id={`${id}-error`}>{error}</FieldError>}
