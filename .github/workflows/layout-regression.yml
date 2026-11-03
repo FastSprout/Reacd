@@ -46,3 +46,44 @@ jobs:
             playwright-report/
           if-no-files-found: ignore
           retention-days: 7
+  prepare:
+    needs: layout
+    if: >-
+      github.repository == 'FastSprout/Reacd' &&
+      github.ref == 'refs/heads/release/0.3.1-layout'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          target-branch: main
+          skip-github-release: true
+      - name: Include the verified native layout corrections
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch=release-please--branches--main--components--reacd
+          gh pr view "$branch" --json title,body > /tmp/reacd-release-pr.json
+          node --input-type=module <<'JS'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const pr = JSON.parse(readFileSync('/tmp/reacd-release-pr.json', 'utf8'));
+          if (!pr || pr.title !== 'chore(main): release 0.3.1' ||
+            typeof pr.body !== 'string') throw Error('Unexpected release PR.');
+          const heading = '### Bug Fixes\n';
+          if (!pr.body.includes(heading)) throw Error('Missing release notes.');
+          const notes = [
+            '* Keep native checkbox labels inside narrow fields.',
+            '* Constrain native page navigation wrappers in both directions.',
+          ].join('\n') + '\n';
+          writeFileSync('/tmp/reacd-release-notes.md',
+            pr.body.replace(heading, heading + '\n' + notes));
+          JS
+          gh pr edit "$branch" --body-file /tmp/reacd-release-notes.md
