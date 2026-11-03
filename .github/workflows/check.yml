@@ -12,40 +12,212 @@ permissions:
 
 env:
   NODE_VERSION: '22.23.4'
-  DOCS_ARTIFACT_RETENTION_DAYS: '14'
   CHECK_ARTIFACT_RETENTION_DAYS: '14'
 
 jobs:
-  check:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ github.sha }}
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+          package-manager-cache: false
       - run: npm install --global npm@11.19.0
       - run: npm ci
-      - run: npx playwright install --with-deps chromium firefox webkit
-      - run: npm run check
-      - name: Preserve failed check diagnostics
-        if: failure()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+      - run: npm run policy
+      - run: npm run lint:layers
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run schema:check
+      - run: npm run fixtures:check
+      - run: npm run docs:check
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:package
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: failed-checks-${{ github.sha }}
+          name: check-build-${{ github.sha }}
+          path: |
+            dist/
+            packages/shadcn/dist/
+            packages/mui/dist/
+            site/
+            .cache/site-runtime-dist/runtime-modules.json
+            .cache/conformance-dist/
+            .cache/examples/counter/
+            .cache/examples/form/
+            .cache/examples/dashboard/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: ${{ env.CHECK_ARTIFACT_RETENTION_DAYS }}
+  coverage:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - run: npm install --global npm@11.19.0
+      - run: npm ci
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: check-build-${{ github.sha }}
+          path: .
+      - run: npm run test:coverage
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: failure()
+        with:
+          name: failed-coverage-${{ github.sha }}
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: ${{ env.CHECK_ARTIFACT_RETENTION_DAYS }}
+  components:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: mui
+            browser: chromium
+            workers: 2
+          - project: shadcn
+            browser: chromium
+            workers: 2
+          - project: pin-chromium
+            browser: chromium
+            workers: 1
+          - project: pin-firefox
+            browser: firefox
+            workers: 1
+          - project: pin-webkit
+            browser: webkit
+            workers: 1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - run: npm install --global npm@11.19.0
+      - run: npm ci
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: check-build-${{ github.sha }}
+          path: .
+      - run: >-
+          node --import tsx --input-type=module -e
+          "await import('./tooling/site/content/model.schema.ts')"
+      - run: npx playwright install --with-deps "$BROWSER"
+        env:
+          BROWSER: ${{ matrix.browser }}
+      - run: >-
+          npm run test:browser -- --project="$PROJECT" --workers="$WORKERS"
+          --reporter=list,html,github
+        env:
+          PROJECT: ${{ matrix.project }}
+          WORKERS: ${{ matrix.workers }}
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report
+          PLAYWRIGHT_HTML_OPEN: never
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: failure()
+        with:
+          name: failed-components-${{ matrix.project }}-${{ github.sha }}
           path: |
             test-results/
             playwright-report/
-            coverage/
           if-no-files-found: ignore
           include-hidden-files: true
           retention-days: ${{ env.CHECK_ARTIFACT_RETENTION_DAYS }}
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+  documentation:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: docs-chromium
+            browser: chromium
+            workers: 2
+          - project: docs-firefox
+            browser: firefox
+            workers: 2
+          - project: docs-webkit
+            browser: webkit
+            workers: 1
+          - project: docs-iphone
+            browser: webkit
+            workers: 1
+          - project: docs-android
+            browser: chromium
+            workers: 1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          name: docs-${{ github.sha }}
-          path: site/
-          if-no-files-found: error
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - run: npm install --global npm@11.19.0
+      - run: npm ci
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: check-build-${{ github.sha }}
+          path: .
+      - run: >-
+          node --import tsx --input-type=module -e
+          "await import('./tooling/site/content/model.schema.ts')"
+      - run: npx playwright install --with-deps "$BROWSER"
+        env:
+          BROWSER: ${{ matrix.browser }}
+      - run: >-
+          npm run test:docs -- --project="$PROJECT" --workers="$WORKERS"
+          --reporter=list,html,github
+        env:
+          PROJECT: ${{ matrix.project }}
+          WORKERS: ${{ matrix.workers }}
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-report
+          PLAYWRIGHT_HTML_OPEN: never
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: failure()
+        with:
+          name: failed-documentation-${{ matrix.project }}-${{ github.sha }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
           include-hidden-files: true
-          retention-days: ${{ env.DOCS_ARTIFACT_RETENTION_DAYS }}
+          retention-days: ${{ env.CHECK_ARTIFACT_RETENTION_DAYS }}
+  check:
+    name: check
+    if: always()
+    needs: [build, coverage, components, documentation]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every complete check result
+        env:
+          BUILD_RESULT: ${{ needs.build.result }}
+          COVERAGE_RESULT: ${{ needs.coverage.result }}
+          COMPONENT_RESULT: ${{ needs.components.result }}
+          DOCS_RESULT: ${{ needs.documentation.result }}
+        run: |
+          for result in "$BUILD_RESULT" "$COVERAGE_RESULT" \
+            "$COMPONENT_RESULT" "$DOCS_RESULT"; do
+            if [ "$result" != success ]; then
+              echo "::error::A required check job did not succeed."
+              exit 1
+            fi
+          done

@@ -7,7 +7,6 @@ import type { RegistryFetch } from './registry.js';
 
 const manifest = z.object({
   name: z.string(),
-  version: z.literal('0.3.0'),
   engines: z.object({ node: z.literal('>=22.12.0') }),
 });
 
