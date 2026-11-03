@@ -19,7 +19,10 @@ export function ShadcnPageNativeLinks({
       aria-label={label}
       orientation="vertical"
       viewport={false}
-      className="min-w-0 max-w-full justify-start"
+      className={[
+        'min-w-0 max-w-full justify-start',
+        '[&>div]:min-w-0 [&>div]:max-w-full',
+      ].join(' ')}
     >
       <NavigationMenuList className="flex-col items-stretch">
         {links.map((item) => (

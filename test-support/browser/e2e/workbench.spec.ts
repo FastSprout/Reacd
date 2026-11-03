@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
 import { watchPreviewFailures } from '../preview-failures.js';
+import { scrollOverflowDiagnostic } from '../scroll-overflow.js';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 
 const WIDTHS = [240, 320, 375, 600, 768, 1024, 1440, 1920];
@@ -16,33 +17,20 @@ async function select(page: Page, name: string, option: string) {
 }
 
 async function contained(page: Page) {
-  const diagnosticLimits = { text: 80, elements: 20 };
-  const widths = await page.evaluate((policy) => ({
+  const widths = await page.evaluate(() => ({
     page: document.documentElement.scrollWidth,
-    viewport: window.innerWidth,
-    outside: [...document.querySelectorAll('body *')].flatMap((element) => {
-      const box = element.getBoundingClientRect();
-      let left = box.left;
-      let right = box.right;
-      for (let parent = element.parentElement; parent; parent = parent.parentElement) {
-        const style = getComputedStyle(parent);
-        if (style.visibility === 'hidden') return [];
-        if (style.overflowX !== 'visible') {
-          const clip = parent.getBoundingClientRect();
-          left = Math.max(left, clip.left);
-          right = Math.min(right, clip.right);
-        }
-      }
-      if (!box.width || !box.height ||
-        right <= left ||
-        Math.max(-left, right - innerWidth) <= policy.tolerance) return [];
-      return [{ tag: element.tagName, text: element.textContent?.slice(0, policy.text),
-        left: box.left, right: box.right, classes: element.className,
-        paintedLeft: left, paintedRight: right,
-        overflow: getComputedStyle(element).overflowX }];
-    }).slice(0, policy.elements),
-  }), { tolerance: PIXEL_TOLERANCE, ...diagnosticLimits });
-  expect(widths.page, JSON.stringify(widths.outside))
+    viewport: innerWidth,
+  }));
+  const diagnostics = widths.page > widths.viewport + PIXEL_TOLERANCE
+    ? await page.evaluate(scrollOverflowDiagnostic, PIXEL_TOLERANCE)
+    : undefined;
+  if (diagnostics) {
+    await test.info().attach('document-scroll-overflow', {
+      body: JSON.stringify(diagnostics, null, 2),
+      contentType: 'application/json',
+    });
+  }
+  expect(widths.page, JSON.stringify(diagnostics))
     .toBeLessThanOrEqual(widths.viewport + PIXEL_TOLERANCE);
   const surface = page.locator('[data-adapter]').first();
   await expect(surface).toBeVisible();
