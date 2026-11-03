@@ -23,6 +23,12 @@ import { useShadcnTheme } from '../surface/theme-context.js';
 import { useNativePopup } from '../surface/use-native-popup.js';
 import type { NativeTable } from './sdk-table.js';
 
+const choiceClasses = [
+  'h-auto min-h-9 min-w-0 max-w-full flex-wrap whitespace-normal',
+  '[&>span]:line-clamp-none',
+  '[&>span]:min-w-0 [&>span]:whitespace-normal [&>span]:[overflow-wrap:anywhere]',
+].join(' ');
+
 const operatorLabels = {
   equals: 'Equals',
   contains: 'Contains',
@@ -81,7 +87,7 @@ export function NativeFilter({ column, disabled }: Properties) {
             )
           }
         >
-          <SelectTrigger id={id}>
+          <SelectTrigger id={id} className={choiceClasses}>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent
@@ -126,7 +132,8 @@ export function NativeFilter({ column, disabled }: Properties) {
             )
           }
         >
-          <SelectTrigger aria-label={`Operator ${definition.label}`}>
+          <SelectTrigger aria-label={`Operator ${definition.label}`}
+            className={choiceClasses}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent

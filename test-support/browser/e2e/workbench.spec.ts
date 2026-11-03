@@ -16,11 +16,34 @@ async function select(page: Page, name: string, option: string) {
 }
 
 async function contained(page: Page) {
-  const widths = await page.evaluate(() => ({
+  const diagnosticLimits = { text: 80, elements: 20 };
+  const widths = await page.evaluate((policy) => ({
     page: document.documentElement.scrollWidth,
     viewport: window.innerWidth,
-  }));
-  expect(widths.page).toBeLessThanOrEqual(widths.viewport + PIXEL_TOLERANCE);
+    outside: [...document.querySelectorAll('body *')].flatMap((element) => {
+      const box = element.getBoundingClientRect();
+      let left = box.left;
+      let right = box.right;
+      for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+        const style = getComputedStyle(parent);
+        if (style.visibility === 'hidden') return [];
+        if (style.overflowX !== 'visible') {
+          const clip = parent.getBoundingClientRect();
+          left = Math.max(left, clip.left);
+          right = Math.min(right, clip.right);
+        }
+      }
+      if (!box.width || !box.height ||
+        right <= left ||
+        Math.max(-left, right - innerWidth) <= policy.tolerance) return [];
+      return [{ tag: element.tagName, text: element.textContent?.slice(0, policy.text),
+        left: box.left, right: box.right, classes: element.className,
+        paintedLeft: left, paintedRight: right,
+        overflow: getComputedStyle(element).overflowX }];
+    }).slice(0, policy.elements),
+  }), { tolerance: PIXEL_TOLERANCE, ...diagnosticLimits });
+  expect(widths.page, JSON.stringify(widths.outside))
+    .toBeLessThanOrEqual(widths.viewport + PIXEL_TOLERANCE);
   const surface = page.locator('[data-adapter]').first();
   await expect(surface).toBeVisible();
   const surfaceBox = await surface.boundingBox();
@@ -120,6 +143,33 @@ for (const template of TEMPLATES) {
         'tabindex',
         '0',
       );
+      const choice = page.getByRole('combobox', { name: 'Filter Active' });
+      const bounds = await choice.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        const parent = element.parentElement?.getBoundingClientRect();
+        if (!parent) throw new Error('Missing native filter track.');
+        const label = element.querySelector('span');
+        if (!label) throw new Error('Missing native filter label.');
+        const labelBox = label.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(label);
+        return { left: box.left, right: box.right,
+          parentLeft: parent.left, parentRight: parent.right,
+          label: { top: labelBox.top, bottom: labelBox.bottom,
+            left: labelBox.left, right: labelBox.right },
+          glyphs: [...range.getClientRects()].map((rect) => ({
+            top: rect.top, bottom: rect.bottom, left: rect.left, right: rect.right,
+          })) };
+      });
+      expect(bounds.left).toBeGreaterThanOrEqual(bounds.parentLeft - PIXEL_TOLERANCE);
+      expect(bounds.right).toBeLessThanOrEqual(bounds.parentRight + PIXEL_TOLERANCE);
+      expect(bounds.glyphs.length).toBeGreaterThan(0);
+      for (const glyph of bounds.glyphs) {
+        expect(glyph.top).toBeGreaterThanOrEqual(bounds.label.top - PIXEL_TOLERANCE);
+        expect(glyph.bottom).toBeLessThanOrEqual(bounds.label.bottom + PIXEL_TOLERANCE);
+        expect(glyph.left).toBeGreaterThanOrEqual(bounds.label.left - PIXEL_TOLERANCE);
+        expect(glyph.right).toBeLessThanOrEqual(bounds.label.right + PIXEL_TOLERANCE);
+      }
       await contained(page);
     });
   }
