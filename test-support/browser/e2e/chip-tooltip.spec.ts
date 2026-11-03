@@ -128,9 +128,7 @@ for (const profile of PROFILES) {
     await data(page, profile);
     const action = page.getByRole('button', { name: 'Run annotated action' });
     const wrapper = action.locator('..');
-    await action.hover();
-    const mainHint = hintBody(page, /^Runs a local sample action/);
-    await expect(mainHint).toBeVisible();
+    const mainHint = await openHint(page, 'hover');
     await mainHint.hover();
     await expect(mainHint).toBeVisible();
     await page.getByRole('heading', { name: 'Tooltip preview', exact: true }).hover();

@@ -108,7 +108,13 @@ for (const profile of PROFILES) {
           await expect(page.getByText('Sample opened locally.')).toBeVisible();
           await expect(trigger).toHaveAttribute('aria-expanded', 'false');
           await expect(child).toBeHidden();
-          await page.getByRole('switch', { name: 'Vertical navigation menu' }).check();
+          await expect(popup).not.toBeAttached();
+          const vertical = page.getByRole('switch', {
+            name: 'Vertical navigation menu',
+          });
+          await vertical.focus();
+          await page.keyboard.press('Space');
+          await expect(vertical).toBeChecked();
           await expect(
             page.getByRole('navigation', {
               name: 'Sample application resources',

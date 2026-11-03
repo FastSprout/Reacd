@@ -84,7 +84,23 @@ for (const profile of PROFILES) {
           selectors: 'input,button,p,a,h1,h2,h3,h4,h5,h6',
           tolerance: TOLERANCE,
         });
-        expect(escaped).toBe(false);
+        const diagnostics = escaped ? await region.evaluate((element, tolerance) => {
+          const outer = element.getBoundingClientRect();
+          return {
+            outer: { left: outer.left, right: outer.right },
+            controls: [...element.querySelectorAll('input,button,p,a,h1,h2,h3,h4')]
+              .flatMap((child) => {
+                const box = child.getBoundingClientRect();
+                if (!box.width || !box.height ||
+                  (box.left >= outer.left - tolerance &&
+                    box.right <= outer.right + tolerance))
+                  return [];
+                return [{ tag: child.tagName, text: child.textContent,
+                  left: box.left, right: box.right, classes: child.className }];
+              }),
+          };
+        }, TOLERANCE) : undefined;
+        expect(escaped, JSON.stringify(diagnostics)).toBe(false);
         expect(
           await page.evaluate(() => document.documentElement.scrollWidth),
         ).toBeLessThanOrEqual(width + TOLERANCE);

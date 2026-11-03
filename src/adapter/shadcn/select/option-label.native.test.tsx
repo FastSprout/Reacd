@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { expect, it, vi } from 'vitest';
 import { ShadcnForm } from '../form/form.adapter.js';
 import { ShadcnSelect } from './select.adapter.js';
 
 it('separates native multiple option labels and descriptions', async () => {
+  const user = userEvent.setup();
   const change = vi.fn<(value: readonly string[]) => void>();
   const label = 'Regional approval and international logistics coordination';
   const content = (value: readonly string[]) => (
@@ -23,12 +24,14 @@ it('separates native multiple option labels and descriptions', async () => {
     </ShadcnForm>
   );
   const view = render(content(['draft']));
-  await userEvent.click(screen.getByRole('combobox', { name: 'Included statuses' }));
-  const option = screen.getByRole('option', { name: label });
+  const trigger = screen.getByRole('combobox', { name: 'Included statuses' });
+  await user.click(trigger);
+  await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+  const option = await screen.findByRole('option', { name: label });
   expect(option).toHaveAccessibleDescription('Review before release.');
-  await userEvent.click(option);
+  await user.click(option);
   expect(change).toHaveBeenCalledExactlyOnceWith(['draft', 'review']);
-  await userEvent.keyboard('{Escape}');
+  await user.keyboard('{Escape}');
   view.rerender(content(['draft', 'review']));
   const form = screen.getByRole('form', { name: 'Selection' });
   if (!(form instanceof HTMLFormElement)) throw new Error('Expected native form.');

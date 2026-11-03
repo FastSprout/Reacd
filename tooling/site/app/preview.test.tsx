@@ -1,11 +1,19 @@
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { renderToString } from 'react-dom/server';
 import { userEvent } from '@testing-library/user-event';
-import { afterEach, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, expect, it, vi } from 'vitest';
 import { LivePreview } from './preview.js';
 import { templates } from '@fastsprout/reacd';
 import type { ThemeAdapter } from '@fastsprout/reacd';
 import * as adapterLoader from './material-adapter.js';
+import { previewRegistry } from '../previews/registry.js';
+import { NATIVE_MODULE_IMPORT_TIMEOUT_MS } from
+  '../../../test-support/native-module-policy.js';
+
+beforeAll(async () => {
+  await previewRegistry.Button.load();
+  await adapterLoader.loadMaterialAdapter();
+}, NATIVE_MODULE_IMPORT_TIMEOUT_MS);
 
 afterEach(() => vi.restoreAllMocks());
 
