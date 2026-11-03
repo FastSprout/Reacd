@@ -54,6 +54,21 @@ for (const profile of PROFILES) {
           ).toHaveCount(0);
           await dialog.getByRole('button', { name: 'Close navigation' })
             .click({ trial: true });
+          await expect.poll(async () => {
+            const box = await dialog.boundingBox();
+            if (box === null) return Infinity;
+            if (mode === 'Slideover') {
+              return Math.max(Math.abs(width - box.x - box.width), Math.abs(box.y));
+            }
+            if (mode === 'Drawer') {
+              return Math.max(
+                Math.abs(box.x),
+                Math.abs(box.width - width),
+                Math.abs(box.y + box.height - HEIGHT),
+              );
+            }
+            return Math.abs(box.x - (width - box.x - box.width));
+          }).toBeLessThanOrEqual(TOLERANCE);
           const box = await dialog.boundingBox();
           if (box === null) throw new Error('Menu geometry is unavailable.');
           if (mode === 'Slideover') {

@@ -15,6 +15,8 @@
 
 ### Bug Fixes
 
+* Stabilize native menu and panel animation checks.
+
 * Keep native checkbox labels inside narrow fields.
 * Constrain native page navigation wrappers in both directions.
 

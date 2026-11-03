@@ -1,0 +1,125 @@
+name: Native readiness regression
+
+on:
+  push:
+    branches:
+      - release/0.3.1-readiness
+
+permissions:
+  contents: read
+
+concurrency:
+  group: readiness-regression-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22.23.4'
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - run: npm install --global npm@11.19.0
+      - run: npm ci
+      - run: npm run policy
+      - run: npm run lint:layers
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: >-
+          npm run test:browser -- --project=shadcn --workers=1
+          --reporter=list,html,github --repeat-each=5
+          action-menus.spec.ts shells.spec.ts
+          --grep='Compact action menus 1440px rtl|Spacious shells 1440px rtl'
+        env:
+          PLAYWRIGHT_HTML_OPEN: never
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: native-readiness-${{ github.sha }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7
+  prepare:
+    needs: readiness
+    if: >-
+      github.repository == 'FastSprout/Reacd' &&
+      github.ref == 'refs/heads/release/0.3.1-readiness'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+      - name: Prepare the replacement candidate without publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_MAIN: 96e0bed363b17fa7e39bc3a19304773ffc51fa4b
+        run: |
+          branch=release-please--branches--main--components--reacd
+          git fetch origin main "$branch:refs/remotes/origin/$branch" --no-tags
+          test "$(git rev-parse origin/main)" = "$EXPECTED_MAIN"
+          git merge-base --is-ancestor "origin/$branch" HEAD
+          gh api repos/FastSprout/Reacd/pulls/8 > /tmp/reacd-prior.json
+          node --input-type=module <<'JS'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const prior = JSON.parse(readFileSync('/tmp/reacd-prior.json', 'utf8'));
+          if (!prior || prior.title !== 'chore(main): release 0.3.1' ||
+            prior.merge_commit_sha !== process.env.EXPECTED_MAIN ||
+            typeof prior.body !== 'string') throw Error('Unexpected candidate.');
+          const base = 'https://api.github.com/repos/FastSprout/Reacd/';
+          const headers = { authorization: `Bearer ${process.env.GH_TOKEN}` };
+          for (const path of ['git/ref/tags/v0.3.1', 'releases/tags/v0.3.1']) {
+            if ((await fetch(base + path, { headers })).status !== 404) {
+              throw Error('Existing tag or release blocks candidate replacement.');
+            }
+          }
+          for (const name of ['reacd', 'reacd-shadcn', 'reacd-mui']) {
+            const id = encodeURIComponent(`@fastsprout/${name}`);
+            const url = `https://registry.npmjs.org/${id}/0.3.1`;
+            if ((await fetch(url)).status !== 404) {
+              throw Error('Existing npm version blocks candidate replacement.');
+            }
+          }
+          const heading = '### Bug Fixes\n';
+          if (!prior.body.includes(heading)) throw Error('Missing release notes.');
+          const note = '\n* Stabilize native menu and panel animation checks.\n';
+          writeFileSync('/tmp/reacd-next.md',
+            prior.body.replace(heading, heading + note));
+          JS
+          gh auth setup-git --hostname github.com
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git restore --source="$EXPECTED_MAIN" -- .github/workflows/check.yml
+          git rm .github/workflows/readiness-regression.yml
+          git add .github/workflows/check.yml
+          git commit -m 'ci: remove completed readiness investigation'
+          git push origin "HEAD:refs/heads/$branch"
+          gh pr edit 8 --remove-label 'autorelease: pending'
+          existing=$(gh pr list --head "$branch" --base main --state open \
+            --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh pr edit "$existing" --title 'chore(main): release 0.3.1' \
+              --body-file /tmp/reacd-next.md --add-label 'autorelease: pending'
+          else
+            gh pr create --head "$branch" --base main \
+              --title 'chore(main): release 0.3.1' \
+              --body-file /tmp/reacd-next.md --label 'autorelease: pending'
+          fi

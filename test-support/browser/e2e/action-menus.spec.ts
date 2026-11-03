@@ -8,6 +8,12 @@ const HEIGHT = 1000;
 const TOLERANCE = 1;
 
 async function settledMenuBox(menu: Locator, width: number) {
+  await expect(menu).toHaveCSS('opacity', '1');
+  await expect.poll(() => menu.evaluate((element) =>
+    element.getAnimations().every((animation) =>
+      !animation.pending && animation.playState !== 'running',
+    ),
+  )).toBe(true);
   await expect
     .poll(async () => {
       const box = await menu.boundingBox();
