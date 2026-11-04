@@ -44,7 +44,7 @@ export function MuiAccordion(props: MuiAccordionProps) {
           >
             {item.label}
           </AccordionSummary>
-          <AccordionDetails id={`${id}-${index}-content`}>
+          <AccordionDetails>
             <PortalActiveContext value={active && props.value.includes(item.value)}>
               {item.content}
             </PortalActiveContext>

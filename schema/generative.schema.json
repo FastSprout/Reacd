@@ -4025,6 +4025,46 @@
         {
           "type": "object",
           "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2000,
+              "allOf": [
+                {
+                  "pattern": "^(https?:\\/\\/[^\\s\\\\]+|\\/(?!\\/)[^\\s\\\\]*)$"
+                },
+                {
+                  "pattern": "^\\P{Cc}*$"
+                }
+              ]
+            },
+            "alt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "aspect": {
+              "type": "string",
+              "enum": [
+                "landscape",
+                "square",
+                "portrait"
+              ]
+            },
+            "type": {
+              "type": "string",
+              "const": "Image"
+            }
+          },
+          "required": [
+            "src",
+            "alt",
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
             "name": {
               "type": "string",
               "minLength": 1,

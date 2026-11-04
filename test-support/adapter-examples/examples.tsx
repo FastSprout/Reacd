@@ -1,5 +1,6 @@
 import { EDITOR_MENU_EXAMPLES } from './editor-menu-examples.js';
 import { ProseExample } from '../../docs/examples/prose.js';
+import { ImageExample } from '../../docs/examples/image.js';
 import { EDITOR_EXAMPLES } from '../adapter-editor-examples.js';
 import { EDITOR_DRAG_HANDLE_EXAMPLES } from './editor-drag-handle-examples.js';
 import { LOCALE_EXAMPLES } from './locale-examples.js';
@@ -22,10 +23,8 @@ import type { ComponentCatalog } from '../../src/components/catalog.js';
 import { CATALOG_EXAMPLES } from './catalog-examples.js';
 import {
   Container,
-  Main,
-  Header,
-  Footer,
-  Separator,
+  Main, Header,
+  Footer, Separator,
   User,
   ProgressGroup,
   Banner,
@@ -40,8 +39,7 @@ import {
   Popover,
   Chip,
   Tooltip,
-  Avatar,
-  AvatarGroup,
+  Avatar, AvatarGroup,
   RadioGroup,
   CheckboxGroup,
   Collapsible,
@@ -87,6 +85,7 @@ export const OPTIONS = [
 const action = () => undefined;
 
 export const EXAMPLES: Record<keyof ComponentCatalog, ReactNode> = {
+  Image: <ImageExample />,
   Prose: <ProseExample />,
   ...EDITOR_EXAMPLES,
   ...EDITOR_MENU_EXAMPLES,
@@ -175,9 +174,8 @@ export const EXAMPLES: Record<keyof ComponentCatalog, ReactNode> = {
     </Tooltip>
   ),
   Avatar: <Avatar name="Example Reader" />,
-  AvatarGroup: (
-    <AvatarGroup label="Example people" items={[{ id: 'a', name: 'Example Reader' }]} />
-  ),
+  AvatarGroup: <AvatarGroup
+    label="Example people" items={[{ id: 'a', name: 'Example Reader' }]} />,
   RadioGroup: (
     <RadioGroup label="Choice" items={OPTIONS} value="a" onValueChange={action} />
   ),

@@ -7,6 +7,7 @@ import type { EditorMentionMenuProps } from './editor-mention-menu/index.js';
 import type { EditorEmojiMenuProps } from './editor-emoji-menu/index.js';
 import type { LocaleSelectProps } from './locale-select/index.js';
 import type { ColorModeImageProps } from './color-mode-image/index.js';
+import type { ImageProps } from './image/index.js';
 import type { ColorModeAvatarProps } from './color-mode-avatar/index.js';
 import type { ColorModeSelectProps } from './color-mode-select/index.js';
 import type { ColorModeSwitchProps } from './color-mode-switch/index.js';
@@ -112,6 +113,7 @@ export interface ComponentCatalog extends CompositionCatalog, FormCatalog, ChatC
   EditorEmojiMenu: EditorEmojiMenuProps;
   LocaleSelect: LocaleSelectProps;
   ColorModeImage: ColorModeImageProps;
+  Image: ImageProps;
   ColorModeAvatar: ColorModeAvatarProps;
   ColorModeSelect: ColorModeSelectProps;
   ColorModeSwitch: ColorModeSwitchProps;

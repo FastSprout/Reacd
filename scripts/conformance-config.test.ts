@@ -25,6 +25,7 @@ it('builds every private host with shared assets and an absolute cache output', 
   expect(conformance.build?.emptyOutDir).toBe(true);
   expect(conformance.build?.manifest).toBe(true);
   expect(conformance.build?.rolldownOptions?.input).toEqual({
+    imageHydration: at('../tooling/conformance/image-hydration.html'),
     compositionSafety: at('../tooling/conformance/composition-safety.html'),
     index: at('../tooling/conformance/index.html'),
     temporalRecovery: at('../tooling/conformance/temporal-recovery.html'),

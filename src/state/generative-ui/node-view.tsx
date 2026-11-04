@@ -188,6 +188,7 @@ export function GenerativeNodeView({
     case 'Empty':
     case 'Kbd':
     case 'Tooltip':
+    case 'Image':
       return (
         <DisplayNodeView node={node} registry={registry} renderChild={renderChild} />
       );

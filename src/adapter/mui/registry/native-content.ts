@@ -72,7 +72,12 @@ import { paginationSchema } from
   '@fastsprout/reacd/adapter-runtime/schema/pagination/pagination.schema.js';
 import { MuiPagination } from '../pagination/pagination.adapter.js';
 
+import { imageSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/image/index.js';
+import { MuiImage } from '../image/image.adapter.js';
+
 export const nativeContentEntries = {
+  Image: renderEntry('Image', imageSchema, MuiImage),
   ColorModeButton: renderEntry(
     'ColorModeButton',
     colorModeButtonSchema,

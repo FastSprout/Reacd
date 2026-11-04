@@ -1,4 +1,5 @@
 export { AuthForm, type AuthFormProps } from './auth-form/index.js';
+export { Image, type ImageProps } from './image/index.js';
 export { SelectMenu, type SelectMenuProps } from './select-menu/index.js';
 export { Listbox, type ListboxProps } from './listbox/index.js';
 export { Toast, type ToastProps } from './toast/index.js';

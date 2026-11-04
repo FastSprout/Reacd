@@ -2,6 +2,11 @@ import { previewEntry } from './entry.js';
 import type { PreviewEntry } from './entry.js';
 
 export const previewGroup1 = {
+  Image: previewEntry('examples/image.tsx', () =>
+    import('../../../docs/examples/image.js').then((module) => ({
+      default: module.ImageExample,
+    })),
+  ),
   Editor: previewEntry('examples/editor.tsx', () =>
     import('../../../docs/examples/editor.js').then((module) => ({
       default: module.EditorExample,

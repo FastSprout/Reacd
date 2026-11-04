@@ -4,6 +4,7 @@ import { expectUnsupportedDiagnostic } from '../native-capabilities.js';
 import { watchPreviewFailures } from '../preview-failures.js';
 import { hasTextOverflow } from '../text-overflow.js';
 import { scrollOverflowDiagnostic } from '../scroll-overflow.js';
+import { expandNativeDisclosure } from '../native-disclosure.js';
 import { LAYOUT_POLICY } from '../../../src/core/policy.js';
 
 const WIDTHS = [240, 320, 375, 600, 768, 1024, 1440, 1920];
@@ -93,9 +94,9 @@ for (const template of TEMPLATES) {
       await page.goto('/');
       await select(page, 'Appearance', template);
       await contained(page);
-      await page.getByRole('button', { name: 'Example overview' }).click();
-      await page.getByRole('button', { name: 'Advanced settings' }).click();
-      await page.getByRole('button', { name: 'Nested settings' }).click();
+      await expandNativeDisclosure(page, 'Example overview');
+      await expandNativeDisclosure(page, 'Advanced settings');
+      await expandNativeDisclosure(page, 'Nested settings');
       await contained(page);
       const disclosures = page.getByText('Full text', { exact: true });
       expect(await disclosures.count()).toBeGreaterThan(0);

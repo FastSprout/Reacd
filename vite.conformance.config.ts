@@ -12,6 +12,9 @@ export default defineConfig({
     rolldownOptions: {
       ...shared.build?.rolldownOptions,
       input: {
+        imageHydration: fileURLToPath(
+          new NodeURL('./tooling/conformance/image-hydration.html', import.meta.url),
+        ),
         compositionSafety: fileURLToPath(
           new NodeURL('./tooling/conformance/composition-safety.html', import.meta.url),
         ),
