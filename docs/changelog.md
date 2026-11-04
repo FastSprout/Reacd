@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.1](https://github.com/FastSprout/Reacd/compare/v0.3.0...v0.3.1) (2026-11-03)
+## [0.3.1](https://github.com/FastSprout/Reacd/compare/v0.3.0...v0.3.1) (2026-11-04)
 
 
 ### ⚠ BREAKING CHANGES
@@ -9,13 +9,19 @@
 
 ### Features
 
+* Add `Image` with `src`, `alt`, optional logical proportions, and native shadcn
+  and Material UI adapters. Include a compiled example and live reference.
+
 * **adapters:** render with native shadcn and Material UI SDKs ([110b5a2](https://github.com/FastSprout/Reacd/commit/110b5a22248492db701225db082b57914a2f1b07))
 * **docs:** generate the site with reacd and native theme controls ([afe8928](https://github.com/FastSprout/Reacd/commit/afe8928b1dd368f4c6409fb1dab18744298dd9f2))
 
 
 ### Bug Fixes
 
+* Keep native Material UI accordion panel identifiers unique.
+
 * Stabilize native menu and panel animation checks.
+* Wait for native popup transitions and chat history scrolling in browser checks.
 
 * Keep native checkbox labels inside narrow fields.
 * Constrain native page navigation wrappers in both directions.
