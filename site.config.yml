@@ -107,6 +107,7 @@ navigation:
           - Toast: components/toast.md
           - Tooltip: components/tooltip.md
       - Data and media:
+          - Image: components/image.md
           - Carousel: components/carousel.md
           - Chart: components/chart.md
           - DataTable: components/data-table.md

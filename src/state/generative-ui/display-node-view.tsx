@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Badge, Empty, Kbd, Skeleton, Tooltip } from '../../components/index.js';
+import { Badge, Empty, Image, Kbd, Skeleton, Tooltip } from '../../components/index.js';
 import type { GenerativeNode } from '../../schema/generative-v2/document.schema.js';
 import type { StateRegistry } from '../registry/registry.types.js';
 import { BoundEmpty } from './bound-empty.js';
@@ -12,7 +12,7 @@ import { BoundContentToc } from './bound-content-toc.js';
 type DisplayNode = Extract<
   GenerativeNode,
   {
-    type: 'Badge' | 'Empty' | 'Kbd' | 'Skeleton' | 'Tooltip' |
+    type: 'Image' | 'Badge' | 'Empty' | 'Kbd' | 'Skeleton' | 'Tooltip' |
       'ContentNavigation' | 'ContentToc';
   }
 >;
@@ -27,6 +27,10 @@ export function DisplayNodeView({
   renderChild: (node: GenerativeNode, index: number) => ReactNode;
 }): ReactNode {
   switch (node.type) {
+    case 'Image': {
+      const { type: _type, ...properties } = node;
+      return <Image {...properties} />;
+    }
     case 'Badge': {
       const { type: _type, ...properties } = node;
       return <Badge {...properties} />;

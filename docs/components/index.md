@@ -33,6 +33,8 @@ with optional item separators.
 Use [Avatar](avatar.md) for one identity and [AvatarGroup](avatar-group.md) for a named
 collection with accessible overflow.
 
+Use [Image](image.md) for a picture with a source and accessible description.
+
 Use [User](user.md) for a composed identity with optional navigation or action.
 
 Use [PageLogos](page-logos.md) for a static collection of host-provided images with

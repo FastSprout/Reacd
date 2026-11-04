@@ -8,6 +8,7 @@ import { listboxNodeSchema } from '../listbox/generative.schema.js';
 import { badgeNodeSchema } from '../badge/generative.schema.js';
 import { localeSelectNodeSchema } from '../locale-select/generative.schema.js';
 import { colorModeImageNodeSchema } from '../color-mode-image/generative.schema.js';
+import { imageNodeSchema } from '../image/index.js';
 import { colorModeAvatarNodeSchema } from '../color-mode-avatar/generative.schema.js';
 import { colorModeSelectNodeSchema } from '../color-mode-select/generative.schema.js';
 import { colorModeSwitchNodeSchema } from '../color-mode-switch/generative.schema.js';
@@ -119,6 +120,7 @@ export const leafNodeSchemas = [
   chatPromptSubmitNodeSchema,
   localeSelectNodeSchema,
   colorModeImageNodeSchema,
+  imageNodeSchema,
   colorModeAvatarNodeSchema,
   colorModeSelectNodeSchema,
   colorModeSwitchNodeSchema,

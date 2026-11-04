@@ -73,7 +73,12 @@ import { bannerSchema } from
   '@fastsprout/reacd/adapter-runtime/schema/banner/banner.schema.js';
 import { ShadcnBanner } from '../banner/banner.adapter.js';
 
+import { imageSchema } from
+  '@fastsprout/reacd/adapter-runtime/schema/image/index.js';
+import { ShadcnImage } from '../image/image.adapter.js';
+
 export const nativeContentEntries = {
+  Image: renderEntry('Image', imageSchema, ShadcnImage),
   Empty: renderEntry('Empty', emptySchema, ShadcnEmpty),
   Error: renderEntry('Error', errorSchema, ShadcnError),
   Banner: renderEntry('Banner', bannerSchema, ShadcnBanner),

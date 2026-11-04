@@ -21,6 +21,7 @@ export const COMPONENT_NAMES = [
   'ChatPalette',
   'LocaleSelect',
   'ColorModeImage',
+  'Image',
   'ColorModeAvatar',
   'ColorModeSelect',
   'ColorModeSwitch',
