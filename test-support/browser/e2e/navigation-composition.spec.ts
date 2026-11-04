@@ -121,6 +121,14 @@ for (const profile of PROFILES) {
               exact: true,
             }),
           ).toHaveAttribute('data-orientation', 'vertical');
+          await page.mouse.move(0, 0);
+          await trigger.hover();
+          await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+          await expect(child).toBeVisible();
+          await page.mouse.move(0, 0);
+          await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+          await expect(child).toBeHidden();
+          await expect(popup).not.toBeAttached();
           await trigger.focus();
           await expect(trigger).toBeFocused();
           await page.keyboard.press('Enter');
@@ -174,6 +182,12 @@ for (const profile of PROFILES) {
       const action = page.getByRole('button', { name: 'Menu help locally' });
       for (const target of [trigger, action]) {
         await expect(target).toBeVisible();
+        await expect.poll(() => target.evaluate((element) =>
+          element.getAnimations().filter((animation) =>
+            animation.effect?.getComputedTiming().iterations !== Infinity &&
+            (animation.pending || animation.playState === 'running'),
+          ).length,
+        )).toBe(0);
         const box = await target.boundingBox();
         if (!box) throw new Error('Missing native navigation target bounds.');
         expect(box.x).toBeGreaterThanOrEqual(-TOLERANCE);

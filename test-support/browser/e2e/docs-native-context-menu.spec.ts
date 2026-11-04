@@ -1,5 +1,15 @@
 import { expect, test } from '@playwright/test';
+import type { Locator } from '@playwright/test';
 import { expectContained, loadedPreview, watchPageErrors } from '../docs-site.js';
+
+async function settledNativeMenu(menu: Locator) {
+  await expect(menu).toHaveCSS('opacity', '1');
+  await expect.poll(() => menu.evaluate((element) =>
+    element.getAnimations().every((animation) =>
+      !animation.pending && animation.playState !== 'running',
+    ),
+  )).toBe(true);
+}
 
 for (const width of [375, 1440]) {
   test(`native context menu choices and keyboard at ${width}px`, async ({ page }) => {
@@ -11,6 +21,7 @@ for (const width of [375, 1440]) {
     await record.click({ button: 'right' });
     const menu = page.getByRole('menu', { name: 'Sample record context', exact: true });
     await expect(menu).toBeVisible();
+    await settledNativeMenu(menu);
     const bounds = await menu.boundingBox();
     if (!bounds) throw new Error('Missing native context menu geometry.');
     expect(bounds.x).toBeGreaterThanOrEqual(-2);
@@ -26,6 +37,7 @@ for (const width of [375, 1440]) {
     await menu.getByRole('menuitem', { name: 'Share', exact: true }).click();
     const submenu = page.getByRole('menu', { name: 'Share', exact: true });
     await expect(submenu).toBeVisible();
+    await settledNativeMenu(submenu);
     await page.keyboard.press('Escape');
     await expect(submenu).toBeHidden();
     await expect(menu).toBeVisible();
@@ -51,6 +63,8 @@ for (const width of [375, 1440]) {
     await expect(record).toBeFocused();
     await record.click({ button: 'right' });
     await menu.getByRole('menuitem', { name: 'Share', exact: true }).click();
+    await expect(submenu).toBeVisible();
+    await settledNativeMenu(submenu);
     await page.getByRole('menuitem', { name: 'Copy record identifier' }).click();
     await expect(page.getByText('Record identifier copied locally.', {
       exact: true,

@@ -87,7 +87,11 @@ for (const profile of ['Spacious', 'Compact']) {
     ).toBeVisible();
     await page.getByRole('switch', { name: 'Read-only selection' }).uncheck();
     await primary.click();
-    await page.getByRole('option', { name: /Answer/ }).click();
+    const primaryList = page.getByRole('listbox', {
+      name: 'Primary record', exact: true,
+    });
+    await primaryList.getByRole('option', { name: /Answer/ }).click();
+    await expect(primaryList).toBeHidden();
     await page.getByRole('button', { name: 'Save primary record' }).click();
     const single = page.getByRole('form', { name: 'Single record form' });
     expect(
@@ -98,8 +102,11 @@ for (const profile of ['Spacious', 'Compact']) {
       exact: true,
     });
     await multiple.click();
-    await page.getByRole('option', { name: /Answer/ }).click();
-    await page.getByRole('option', { name: 'Beta', exact: true }).click();
+    const relatedList = page.getByRole('listbox', {
+      name: 'Related records', exact: true,
+    });
+    await relatedList.getByRole('option', { name: /Answer/ }).click();
+    await relatedList.getByRole('option', { name: 'Beta', exact: true }).click();
     await page.getByRole('button', { name: 'Save related records' }).click();
     const form = page.getByRole('form', { name: 'Multiple records form' });
     expect(
